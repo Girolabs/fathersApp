@@ -9,6 +9,7 @@ import PatresNavigator from "./src/navigator/PatresNavigator";
 export default function App() {
     const [fontsLoaded] = useFonts({
         "work-sans": require("./assets/fonts/WorkSans-Regular.ttf"),
+        "work-sans-medium": require("./assets/fonts/WorkSans-Medium.ttf"),
         "work-sans-semibold": require("./assets/fonts/WorkSans-SemiBold.ttf"),
     });
 

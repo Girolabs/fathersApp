@@ -1,6 +1,8 @@
 export default {
     primaryColor: '#000258',
     secondaryColor:'#F8CE46',
-    surfaceColor: '#F2F3FF',
-    onSurfaceColor:'#292929',
+    surfaceColorPrimary: '#F2F3FF',
+    surfaceColorSecondary:'#FFFFFF',
+    onSurfaceColorPrimary:'#292929',
+    onSurfaceColorSecondary: '#A4A2A2',
 }

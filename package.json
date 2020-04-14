@@ -11,10 +11,12 @@
   "dependencies": {
     "@react-native-community/masked-view": "0.1.6",
     "@use-expo/font": "^2.0.0",
+    "axios": "^0.19.2",
     "expo": "~37.0.3",
     "expo-localization": "~8.1.0",
     "expo-vector-icons": "^10.0.1",
     "i18n-js": "^3.5.1",
+    "moment": "^2.18.1",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-i18next": "^11.3.4",

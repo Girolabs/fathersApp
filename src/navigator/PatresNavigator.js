@@ -20,7 +20,7 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 
 const defaultStackNavOptions = {
     headerStyle : {
-        backgroundColor: Colors.surfaceColor
+        backgroundColor: Colors.surfaceColorPrimary
     },
     headerTitleStyle: {
         fontFamily: 'work-sans-semibold',
@@ -28,7 +28,7 @@ const defaultStackNavOptions = {
     headerBackTitle: {
         fontFamily: 'work-sans',
     },
-    headerTintColor: Colors.onSurfaceColor,
+    headerTintColor: Colors.onSurfaceColorPrimary,
 }
 
 
@@ -64,7 +64,7 @@ const tabScreenConfig = {
                 console.log(tabInfo)
                 return <Ionicons name='ios-home' size={25} color={tabInfo.tintColor} />
             },
-            tabBarColor: Colors.surfaceColor, 
+            tabBarColor: Colors.surfaceColorPrimary, 
         }
     },
     Search: {
@@ -83,7 +83,7 @@ const HomeSearchTabNavigator =
         activeColor:Colors.primaryColor,
         shifting:true,
         barStyle: {
-            backgroundColor: Colors.surfaceColor
+            backgroundColor: Colors.surfaceColorPrimary
         }
     })
 const ProfileNavigator = createStackNavigator({
