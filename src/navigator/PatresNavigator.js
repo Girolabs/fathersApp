@@ -10,6 +10,7 @@ import Colors from '../constants/Colors';
 import HomeScreen from '../screens/HomeScreen';
 import PatreDetailScreen from "../screens/PatreDetailScreen";
 import SearchScreen from '../screens/SearchScreen';
+import PrayersScreen from '../screens/PrayersScreen';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 
 
@@ -43,6 +44,9 @@ const HomeNavigator = createStackNavigator({
     PatreDetail: {
         screen: PatreDetailScreen, 
     },
+    Prayers: {
+        screen: PrayersScreen,
+    }
 
 },{
     defaultNavigationOptions: defaultStackNavOptions
