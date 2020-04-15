@@ -5,13 +5,15 @@ import { Ionicons } from '@expo/vector-icons';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs'
 
-import { Platform } from "react-native";
+import { Platform, SafeAreaView, Image, View, Text } from "react-native";
 import Colors from '../constants/Colors';
 import HomeScreen from '../screens/HomeScreen';
 import PatreDetailScreen from "../screens/PatreDetailScreen";
 import SearchScreen from '../screens/SearchScreen';
 import PrayersScreen from '../screens/PrayersScreen';
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import PrayerScreen from '../screens/PrayerScreen'
+import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 
 
@@ -20,7 +22,7 @@ import { createDrawerNavigator } from 'react-navigation-drawer';
 
 
 const defaultStackNavOptions = {
-    headerStyle : {
+    headerStyle: {
         backgroundColor: Colors.surfaceColorPrimary
     },
     headerTitleStyle: {
@@ -42,13 +44,16 @@ const HomeNavigator = createStackNavigator({
         }
     },
     PatreDetail: {
-        screen: PatreDetailScreen, 
+        screen: PatreDetailScreen,
     },
     Prayers: {
         screen: PrayersScreen,
+    },
+    Prayer: {
+        screen: PrayerScreen
     }
 
-},{
+}, {
     defaultNavigationOptions: defaultStackNavOptions
 });
 
@@ -68,35 +73,35 @@ const tabScreenConfig = {
                 console.log(tabInfo)
                 return <Ionicons name='ios-home' size={25} color={tabInfo.tintColor} />
             },
-            tabBarColor: Colors.surfaceColorPrimary, 
+            tabBarColor: Colors.surfaceColorPrimary,
         }
     },
     Search: {
-        screen: SearchNavigator, navigationOptions:{
+        screen: SearchNavigator, navigationOptions: {
             tabBarLabel: 'Search',
             tabBarIcon: (tabInfo) => {
-                return <Ionicons name = 'ios-search' size={25} color={tabInfo.tintColor} />
+                return <Ionicons name='ios-search' size={25} color={tabInfo.tintColor} />
             },
             tabBarColor: Colors.secondaryColor
         }
     }
 }
 
-const HomeSearchTabNavigator = 
-    createMaterialBottomTabNavigator(tabScreenConfig,{
-        activeColor:Colors.primaryColor,
-        shifting:true,
+const HomeSearchTabNavigator =
+    createMaterialBottomTabNavigator(tabScreenConfig, {
+        activeColor: Colors.primaryColor,
+        shifting: true,
         barStyle: {
             backgroundColor: Colors.surfaceColorPrimary
         }
     })
 const ProfileNavigator = createStackNavigator({
-    screen:PatreDetailScreen
-},{
-    navigationOptions:{
+    screen: PatreDetailScreen
+}, {
+    navigationOptions: {
 
     },
-    defaultNavigationOptions:defaultStackNavOptions
+    defaultNavigationOptions: defaultStackNavOptions
 })
 
 const MainNavigator = createDrawerNavigator({
@@ -104,23 +109,58 @@ const MainNavigator = createDrawerNavigator({
         screen: HomeSearchTabNavigator,
         navigationOptions: {
             drawerLabel: 'Principal'
-        },  
+        },
     },
-    Profile:{
+    Profile: {
         screen: ProfileNavigator,
         navigationOptions: {
             drawerLabel: 'Profile'
         }
     }
 
-},{
+}, {
+    contentComponent: props => <DefaultDrawer {...props} />,
+    drawerBackgroundColor: Colors.primaryColor,
     contentOptions: {
         activeTintColor: Colors.secondaryColor,
+        inactiveTintColor: Colors.surfaceColorPrimary,
         labelStyle: {
-            fontFamily:'work-sans-semibold'
+            fontFamily: 'work-sans-semibold',
+            fontSize: 18
         }
+
+
     }
+
+
 }
 )
 
 export default createAppContainer(MainNavigator);
+
+const DefaultDrawer = (props) => {
+    console.log('ENTRO ACA')
+    return (
+        <SafeAreaView style={{ flex: 1 }}>
+            <TouchableOpacity style={{ margin:15,padding: 15 }} onPress={() => {
+                props.navigation.toggleDrawer();
+            }
+
+            }>
+                <Ionicons name='md-close' size={36} color={Colors.surfaceColorPrimary} />
+            </TouchableOpacity>
+            <ScrollView contentContainerStyle={{ justifyContent: 'flex-start',alignItems:'flex-start', height: '100%', padding: 15 }}>
+
+
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 15 }}>
+                    <Image source={require('../../assets/img/icono.png')} style={{ width: 88, height: 88 }} />
+                    <Text numberOfLines={2} style={{ width: '70%', fontSize: 18, fontFamily: 'work-sans', color: 'white', paddingHorizontal: 15 }}>Padres de Schoenstatt</Text>
+                </View>
+
+                <DrawerItems {...props} />
+
+
+            </ScrollView>
+        </SafeAreaView>
+    )
+}
