@@ -5,4 +5,3 @@ import { AsyncStorage } from 'react-native';
 
 import en from './en.json';
 import es from './es.json';
-

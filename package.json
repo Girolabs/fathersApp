@@ -17,6 +17,7 @@
     "expo-vector-icons": "^10.0.1",
     "i18n-js": "^3.5.1",
     "moment": "^2.18.1",
+    "prop-types": "^15.7.2",
     "react": "16.9.0",
     "react-dom": "16.9.0",
     "react-i18next": "^11.3.4",
