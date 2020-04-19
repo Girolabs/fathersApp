@@ -28,7 +28,7 @@ const PatreDetailScreen = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       <ScrollView>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', padding: 15 }}>
           <Image
             style={{ width: 100, height: 100, borderRadius: 50 }}
             resizMode="center"
@@ -66,6 +66,7 @@ const PatreDetailScreen = ({ navigation }) => {
                 paddingHorizontal: 10,
                 width: '45%',
                 height: 50,
+                marginHorizontal: 15,
                 justifyContent: 'center',
               }}
             >
@@ -194,14 +195,14 @@ const DefaultItem = ({
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    padding: 15,
+    padding: 0,
     backgroundColor: Colors.surfaceColorPrimary,
   },
   sectionHeader: {
     fontFamily: 'work-sans-medium',
     color: Colors.onSurfaceColorPrimary,
     fontSize: 11,
-    paddingVertical: 15,
+    padding: 15,
     letterSpacing: 2.5,
     textTransform: 'uppercase',
   },
