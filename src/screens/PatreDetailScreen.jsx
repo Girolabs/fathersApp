@@ -8,16 +8,18 @@ import {
   Platform,
   TouchableNativeFeedback,
   ScrollView,
+  Linking,
 } from 'react-native';
 import { Flag } from 'react-native-svg-flagkit';
 import moment from 'moment';
+import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
 import 'moment/min/locales';
+import { Ionicons } from 'expo-vector-icons';
 
 const PatreDetailScreen = ({ navigation }) => {
   const profile = navigation.getParam('profile');
 
-  moment.locale('es');
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableComp = TouchableNativeFeedback;
@@ -44,18 +46,22 @@ const PatreDetailScreen = ({ navigation }) => {
             >
               {profile.fullName}
             </Text>
-            <Text
-              style={{ color: Colors.onSurfaceColorSecondary, fontFamily: 'work-sans' }}
-            >
-              {`Last update:${profile.personalInfoUpdatedOn}`}
-            </Text>
+            <View style={{ width: '75%' }}>
+              <Text style={{ color: Colors.onSurfaceColorSecondary, fontFamily: 'work-sans' }}>
+                {`${i18n.t('LAST_UPDATE')}:${
+                  profile.personalInfoUpdatedOn
+                    ? moment.utc(profile.personalInfoUpdatedOn).format('Do MMMM YYYY')
+                    : null
+                }`}
+              </Text>
+            </View>
           </View>
         </View>
 
-        <Text style={styles.sectionHeader}> Información del contacto</Text>
-        <DefaultItem title="Email" body={profile.email} />
-        <DefaultItem title="Teléfono móvil principal" body={profile.phones[0].number} />
-        <DefaultItem title="Casa" body={profile.phones[1] != undefined ? profile.phones[1].number : ''} />
+        <Text style={styles.sectionHeader}>{i18n.t('CONTACT_INFO')}</Text>
+        <DefaultItem title="EMAIL" body={profile.email} />
+        <DefaultItem title="MAIN_CELL_PHONE" body={profile.phones[0].number} />
+        <DefaultItem title="HOME" body={profile.phones[1] != undefined ? profile.phones[1].number : ''} />
 
         <View style={{ flexDirection: 'row', width: '100%', marginVertical: 10 }}>
           <TouchableComp>
@@ -79,47 +85,61 @@ const PatreDetailScreen = ({ navigation }) => {
                   color: Colors.surfaceColorSecondary,
                 }}
               >
-                Guardar Contacto
+                {i18n.t('SAVE_CONTACT')}
               </Text>
             </View>
           </TouchableComp>
+          {profile.phones[0].whatsApp === true && (
+            <TouchableComp
+              onPress={() => {
+                Linking.openURL(`http://api.whatsapp.com/send?phone=${profile.phones[0].number}`);
+              }}
+            >
+              <Ionicons
+                name="logo-whatsapp"
+                style={{ paddingHorizontal: 20 }}
+                size={46}
+                color={Colors.primaryColor}
+              />
+            </TouchableComp>
+          )}
         </View>
 
-        <Text style={styles.sectionHeader}> Vivienda actual </Text>
-        <DefaultItem title="Filial" body="" />
-        <DefaultItem title="Casa" body="" />
-        <DefaultItem title="Territorio responsable /  Donde trabaja: " body="" />
+        <Text style={styles.sectionHeader}>{i18n.t('CURRENT_HOME')}</Text>
+        <DefaultItem title="FILIATION" body="" />
+        <DefaultItem title="HOME" body="" />
+        <DefaultItem title="RESPONSIBLE_TERRITORY" body="" />
 
-        <Text style={styles.sectionHeader}> Informacion Personal</Text>
+        <Text style={styles.sectionHeader}>{i18n.t('PERSONAL_INFO')}</Text>
 
-        <DefaultItem title="Pais de origen" body="" img={profile.country} />
+        <DefaultItem title="HOME_COUNTRY" body="" img={profile.country} />
 
-        <DefaultItem title="Territorio de origen" body={profile.homeTerritoryName} />
-        <DefaultItem title="Curso" body={profile.courseName} />
+        <DefaultItem title="HOME_TERRITORY" body={profile.homeTerritoryName} />
+        <DefaultItem title="COURSE" body={profile.courseName} />
 
-        <DefaultItem title="Generación" body={profile.generationName} />
+        <DefaultItem title="GENERATION" body={profile.generationName} />
         <DefaultItem
-          title="Cumpleaños"
+          title="BIRTHDAY"
           body={profile.birthDate ? moment.utc(profile.birthDate).format('Do MMMM YYYY') : null}
         />
         <DefaultItem
-          title="Onomástico"
+          title="NAMEDAY"
           body={profile.nameDay ? moment.utc(profile.nameDay).format('Do MMMM YYYY') : null}
         />
         <DefaultItem
-          title="Bautismo"
+          title="BAPTISM"
           body={profile.baptismDate ? moment.utc(profile.baptismDate).format('Do MMMM YYYY') : null}
         />
         <DefaultItem
-          title="Admisión al Postulantado"
+          title="POSTULANCY_ADMITTANCE"
           body={profile.postulancyDate ? moment.utc(profile.postulancyDate).format('Do MMMM YYYY') : null}
         />
         <DefaultItem
-          title="Inicio del Noviciado"
+          title="NOVITIATE_START"
           body={profile.novitiateDate ? moment.utc(profile.novitiateDate).format('Do MMMM YYYY') : null}
         />
         <DefaultItem
-          title="Pertenencia Comunitaria"
+          title="COMMUNITY_MEMBERSHIP"
           body={
                         profile.communityMembershipDate
                           ? moment.utc(profile.communityMembershipDate).format('Do MMMM YYYY')
@@ -127,7 +147,7 @@ const PatreDetailScreen = ({ navigation }) => {
                     }
         />
         <DefaultItem
-          title="Contrato Perpetuo"
+          title="PERPETUAL_CONTRACT"
           body={
                         profile.perpetualContractDate
                           ? moment.utc(profile.perpetualContractDate).format('Do MMMM YYYY')
@@ -135,25 +155,31 @@ const PatreDetailScreen = ({ navigation }) => {
                     }
         />
         <DefaultItem
-          title="Ordenación Diaconal"
+          title="DIACONATE_ORDINATION"
           body={profile.deaconDate ? moment.utc(profile.deaconDate).format('Do MMMM YYYY') : null}
         />
         <DefaultItem
-          title="Ordenación Sacerdotal"
+          title="PRIESTLY_ORDINATION"
           body={profile.priestDate ? moment.utc(profile.priestDate).format('Do MMMM YYYY') : null}
         />
 
-        <Text style={styles.sectionHeader}>Viviendas Pasadas</Text>
-        <DefaultItem title="Filial" body="" />
-        <DefaultItem title="Casa" body="" />
-        <DefaultItem title="Territorio responsable /  Donde trabaja: " body="" />
-        <DefaultItem title="Fecha de inicio" body="" />
-        <DefaultItem title="Fecha de término" body="" />
+        <Text style={styles.sectionHeader}>{i18n.t('PAST_HOMES')}</Text>
+        <DefaultItem title="FILIATION" body="" />
+        <DefaultItem title="HOME" body="" />
+        <DefaultItem title="RESPONSIBLE_TERRITORY" body="" />
+        <DefaultItem title="START_DATE" body="" />
+        <DefaultItem title="END_DATE" body="" />
       </ScrollView>
     </View>
   );
 };
 
+PatreDetailScreen.navigationOptions = (navigationData) => {
+  const profile = navigationData.navigation.getParam('profile');
+  return {
+    headerTitle: profile.fullName,
+  };
+};
 
 const DefaultItem = ({
   title, body, selected, img,
@@ -179,7 +205,7 @@ const DefaultItem = ({
         }}
       >
         <View>
-          <Text style={styles.listItemTitle}>{title}</Text>
+          <Text style={styles.listItemTitle}>{i18n.t(title)}</Text>
           <Text style={styles.listItemBody}>{body}</Text>
         </View>
         {img && (

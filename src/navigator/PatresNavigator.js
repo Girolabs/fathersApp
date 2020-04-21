@@ -16,6 +16,7 @@ import PatreDetailScreen from '../screens/PatreDetailScreen';
 import SearchScreen from '../screens/SearchScreen';
 import PrayersScreen from '../screens/PrayersScreen';
 import PrayerScreen from '../screens/PrayerScreen';
+import CommunityScreen from '../screens/CommunityScreen';
 
 
 const defaultStackNavOptions = {
@@ -60,6 +61,8 @@ const SearchNavigator = createStackNavigator({
   PatreDetail: {
     screen: PatreDetailScreen,
   },
+}, {
+  defaultNavigationOptions: defaultStackNavOptions,
 });
 
 const tabScreenConfig = {
@@ -99,6 +102,12 @@ const ProfileNavigator = createStackNavigator({
   defaultNavigationOptions: defaultStackNavOptions,
 });
 
+const CommunityNavigator = createStackNavigator({
+  screen: CommunityScreen,
+}, {
+  defaultNavigationOptions: defaultStackNavOptions,
+});
+
 const MainNavigator = createDrawerNavigator({
   HomeSearch: {
     screen: HomeSearchTabNavigator,
@@ -112,6 +121,13 @@ const MainNavigator = createDrawerNavigator({
       drawerLabel: 'Profile',
     },
   },
+  Community: {
+    screen: CommunityNavigator,
+    navigationOptions: {
+      drawerLabel: 'Comunidad Oficial',
+    },
+  },
+
 
 }, {
   contentComponent: (props) => <DefaultDrawer {...props} />,
@@ -123,17 +139,12 @@ const MainNavigator = createDrawerNavigator({
       fontFamily: 'work-sans-semibold',
       fontSize: 18,
     },
-
-
   },
-
-
 });
 
 export default createAppContainer(MainNavigator);
 
 const DefaultDrawer = (props) => {
-  console.log('ENTRO ACA');
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <TouchableOpacity
@@ -161,10 +172,7 @@ const DefaultDrawer = (props) => {
             Padres de Schoenstatt
           </Text>
         </View>
-
         <DrawerItems {...props} />
-
-
       </ScrollView>
     </SafeAreaView>
   );
