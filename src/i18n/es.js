@@ -29,4 +29,6 @@ exports.ES = {
   PRIESTLY_ORDINATION: 'Ordenación Sacerdotal',
   START_DATE: 'Fecha de inicio',
   END_DATE: 'Fecha de fin',
+
+
 };

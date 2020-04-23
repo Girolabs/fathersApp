@@ -17,6 +17,8 @@ import SearchScreen from '../screens/SearchScreen';
 import PrayersScreen from '../screens/PrayersScreen';
 import PrayerScreen from '../screens/PrayerScreen';
 import CommunityScreen from '../screens/CommunityScreen';
+import FiliationDetailScreen from '../screens/FiliationDetailScreen';
+import DelegationDetailScreen from '../screens/DelegationDetailScreen';
 
 
 const defaultStackNavOptions = {
@@ -103,7 +105,19 @@ const ProfileNavigator = createStackNavigator({
 });
 
 const CommunityNavigator = createStackNavigator({
-  screen: CommunityScreen,
+  Comunidad: {
+    screen: CommunityScreen,
+    navigationOptions: {
+      headerTitle: 'Comunidad Oficial',
+    },
+  },
+  FiliationDetail: {
+    screen: FiliationDetailScreen,
+  },
+  DelegationDetail: {
+    screen: DelegationDetailScreen,
+  },
+
 }, {
   defaultNavigationOptions: defaultStackNavOptions,
 });

@@ -29,4 +29,11 @@ exports.EN = {
   PRIESTLY_ORDINATION: 'Priestly ordination',
   START_DATE: 'Start date',
   END_DATE: 'End date',
+
+  /* DelegationDetail Screen */
+  TERRITORY_INFO: 'Territory information',
+  TERRITORY_CHARGE: 'Territory in charge',
+  CELEBRATION_DATE: 'Celebration date',
+  SUPERIOR: 'Superior',
+  TERRITORY_FILIATION: '',
 };
