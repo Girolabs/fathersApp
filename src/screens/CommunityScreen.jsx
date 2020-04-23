@@ -13,29 +13,36 @@ import { Flag } from 'react-native-svg-flagkit';
 import { Ionicons } from 'expo-vector-icons';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-
 import Colors from '../constants/Colors';
+import axios from 'axios';
+import Constants from 'expo-constants';
 
 class CommunityScreen extends Component {
     state = {
-        data: [
-            {
-                title: 'Delegación de Paraguay',
-                data: [
-                    { flag: 'PY', text: 'Asunción' },
-                    { flag: 'PY', text: 'Tuparenda' },
-                ],
-            },
-            {
-                title: 'Región del Padre',
-                data: [
-                    { flag: 'AR', text: 'Buenos Aires' },
-                    { flag: 'AR', text: 'Córdoba' },
-                    { flag: 'AR', text: 'Tucumán' },
-                ],
-            },
-        ],
+        delegations: [],
     };
+
+    componentDidMount() {
+        axios
+            .get(`https://schoenstatt-fathers.link/en/api/v1/territories?fields=all&key=${Constants.manifest.extra.secretKey}`)
+            .then((res) => {
+                console.log(res)
+                if (res.data.status == "OK") {
+                    const fetchedDelegations = res.data.result.entries.map(entry => {
+                        return {
+                            ...entry,
+                            data: [
+                                { flag: 'AR', text: 'Buenos Aires' },
+                                { flag: 'AR', text: 'Córdoba' },
+                                { flag: 'AR', text: 'Tucumán' },
+                            ]
+                        }
+                    })
+                    
+                    this.setState({ delegations: fetchedDelegations });
+                }
+            });
+    }
 
     render() {
         let TouchableComp = TouchableOpacity;
@@ -44,21 +51,24 @@ class CommunityScreen extends Component {
         }
         return (
             <SafeAreaView style={styles.container}>
+                {this.state.delegations.length > 0 && 
                 <SectionList
-                    sections={this.state.data}
-                    renderItem={({ item }) => <Filiation title={item.text} flag={item.flag} onSelect = {() =>this.props.navigation.navigate('FiliationDetail')} />}
-                    renderSectionHeader={({ section: { title } }) => (
-                        <TouchableComp onPress ={() =>{
-							this.props.navigation.navigate('DelegationDetail')
-						}}>
-							<View style={styles.sectionHeaderContainer}>
-							<Text style={styles.header}>{title}</Text>
-							<Ionicons name='ios-help-circle-outline' size={23} color={Colors.primaryColor} />
-							</View>
-                           
-                        </TouchableComp>
-                    )}
-                />
+                sections={this.state.delegations}
+                renderItem={({ item }) => <Filiation title={item.text} flag={item.flag} onSelect = {() =>this.props.navigation.navigate('FiliationDetail')} />}
+                renderSectionHeader={({ section: { name } }) => (
+                    <TouchableComp onPress ={() =>{
+                        this.props.navigation.navigate('DelegationDetail')
+                    }}>
+                        <View style={styles.sectionHeaderContainer}>
+                        <Text style={styles.header}>{name}</Text>
+                        <Ionicons name='ios-help-circle-outline' size={23} color={Colors.primaryColor} />
+                        </View>
+                       
+                    </TouchableComp>
+                )}
+            />
+                }
+                
             </SafeAreaView>
         );
     }
