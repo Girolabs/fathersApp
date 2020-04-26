@@ -28,7 +28,7 @@ class CommunityScreen extends Component {
             .then((res) => {
                 console.log(res)
                 if (res.data.status == "OK") {
-                    const fetchedDelegations = res.data.result.entries.map(entry => {
+                    const fetchedDelegations = res.data.result.map(entry => {
                         return {
                             ...entry,
                             data: [
@@ -38,7 +38,6 @@ class CommunityScreen extends Component {
                             ]
                         }
                     })
-                    
                     this.setState({ delegations: fetchedDelegations });
                 }
             });

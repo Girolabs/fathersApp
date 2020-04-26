@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.surfaceColorPrimary,
     borderBottomWidth: 2,
     padding: 15,
+    borderRadius: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

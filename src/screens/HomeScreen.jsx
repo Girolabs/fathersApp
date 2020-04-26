@@ -42,9 +42,7 @@ const HomeScreen = ({ navigation }) => {
       .then((res) => {
         console.log(res.data.result);
         const fetchedReminders = res.data.result;
-        console.log('fetched', fetchedReminders);
         setReminders(fetchedReminders);
-        console.log('reminder', reminders);
       });
   }, []);
   console.log('render: HomeScreen');
@@ -162,7 +160,7 @@ const HomeScreen = ({ navigation }) => {
                         <View style={styles.reminderListItem}>
                           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             {item.entityCountry != null ? (
-                              <Flag id={item.entityCountry} size={0.2} />
+                              <Flag id={item.entityCountry} size={0.1} />
                             ) : (
                               <Ionicons
                                 name="ios-flag"
@@ -183,7 +181,7 @@ const HomeScreen = ({ navigation }) => {
 
                               <TouchableComp
                                 onPress={() => {
-                                  navigation.navigate('PatreDetail');
+                                  navigation.navigate('PatreDetail', { profile: item.entityObject });
                                 }}
                               >
                                 <Text
@@ -256,8 +254,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.secondaryColor,
     width: '100%',
-    height: 80,
-    padding: 20,
+
+    padding: 15,
     borderRadius: 15,
   },
   prayerCardTitle: {
@@ -268,8 +266,8 @@ const styles = StyleSheet.create({
   title: {
     color: Colors.primaryColor,
     fontFamily: 'work-sans-semibold',
-    fontSize: 27,
-    marginTop: 20,
+    fontSize: 22,
+    marginTop: 5,
     padding: 20,
   },
   reminderHeader: {
@@ -277,10 +275,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    padding: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     backgroundColor: Colors.primaryColor,
     borderRadius: 15,
-    marginTop: 15,
+    marginTop: 5,
   },
   reminderHeaderTitle: {
     color: Colors.surfaceColorPrimary,
@@ -293,7 +292,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     backgroundColor: Colors.secondaryColor,
     borderRadius: 15,
     marginTop: 15,
@@ -302,7 +302,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
     borderRadius: 15,
     borderBottomWidth: 1,
     borderBottomColor: Colors.surfaceColorPrimary,
