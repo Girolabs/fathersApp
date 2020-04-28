@@ -7,6 +7,7 @@ import {
     SectionList,
     TouchableOpacity,
     Platform,
+    ActivityIndicator,
     TouchableNativeFeedback,
 } from 'react-native';
 import { Flag } from 'react-native-svg-flagkit';
@@ -31,11 +32,7 @@ class CommunityScreen extends Component {
                     const fetchedDelegations = res.data.result.map(entry => {
                         return {
                             ...entry,
-                            data: [
-                                { flag: 'AR', text: 'Buenos Aires' },
-                                { flag: 'AR', text: 'Córdoba' },
-                                { flag: 'AR', text: 'Tucumán' },
-                            ]
+                            data: entry.filiations
                         }
                     })
                     this.setState({ delegations: fetchedDelegations });
@@ -50,13 +47,16 @@ class CommunityScreen extends Component {
         }
         return (
             <SafeAreaView style={styles.container}>
-                {this.state.delegations.length > 0 && 
+                {this.state.delegations.length > 0 ? 
                 <SectionList
                 sections={this.state.delegations}
-                renderItem={({ item }) => <Filiation title={item.text} flag={item.flag} onSelect = {() =>this.props.navigation.navigate('FiliationDetail')} />}
-                renderSectionHeader={({ section: { name } }) => (
-                    <TouchableComp onPress ={() =>{
-                        this.props.navigation.navigate('DelegationDetail')
+                renderItem={({ item }) => <Filiation title={item.name} flag={item.country} onSelect = {() =>this.props.navigation.navigate('FiliationDetail')} />}
+                renderSectionHeader={({ section: {name, territoryId} }) => (
+                    <TouchableComp onPress ={(section) =>{
+                        console.log(section)
+                        
+                            this.props.navigation.navigate('DelegationDetail', {delegationId: territoryId})
+                                               
                     }}>
                         <View style={styles.sectionHeaderContainer}>
                         <Text style={styles.header}>{name}</Text>
@@ -66,6 +66,10 @@ class CommunityScreen extends Component {
                     </TouchableComp>
                 )}
             />
+                : 
+                <View>
+                    <ActivityIndicator size="large" color={Colors.primaryColor} />
+                </View>
                 }
                 
             </SafeAreaView>
@@ -97,11 +101,12 @@ const Filiation = ({ title, flag, onSelect }) => {
 
 	return (
 		<TouchableComp onPress = {() => {
-			console.log('[Navegar a Filiation screen]')
+            console.log('[Navegar a Filiation screen]')
+            
 			onSelect()
 		}}>
 			<View style={styles.item}>
-				<View style={{flexDirection: 'row', justifyContent:'flex-start'}}>
+				<View style={{flexDirection: 'row', justifyContent:'flex-start', width: '80%', alignItems:'center'}}>
 					<Flag id={flag} size={0.2} />
         			<Text style={styles.title}>{title}</Text>
 				</View>
@@ -122,7 +127,7 @@ const styles = StyleSheet.create({
     item: {
         backgroundColor: Colors.surfaceColorSecondary,
         padding: 20,
-        
+        alignItems: 'center',
 		flexDirection: 'row',
 		justifyContent: 'space-between'
     },

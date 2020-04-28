@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,79 +8,94 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import { Flag } from 'react-native-svg-flagkit';
 import i18n from 'i18n-js';
 import { FlatList } from 'react-native-gesture-handler';
+import axios from 'axios';
+import Constants from 'expo-constants';
 import Colors from '../constants/Colors';
 
-const DelegationDetailScreen = () => {
+
+const DelegationDetailScreen = ({ navigation }) => {
+  const [territory, setTerritory] = useState();
+  useEffect(() => {
+    const territoryId = navigation.getParam('delegationId');
+    axios.get(`https://schoenstatt-fathers.link/en/api/v1/territories/${territoryId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
+      .then((res) => {
+        setTerritory(res.data.result);
+        console.log(territory);
+      });
+  }, []);
   return (
     <SafeAreaView>
-      <ScrollView>
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>Paraguay</Text>
-          <Flag id="PY" size={0.2} />
-        </View>
-        <View>
-          <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_INFO')}</Text>
-          <View style={styles.listItem}>
-            <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_CHARGE')}</Text>
-            <Text style={styles.listItemBody}>Region del Padre</Text>
-          </View>
-          <View style={styles.listItem}>
-            <Text style={styles.listItemTitle}>{i18n.t('CELEBRATION_DATE')}</Text>
-            <Text style={styles.listItemBody}>20/12</Text>
-          </View>
-          <View style={[styles.listItem]}>
-            <Text style={styles.listItemTitle}>{i18n.t('SUPERIOR')}</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 20 }}>
-              <Image
-                source={{ uri: 'https://cdn0.iconfinder.com/data/icons/professions-47/64/16-512.png' }}
-                style={{ width: 60, height: 60 }}
-              />
-              <Text style={styles.listItemBody}>Kühlcke, Pedro (2017-2020)</Text>
+      {territory
+        ? (
+          <ScrollView>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>{territory.name}</Text>
+              {/* <Flag id="PY" size={0.2} /> */}
             </View>
-          </View>
-        </View>
-        <View styles={{ marginTop: 10, marginBottom: 5, backgroundColor: Colors.surfaceColorSecondary }}>
-          <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_FILIATION')}</Text>
-          <View>
-            <View style={styles.card}>
-              <Text style={styles.cardTitle}>Asunción</Text>
-              <View style={styles.cardBody}>
-                <Text style={styles.cardBodyText}>{i18n.t('RECTOR')}</Text>
-                <Text style={styles.cardBodyTextBold}>Kühlcke, Pedro</Text>
+            <View>
+              <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_INFO')}</Text>
+              <View style={styles.listItem}>
+                <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_CHARGE')}</Text>
+                <Text style={styles.listItemBody}>Region del Padre</Text>
               </View>
-              <View style={styles.cardBody}>
-                <Text style={styles.cardBodyText}>{i18n.t('MAIN_HOUSE')}</Text>
-                <Text style={styles.cardBodyTextBold}>Asunción</Text>
+              <View style={styles.listItem}>
+                <Text style={styles.listItemTitle}>{i18n.t('CELEBRATION_DATE')}</Text>
+                <Text style={styles.listItemBody}>20/12</Text>
               </View>
-              <View style={styles.cardBody}>
-                <Text style={styles.cardBodyText}>{i18n.t('MEMBERS')}</Text>
-                <Text style={styles.cardBodyTextBold}>7</Text>
+              <View style={[styles.listItem]}>
+                <Text style={styles.listItemTitle}>{i18n.t('SUPERIOR')}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 20 }}>
+                  <Image
+                    source={{ uri: 'https://cdn0.iconfinder.com/data/icons/professions-47/64/16-512.png' }}
+                    style={{ width: 60, height: 60 }}
+                  />
+                  <Text style={styles.listItemBody}>Kühlcke, Pedro (2017-2020)</Text>
+                </View>
               </View>
             </View>
-            <View style={styles.card}>
-              <Text style={styles.cardTitle}>Asunción</Text>
-              <View style={styles.cardBody}>
-                <Text style={styles.cardBodyText}>{i18n.t('RECTOR')}</Text>
-                <Text style={styles.cardBodyTextBold}>Kühlcke, Pedro</Text>
-              </View>
-              <View style={styles.cardBody}>
-                <Text style={styles.cardBodyText}>{i18n.t('MAIN_HOUSE')}</Text>
-                <Text style={styles.cardBodyTextBold}>Asunción</Text>
-              </View>
-              <View style={styles.cardBody}>
-                <Text style={styles.cardBodyText}>{i18n.t('MEMBERS')}</Text>
-                <Text style={styles.cardBodyTextBold}>7</Text>
+            <View styles={{ marginTop: 10, marginBottom: 5, backgroundColor: Colors.surfaceColorSecondary }}>
+              <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_FILIATION')}</Text>
+              <View>
+                <View style={styles.card}>
+                  <Text style={styles.cardTitle}>Asunción</Text>
+                  <View style={styles.cardBody}>
+                    <Text style={styles.cardBodyText}>{i18n.t('RECTOR')}</Text>
+                    <Text style={styles.cardBodyTextBold}>Kühlcke, Pedro</Text>
+                  </View>
+                  <View style={styles.cardBody}>
+                    <Text style={styles.cardBodyText}>{i18n.t('MAIN_HOUSE')}</Text>
+                    <Text style={styles.cardBodyTextBold}>Asunción</Text>
+                  </View>
+                  <View style={styles.cardBody}>
+                    <Text style={styles.cardBodyText}>{i18n.t('MEMBERS')}</Text>
+                    <Text style={styles.cardBodyTextBold}>7</Text>
+                  </View>
+                </View>
+                <View style={styles.card}>
+                  <Text style={styles.cardTitle}>Asunción</Text>
+                  <View style={styles.cardBody}>
+                    <Text style={styles.cardBodyText}>{i18n.t('RECTOR')}</Text>
+                    <Text style={styles.cardBodyTextBold}>Kühlcke, Pedro</Text>
+                  </View>
+                  <View style={styles.cardBody}>
+                    <Text style={styles.cardBodyText}>{i18n.t('MAIN_HOUSE')}</Text>
+                    <Text style={styles.cardBodyTextBold}>Asunción</Text>
+                  </View>
+                  <View style={styles.cardBody}>
+                    <Text style={styles.cardBodyText}>{i18n.t('MEMBERS')}</Text>
+                    <Text style={styles.cardBodyTextBold}>7</Text>
+                  </View>
+                </View>
               </View>
             </View>
-          </View>
-        </View>
-        <Text style={styles.sectionHeader}>{i18n.t('MEMBERS_OF_TERRITORY')}</Text>
-        <FlatList
-          data={
+            <Text style={styles.sectionHeader}>{i18n.t('MEMBERS_OF_TERRITORY')}</Text>
+            <FlatList
+              data={
             [
               {
                 name: 'Kühlcke, Pedro (2017-2020)',
@@ -92,24 +107,26 @@ const DelegationDetailScreen = () => {
               },
             ]
           }
-          renderItem={({ item }) => {
-            return (
-              <View style={{
-                flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.surfaceColorSecondary, padding: 15,
+              renderItem={({ item }) => {
+                return (
+                  <View style={{
+                    flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.surfaceColorSecondary, padding: 15,
+                  }}
+                  >
+                    <Image
+                      source={{ uri: 'https://cdn0.iconfinder.com/data/icons/professions-47/64/16-512.png' }}
+                      style={{ width: 20, height: 20 }}
+                    />
+                    <Text style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}>{item.name}</Text>
+                  </View>
+                );
               }}
-              >
-                <Image
-                  source={{ uri: 'https://cdn0.iconfinder.com/data/icons/professions-47/64/16-512.png' }}
-                  style={{ width: 20, height: 20 }}
-                />
-                <Text style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}>{item.name}</Text>
-              </View>
-            );
-          }}
-        />
-        <Text style={{ marginLeft: 16, color: Colors.onSurfaceColorPrimary, paddingVertical: 10 }}>Total: </Text>
+            />
+            <Text style={{ marginLeft: 16, color: Colors.onSurfaceColorPrimary, paddingVertical: 10 }}>Total: </Text>
 
-      </ScrollView>
+          </ScrollView>
+        )
+        : <ActivityIndicator size="large" color={Colors.primaryColor} />}
     </SafeAreaView>
   );
 };

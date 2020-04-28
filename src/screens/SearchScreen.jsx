@@ -13,7 +13,7 @@ class SearchScreen extends Component {
 
     componentDidMount() {
         axios
-            .get(`https://schoenstatt-fathers.link/en/api/v1/persons?key=${Constants.manifest.extra.secretKey}`)
+            .get(`https://schoenstatt-fathers.link/en/api/v1/persons?fields=all&key=${Constants.manifest.extra.secretKey}`)
             .then((res) => {
                 if (res.status == 200) {
                     this.setState({ results: res.data.result });
@@ -37,6 +37,8 @@ class SearchScreen extends Component {
         });
         this.setState({ filterResults: filterResults });
     };
+
+   
     render() {
         return (
             <View style={styles.screen}>
