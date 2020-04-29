@@ -31,6 +31,7 @@ exports.EN = {
   END_DATE: 'End date',
 
   /* DelegationDetail Screen */
+  INFORMATION: 'INFORMATION',
   TERRITORY_INFO: 'Territory information',
   TERRITORY_CHARGE: 'Territory in charge',
   CELEBRATION_DATE: 'Celebration date',
@@ -40,5 +41,6 @@ exports.EN = {
   MAIN_HOUSE: 'Main house',
   MEMBERS: 'Members',
   MEMBERS_OF_TERRITORY: 'Members of this territory of origin',
+  
 
 };

@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   ScrollView,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import { Flag } from 'react-native-svg-flagkit';
 import i18n from 'i18n-js';
@@ -20,12 +21,16 @@ import Colors from '../constants/Colors';
 
 const DelegationDetailScreen = ({ navigation }) => {
   const [territory, setTerritory] = useState();
+  let TouchableComp = TouchableOpacity;
+  if (Platform.OS === 'android' && Platform.Version >= 21) {
+    TouchableComp = TouchableNativeFeedback;
+  }
   useEffect(() => {
     const territoryId = navigation.getParam('delegationId');
     axios.get(`https://schoenstatt-fathers.link/en/api/v1/territories/${territoryId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
       .then((res) => {
         setTerritory(res.data.result);
-        console.log(territory);
+        console.log('[Territory]', res.data.result);
       });
   }, []);
   return (
@@ -39,14 +44,26 @@ const DelegationDetailScreen = ({ navigation }) => {
             </View>
             <View>
               <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_INFO')}</Text>
-              <View style={styles.listItem}>
-                <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_CHARGE')}</Text>
-                <Text style={styles.listItemBody}>Region del Padre</Text>
-              </View>
-              <View style={styles.listItem}>
-                <Text style={styles.listItemTitle}>{i18n.t('CELEBRATION_DATE')}</Text>
-                <Text style={styles.listItemBody}>20/12</Text>
-              </View>
+              {territory.parentTerritory &&
+                <TouchableComp onPress={() => {
+
+                }}>
+                  <View style={styles.listItem}>
+                    <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_CHARGE')}</Text>
+
+                    <Text style={styles.listItemBody}>{territory.name}</Text>
+                  </View>
+                </TouchableComp>
+              }
+
+              {territory.celebrationDate &&
+                <View style={styles.listItem}>
+                  <Text style={styles.listItemTitle}>{i18n.t('CELEBRATION_DATE')}</Text>
+                  <Text style={styles.listItemBody}>{territory.celebrationDate}</Text>
+                </View>
+              }
+
+
               <View style={[styles.listItem]}>
                 <Text style={styles.listItemTitle}>{i18n.t('SUPERIOR')}</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 20 }}>
@@ -61,52 +78,45 @@ const DelegationDetailScreen = ({ navigation }) => {
             <View styles={{ marginTop: 10, marginBottom: 5, backgroundColor: Colors.surfaceColorSecondary }}>
               <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_FILIATION')}</Text>
               <View>
-                <View style={styles.card}>
-                  <Text style={styles.cardTitle}>Asunción</Text>
-                  <View style={styles.cardBody}>
-                    <Text style={styles.cardBodyText}>{i18n.t('RECTOR')}</Text>
-                    <Text style={styles.cardBodyTextBold}>Kühlcke, Pedro</Text>
-                  </View>
-                  <View style={styles.cardBody}>
-                    <Text style={styles.cardBodyText}>{i18n.t('MAIN_HOUSE')}</Text>
-                    <Text style={styles.cardBodyTextBold}>Asunción</Text>
-                  </View>
-                  <View style={styles.cardBody}>
-                    <Text style={styles.cardBodyText}>{i18n.t('MEMBERS')}</Text>
-                    <Text style={styles.cardBodyTextBold}>7</Text>
-                  </View>
-                </View>
-                <View style={styles.card}>
-                  <Text style={styles.cardTitle}>Asunción</Text>
-                  <View style={styles.cardBody}>
-                    <Text style={styles.cardBodyText}>{i18n.t('RECTOR')}</Text>
-                    <Text style={styles.cardBodyTextBold}>Kühlcke, Pedro</Text>
-                  </View>
-                  <View style={styles.cardBody}>
-                    <Text style={styles.cardBodyText}>{i18n.t('MAIN_HOUSE')}</Text>
-                    <Text style={styles.cardBodyTextBold}>Asunción</Text>
-                  </View>
-                  <View style={styles.cardBody}>
-                    <Text style={styles.cardBodyText}>{i18n.t('MEMBERS')}</Text>
-                    <Text style={styles.cardBodyTextBold}>7</Text>
-                  </View>
-                </View>
+                {territory.filiations.map(filiation => {
+                  return (
+                    <View style={styles.card}>
+                      <Text style={styles.cardTitle}>{filiation.name}</Text>
+                      <View style={styles.cardBody}>
+                        <Text style={styles.cardBodyText}>{i18n.t('RECTOR')}</Text>
+                        <Text style={styles.cardBodyTextBold}>Kühlcke, Pedro</Text>
+                      </View>
+                      <View style={styles.cardBody}>
+                        <Text style={styles.cardBodyText}>{i18n.t('MAIN_HOUSE')}</Text>
+                        <Text style={styles.cardBodyTextBold}>Asunción</Text>
+                      </View>
+                      <View style={styles.cardBody}>
+                        <Text style={styles.cardBodyText}>{i18n.t('MEMBERS')}</Text>
+                        <Text style={styles.cardBodyTextBold}>7</Text>
+                      </View>
+                    </View>
+                  )
+
+                })
+
+
+                }
               </View>
             </View>
             <Text style={styles.sectionHeader}>{i18n.t('MEMBERS_OF_TERRITORY')}</Text>
             <FlatList
               data={
-            [
-              {
-                name: 'Kühlcke, Pedro (2017-2020)',
-              }, {
-                name: 'Miranda, Jose (2017-2020)',
-              },
-              {
-                name: 'Ferrero Arinci, Santiago Nicolás',
-              },
-            ]
-          }
+                [
+                  {
+                    name: 'Kühlcke, Pedro (2017-2020)',
+                  }, {
+                    name: 'Miranda, Jose (2017-2020)',
+                  },
+                  {
+                    name: 'Ferrero Arinci, Santiago Nicolás',
+                  },
+                ]
+              }
               renderItem={({ item }) => {
                 return (
                   <View style={{
@@ -132,7 +142,9 @@ const DelegationDetailScreen = ({ navigation }) => {
 };
 
 DelegationDetailScreen.navigationOptions = (navigationData) => ({
-  headerTitle: 'Delegation',
+
+  headerTitle: i18n.t('INFORMATION'),
+
 });
 
 const styles = StyleSheet.create({
