@@ -11,12 +11,14 @@ import {
   ActivityIndicator,
   Platform,
 } from 'react-native';
-import { Flag } from 'react-native-svg-flagkit';
 import i18n from 'i18n-js';
 import { FlatList } from 'react-native-gesture-handler';
 import axios from 'axios';
 import Constants from 'expo-constants';
 import Colors from '../constants/Colors';
+import moment from 'moment';
+import 'moment/min/locales';
+import { I18nContext } from '../context/I18nProvider';
 
 
 const DelegationDetailScreen = ({ navigation }) => {
@@ -34,110 +36,110 @@ const DelegationDetailScreen = ({ navigation }) => {
       });
   }, []);
   return (
-    <SafeAreaView>
-      {territory
-        ? (
-          <ScrollView>
-            <View style={styles.titleContainer}>
-              <Text style={styles.title}>{territory.name}</Text>
-              {/* <Flag id="PY" size={0.2} /> */}
-            </View>
-            <View>
-              <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_INFO')}</Text>
-              {territory.parentTerritory &&
-                <TouchableComp onPress={() => {
-
-                }}>
-                  <View style={styles.listItem}>
-                    <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_CHARGE')}</Text>
-
-                    <Text style={styles.listItemBody}>{territory.name}</Text>
-                  </View>
-                </TouchableComp>
-              }
-
-              {territory.celebrationDate &&
-                <View style={styles.listItem}>
-                  <Text style={styles.listItemTitle}>{i18n.t('CELEBRATION_DATE')}</Text>
-                  <Text style={styles.listItemBody}>{territory.celebrationDate}</Text>
+    <I18nContext.Consumer>
+      {(value) => {
+         moment.locale(value.lang)
+        return(
+        <SafeAreaView>
+          {territory
+            ? (
+              <ScrollView>
+                <View style={styles.titleContainer}>
+                  <Text style={styles.title}>{territory.name}</Text>
                 </View>
-              }
-
-
-              <View style={[styles.listItem]}>
-                <Text style={styles.listItemTitle}>{i18n.t('SUPERIOR')}</Text>
-                <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 20 }}>
-                  <Image
-                    source={{ uri: 'https://cdn0.iconfinder.com/data/icons/professions-47/64/16-512.png' }}
-                    style={{ width: 60, height: 60 }}
-                  />
-                  <Text style={styles.listItemBody}>Kühlcke, Pedro (2017-2020)</Text>
-                </View>
-              </View>
-            </View>
-            <View styles={{ marginTop: 10, marginBottom: 5, backgroundColor: Colors.surfaceColorSecondary }}>
-              <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_FILIATION')}</Text>
-              <View>
-                {territory.filiations.map(filiation => {
-                  return (
-                    <View style={styles.card}>
-                      <Text style={styles.cardTitle}>{filiation.name}</Text>
-                      <View style={styles.cardBody}>
-                        <Text style={styles.cardBodyText}>{i18n.t('RECTOR')}</Text>
-                        <Text style={styles.cardBodyTextBold}>Kühlcke, Pedro</Text>
+                <View>
+                  <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_INFO')}</Text>
+                  {territory.parentTerritory &&
+                    <TouchableComp onPress={() => {
+                      navigation.navigate('DelegationDetail', { delegatioId: territory.parentTerritory.territoryId })
+                    }}>
+                      <View style={styles.listItem}>
+                        <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_CHARGE')}</Text>
+                        <Text style={styles.listItemBody}>{territory.name}</Text>
                       </View>
-                      <View style={styles.cardBody}>
-                        <Text style={styles.cardBodyText}>{i18n.t('MAIN_HOUSE')}</Text>
-                        <Text style={styles.cardBodyTextBold}>Asunción</Text>
-                      </View>
-                      <View style={styles.cardBody}>
-                        <Text style={styles.cardBodyText}>{i18n.t('MEMBERS')}</Text>
-                        <Text style={styles.cardBodyTextBold}>7</Text>
-                      </View>
+                    </TouchableComp>
+                  }
+                  {territory.celebrationDate &&
+                    <View style={styles.listItem}>
+                      <Text style={styles.listItemTitle}>{i18n.t('CELEBRATION_DATE')}</Text>
+                      <Text style={styles.listItemBody}>{moment.utc(territory.celebrationDate).format('Do MMMM YYYY')}</Text>
                     </View>
-                  )
-
-                })
-
-
-                }
-              </View>
-            </View>
-            <Text style={styles.sectionHeader}>{i18n.t('MEMBERS_OF_TERRITORY')}</Text>
-            <FlatList
-              data={
-                [
-                  {
-                    name: 'Kühlcke, Pedro (2017-2020)',
-                  }, {
-                    name: 'Miranda, Jose (2017-2020)',
-                  },
-                  {
-                    name: 'Ferrero Arinci, Santiago Nicolás',
-                  },
-                ]
-              }
-              renderItem={({ item }) => {
-                return (
-                  <View style={{
-                    flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.surfaceColorSecondary, padding: 15,
-                  }}
-                  >
-                    <Image
-                      source={{ uri: 'https://cdn0.iconfinder.com/data/icons/professions-47/64/16-512.png' }}
-                      style={{ width: 20, height: 20 }}
-                    />
-                    <Text style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}>{item.name}</Text>
+                  }
+                  <View style={[styles.listItem]}>
+                    <Text style={styles.listItemTitle}>{i18n.t('SUPERIOR')}</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 20 }}>
+                      <Image
+                        source={{ uri: 'https://cdn0.iconfinder.com/data/icons/professions-47/64/16-512.png' }}
+                        style={{ width: 60, height: 60 }}
+                      />
+                      <Text style={styles.listItemBody}>Kühlcke, Pedro (2017-2020)</Text>
+                    </View>
                   </View>
-                );
-              }}
-            />
-            <Text style={{ marginLeft: 16, color: Colors.onSurfaceColorPrimary, paddingVertical: 10 }}>Total: </Text>
+                </View>
+                <View styles={{ marginTop: 10, marginBottom: 5, backgroundColor: Colors.surfaceColorSecondary }}>
+                  <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_FILIATION')}</Text>
+                  <View>
+                    {territory.filiations.map(filiation => {
+                      return (
+                        <View style={styles.card}>
+                          <Text style={styles.cardTitle}>{filiation.name}</Text>
+                          <View style={styles.cardBody}>
+                            <Text style={styles.cardBodyText}>{i18n.t('RECTOR')}</Text>
+                            <Text style={styles.cardBodyTextBold}>{filiation.mainAssignment.person.fullName}</Text>
+                          </View>
+                         {/*  <View style={styles.cardBody}>
+                            <Text style={styles.cardBodyText}>{i18n.t('MAIN_HOUSE')}</Text>
+                            <Text style={styles.cardBodyTextBold}>{filiation.name}</Text>
+                          </View> */}
+                          {/* <View style={styles.cardBody}>
+                            <Text style={styles.cardBodyText}>{i18n.t('MEMBERS')}</Text>
+                            <Text style={styles.cardBodyTextBold}>7</Text>
+                          </View> */}
+                        </View>
+                      )
 
-          </ScrollView>
-        )
-        : <ActivityIndicator size="large" color={Colors.primaryColor} />}
-    </SafeAreaView>
+                    })
+                    }
+                  </View>
+                </View>
+                <Text style={styles.sectionHeader}>{i18n.t('MEMBERS_OF_TERRITORY')}</Text>
+                <FlatList
+                  data={
+                    [
+                      {
+                        name: 'Kühlcke, Pedro (2017-2020)',
+                      }, {
+                        name: 'Miranda, Jose (2017-2020)',
+                      },
+                      {
+                        name: 'Ferrero Arinci, Santiago Nicolás',
+                      },
+                    ]
+                  }
+                  renderItem={({ item }) => {
+                    return (
+                      <View style={{
+                        flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.surfaceColorSecondary, padding: 15,
+                      }}
+                      >
+                        <Image
+                          source={{ uri: 'https://cdn0.iconfinder.com/data/icons/professions-47/64/16-512.png' }}
+                          style={{ width: 20, height: 20 }}
+                        />
+                        <Text style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}>{item.name}</Text>
+                      </View>
+                    );
+                  }}
+                />
+                <Text style={{ marginLeft: 16, color: Colors.onSurfaceColorPrimary, paddingVertical: 10 }}>Total: </Text>
+
+              </ScrollView>
+            )
+            : <ActivityIndicator size="large" color={Colors.primaryColor} />}
+        </SafeAreaView>
+        )}}
+    </I18nContext.Consumer>
+
   );
 };
 

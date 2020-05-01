@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Colors from '../constants/Colors';
 import { Ionicons } from 'expo-vector-icons';
 import Constants from 'expo-constants';
@@ -9,19 +9,22 @@ class SearchScreen extends Component {
     state = {
         results: [],
         filterResults: [],
+        loading:true
     };
 
     componentDidMount() {
+        
         axios
             .get(`https://schoenstatt-fathers.link/en/api/v1/persons?fields=all&key=${Constants.manifest.extra.secretKey}`)
             .then((res) => {
                 if (res.status == 200) {
-                    this.setState({ results: res.data.result });
+                    this.setState({ results: res.data.result, loading:false });
                 }
             });
     }
     handleFilter = (keyword) => {
         console.log(keyword);
+        this.setState({loading:true})
         let filterResults = [];
         const texto = keyword.toLowerCase();
         filterResults = this.state.results.filter((persona) => {
@@ -35,10 +38,10 @@ class SearchScreen extends Component {
                 return persona;
             }
         });
-        this.setState({ filterResults: filterResults });
+        this.setState({ filterResults: filterResults, loading:false });
     };
 
-   
+
     render() {
         return (
             <View style={styles.screen}>
@@ -46,24 +49,27 @@ class SearchScreen extends Component {
                     <TextInput placeholder="Search" onChangeText={(text) => this.handleFilter(text)} />
                     <Ionicons name="ios-search" size={25} colors={Colors.primaryColor} />
                 </View>
-                <FlatList
-                    data={this.state.filterResults}
-                    renderItem={({ item, data }) => {
-                        return (
-                            <TouchableOpacity
-                                style={styles.item}
-                                onPress={() => {
-                                    this.props.navigation.navigate('PatreDetail', {
-                                        profile: item,
-                                    });
-                                }}
-                            >
-                                <Text>{item.fullName}</Text>
-                                <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
-                            </TouchableOpacity>
-                        );
-                    }}
-                />
+                {!this.state.loading ? 
+                      <FlatList
+                      data={this.state.filterResults}
+                      renderItem={({ item, data }) => {
+                          return (
+                              <TouchableOpacity
+                                  style={styles.item}
+                                  onPress={() => {
+                                      this.props.navigation.navigate('PatreDetail', {
+                                          fatherId: item.personId,
+                                      });
+                                  }}
+                              >
+                                  <Text>{item.fullName}</Text>
+                                  <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
+                              </TouchableOpacity>
+                          );
+                      }}
+                  />
+                :<ActivityIndicator size="large" color={Colors.primaryColor} />}
+              
             </View>
         );
     }

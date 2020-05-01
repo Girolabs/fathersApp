@@ -19,6 +19,9 @@ import PrayerScreen from '../screens/PrayerScreen';
 import CommunityScreen from '../screens/CommunityScreen';
 import FiliationDetailScreen from '../screens/FiliationDetailScreen';
 import DelegationDetailScreen from '../screens/DelegationDetailScreen';
+import HouseDetailScreen from '../screens/HouseDetailScreen';
+import CourseDetailScreen from '../screens/CourseDetailScreen';
+import GenerationDetailScreen from '../screens/GenerationDetailScreen';
 
 
 const defaultStackNavOptions = {
@@ -63,6 +66,18 @@ const SearchNavigator = createStackNavigator({
   PatreDetail: {
     screen: PatreDetailScreen,
   },
+  FiliationDetail: {
+    screen: FiliationDetailScreen,
+  },
+  GenerationDetail: {
+    screen: GenerationDetailScreen,
+  },
+  HouseDetail: {
+    screen: HouseDetailScreen,
+  },
+  CourseDetailScreen: {
+    screen: CourseDetailScreen,
+  }
 }, {
   defaultNavigationOptions: defaultStackNavOptions,
 });
@@ -97,6 +112,7 @@ const HomeSearchTabNavigator = createMaterialBottomTabNavigator(tabScreenConfig,
 });
 const ProfileNavigator = createStackNavigator({
   screen: PatreDetailScreen,
+  
 }, {
   navigationOptions: {
 
