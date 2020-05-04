@@ -36,7 +36,9 @@
     "react-navigation-header-buttons": "^3.0.5",
     "react-navigation-material-bottom-tabs": "^2.2.10",
     "react-navigation-stack": "^2.3.11",
-    "react-navigation-tabs": "^2.8.11"
+    "react-navigation-tabs": "^2.8.11",
+    "expo-contacts": "~8.1.0",
+    "expo-permissions": "~8.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

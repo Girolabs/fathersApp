@@ -9,7 +9,7 @@ import {
   TouchableNativeFeedback,
   ScrollView,
   ActivityIndicator,
-  SafeAreaView,
+  Alert,
   Linking,
 } from 'react-native';
 import { Flag } from 'react-native-svg-flagkit';
@@ -22,18 +22,98 @@ import { I18nContext } from '../context/I18nProvider';
 import Constants from 'expo-constants';
 import countries from "i18n-iso-countries";
 import axios from 'axios';
+import * as Contacts from "expo-contacts";
+import * as Permissions from 'expo-permissions';
+import { set } from 'react-native-reanimated';
+
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 countries.registerLocale(require("i18n-iso-countries/langs/es.json"));
 
 const PatreDetailScreen = ({ navigation }) => {
   const [father, setFather] = useState(null);
+  const [showSaveContact,setShowSaveContact] = useState(false);
 
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableComp = TouchableNativeFeedback;
   }
 
+  const handleSaveContact = async (father) => {
+    try{
+      const contact = {
+        [Contacts.Fields.FirstName]: father.friendlyFirstName,
+        [Contacts.Fields.LastName]:father.friendlyLastName,
+        [Contacts.Fields.PhoneNumbers]: [{
+          label:'mobile',
+          number: father.phones ? father.phones[0].number:null,
+        }],
+        [Contacts.Fields.Emails]: [{
+          email: father.email ? father.email:null
+        }] 
+      }
+      console.log('contact',contact)
+      console.log('spanshot',contact)
+      const contactId = await Contacts.addContactAsync(contact);
+  
+      if(contactId){
+        Alert.alert(
+          "Contact Saved.",
+          "My Alert Msg",
+          [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            },
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ],
+          { cancelable: false }
+        );
+      }
+      else{
+        Alert.alert(
+          "Contact not saved.",
+          "My Alert Msg",
+          [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            },
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ],
+          { cancelable: false }
+        );
+     
+      }}
+      catch(err){
+        Alert.alert(
+          "Contact not Saved.problem",
+          "My Alert Msg",
+          [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            },
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ],
+          { cancelable: false }
+        );
+      }
+    
+     const contactId = await Contacts.addContactAsync(contact);
+     console.log(contactId)
+     
+  }
+
   useEffect(() => {
+    (async () => {
+      const { status } = await Contacts.requestPermissionsAsync();
+      if ( status === 'granted') {
+        setShowSaveContact( true )
+      }
+    })()
     const fatherId = navigation.getParam('fatherId');
     axios.get(`https://schoenstatt-fathers.link/en/api/v1/persons/${fatherId}?fields=all&key=${Constants.manifest.extra.secretKey}`).then(response => {
       console.log('[PatreDetail]', response.data.result)
@@ -86,11 +166,19 @@ const PatreDetailScreen = ({ navigation }) => {
                 <DefaultItem title="HOME" body={father.phones[1] != undefined ? father.phones[1].number : ''} />
 
                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 10 }}>
-                  <TouchableComp>
+                  {showSaveContact && 
+                  <TouchableComp onPress = {
+                    () =>{
+                      handleSaveContact(father)
+                    }
+                  }>
                     <View
                       style={{
-                        backgroundColor: Colors.primaryColor,
+                        backgroundColor: 'white',
+                        borderColor: Colors.primaryColor,
+                        
                         borderRadius: 5,
+                        borderWidth:2,
                         paddingHorizontal: 10,
                         width: '45%',
                         height: 50,
@@ -104,13 +192,15 @@ const PatreDetailScreen = ({ navigation }) => {
                           fontSize: 12,
                           fontFamily: 'work-sans-bold',
                           textTransform: 'uppercase',
-                          color: Colors.surfaceColorSecondary,
+                          color: Colors.primaryColor,
                         }}
                       >
                         {i18n.t('SAVE_CONTACT')}
                       </Text>
                     </View>
                   </TouchableComp>
+                  }
+                  
                   {father.phones[0].whatsApp === true && (
                     <TouchableComp
                       onPress={() => {
