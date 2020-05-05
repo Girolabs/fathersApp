@@ -23,8 +23,7 @@ import Constants from 'expo-constants';
 import countries from "i18n-iso-countries";
 import axios from 'axios';
 import * as Contacts from "expo-contacts";
-import * as Permissions from 'expo-permissions';
-import { set } from 'react-native-reanimated';
+
 
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 countries.registerLocale(require("i18n-iso-countries/langs/es.json"));

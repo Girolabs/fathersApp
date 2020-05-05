@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import i18n from 'i18n-js';
 import { FlatList } from 'react-native-gesture-handler';
+import { Flag } from 'react-native-svg-flagkit';
 import axios from 'axios';
 import Constants from 'expo-constants';
 import Colors from '../constants/Colors';
@@ -21,127 +22,164 @@ import 'moment/min/locales';
 import { I18nContext } from '../context/I18nProvider';
 
 
-const DelegationDetailScreen = ({ navigation }) => {
-  const [territory, setTerritory] = useState();
-  let TouchableComp = TouchableOpacity;
-  if (Platform.OS === 'android' && Platform.Version >= 21) {
-    TouchableComp = TouchableNativeFeedback;
+class DelegationDetailScreen extends Component {
+  state = {
+    territory: null
   }
-  useEffect(() => {
+
+  componentDidMount() {
+    const { navigation } = this.props;
     const territoryId = navigation.getParam('delegationId');
     axios.get(`https://schoenstatt-fathers.link/en/api/v1/territories/${territoryId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
       .then((res) => {
-        setTerritory(res.data.result);
+        this.setState({ territory:res.data.result });
         console.log('[Territory]', res.data.result);
       });
-  }, []);
-  return (
-    <I18nContext.Consumer>
+  }
+
+
+
+  componentDidUpdate(prevProps) {
+    console.log('compoentDidUpdate',prevProps.navigation.getParam('delegationId'), this.props.navigation.getParam('delegationId'))
+    
+    const { navigation } = this.props;
+    const territoryId = navigation.getParam('delegationId');
+    if( prevProps.navigation.getParam('delegationId') != this.props.navigation.getParam('delegationId') ) {
+      axios.get(`https://schoenstatt-fathers.link/en/api/v1/territories/${territoryId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
+      .then((res) => {
+        this.setState({ territory:res.data.result });
+        console.log('[Territory]', res.data.result);
+      });
+    }
+    
+  }
+  render() {
+    let TouchableComp = TouchableOpacity;
+    if (Platform.OS === 'android' && Platform.Version >= 21) {
+    TouchableComp = TouchableNativeFeedback;
+    }
+    const { navigation } = this.props; 
+    const { territory } = this.state;
+    return(
+      <I18nContext.Consumer>
       {(value) => {
-         moment.locale(value.lang)
-        return(
-        <SafeAreaView>
-          {territory
-            ? (
-              <ScrollView>
-                <View style={styles.titleContainer}>
-                  <Text style={styles.title}>{territory.name}</Text>
-                </View>
-                <View>
-                  <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_INFO')}</Text>
-                  {territory.parentTerritory &&
-                    <TouchableComp onPress={() => {
-                      navigation.navigate('DelegationDetail', { delegatioId: territory.parentTerritory.territoryId })
-                    }}>
-                      <View style={styles.listItem}>
-                        <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_CHARGE')}</Text>
-                        <Text style={styles.listItemBody}>{territory.name}</Text>
-                      </View>
-                    </TouchableComp>
-                  }
-                  {territory.celebrationDate &&
-                    <View style={styles.listItem}>
-                      <Text style={styles.listItemTitle}>{i18n.t('CELEBRATION_DATE')}</Text>
-                      <Text style={styles.listItemBody}>{moment.utc(territory.celebrationDate).format('Do MMMM YYYY')}</Text>
-                    </View>
-                  }
-                  <View style={[styles.listItem]}>
-                    <Text style={styles.listItemTitle}>{i18n.t('SUPERIOR')}</Text>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 20 }}>
-                      <Image
-                        source={{ uri: 'https://cdn0.iconfinder.com/data/icons/professions-47/64/16-512.png' }}
-                        style={{ width: 60, height: 60 }}
-                      />
-                      <Text style={styles.listItemBody}>Kühlcke, Pedro (2017-2020)</Text>
-                    </View>
+        moment.locale(value.lang)
+        return (
+          <SafeAreaView>
+            {territory
+              ? (
+                <ScrollView>
+                  <View style={styles.titleContainer}>
+                    <Text style={styles.title}>{territory.name}</Text>
                   </View>
-                </View>
-                <View styles={{ marginTop: 10, marginBottom: 5, backgroundColor: Colors.surfaceColorSecondary }}>
-                  <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_FILIATION')}</Text>
                   <View>
-                    {territory.filiations.map(filiation => {
-                      return (
-                        <View style={styles.card}>
-                          <Text style={styles.cardTitle}>{filiation.name}</Text>
-                          <View style={styles.cardBody}>
-                            <Text style={styles.cardBodyText}>{i18n.t('RECTOR')}</Text>
-                            <Text style={styles.cardBodyTextBold}>{filiation.mainAssignment.person.fullName}</Text>
-                          </View>
-                         {/*  <View style={styles.cardBody}>
-                            <Text style={styles.cardBodyText}>{i18n.t('MAIN_HOUSE')}</Text>
-                            <Text style={styles.cardBodyTextBold}>{filiation.name}</Text>
-                          </View> */}
-                          {/* <View style={styles.cardBody}>
-                            <Text style={styles.cardBodyText}>{i18n.t('MEMBERS')}</Text>
-                            <Text style={styles.cardBodyTextBold}>7</Text>
-                          </View> */}
+                    <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_INFO')}</Text>
+                    {territory.parentTerritory &&
+                      <TouchableComp onPress={() => {
+                        console.log('apreto')
+                        navigation.navigate('DelegationDetail', { delegatioId: territory.parentTerritory.territoryId })
+                      }}>
+                        <View style={styles.listItem}>
+                          <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_CHARGE')}</Text>
+                          <Text style={styles.listItemBody}>{territory.parentTerritory.name}</Text>
                         </View>
-                      )
-
-                    })
+                      </TouchableComp>
                     }
-                  </View>
-                </View>
-                <Text style={styles.sectionHeader}>{i18n.t('MEMBERS_OF_TERRITORY')}</Text>
-                <FlatList
-                  data={
-                    [
-                      {
-                        name: 'Kühlcke, Pedro (2017-2020)',
-                      }, {
-                        name: 'Miranda, Jose (2017-2020)',
-                      },
-                      {
-                        name: 'Ferrero Arinci, Santiago Nicolás',
-                      },
-                    ]
-                  }
-                  renderItem={({ item }) => {
-                    return (
-                      <View style={{
-                        flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.surfaceColorSecondary, padding: 15,
-                      }}
-                      >
-                        <Image
-                          source={{ uri: 'https://cdn0.iconfinder.com/data/icons/professions-47/64/16-512.png' }}
-                          style={{ width: 20, height: 20 }}
-                        />
-                        <Text style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}>{item.name}</Text>
+                    {territory.celebrationDate &&
+                      <View style={styles.listItem}>
+                        <Text style={styles.listItemTitle}>{i18n.t('CELEBRATION_DATE')}</Text>
+                        <Text style={styles.listItemBody}>{moment.utc(territory.celebrationDate).format('Do MMMM YYYY')}</Text>
                       </View>
-                    );
-                  }}
-                />
-                <Text style={{ marginLeft: 16, color: Colors.onSurfaceColorPrimary, paddingVertical: 10 }}>Total: </Text>
+                    }
+                    <View style={[styles.listItem]}>
+                      <Text style={styles.listItemTitle}>{i18n.t('SUPERIOR')}</Text>
+                      {territory.assignments.map((asg) => {
+                        return (
+                          <View style={styles.fatherItem}>
+                            <Image
+                              source={{ uri: `https://schoenstatt-fathers.link${asg.person.photo}` }}
+                              style={{ width: 70, height: 70, borderRadius: 35, marginRight: 10 }}
+                            />
+                            <View style={{ flexDirection: 'column' }}>
+                              <Text style={styles.listItemBody}>{asg.roleTitle}</Text>
+                              <Text style={styles.listItemBody}>{asg.person.fullName}</Text>
+                              <Text style={styles.listItemBody}>
+                                {`${moment.utc(asg.startDate).format('Do MMMM YYYY')} ${moment.utc(asg.endDate).format('Do MMMM YYYY')}`}
+                              </Text>
+                            </View>
+                          </View>
+                        )
+                      })}
 
-              </ScrollView>
-            )
-            : <ActivityIndicator size="large" color={Colors.primaryColor} />}
-        </SafeAreaView>
-        )}}
+                    </View>
+                  </View>
+                  <View styles={{ marginTop: 10, marginBottom: 5, backgroundColor: Colors.surfaceColorSecondary }}>
+                    <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_FILIATION')}</Text>
+                    <View>
+                      {territory.filiations.map(filiation => {
+                        return (
+                          <View style={styles.card}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center'}} >
+                              <Flag id={filiation.country} size={0.1} />
+                              <Text style={styles.cardTitle}>{filiation.name}</Text>
+                            </View>
+                            
+                            <View style={styles.cardBody}>
+                              <Text style={styles.cardBodyText}>{i18n.t('RECTOR')}</Text>
+                              <Text style={styles.cardBodyTextBold}>{filiation.mainAssignment ? filiation.mainAssignment.person.fullName : null}</Text>
+                            </View>
+                          </View>
+                        )
+
+                      })
+                      }
+                    </View>
+                  </View>
+                  <Text style={styles.sectionHeader}>{i18n.t('MEMBERS_OF_TERRITORY')}</Text>
+                  <FlatList
+                    data={
+                      [
+                        {
+                          name: 'Kühlcke, Pedro (2017-2020)',
+                        }, {
+                          name: 'Miranda, Jose (2017-2020)',
+                        },
+                        {
+                          name: 'Ferrero Arinci, Santiago Nicolás',
+                        },
+                      ]
+                    }
+                    renderItem={({ item }) => {
+                      return (
+                        <View style={{
+                          flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.surfaceColorSecondary, padding: 15,
+                        }}
+                        >
+                          <Image
+                            source={{ uri: 'https://cdn0.iconfinder.com/data/icons/professions-47/64/16-512.png' }}
+                            style={{ width: 20, height: 20 }}
+                          />
+                          <Text style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}>{item.name}</Text>
+                        </View>
+                      );
+                    }}
+                  />
+                  <Text style={ styles.statsText }> Total: {territory.statistics.total} </Text>
+                  <Text style={ styles.statsText }> {`${i18n.t('PRIESTS')}: ${territory.statistics.livingPerpetual}`} </Text>
+                  <Text style={ styles.statsText }> {`${i18n.t('STUDENTS')}: ${territory.statistics.students}`} </Text>
+                  <Text style={ styles.statsText }> {`${i18n.t('DECEASED')}: ${territory.statistics.deceased}`} </Text>
+
+                </ScrollView>
+              )
+              : <ActivityIndicator size="large" color={Colors.primaryColor} />}
+          </SafeAreaView>
+        )
+      }}
     </I18nContext.Consumer>
+    ) 
+  }
+}
 
-  );
-};
 
 DelegationDetailScreen.navigationOptions = (navigationData) => ({
 
@@ -158,7 +196,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 38,
+    paddingVertical: 30,
+    paddingHorizontal: 16
   },
   title: {
     fontFamily: 'work-sans-semibold',
@@ -200,6 +239,7 @@ const styles = StyleSheet.create({
     color: Colors.surfaceColorSecondary,
     fontSize: 18,
     fontFamily: 'work-sans-semibold',
+    marginLeft:10
   },
   cardBody: {
     flexDirection: 'row',
@@ -223,6 +263,19 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     width: '50%',
   },
+  fatherItem: {
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    paddingVertical: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.surfaceColorPrimary,
+  },
+  statsText: {
+    marginLeft: 16,
+    color: Colors.onSurfaceColorPrimary,
+    paddingVertical: 10,
+    fontFamily:'work-sans-medium'
+  }
 });
 
 export default DelegationDetailScreen;

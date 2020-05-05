@@ -30,5 +30,20 @@ exports.ES = {
   START_DATE: 'Fecha de inicio',
   END_DATE: 'Fecha de fin',
 
+  /* DelegationDetail Screen */
+  INFORMATION: 'INFORMATION',
+  TERRITORY_INFO: 'Territory information',
+  TERRITORY_CHARGE: 'Territory in charge',
+  CELEBRATION_DATE: 'Celebration date',
+  SUPERIOR: 'Superior',
+  TERRITORY_FILIATION: 'Filiales del territorio',
+  RECTOR: 'Rector',
+  MAIN_HOUSE: 'Main house',
+  MEMBERS: 'Members',
+  MEMBERS_OF_TERRITORY: 'Members of this territory of origin',
+  PRIESTS: 'Sacerdotes',
+  STUDENTS: 'Estudiantes',
+  DECEASED: 'Fallecidos'
+
 
 };

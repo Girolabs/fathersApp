@@ -41,6 +41,9 @@ exports.EN = {
   MAIN_HOUSE: 'Main house',
   MEMBERS: 'Members',
   MEMBERS_OF_TERRITORY: 'Members of this territory of origin',
+  PRIESTS: 'Priests',
+  STUDENTS: 'Students',
+  DECEASED: 'Deceased'
   
 
 };
