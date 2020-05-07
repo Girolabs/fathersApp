@@ -6,7 +6,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
 import {
-  Platform, SafeAreaView, Image, View, Text,
+  SafeAreaView, Image, View, Text,
 } from 'react-native';
 import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
@@ -133,6 +133,9 @@ const CommunityNavigator = createStackNavigator({
   DelegationDetail: {
     screen: DelegationDetailScreen,
   },
+  PatreDetail:{
+    screen: PatreDetailScreen,
+  }
 
 }, {
   defaultNavigationOptions: defaultStackNavOptions,

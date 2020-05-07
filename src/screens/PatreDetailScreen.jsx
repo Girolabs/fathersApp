@@ -30,7 +30,7 @@ countries.registerLocale(require("i18n-iso-countries/langs/es.json"));
 
 const PatreDetailScreen = ({ navigation }) => {
   const [father, setFather] = useState(null);
-  const [showSaveContact,setShowSaveContact] = useState(false);
+  const [showSaveContact, setShowSaveContact] = useState(false);
 
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -38,24 +38,24 @@ const PatreDetailScreen = ({ navigation }) => {
   }
 
   const handleSaveContact = async (father) => {
-    try{
+    try {
       const contact = {
         [Contacts.Fields.FirstName]: father.friendlyFirstName,
-        [Contacts.Fields.LastName]:father.friendlyLastName,
+        [Contacts.Fields.LastName]: father.friendlyLastName,
         [Contacts.Fields.PhoneNumbers]: [{
-          label:'mobile',
-          number: father.phones ? father.phones[0].number:null,
+          label: 'mobile',
+          number: father.phones ? father.phones[0].number : null,
         }],
         [Contacts.Fields.Emails]: [{
-          email: father.email ? father.email:null
-        }] 
+          email: father.email ? father.email : null
+        }]
       }
-      console.log('contact',contact)
-      console.log('spanshot',contact)
+      console.log('contact', contact)
+      console.log('spanshot', contact)
       const contactId = await Contacts.addContactAsync(contact);
-  
-      if(contactId){
-        Alert.alert(
+
+      if (contactId) {
+       /*  Alert.alert(
           "Contact Saved.",
           "My Alert Msg",
           [
@@ -67,10 +67,10 @@ const PatreDetailScreen = ({ navigation }) => {
             { text: "OK", onPress: () => console.log("OK Pressed") }
           ],
           { cancelable: false }
-        );
+        ); */
       }
-      else{
-        Alert.alert(
+      else {
+      /*   Alert.alert(
           "Contact not saved.",
           "My Alert Msg",
           [
@@ -82,35 +82,36 @@ const PatreDetailScreen = ({ navigation }) => {
             { text: "OK", onPress: () => console.log("OK Pressed") }
           ],
           { cancelable: false }
-        );
-     
-      }}
-      catch(err){
-        Alert.alert(
-          "Contact not Saved.problem",
-          "My Alert Msg",
-          [
-            {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel"
-            },
-            { text: "OK", onPress: () => console.log("OK Pressed") }
-          ],
-          { cancelable: false }
-        );
+        ); */
+
       }
-    
-     const contactId = await Contacts.addContactAsync(contact);
-     console.log(contactId)
-     
+    }
+    catch (err) {
+     /*  Alert.alert(
+        "Contact not Saved.problem",
+        "My Alert Msg",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: false }
+      ); */
+    }
+
+    const contactId = await Contacts.addContactAsync(contact);
+    console.log(contactId)
+
   }
 
   useEffect(() => {
     (async () => {
       const { status } = await Contacts.requestPermissionsAsync();
-      if ( status === 'granted') {
-        setShowSaveContact( true )
+      if (status === 'granted') {
+        setShowSaveContact(true)
       }
     })()
     const fatherId = navigation.getParam('fatherId');
@@ -150,7 +151,7 @@ const PatreDetailScreen = ({ navigation }) => {
                     <View style={{ width: '75%' }}>
                       <Text style={{ color: Colors.onSurfaceColorSecondary, fontFamily: 'work-sans' }}>
 
-                        {`${i18n.t('LAST_UPDATE')}:${
+                        {`${i18n.t('FATHER_DETAIL.LAST_UPDATE')}:${
                           father.personalInfoUpdatedOn ?
                             moment.utc(father.personalInfoUpdatedOn).format('Do MMMM YYYY')
                             : null
@@ -159,47 +160,47 @@ const PatreDetailScreen = ({ navigation }) => {
                     </View>
                   </View>
                 </View>
-                <Text style={styles.sectionHeader}>{i18n.t('CONTACT_INFO')}</Text>
+                <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CONTACT_INFO')}</Text>
                 <DefaultItem title="EMAIL" body={father.email} />
                 <DefaultItem title="MAIN_CELL_PHONE" body={father.phones[0].number} />
                 <DefaultItem title="HOME" body={father.phones[1] != undefined ? father.phones[1].number : ''} />
 
                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 10 }}>
-                  {showSaveContact && 
-                  <TouchableComp onPress = {
-                    () =>{
-                      handleSaveContact(father)
-                    }
-                  }>
-                    <View
-                      style={{
-                        backgroundColor: 'white',
-                        borderColor: Colors.primaryColor,
-                        
-                        borderRadius: 5,
-                        borderWidth:2,
-                        paddingHorizontal: 10,
-                        width: '45%',
-                        height: 50,
-                        marginHorizontal: 15,
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <Text
+                  {showSaveContact &&
+                    <TouchableComp onPress={
+                      () => {
+                        handleSaveContact(father)
+                      }
+                    }>
+                      <View
                         style={{
-                          textAlign: 'center',
-                          fontSize: 12,
-                          fontFamily: 'work-sans-bold',
-                          textTransform: 'uppercase',
-                          color: Colors.primaryColor,
+                          backgroundColor: 'white',
+                          borderColor: Colors.primaryColor,
+
+                          borderRadius: 5,
+                          borderWidth: 2,
+                          paddingHorizontal: 10,
+                          width: '45%',
+                          height: 50,
+                          marginHorizontal: 15,
+                          justifyContent: 'center',
                         }}
                       >
-                        {i18n.t('SAVE_CONTACT')}
-                      </Text>
-                    </View>
-                  </TouchableComp>
+                        <Text
+                          style={{
+                            textAlign: 'center',
+                            fontSize: 12,
+                            fontFamily: 'work-sans-bold',
+                            textTransform: 'uppercase',
+                            color: Colors.primaryColor,
+                          }}
+                        >
+                          {i18n.t('FATHER_DETAIL.SAVE_CONTACT')}
+                        </Text>
+                      </View>
+                    </TouchableComp>
                   }
-                  
+
                   {father.phones[0].whatsApp === true && (
                     <TouchableComp
                       onPress={() => {
@@ -216,7 +217,7 @@ const PatreDetailScreen = ({ navigation }) => {
                   )}
                 </View>
 
-                <Text style={styles.sectionHeader}>{i18n.t('CURRENT_HOME')}</Text>
+                <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CURRENT_HOME')}</Text>
                 <DefaultItem
                   title="FILIATION"
                   body={father.activeLivingSituation.filiationName}
@@ -228,7 +229,7 @@ const PatreDetailScreen = ({ navigation }) => {
                   body={father.activeLivingSituation.houseName}
                   img={father.activeLivingSituation.houseCountry}
                   selected={() => {
-                    navigation.navigate('HouseDetail', { houseId:father.activeLivingSituation.houseId })
+                    navigation.navigate('HouseDetail', { houseId: father.activeLivingSituation.houseId })
                   }} />
                 <DefaultItem
                   title="RESPONSIBLE_TERRITORY"
@@ -237,7 +238,7 @@ const PatreDetailScreen = ({ navigation }) => {
                     navigation.navigate('DelegationDetail', { delegationId: father.activeLivingSituation.responsibleTerritoryId })
                   }} />
 
-                <Text style={styles.sectionHeader}>{i18n.t('PERSONAL_INFO')}</Text>
+                <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PERSONAL_INFO')}</Text>
 
                 <DefaultItem title="HOME_COUNTRY" img={father.country} country_code={father.country} lang={value.lang} />
 
@@ -245,20 +246,20 @@ const PatreDetailScreen = ({ navigation }) => {
                   title="HOME_TERRITORY"
                   body={father.homeTerritoryName}
                   selected={() => {
-                    navigation.navigate('DelegationDetail',{ delegationId: father.activeLivingSituation.homeTerritoryId })
+                    navigation.navigate('DelegationDetail', { delegationId: father.activeLivingSituation.homeTerritoryId })
                   }} />
                 <DefaultItem
                   title="COURSE"
                   body={father.courseName}
                   selected={() => {
-                    navigation.navigate('CourseDetail',{ courseId: father.courseId })
+                    navigation.navigate('CourseDetail', { courseId: father.courseId })
                   }} />
 
                 <DefaultItem
                   title="GENERATION"
                   body={father.generationName}
-                  selected={()=> {
-                    navigation.navigate('GenerationDetail', { generationId:father.generationId })
+                  selected={() => {
+                    navigation.navigate('GenerationDetail', { generationId: father.generationId })
                   }}
                 />
                 <DefaultItem
@@ -307,7 +308,7 @@ const PatreDetailScreen = ({ navigation }) => {
                 />
                 {father.livingSituations &&
                   <Fragment>
-                    <Text style={styles.sectionHeader}>{i18n.t('PAST_HOMES')}</Text>
+                    <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PAST_HOMES')}</Text>
                     {profile.livingSituations.map((pastHomes) => (
                       <View>
                         <DefaultItem title="FILIATION" body={pastHomes.filiationName} img={pastHomes.filiationCountry} />
@@ -340,7 +341,7 @@ const PatreDetailScreen = ({ navigation }) => {
 
 PatreDetailScreen.navigationOptions = (navigationData) => ({
 
-  headerTitle: i18n.t('INFORMATION'),
+  headerTitle: i18n.t(''),
 
 });
 
@@ -377,7 +378,7 @@ const DefaultItem = ({
         }}
       >
         <View>
-          <Text style={styles.listItemTitle}>{i18n.t(title)}</Text>
+          <Text style={styles.listItemTitle}>{i18n.t('FATHER_DETAIL.' + title)}</Text>
           {country_code &&
             <Text style={styles.listItemBody}>{countries.getName(country_code, lang)}</Text>
           }

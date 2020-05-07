@@ -60,13 +60,13 @@ const HomeScreen = ({ navigation }) => {
                 <View style={styles.prayerCard}>
                   <Text style={styles.prayerCardTitle}>
                     {' '}
-                    {i18n.t('COMMUNITY_PRAYER')}
+                    {i18n.t('HOME_SCREEN.COMMUNITY_PRAYER')}
                   </Text>
                   <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
                 </View>
               </TouchableComp>
 
-              <Text style={styles.title}>{i18n.t('REMINDERS')}</Text>
+              <Text style={styles.title}>{i18n.t('HOME_SCREEN.REMINDERS')}</Text>
 
 
               <FlatList
