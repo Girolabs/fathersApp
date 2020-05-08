@@ -135,6 +135,9 @@ const CommunityNavigator = createStackNavigator({
   },
   PatreDetail:{
     screen: PatreDetailScreen,
+  },
+  HouseDetail: {
+    screen: HouseDetailScreen
   }
 
 }, {

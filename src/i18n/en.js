@@ -55,5 +55,16 @@ exports.EN = {
     SUPERIOR: 'Superior',
     HOMES: 'Houses',
     MEMBERS: 'MEMBERS OF THE FILIAL'
+  },
+  HOUSE_DETAIL: {
+    HOUSE_INFO: 'House information',
+    PHONE:  'Phone',
+    FAX: 'Fax',
+    DIOCESE: 'Diocese',
+    ADDRESS: 'Address',
+    EMAIL: 'Email',
+    MAIN_HOUSE: 'Main house',
+    MEMBERS: 'Members of the house',
+    FILIAL: 'Filial'
   }
 };

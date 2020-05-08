@@ -341,7 +341,7 @@ const PatreDetailScreen = ({ navigation }) => {
 
 PatreDetailScreen.navigationOptions = (navigationData) => ({
 
-  headerTitle: i18n.t(''),
+  headerTitle: '',
 
 });
 

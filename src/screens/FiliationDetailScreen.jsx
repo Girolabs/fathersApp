@@ -9,7 +9,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Flag } from 'react-native-svg-flagkit';
 import moment from 'moment';
 import 'moment/min/locales';
-import { CardStyleInterpolators } from 'react-navigation-stack';
 
 class FiliationDetailScreen extends Component {
   state = {
@@ -77,7 +76,6 @@ class FiliationDetailScreen extends Component {
                               </Text>
                             </View>
                           </View>
-
                         </View>
                       </TouchableComp>
                     }
@@ -85,9 +83,9 @@ class FiliationDetailScreen extends Component {
                   <View  >
                     <Text style={styles.sectionHeader}>{i18n.t('FILIAL_DETAIL.HOMES')}</Text>
                     <View>
-                      {filiation.houses.filter( house => house.isActive == true ).map(house => {
+                      {filiation.houses.filter(house => house.isActive == true).map(house => {
                         return (
-                          <TouchableComp onPress= {() => {
+                          <TouchableComp onPress={() => {
                             navigation.navigate('HouseDetail', { houseId: house.houseId })
                           }}>
                             <View style={styles.card}>
@@ -131,7 +129,7 @@ class FiliationDetailScreen extends Component {
 
 };
 
-FiliationDetailScreen.navigationOptions = (navigationData) => ({
+FiliationDetailScreen.navigationOptions = () => ({
   headerTitle: '',
 });
 

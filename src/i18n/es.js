@@ -42,7 +42,7 @@ exports.ES = {
     SUPERIOR: 'Superior',
     TERRITORY_FILIATION: 'Filiales del territorio',
     RECTOR: 'Rector',
-    MAIN_HOUSE: 'Main house',
+    MAIN_HOUSE: 'Casa principal',
     MEMBERS: 'Members',
     MEMBERS_OF_TERRITORY: 'Miembros de este territorio de origen',
     PRIESTS: 'Sacerdotes',
@@ -50,12 +50,23 @@ exports.ES = {
     DECEASED: 'Fallecidos'
   },
   FILIAL_DETAIL: {
-    FILIAL_INFO: 'Filial information',
+    FILIAL_INFO: 'Información de filial',
     TERRITORY: 'Territorio',
     SUPERIOR: 'Superior',
     HOUSES: 'CASAS',
     MAIN_HOUSE: 'Casa principal',
     MEMBERS: 'Miembros de la filial'
+  },
+  HOUSE_DETAIL: {
+    HOUSE_INFO: 'Información de la casa',
+    PHONE:  'Teléfono',
+    FAX: 'Fax',
+    DIOCESE: 'Diócesis',
+    ADDRESS: 'Domicilio',
+    EMAIL: 'Email',
+    MAIN_HOUSE: 'Casa principal',
+    MEMBERS: 'Miembros de la casa',
+    FILIAL: 'Filial'
   }
 };
 
