@@ -54,7 +54,8 @@ exports.EN = {
     TERRITORY: 'Territorio',
     SUPERIOR: 'Superior',
     HOMES: 'Houses',
-    MEMBERS: 'MEMBERS OF THE FILIAL'
+    MEMBERS: 'MEMBERS OF THE FILIAL',
+    MAIN_HOUSE: 'Main house',
   },
   HOUSE_DETAIL: {
     HOUSE_INFO: 'House information',
@@ -66,5 +67,13 @@ exports.EN = {
     MAIN_HOUSE: 'Main house',
     MEMBERS: 'Members of the house',
     FILIAL: 'Filial'
+  },
+  GENERATION: {
+    GENERATION_INFO: 'Generation information',
+    CELEBRATION_DATE: 'Celebration date',
+    FOUNDATION_DATE: 'Foundation date',
+    COURSES: 'Cursos'
+    
+
   }
 };

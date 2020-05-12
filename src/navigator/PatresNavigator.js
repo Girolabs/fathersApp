@@ -24,6 +24,7 @@ import CourseDetailScreen from '../screens/CourseDetailScreen';
 import GenerationDetailScreen from '../screens/GenerationDetailScreen';
 
 
+
 const defaultStackNavOptions = {
   headerStyle: {
     backgroundColor: Colors.surfaceColorPrimary,
@@ -75,7 +76,7 @@ const SearchNavigator = createStackNavigator({
   HouseDetail: {
     screen: HouseDetailScreen,
   },
-  CourseDetailScreen: {
+  CourseDetail: {
     screen: CourseDetailScreen,
   }
 }, {
@@ -136,9 +137,16 @@ const CommunityNavigator = createStackNavigator({
   PatreDetail:{
     screen: PatreDetailScreen,
   },
+  GenerationDetail: {
+    screen: GenerationDetailScreen,
+  },
   HouseDetail: {
     screen: HouseDetailScreen
+  },
+  CourseDetail: {
+    screen: CourseDetailScreen,
   }
+  
 
 }, {
   defaultNavigationOptions: defaultStackNavOptions,

@@ -67,6 +67,9 @@ exports.ES = {
     MAIN_HOUSE: 'Casa principal',
     MEMBERS: 'Miembros de la casa',
     FILIAL: 'Filial'
+  },
+  GENERATION: {
+    GENERATION_INFO: 'Información de la generación'
   }
 };
 

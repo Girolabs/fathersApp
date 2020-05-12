@@ -161,9 +161,14 @@ const PatreDetailScreen = ({ navigation }) => {
                   </View>
                 </View>
                 <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CONTACT_INFO')}</Text>
-                <DefaultItem title="EMAIL" body={father.email} />
-                <DefaultItem title="MAIN_CELL_PHONE" body={father.phones[0].number} />
-                <DefaultItem title="HOME" body={father.phones[1] != undefined ? father.phones[1].number : ''} />
+                <DefaultItem title="FATHER_DETAIL.EMAIL" body={father.email} />
+                <DefaultItem title="FATHER_DETAIL.MAIN_CELL_PHONE" body={father.phones[0].number}  />
+                {
+                  father.phones.length > 1 && (
+                    <DefaultItem title="FATHER_DETAIL.HOME" body={father.phones[1] != undefined ? father.phones[1].number : ''}  />
+                  )
+                }
+                
 
                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 10 }}>
                   {showSaveContact &&
@@ -219,20 +224,20 @@ const PatreDetailScreen = ({ navigation }) => {
 
                 <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CURRENT_HOME')}</Text>
                 <DefaultItem
-                  title="FILIATION"
+                  title="FATHER_DETAIL.FILIATION"
                   body={father.activeLivingSituation.filiationName}
                   img={father.activeLivingSituation.filiationCountry}
                   selected={() => { navigation.navigate('FiliationDetail', { filiationId: father.activeLivingSituation.filiationId }) }} />
 
                 <DefaultItem
-                  title="HOME"
+                  title="FATHER_DETAIL.HOME"
                   body={father.activeLivingSituation.houseName}
                   img={father.activeLivingSituation.houseCountry}
                   selected={() => {
                     navigation.navigate('HouseDetail', { houseId: father.activeLivingSituation.houseId })
                   }} />
                 <DefaultItem
-                  title="RESPONSIBLE_TERRITORY"
+                  title="FATHER_DETAIL.RESPONSIBLE_TERRITORY"
                   body={father.activeLivingSituation.responsibleTerritoryName}
                   selected={() => {
                     navigation.navigate('DelegationDetail', { delegationId: father.activeLivingSituation.responsibleTerritoryId })
@@ -240,50 +245,50 @@ const PatreDetailScreen = ({ navigation }) => {
 
                 <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PERSONAL_INFO')}</Text>
 
-                <DefaultItem title="HOME_COUNTRY" img={father.country} country_code={father.country} lang={value.lang} />
+                <DefaultItem title="FATHER_DETAIL.HOME_COUNTRY" img={father.country} country_code={father.country} lang={value.lang} />
 
                 <DefaultItem
-                  title="HOME_TERRITORY"
+                  title="FATHER_DETAIL.HOME_TERRITORY"
                   body={father.homeTerritoryName}
                   selected={() => {
                     navigation.navigate('DelegationDetail', { delegationId: father.activeLivingSituation.homeTerritoryId })
                   }} />
                 <DefaultItem
-                  title="COURSE"
+                  title="FATHER_DETAIL.COURSE"
                   body={father.courseName}
                   selected={() => {
                     navigation.navigate('CourseDetail', { courseId: father.courseId })
                   }} />
 
                 <DefaultItem
-                  title="GENERATION"
+                  title="FATHER_DETAIL.GENERATION"
                   body={father.generationName}
                   selected={() => {
                     navigation.navigate('GenerationDetail', { generationId: father.generationId })
                   }}
                 />
                 <DefaultItem
-                  title="BIRTHDAY"
+                  title="FATHER_DETAIL.BIRTHDAY"
                   body={father.birthDate ? moment.utc(father.birthDate).format('Do MMMM YYYY') : null}
                 />
                 <DefaultItem
-                  title="NAMEDAY"
+                  title="FATHER_DETAIL.NAMEDAY"
                   body={father.nameDay ? moment.utc(father.nameDay).format('Do MMMM YYYY') : null}
                 />
                 <DefaultItem
-                  title="BAPTISM"
+                  title="FATHER_DETAIL.BAPTISM"
                   body={father.baptismDate ? moment.utc(father.baptismDate).format('Do MMMM YYYY') : null}
                 />
                 <DefaultItem
-                  title="POSTULANCY_ADMITTANCE"
+                  title="FATHER_DETAIL.POSTULANCY_ADMITTANCE"
                   body={father.postulancyDate ? moment.utc(father.postulancyDate).format('Do MMMM YYYY') : null}
                 />
                 <DefaultItem
-                  title="NOVITIATE_START"
+                  title="FATHER_DETAIL.NOVITIATE_START"
                   body={father.novitiateDate ? moment.utc(father.novitiateDate).format('Do MMMM YYYY') : null}
                 />
                 <DefaultItem
-                  title="COMMUNITY_MEMBERSHIP"
+                  title="FATHER_DETAIL.COMMUNITY_MEMBERSHIP"
                   body={
                     father.communityMembershipDate
                       ? moment.utc(father.communityMembershipDate).format('Do MMMM YYYY')
@@ -291,7 +296,7 @@ const PatreDetailScreen = ({ navigation }) => {
                   }
                 />
                 <DefaultItem
-                  title="PERPETUAL_CONTRACT"
+                  title="FATHER_DETAIL.PERPETUAL_CONTRACT"
                   body={
                     father.perpetualContractDate
                       ? moment.utc(father.perpetualContractDate).format('Do MMMM YYYY')
@@ -299,11 +304,11 @@ const PatreDetailScreen = ({ navigation }) => {
                   }
                 />
                 <DefaultItem
-                  title="DIACONATE_ORDINATION"
+                  title="FATHER_DETAIL.DIACONATE_ORDINATION"
                   body={father.deaconDate ? moment.utc(father.deaconDate).format('Do MMMM YYYY') : null}
                 />
                 <DefaultItem
-                  title="PRIESTLY_ORDINATION"
+                  title="FATHER_DETAIL.PRIESTLY_ORDINATION"
                   body={father.priestDate ? moment.utc(father.priestDate).format('Do MMMM YYYY') : null}
                 />
                 {father.livingSituations &&
@@ -311,11 +316,11 @@ const PatreDetailScreen = ({ navigation }) => {
                     <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PAST_HOMES')}</Text>
                     {profile.livingSituations.map((pastHomes) => (
                       <View>
-                        <DefaultItem title="FILIATION" body={pastHomes.filiationName} img={pastHomes.filiationCountry} />
-                        <DefaultItem title="HOME" body={pastHomes.houseName} img={pastHomes.houseCountry} />
-                        <DefaultItem title="RESPONSIBLE_TERRITORY" body={pastHomes.responsibleTerritoryName} />
-                        <DefaultItem title="START_DATE" date={pastHomes.startDate} lang={value.lang} />
-                        <DefaultItem title="END_DATE" date={pastHomes.endDate} lang={value.lang} />
+                        <DefaultItem title="FATHER_DETAIL.FILIATION" body={pastHomes.filiationName} img={pastHomes.filiationCountry} />
+                        <DefaultItem title="FATHER_DETAIL.HOME" body={pastHomes.houseName} img={pastHomes.houseCountry} />
+                        <DefaultItem title="FATHER_DETAIL.RESPONSIBLE_TERRITORY" body={pastHomes.responsibleTerritoryName} />
+                        <DefaultItem title="FATHER_DETAIL.START_DATE" date={pastHomes.startDate} lang={value.lang} />
+                        <DefaultItem title="FATHER_DETAIL.END_DATE" date={pastHomes.endDate} lang={value.lang} />
                         <Text style={styles.sectionHeader}></Text>
                       </View>
                     ))}
@@ -377,8 +382,12 @@ const DefaultItem = ({
           alignItems: 'center',
         }}
       >
+
         <View>
-          <Text style={styles.listItemTitle}>{i18n.t('FATHER_DETAIL.' + title)}</Text>
+        {title &&
+             <Text style={styles.listItemTitle}>{i18n.t(title)}</Text>
+          }
+         
           {country_code &&
             <Text style={styles.listItemBody}>{countries.getName(country_code, lang)}</Text>
           }
