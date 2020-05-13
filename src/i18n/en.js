@@ -1,6 +1,5 @@
 exports.EN = {
   GENERAL:{
-
   },
   HOME_SCREEN: {
     REMINDERS: 'Reminders',
@@ -72,8 +71,6 @@ exports.EN = {
     GENERATION_INFO: 'Generation information',
     CELEBRATION_DATE: 'Celebration date',
     FOUNDATION_DATE: 'Foundation date',
-    COURSES: 'Cursos'
-    
-
+    COURSES: 'Courses'
   }
 };

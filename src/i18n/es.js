@@ -1,6 +1,5 @@
 exports.ES = {
   GENERAL:{
-
   },
   HOME_SCREEN: {
     REMINDERS: 'Recordatorios',
@@ -69,7 +68,10 @@ exports.ES = {
     FILIAL: 'Filial'
   },
   GENERATION: {
-    GENERATION_INFO: 'Información de la generación'
+    GENERATION_INFO: 'Información de la generación',
+    CELEBRATION_DATE: 'Fecha de celebración',
+    FOUNDATION_DATE: 'Fecha de fundación',
+    COURSES: 'Cursos'
   }
 };
 
