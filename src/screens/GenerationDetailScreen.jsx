@@ -146,8 +146,8 @@ const styles = StyleSheet.create({
 
 	},
 	cardBody: {
-		flexDirection: 'row',
-		alignItems: 'center',
+		flexDirection: 'column',
+		alignItems: 'flex-start',
 		justifyContent: 'space-between',
 		borderBottomColor: Colors.onSurfaceColorSecondary,
 		borderBottomWidth: 0.5,

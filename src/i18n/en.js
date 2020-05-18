@@ -72,5 +72,22 @@ exports.EN = {
     CELEBRATION_DATE: 'Celebration date',
     FOUNDATION_DATE: 'Foundation date',
     COURSES: 'Courses'
+  },
+  COURSE: {
+    INFORMATION: 'Course information',
+    GENERATION: 'Generation',
+    CELEBRATION_DATE: 'Celebration date',
+    CONSECRATION_DATE: 'Ideal consecration date',
+    LEADER: 'Course leader',
+    NOVITIATE_START: 'Novitiate start',
+    NOVITIATE: 'Novitiate',
+    NOVICE_MASTER: 'Novice master',
+    SCHOLASTICATE: 'Scholasticate',
+    SCHOLASTICATE_RECTORS: 'Scholasticate Rectors',
+    FIRST_TERTIANSHIP: 'First tertianship',
+    SECOND_TERTIANSHIP: 'Second tertianship',
+    SION_TIME: 'Sion Time',
+    STATEMENT: 'Ideal Statement',
+    MEMBERS: 'Course members',
   }
 };
