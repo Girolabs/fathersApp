@@ -55,51 +55,51 @@ const PatreDetailScreen = ({ navigation }) => {
       const contactId = await Contacts.addContactAsync(contact);
 
       if (contactId) {
-       /*  Alert.alert(
-          "Contact Saved.",
-          "My Alert Msg",
-          [
-            {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel"
-            },
-            { text: "OK", onPress: () => console.log("OK Pressed") }
-          ],
-          { cancelable: false }
-        ); */
+        /*  Alert.alert(
+           "Contact Saved.",
+           "My Alert Msg",
+           [
+             {
+               text: "Cancel",
+               onPress: () => console.log("Cancel Pressed"),
+               style: "cancel"
+             },
+             { text: "OK", onPress: () => console.log("OK Pressed") }
+           ],
+           { cancelable: false }
+         ); */
       }
       else {
-      /*   Alert.alert(
-          "Contact not saved.",
-          "My Alert Msg",
-          [
-            {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel"
-            },
-            { text: "OK", onPress: () => console.log("OK Pressed") }
-          ],
-          { cancelable: false }
-        ); */
+        /*   Alert.alert(
+            "Contact not saved.",
+            "My Alert Msg",
+            [
+              {
+                text: "Cancel",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+              },
+              { text: "OK", onPress: () => console.log("OK Pressed") }
+            ],
+            { cancelable: false }
+          ); */
 
       }
     }
     catch (err) {
-     /*  Alert.alert(
-        "Contact not Saved.problem",
-        "My Alert Msg",
-        [
-          {
-            text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel"
-          },
-          { text: "OK", onPress: () => console.log("OK Pressed") }
-        ],
-        { cancelable: false }
-      ); */
+      /*  Alert.alert(
+         "Contact not Saved.problem",
+         "My Alert Msg",
+         [
+           {
+             text: "Cancel",
+             onPress: () => console.log("Cancel Pressed"),
+             style: "cancel"
+           },
+           { text: "OK", onPress: () => console.log("OK Pressed") }
+         ],
+         { cancelable: false }
+       ); */
     }
 
     const contactId = await Contacts.addContactAsync(contact);
@@ -162,14 +162,21 @@ const PatreDetailScreen = ({ navigation }) => {
                 </View>
                 <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CONTACT_INFO')}</Text>
                 <DefaultItem title="FATHER_DETAIL.EMAIL" body={father.email} />
-                <DefaultItem title="FATHER_DETAIL.MAIN_CELL_PHONE" body={father.phones[0].number}  />
                 {
-                  father.phones.length > 1 && (
-                    <DefaultItem title="FATHER_DETAIL.HOME" body={father.phones[1] != undefined ? father.phones[1].number : ''}  />
+                  father.phones.length >= 1 && (
+                    <DefaultItem title="FATHER_DETAIL.MAIN_CELL_PHONE" body={father.phones[0] != undefined ? father.phones[0].number : null} />
                   )
                 }
-                
 
+                {
+                  father.phones.length > 1 && (
+                    <DefaultItem title="FATHER_DETAIL.HOME" body={father.phones[1] != undefined ? father.phones[1].number : ''} />
+                  )
+                }
+
+                {
+
+                }
                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 10 }}>
                   {showSaveContact &&
                     <TouchableComp onPress={
@@ -206,7 +213,7 @@ const PatreDetailScreen = ({ navigation }) => {
                     </TouchableComp>
                   }
 
-                  {father.phones[0].whatsApp === true && (
+                  {(father.phones.length >= 1) && (father.phones[0].whatsApp === true) && (
                     <TouchableComp
                       onPress={() => {
                         Linking.openURL(`http://api.whatsapp.com/send?phone=${father.phones[0].number}`);
@@ -223,25 +230,31 @@ const PatreDetailScreen = ({ navigation }) => {
                 </View>
 
                 <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CURRENT_HOME')}</Text>
-                <DefaultItem
-                  title="FATHER_DETAIL.FILIATION"
-                  body={father.activeLivingSituation.filiationName}
-                  img={father.activeLivingSituation.filiationCountry}
-                  selected={() => { navigation.navigate('FiliationDetail', { filiationId: father.activeLivingSituation.filiationId }) }} />
+                {father.activeLivingSituation &&
+                  <Fragment>
+                    <DefaultItem
+                      title="FATHER_DETAIL.FILIATION"
+                      body={father.activeLivingSituation.filiationName}
+                      img={father.activeLivingSituation.filiationCountry}
+                      selected={() => { navigation.navigate('FiliationDetail', { filiationId: father.activeLivingSituation.filiationId }) }} />
 
-                <DefaultItem
-                  title="FATHER_DETAIL.HOME"
-                  body={father.activeLivingSituation.houseName}
-                  img={father.activeLivingSituation.houseCountry}
-                  selected={() => {
-                    navigation.navigate('HouseDetail', { houseId: father.activeLivingSituation.houseId })
-                  }} />
-                <DefaultItem
-                  title="FATHER_DETAIL.RESPONSIBLE_TERRITORY"
-                  body={father.activeLivingSituation.responsibleTerritoryName}
-                  selected={() => {
-                    navigation.navigate('DelegationDetail', { delegationId: father.activeLivingSituation.responsibleTerritoryId })
-                  }} />
+                    <DefaultItem
+                      title="FATHER_DETAIL.HOME"
+                      body={father.activeLivingSituation.houseName}
+                      img={father.activeLivingSituation.houseCountry}
+                      selected={() => {
+                        navigation.navigate('HouseDetail', { houseId: father.activeLivingSituation.houseId })
+                      }} />
+                    <DefaultItem
+                      title="FATHER_DETAIL.RESPONSIBLE_TERRITORY"
+                      body={father.activeLivingSituation.responsibleTerritoryName}
+                      selected={() => {
+                        navigation.navigate('DelegationDetail', { delegationId: father.activeLivingSituation.responsibleTerritoryId })
+                      }} />
+                  </Fragment>
+
+                }
+
 
                 <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PERSONAL_INFO')}</Text>
 
@@ -384,10 +397,10 @@ const DefaultItem = ({
       >
 
         <View>
-        {title &&
-             <Text style={styles.listItemTitle}>{i18n.t(title)}</Text>
+          {title &&
+            <Text style={styles.listItemTitle}>{i18n.t(title)}</Text>
           }
-         
+
           {country_code &&
             <Text style={styles.listItemBody}>{countries.getName(country_code, lang)}</Text>
           }

@@ -85,9 +85,13 @@ exports.EN = {
     SCHOLASTICATE: 'Scholasticate',
     SCHOLASTICATE_RECTORS: 'Scholasticate Rectors',
     FIRST_TERTIANSHIP: 'First tertianship',
+    FILIATION: 'Filiation',
+    MASTER:'Master',
     SECOND_TERTIANSHIP: 'Second tertianship',
     SION_TIME: 'Sion Time',
     STATEMENT: 'Ideal Statement',
     MEMBERS: 'Course members',
+    START_DATE: 'Start date',
+    END_DATE: 'End date'
   }
 };

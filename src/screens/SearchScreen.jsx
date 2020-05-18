@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Colors from '../constants/Colors';
 import { Ionicons } from 'expo-vector-icons';
@@ -45,16 +45,19 @@ class SearchScreen extends Component {
 	render() {
 		return (
 			<View style={styles.screen}>
+				{!this.state.loading ?
+				<Fragment>
 				<View style={styles.inputBox}>
 					<TextInput placeholder="Search" onChangeText={(text) => this.handleFilter(text)} />
 					<Ionicons name="ios-search" size={25} colors={Colors.primaryColor} />
 				</View>
-				{!this.state.loading ?
+				
 					<FlatList
 						data={this.state.filterResults}
 						renderItem={({ item, data }) => {
 							return (
 								<TouchableOpacity
+									key={item.personId}
 									style={styles.item}
 									onPress={() => {
 										this.props.navigation.navigate('PatreDetail', {
@@ -68,6 +71,7 @@ class SearchScreen extends Component {
 							);
 						}}
 					/>
+					</Fragment>
 					: <ActivityIndicator size="large" color={Colors.primaryColor} />}
 			</View>
 		);
