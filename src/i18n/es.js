@@ -1,5 +1,7 @@
 exports.ES = {
   GENERAL:{
+    FREE_COMMUNITY:'Comunidad libre',
+    GENERAL_COMMUNITY: 'Comunidad oficial'
   },
   HOME_SCREEN: {
     REMINDERS: 'Recordatorios',
@@ -93,6 +95,11 @@ exports.ES = {
     MEMBERS: 'Miembros del curso',
     START_DATE: 'Fecha de inicio',
     END_DATE: 'Fecha de fin'
+  },
+  ASSIGNMENTS: {
+    TERRITORY: 'Territory',
+    ALL: 'ALL',
+    HISTORICAL: ' Historical'
   }
 };
 

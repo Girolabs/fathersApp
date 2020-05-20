@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
 import HomeScreen from '../screens/HomeScreen';
 import PatreDetailScreen from '../screens/PatreDetailScreen';
@@ -22,6 +23,8 @@ import DelegationDetailScreen from '../screens/DelegationDetailScreen';
 import HouseDetailScreen from '../screens/HouseDetailScreen';
 import CourseDetailScreen from '../screens/CourseDetailScreen';
 import GenerationDetailScreen from '../screens/GenerationDetailScreen';
+import FreeCommunityScreen from "../screens/FreeCommunityScreen";
+import AssignmentsScreen from '../screens/AssignmentsScreen';
 
 
 
@@ -146,11 +149,33 @@ const CommunityNavigator = createStackNavigator({
   CourseDetail: {
     screen: CourseDetailScreen,
   }
-  
-
 }, {
   defaultNavigationOptions: defaultStackNavOptions,
 });
+
+const FreeCommunityNavigator = createStackNavigator({
+  FreeCommunity: {
+    screen: FreeCommunityScreen,
+    navigationOptions: {
+      headerTitle: 'Comunidad Libre'
+    }
+  },
+  GenerationDetail: {
+    screen: GenerationDetailScreen
+  },
+  CourseDetail: {
+    screen: CourseDetailScreen
+  }
+})
+
+const AssignmentsNavigator = createStackNavigator({
+  Assignments: {
+    screen: AssignmentsScreen,
+    navigationOptions: {
+      headerTitle: 'Cargos'
+    }
+  }
+})
 
 const MainNavigator = createDrawerNavigator({
   HomeSearch: {
@@ -162,15 +187,27 @@ const MainNavigator = createDrawerNavigator({
   Profile: {
     screen: ProfileNavigator,
     navigationOptions: {
-      drawerLabel: 'Profile',
+      drawerLabel: 'Perfil',
     },
   },
   Community: {
     screen: CommunityNavigator,
     navigationOptions: {
-      drawerLabel: 'Comunidad Oficial',
+      drawerLabel: 'Comunidad oficial' 
     },
   },
+  FreeCommunity: {
+    screen: FreeCommunityNavigator,
+    navigationOptions : {
+      drawerLabel: 'Comunidad Libre'
+    }
+  },
+  Assignments: {
+    screen: AssignmentsNavigator,
+    navigationOptions: {
+      drawerLabel: 'Cargos'
+    }
+  }
 
 
 }, {
@@ -189,6 +226,7 @@ const MainNavigator = createDrawerNavigator({
 export default createAppContainer(MainNavigator);
 
 const DefaultDrawer = (props) => {
+  
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <TouchableOpacity

@@ -12,11 +12,13 @@ class I18nProvider extends Component {
         lang:String(Localization.locale).split('-')[0],
     }
     componentDidMount(){
+        console.log('antes', i18n.translations)
         i18n.translations = {
             
             en: EN,
             es: ES,
           };
+          console.log('despues', i18n.translations)
 
         i18n.locale = this.state.lang;
         i18n.fallbacks = true;
@@ -35,7 +37,7 @@ class I18nProvider extends Component {
                 <Fragment>
 
                 
-                {this.state.lang ?
+                {(this.state.lang && i18n.translations) ?
                 <I18nContext.Provider value={{
                     lang:this.state.lang,
                     changeLang: (newLang) => this.setState({lang:newLang})
