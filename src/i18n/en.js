@@ -97,8 +97,13 @@ exports.EN = {
     END_DATE: 'End date'
   },
   ASSIGNMENTS: {
-    TERRITORY: 'Territory',
+    TERRITORY: 'Terr.',
     ALL: 'ALL',
-    HISTORICAL: ' Historical'
+    HISTORICAL: ' Histor.',
+    FILIATIONS: 'Filiat.',
+    GENERATIONS: 'Gen.',
+    COURSES: 'Courses',
+    GENERATION: 'Generation',
+    COURSE: 'Course'
   }
 };
