@@ -10,6 +10,9 @@ import 'moment/min/locales';
 import { I18nContext } from '../context/I18nProvider';
 import { Flag } from 'react-native-svg-flagkit';
 
+import HeaderButton from '../components/HeaderButton';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+
 
 class AssignmentsScreen extends Component {
 	state = {
@@ -188,16 +191,23 @@ class AssignmentsScreen extends Component {
 					list = <SectionList
 						sections={filtered}
 						renderItem={({ item }) =>
-							<Item
+							<ListItem
 								name={item.person.fullName}
 								photo={item.person.photo}
 								roleTitle={item.roleTitle}
 								startDate={item.startDate}
 								endDate={item.endDate}
+								selectPerson={() => item.person ? this.props.navigation.navigate('PatreDetail', {
+									fatherId: item.person.personId
+								}) : null}
 							/>
 						}
-						renderSectionHeader={({ section: { name } }) =>
-							<Header name={name} />
+						renderSectionHeader={({ section: { name, territoryId } }) =>
+							<Header selectHeader={() => {
+								this.props.navigation.navigate('DelegationDetail', {
+									delegationId: territoryId
+								})
+							}} name={name} />
 						}
 					/>
 					console.log('filtered', filtered)
@@ -229,7 +239,9 @@ class AssignmentsScreen extends Component {
 
 							<View>
 								<TouchableComp onPress={() => {
-
+									this.props.navigation.navigate('DelegationDetail', {
+										delegationId: territory.territoryId
+									})
 
 								}}>
 									<View style={styles.sectionHeaderContainer}>
@@ -240,9 +252,6 @@ class AssignmentsScreen extends Component {
 								</TouchableComp>
 								{territory.filiations.map(filiation => {
 									return (
-
-
-
 										<Fragment>
 											{filiation.data.map(asg => {
 												return (
@@ -257,22 +266,36 @@ class AssignmentsScreen extends Component {
 																		uri: `https://schoenstatt-fathers.link${asg.person.photo}`
 																	}} />
 																<View style={styles.itemTextContainer}>
+																	<TouchableComp onPress = {() => {
+																		this.props.navigation.navigate('FiliationDetail',{
+																			filiationId: asg.filiationId
+																		})
+																	}}>
 																	<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-																		<Text style={{ marginRight: 5 }}>{asg.filiationName}</Text>
+																		<Text style={styles.itemTextTitle}>{asg.filiationName}</Text>
 																		<Flag id={asg.country} size={0.1} />
 																	</View>
 
-																	<Text>{asg.roleTitle}</Text>
-																	<Text>{asg.person.fullName}</Text>
-																	<Text>{`${asg.startDate ? moment.utc(asg.startDate).format('Do MMMM YYYY') : ''} - ${asg.endDate ? moment.utc(asg.endDate).format('Do MMMM YYYY') : ''}`}</Text>
-																	<Text></Text>
+																	</TouchableComp>
+																	
+																	<Text style={styles.itemText}>{asg.roleTitle}</Text>
+																	<TouchableComp onPress = {
+																		() => {
+																			this.props.navigation.navigate('PatreDetail',{
+																				fatherId: asg.person.personId
+																			})
+																		}
+																	}>
+																		<Text style={styles.itemText}>{asg.person.fullName}</Text>
+																	</TouchableComp>
+																	
+																	<Text style={styles.itemText}>{`${asg.startDate ? moment.utc(asg.startDate).format('Do MMMM YYYY') : ''} - ${asg.endDate ? moment.utc(asg.endDate).format('Do MMMM YYYY') : ''}`}</Text>
+
 																</View>
 															</View>
 														}
 													</Fragment>
-
 												)
-
 											})}
 										</Fragment>
 
@@ -280,81 +303,74 @@ class AssignmentsScreen extends Component {
 									)
 								})}
 							</View>
-
-
 						)
-
 					})}</ScrollView>
-					console.log('fil', filtered)
-
-
-
 					break
 				case 2:
 					filtered = territories
 					list = <SectionList
 						sections={filtered}
 						renderItem={({ item }) =>
-							<Item
+							<ListItem
 								name={item.person.fullName}
 								photo={item.person.photo}
 								roleTitle={item.roleTitle}
 								startDate={item.startDate}
 								endDate={item.endDate}
+								selectPerson={() => item.person ? this.props.navigation.navigate('PatreDetail', {
+									fatherId: item.person.personId
+								}) : null}
 							/>
 						}
-						renderSectionHeader={({ section: { name } }) =>
-							<Header name={name} />
+						renderSectionHeader={({ section: { name, territoryId } }) =>
+							<Header selectHeader={() => {
+								this.props.navigation.navigate('DelegationDetail', {
+									delegationId: territoryId
+								})
+							}} name={name} />
 						}
 					/>
 					break
 				case 3:
-
 					list = <ScrollView>
 						{this.state.generations.map(generation => {
 							return (
-								<View style={{ padding:20, backgroundColor: Colors.surfaceColorSecondary}}>
-									<Text>{`${i18n.t('ASSIGNMENTS.GENERATION')} ${generation.name}`}</Text>
-									{generation.mainAssignment &&
-										<Fragment>
-											<View style={{ flexDirection:'row', alignItems: 'center'}}>
-												<Text style={{marginRight:5}}>{generation.mainAssignment.person.fullName}</Text>
-												<Flag id={generation.mainAssignment.person.country} size={0.1} />
-											</View>
-											
-											<Text>{`${generation.mainAssignment.startDate ? moment.utc(generation.mainAssignment.startDate).format('Do MMMM YYYY') : ''} - ${
-												generation.mainAssignment.endDate ? moment.utc(generation.mainAssignment.endDate).format('Do MMMM YYYY') : ''}`}</Text>
-										</Fragment>
-
-									}
-
-								</View>
+								<ListItemGC
+									photo={generation.mainAssignment ? generation.mainAssignment.person.photo : null}
+									title={generation.name}
+									fullName={generation.mainAssignment ? generation.mainAssignment.person.fullName : null}
+									startDate={generation.mainAssignment ? generation.mainAssignment.startDate : null}
+									endDate={generation.mainAssignment ? generation.mainAssignment.endDate : null}
+									selectTitle={() => this.props.navigation.navigate('GenerationDetail', {
+										generationId: generation.generationId
+									})}
+									selectPerson={() => generation.mainAssignment ? this.props.navigation.navigate('PatreDetail', {
+										fatherId: generation.mainAssignment.person.personId
+									}) : null}
+								/>
 							)
+
 						})}
 					</ScrollView>
 
 					break;
 				case 4:
-					filtered = territories
 					list = <ScrollView>
 						{this.state.courses.map(course => {
 							return (
-								<View style={{ padding:20, backgroundColor: Colors.surfaceColorSecondary}}>
-									<Text>{`${i18n.t('ASSIGNMENTS.COURSE')} ${course.name}`}</Text>
-									{course.leaderAssignment &&
-										<Fragment>
-											<View style={{ flexDirection:'row', alignItems: 'center'}}>
-												<Text style={{marginRight:5}}>{course.leaderAssignment.person.fullName}</Text>
-												<Flag id={course.leaderAssignment.person.country} size={0.1} />
-											</View>
-											
-											<Text>{`${course.leaderAssignment.startDate ? moment.utc(course.leaderAssignment.startDate).format('Do MMMM YYYY') : ''} - ${
-												course.leaderAssignment.endDate ? moment.utc(course.leaderAssignment.endDate).format('Do MMMM YYYY') : ''}`}</Text>
-										</Fragment>
-
-									}
-
-								</View>
+								<ListItemGC
+									photo={course.leaderAssignment ? course.leaderAssignment.person.photo : null}
+									title={course.name}
+									fullName={course.leaderAssignment ? course.leaderAssignment.person.fullName : null}
+									startDate={course.leaderAssignment ? course.leaderAssignment.startDate : null}
+									endDate={course.leaderAssignment ? course.leaderAssignment.endDate : null}
+									selectTitle={() => this.props.navigation.navigate('CourseDetail', {
+										courseId: course.courseId
+									})}
+									selectPerson={() => course.leaderAssignment ? this.props.navigation.navigate('PatreDetail', {
+										fatherId: course.leaderAssignment.person.personId
+									}) : null}
+								/>
 							)
 						})}
 					</ScrollView>
@@ -388,10 +404,6 @@ class AssignmentsScreen extends Component {
 												</TouchableComp>
 											)
 										})}
-
-
-
-
 									</View>
 									<View>
 										{filtered &&
@@ -399,7 +411,6 @@ class AssignmentsScreen extends Component {
 												{list}
 											</Fragment>
 										}
-
 									</View>
 								</Fragment>
 								: <ActivityIndicator size="large" color={Colors.primaryColor} />}
@@ -407,18 +418,27 @@ class AssignmentsScreen extends Component {
 					)
 				}}
 			</I18nContext.Consumer>
-
-
 		);
 	}
 }
 
 AssignmentsScreen.navigationOptions = (navigationData) => ({
 	headerTitle: '',
-});
+	headerLeft: (
+		<HeaderButtons HeaderButtonComponent={HeaderButton}>
+			<Item
+				title="Menu"
+				iconName="md-menu"
+				onPress={() => {
+					navigationData.navigation.toggleDrawer();
+				}}
+			/>
+		</HeaderButtons>
+	),
+})
 
 const Header = (props) => {
-	const { name } = props
+	const { name, selectHeader } = props
 	let TouchableComp = TouchableOpacity;
 	if (Platform.OS === 'android' && Platform.Version >= 21) {
 		TouchableComp = TouchableNativeFeedback;
@@ -426,7 +446,7 @@ const Header = (props) => {
 
 	return (
 		<TouchableComp onPress={() => {
-
+			selectHeader()
 
 		}}>
 			<View style={styles.sectionHeaderContainer}>
@@ -439,31 +459,73 @@ const Header = (props) => {
 
 }
 
-const Item = (props) => {
-	const { photo, name, startDate, endDate, roleTitle } = props;
+const ListItem = (props) => {
+	const { photo, name, startDate, endDate, roleTitle, selectPerson } = props;
 	let TouchableComp = TouchableOpacity;
 	if (Platform.OS === 'android' && Platform.Version >= 21) {
 		TouchableComp = TouchableNativeFeedback;
 	}
 	return (
-		<View style={styles.itemContainer}>
+		<TouchableComp onPress = {() => {
+			selectPerson()
+		}}>
+			<View style={styles.itemContainer}>
+				<Image
+					style={{ width: 45, height: 45, borderRadius: 22 }}
+					resizMode="center"
+					source={{
+
+						uri: `https://schoenstatt-fathers.link${photo}`
+					}} />
+				<View style={styles.itemTextContainer}>
+					<Text style={styles.itemTextTitle}>{roleTitle}</Text>
+					<Text style={styles.itemText}>{name}</Text>
+					<Text style={styles.itemText}>{`${startDate ? moment.utc(startDate).format('Do MMMM YYYY') : ''} - ${endDate ? moment.utc(endDate).format('Do MMMM YYYY') : ''}`}</Text>
+
+				</View>
+			</View>
+		</TouchableComp>
+
+	)
+
+}
+
+const ListItemGC = (props) => {
+	const { photo, title, fullName, startDate, endDate, selectTitle, selectPerson } = props;
+	let TouchableComp = TouchableOpacity;
+	if (Platform.OS === 'android' && Platform.Version >= 21) {
+		TouchableComp = TouchableNativeFeedback;
+	}
+	return (
+		<View style={[styles.itemContainer, { marginVertical: 15 }]}>
 			<Image
-				style={{ width: 45, height: 45, borderRadius: 50 }}
+				style={{ width: 45, height: 45, borderRadius: 22 }}
 				resizMode="center"
 				source={{
 
 					uri: `https://schoenstatt-fathers.link${photo}`
 				}} />
 			<View style={styles.itemTextContainer}>
-				<Text>{roleTitle}</Text>
-				<Text>{name}</Text>
-				<Text>{`${startDate ? moment.utc(startDate).format('Do MMMM YYYY') : ''} - ${endDate ? moment.utc(endDate).format('Do MMMM YYYY') : ''}`}</Text>
-				<Text></Text>
+				<TouchableComp onPress={
+					() => selectTitle()
+				}>
+					<Text style={styles.itemTextTitle}>{title}</Text>
+				</TouchableComp>
+				<TouchableComp onPress={() => selectPerson()}>
+					<Text style={styles.itemText}>{fullName}</Text>
+				</TouchableComp>
+
+				{(startDate || endDate) &&
+					<Text style={styles.itemText}>{`${startDate ? moment.utc(startDate).format('Do MMMM YYYY') : ''} - ${endDate ? moment.utc(endDate).format('Do MMMM YYYY') : ''}`}</Text>
+				}
 			</View>
 		</View>
 	)
-
 }
+
+
+
+
 
 const styles = StyleSheet.create({
 	screen: {
@@ -521,13 +583,26 @@ const styles = StyleSheet.create({
 
 	},
 	itemContainer: {
+		backgroundColor: Colors.surfaceColorSecondary,
 		padding: 10,
 		flexDirection: 'row',
 		alignItems: 'center'
 	},
 	itemTextContainer: {
+		flexDirection: 'column',
+		maxWidth: '80%'
+	},
+	itemText: {
 		justifyContent: 'center',
-		paddingHorizontal: 5
+		paddingHorizontal: 10,
+		fontFamily: 'work-sans',
+		color: Colors.onSurfaceColorPrimary
+	},
+	itemTextTitle:{
+		fontSize: 18,
+		paddingHorizontal: 10,
+		fontFamily: 'work-sans-semibold',
+		color: Colors.primaryColor,
 	}
 });
 

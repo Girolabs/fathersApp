@@ -173,7 +173,22 @@ const AssignmentsNavigator = createStackNavigator({
     screen: AssignmentsScreen,
     navigationOptions: {
       headerTitle: 'Cargos'
-    }
+    },
+  },
+  CourseDetail: {
+    screen:CourseDetailScreen
+  },
+  PatreDetail: {
+    screen: PatreDetailScreen
+  },
+  GenerationDetail: {
+    screen: GenerationDetailScreen
+  },
+  DelegationDetail: {
+    screen: DelegationDetailScreen
+  },
+  FiliationDetail: {
+    screen: FiliationDetailScreen
   }
 })
 

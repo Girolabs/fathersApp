@@ -90,95 +90,97 @@ class CourseDetailScreen extends Component {
 												<Text style={styles.listItemTitle}>{i18n.t('COURSE.CONSECRATION_DATE')}</Text>
 												<Text style={styles.listItemBody}>{course.idealConsecrationDate ? moment.utc(course.idealConsecrationDate).format('D MMMM YYYY') : ''}</Text>
 											</View>
-											{course.leaderAssignment && 
+											{course.leaderAssignment &&
 												<TouchableComp onPress={() => {
-													if(course.leaderAssignment.person ) {
+													if (course.leaderAssignment.person) {
 														navigation.push('PatreDetail', { fatherId: course.leaderAssignment.person.personId })
 													}
-													
-													
+
+
 												}}>
 													<View style={styles.listItem}>
 														<Text style={styles.listItemTitle}>{i18n.t('COURSE.LEADER')}</Text>
 														<View style={{ flexDirection: 'row' }}>
-															{course.leaderAssignment.person && 
+															{course.leaderAssignment.person &&
 																<Image
-																source={{ uri: `https://schoenstatt-fathers.link${course.leaderAssignment.person.photo}` }}
-																style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }} />
+																	source={{ uri: `https://schoenstatt-fathers.link${course.leaderAssignment.person.photo}` }}
+																	style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }} />
 															}
-															
-															<View style={{ flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center' }}>
-																<Text style={styles.listItemBody}>{course.leaderAssignment.person.fullName}</Text>
-																<Text style={styles.listItemBody}>
-																	{`${moment.utc(course.leaderAssignment.startDate).format('Do MMMM YYYY')} ${moment.utc(course.leaderAssignment.endDate).format('Do MMMM YYYY')}`}
-																</Text>
-															</View>
+															{course.leaderAssignment.person &&
+																<View style={{ flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center' }}>
+																	<Text style={styles.listItemBody}>{course.leaderAssignment.person.fullName}</Text>
+																	<Text style={styles.listItemBody}>
+																		{`${moment.utc(course.leaderAssignment.startDate).format('Do MMMM YYYY')} ${moment.utc(course.leaderAssignment.endDate).format('Do MMMM YYYY')}`}
+																	</Text>
+																</View>
+															}
+
 														</View>
 													</View>
-												</TouchableComp>										
+												</TouchableComp>
 											}
-											
+
 											<View style={styles.listItem}>
 												<Text style={styles.listItemTitle}>{i18n.t('COURSE.NOVITIATE_START')}</Text>
 												<Text style={styles.listItemBody}>{course.novitiateStartDate ? moment.utc(course.novitiateStartDate).format('D MMMM YYYY') : ''}</Text>
 											</View>
-											{course.novitiateFiliation && 
-													<TouchableComp onPress={() => {
-														navigation.navigate('FiliationDetail', { filiationId: course.novitiateFiliation.filiationId })
-													}}>
-														<View style={styles.listItem}>
-		
-															<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-		
-																<View style={{ marginRight: 10 }}>
-																	<Text style={styles.listItemTitle}>{i18n.t('COURSE.NOVITIATE')}</Text>
-																	<Text style={styles.listItemBody}>{course.novitiateFiliation ? course.novitiateFiliation.name : ''}</Text>
-		
-																</View>
-																{course.novitiateFiliation &&
-																	<Flag id={course.novitiateFiliation.country} size={0.2} />
-																}
-		
-		
-		
+											{course.novitiateFiliation &&
+												<TouchableComp onPress={() => {
+													navigation.navigate('FiliationDetail', { filiationId: course.novitiateFiliation.filiationId })
+												}}>
+													<View style={styles.listItem}>
+
+														<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+
+															<View style={{ marginRight: 10 }}>
+																<Text style={styles.listItemTitle}>{i18n.t('COURSE.NOVITIATE')}</Text>
+																<Text style={styles.listItemBody}>{course.novitiateFiliation ? course.novitiateFiliation.name : ''}</Text>
+
 															</View>
-		
+															{course.novitiateFiliation &&
+																<Flag id={course.novitiateFiliation.country} size={0.2} />
+															}
+
+
+
 														</View>
-													</TouchableComp>
-											}
 
-											{ course.noviceMaster &&
-												<TouchableComp
-												onPress={() => {
-													navigation.push('PatreDetail', { fatherId: course.noviceMaster.personId });
-												}}
-											>
-												<View style={styles.listItem}>
-													<Text style={styles.listItemTitle}>{i18n.t('COURSE.NOVICE_MASTER')}</Text>
-													<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-														{course.noviceMaster && 
-															<Image
-															source={{ uri: `https://schoenstatt-fathers.link${course.noviceMaster.photo}` }}
-															style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }} />
-														}
-														
-														<Text style={styles.listItemBody}>{course.noviceMaster ? course.noviceMaster.fullName : ''}</Text>
 													</View>
-
-												</View>
-											</TouchableComp>
+												</TouchableComp>
 											}
-										
 
-											
+											{course.noviceMaster &&
+												<TouchableComp
+													onPress={() => {
+														navigation.push('PatreDetail', { fatherId: course.noviceMaster.personId });
+													}}
+												>
+													<View style={styles.listItem}>
+														<Text style={styles.listItemTitle}>{i18n.t('COURSE.NOVICE_MASTER')}</Text>
+														<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+															{course.noviceMaster &&
+																<Image
+																	source={{ uri: `https://schoenstatt-fathers.link${course.noviceMaster.photo}` }}
+																	style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }} />
+															}
+
+															<Text style={styles.listItemBody}>{course.noviceMaster ? course.noviceMaster.fullName : ''}</Text>
+														</View>
+
+													</View>
+												</TouchableComp>
+											}
+
+
+
 
 											{course.scholasticateFiliations &&
 												<TouchableComp
 													onPress={() => {
-														if(course.scholasticateFiliations[0]) {
+														if (course.scholasticateFiliations[0]) {
 															navigation.navigate('FiliationDetail', { filiationId: course.scholasticateFiliations[0].filiationId });
 														}
-														
+
 													}}>
 													<View style={styles.listItem}>
 														<Text style={styles.listItemTitle}>{i18n.t('COURSE.SCHOLASTICATE')}</Text>
@@ -199,12 +201,12 @@ class CourseDetailScreen extends Component {
 															<View style={styles.listItem}>
 
 																<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-																	{rector && 
+																	{rector &&
 																		<Image
-																		source={{ uri: `https://schoenstatt-fathers.link${rector.photo}` }}
-																		style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }} />
+																			source={{ uri: `https://schoenstatt-fathers.link${rector.photo}` }}
+																			style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }} />
 																	}
-																	
+
 																	<Text style={styles.listItemBody}>{rector ? rector.fullName : ''}</Text>
 																</View>
 
@@ -227,10 +229,10 @@ class CourseDetailScreen extends Component {
 																	<Text style={styles.listItemTitle}>{i18n.t('COURSE.FILIATION')}</Text>
 																	<Text style={styles.listItemBody}>{course.firstTertianshipFiliation.name}</Text>
 																</View>
-																{course.firstTertianshipFiliation.country && 
+																{course.firstTertianshipFiliation.country &&
 																	<Flag id={course.firstTertianshipFiliation.country} size={0.2} />
 																}
-																
+
 															</View>
 														</View>
 													</TouchableComp>
@@ -240,12 +242,12 @@ class CourseDetailScreen extends Component {
 														<View style={styles.listItem}>
 															<Text style={styles.listItemTitle}>{i18n.t('COURSE.MASTER')}</Text>
 															<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-																{course.firstTertianshipMaster && 
+																{course.firstTertianshipMaster &&
 																	<Image
-																	source={{ uri: `https://schoenstatt-fathers.link${course.firstTertianshipMaster.photo}` }}
-																	style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }} />
+																		source={{ uri: `https://schoenstatt-fathers.link${course.firstTertianshipMaster.photo}` }}
+																		style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }} />
 																}
-																
+
 																<Text style={styles.listItemBody}>{course.firstTertianshipMaster.fullName ? course.firstTertianshipMaster.fullName : ''}</Text>
 															</View>
 
@@ -278,7 +280,7 @@ class CourseDetailScreen extends Component {
 																{course.secondTertianshipFiliation.country &&
 																	<Flag id={course.secondTertianshipFiliation.country} size={0.2} />
 																}
-																
+
 															</View>
 														</View>
 													</TouchableComp>
@@ -288,12 +290,12 @@ class CourseDetailScreen extends Component {
 														<View style={styles.listItem}>
 															<Text style={styles.listItemTitle}>{i18n.t('COURSE.MASTER')}</Text>
 															<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-																{course.secondTertianshipMaster && 
+																{course.secondTertianshipMaster &&
 																	<Image
-																	source={{ uri: `https://schoenstatt-fathers.link${course.secondTertianshipMaster.photo}` }}
-																	style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }} />
+																		source={{ uri: `https://schoenstatt-fathers.link${course.secondTertianshipMaster.photo}` }}
+																		style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }} />
 																}
-																
+
 																<Text style={styles.listItemBody}>{course.secondTertianshipMaster.fullName ? course.secondTertianshipMaster.fullName : ''}</Text>
 															</View>
 
@@ -325,10 +327,10 @@ class CourseDetailScreen extends Component {
 																	<Text style={styles.listItemTitle}>{i18n.t('COURSE.FILIATION')}</Text>
 																	<Text style={styles.listItemBody}>{course.sionzeitFiliation.name}</Text>
 																</View>
-																{course.sionzeitFiliation.country && 
+																{course.sionzeitFiliation.country &&
 																	<Flag id={course.sionzeitFiliation.country} size={0.2} />
 																}
-																
+
 															</View>
 														</View>
 													</TouchableComp>
@@ -338,12 +340,12 @@ class CourseDetailScreen extends Component {
 														<View style={styles.listItem}>
 															<Text style={styles.listItemTitle}>{i18n.t('COURSE.MASTER')}</Text>
 															<View style={{ flexDirection: 'row', alignItems: 'center' }}>
-																{course.sionzeitCoordinator && 
+																{course.sionzeitCoordinator &&
 																	<Image
-																	source={{ uri: `https://schoenstatt-fathers.link${course.sionzeitCoordinator.photo}` }}
-																	style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }} />
+																		source={{ uri: `https://schoenstatt-fathers.link${course.sionzeitCoordinator.photo}` }}
+																		style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }} />
 																}
-																
+
 																<Text style={styles.listItemBody}>{course.sionzeitCoordinator.fullName ? course.sionzeitCoordinator.fullName : ''}</Text>
 															</View>
 
@@ -366,13 +368,13 @@ class CourseDetailScreen extends Component {
 													<TouchableComp key={person.personId} onPress={() => navigation.push('PatreDetail', { fatherId: person.personId })}>
 														<View style={styles.memberItem}
 														>
-															
-																<Image
+
+															<Image
 																source={{ uri: `https://schoenstatt-fathers.link${person.photo}` }}
 																style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
 															/>
-															
-															
+
+
 															<Text style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}>{person.fullName}</Text>
 														</View>
 													</TouchableComp>
