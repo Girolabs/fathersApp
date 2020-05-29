@@ -103,11 +103,11 @@ exports.ES = {
   },
   ASSIGNMENTS: {
     TERRITORY: 'Terr.',
-    ALL: 'ALL',
+    ALL: 'Todo',
     HISTORICAL: ' Histor.',
-    FILIATIONS: 'Filiat.',
+    FILIATIONS: 'Filial.',
     GENERATIONS: 'Gen.',
-    COURSES: 'Courses',
+    COURSES: 'Cursos',
     GENERATION: 'Generación',
     COURSE: 'Curso'
   }

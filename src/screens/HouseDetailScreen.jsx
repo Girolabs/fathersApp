@@ -10,7 +10,7 @@ import moment from 'moment';
 import 'moment/min/locales';
 import { ScrollView } from 'react-native-gesture-handler';
 import countries from "i18n-iso-countries";
-import { Badge } from 'react-native-paper';
+
 
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
 countries.registerLocale(require("i18n-iso-countries/langs/es.json"));

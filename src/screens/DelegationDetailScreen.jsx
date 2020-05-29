@@ -170,7 +170,7 @@ class DelegationDetailScreen extends Component {
 
 DelegationDetailScreen.navigationOptions = () => ({
 
-  headerTitle: i18n.t('TERRITORY_DETAIL.INFORMATION'),
+  headerTitle: '',
 
 });
 

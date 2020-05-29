@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal:5,
 		paddingVertical:5,
 		borderRadius:5,
-		marginVertical:2
+		marginVertical:5
 	},
 	btnSecondary: {
 		backgroundColor: Colors.secondaryColor,
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal:5,
 		paddingVertical:5,
 		borderRadius:5,
-		marginVertical:2
+		marginVertical:5
 	},
 	btnText:{
 		color: 'white',
