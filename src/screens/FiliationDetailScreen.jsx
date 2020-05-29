@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, Image, ActivityIndicator, Platform, SafeAreaView, FlatList, TouchableNativeFeedback, TouchableOpacity } from 'react-native';
-import axios from 'axios';
+import axios from '../../axios-instance';
 import Constants from 'expo-constants';
 import Colors from '../constants/Colors';
 import { I18nContext } from '../context/I18nProvider';
@@ -19,7 +19,7 @@ class FiliationDetailScreen extends Component {
     const { navigation } = this.props;
     const filiationId = navigation.getParam('filiationId');
     axios.
-      get(`https://schoenstatt-fathers.link/en/api/v1/filiations/${filiationId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
+      get(`filiations/${filiationId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
       .then((res) => {
         this.setState({ filiation: res.data.result });
       });

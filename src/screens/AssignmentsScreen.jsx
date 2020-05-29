@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
-import axios from 'axios';
+import axios from '../../axios-instance';
 import Constants from 'expo-constants';
 import { Ionicons } from 'expo-vector-icons';
 import moment from 'moment';
@@ -36,14 +36,14 @@ class AssignmentsScreen extends Component {
   componentDidMount() {
     axios
       .get(
-        `https://schoenstatt-fathers.link/en/api/v1/territories?fields=all&key=${Constants.manifest.extra.secretKey}`,
+        `territories?fields=all&key=${Constants.manifest.extra.secretKey}`,
       )
       .then((resTerritory) => {
         let territories = resTerritory.data.result;
 
         axios
           .get(
-            `https://schoenstatt-fathers.link/en/api/v1/filiations?fields=all&key=${Constants.manifest.extra.secretKey}`,
+            `filiations?fields=all&key=${Constants.manifest.extra.secretKey}`,
           )
           .then((resFiliations) => {
             let filiations = resFiliations.data.result;
@@ -96,19 +96,19 @@ class AssignmentsScreen extends Component {
 
             axios
               .get(
-                `https://schoenstatt-fathers.link/en/api/v1/generations?fields=all&key=${Constants.manifest.extra.secretKey}`,
+                `generations?fields=all&key=${Constants.manifest.extra.secretKey}`,
               )
               .then((resGenerations) => {
                 let generations = resGenerations.data.result;
                 axios
                   .get(
-                    `https://schoenstatt-fathers.link/en/api/v1/courses?fields=all&key=${Constants.manifest.extra.secretKey}`,
+                    `courses?fields=all&key=${Constants.manifest.extra.secretKey}`,
                   )
                   .then((resCourses) => {
                     let courses = resCourses.data.result;
                     axios
                       .get(
-                        `https://schoenstatt-fathers.link/en/api/v1/persons?fields=all&key=${Constants.manifest.extra.secretKey}`,
+                        `persons?fields=all&key=${Constants.manifest.extra.secretKey}`,
                       )
                       .then((resPersons) => {
                         let persons = resPersons.data.result;

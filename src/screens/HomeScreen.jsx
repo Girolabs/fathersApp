@@ -13,7 +13,7 @@ import {
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { Ionicons } from 'expo-vector-icons';
 import Constants from 'expo-constants';
-import axios from 'axios';
+import axios from '../../axios-instance';
 import i18n from 'i18n-js';
 import moment from 'moment';
 import 'moment/min/locales';
@@ -35,7 +35,7 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     axios
       .get(
-        `https://schoenstatt-fathers.link/en/api/v1/date-tiles?daysInAdvance=8&key=${Constants.manifest.extra.secretKey}`,
+        `date-tiles?daysInAdvance=8&key=${Constants.manifest.extra.secretKey}`,
       )
       .then((res) => {
         console.log(res.data.result);

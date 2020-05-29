@@ -14,12 +14,12 @@ import {
 import i18n from 'i18n-js';
 import { FlatList } from 'react-native-gesture-handler';
 import { Flag } from 'react-native-svg-flagkit';
-import axios from 'axios';
 import Constants from 'expo-constants';
 import Colors from '../constants/Colors';
 import moment from 'moment';
 import 'moment/min/locales';
 import { I18nContext } from '../context/I18nProvider';
+import axios from '../../axios-instance';
 
 
 class DelegationDetailScreen extends Component {
@@ -31,7 +31,7 @@ class DelegationDetailScreen extends Component {
     const { navigation } = this.props;
     const territoryId = navigation.getParam('delegationId');
     console.log('territoryID', territoryId)
-    axios.get(`https://schoenstatt-fathers.link/en/api/v1/territories/${territoryId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
+    axios.get(`territories/${territoryId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
       .then((res) => {
         this.setState({ territory: res.data.result });
         console.log('[Territory]', res.data.result);

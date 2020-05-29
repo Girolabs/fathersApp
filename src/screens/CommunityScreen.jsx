@@ -15,7 +15,7 @@ import { Ionicons } from 'expo-vector-icons';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Colors from '../constants/Colors';
-import axios from 'axios';
+import axios from '../../axios-instance';
 import Constants from 'expo-constants';
 
 class CommunityScreen extends Component {
@@ -25,7 +25,7 @@ class CommunityScreen extends Component {
 
 	componentDidMount() {
 		axios
-			.get(`https://schoenstatt-fathers.link/en/api/v1/territories?fields=all&key=${Constants.manifest.extra.secretKey}`)
+			.get(`territories?fields=all&key=${Constants.manifest.extra.secretKey}`)
 			.then((res) => {
 				console.log(res)
 				if (res.data.status == "OK") {

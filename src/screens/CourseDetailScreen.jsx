@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react'
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, Platform, TouchableNativeFeedback, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
-import axios from 'axios';
 import Constants from 'expo-constants';
 import { I18nContext } from '../context/I18nProvider';
 import i18n from 'i18n-js';
@@ -8,6 +7,7 @@ import Colors from '../constants/Colors';
 import moment from 'moment';
 import 'moment/min/locales';
 import { Flag } from 'react-native-svg-flagkit';
+import axios from '../../axios-instance';
 
 class CourseDetailScreen extends Component {
 	state = {
@@ -17,12 +17,12 @@ class CourseDetailScreen extends Component {
 		const { navigation } = this.props;
 		const courseId = navigation.getParam('courseId');
 		axios
-			.get((`https://schoenstatt-fathers.link/en/api/v1/courses/${courseId}?fields=all&key=${Constants.manifest.extra.secretKey}`))
+			.get((`courses/${courseId}?fields=all&key=${Constants.manifest.extra.secretKey}`))
 			.then((res) => {
 				let course = res.data.result
 				this.setState({ course })
 				axios
-					.get(`https://schoenstatt-fathers.link/en/api/v1/persons/${course.leaderAssignment.personId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
+					.get(`persons/${course.leaderAssignment.personId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
 					.then((respPerson) => {
 						const person = respPerson.data.result;
 

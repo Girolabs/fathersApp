@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import axios from 'axios';
+import axios from '../../axios-instance';
 import Constants from 'expo-constants';
 import { I18nContext } from '../context/I18nProvider';
 import i18n from 'i18n-js';
@@ -26,7 +26,7 @@ class GenerationDetailScreen extends Component {
     const generationId = navigation.getParam('generationId');
     axios
       .get(
-        `https://schoenstatt-fathers.link/en/api/v1/generations/${generationId}?fields=all&key=${Constants.manifest.extra.secretKey}`,
+        `generations/${generationId}?fields=all&key=${Constants.manifest.extra.secretKey}`,
       )
       .then((res) => {
         this.setState({ generation: res.data.result });

@@ -10,12 +10,11 @@ import {
 	ActivityIndicator,
 	TouchableNativeFeedback,
 } from 'react-native';
-import { Flag } from 'react-native-svg-flagkit';
 import { Ionicons } from 'expo-vector-icons';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Colors from '../constants/Colors';
-import axios from 'axios';
+import axios from '../../axios-instance';
 import Constants from 'expo-constants';
 
 class FreeCommunityScreen extends Component {
@@ -25,7 +24,7 @@ class FreeCommunityScreen extends Component {
 
 	componentDidMount() {
 		axios
-			.get(`https://schoenstatt-fathers.link/en/api/v1/generations?fields=all&key=${Constants.manifest.extra.secretKey}`)
+			.get(`generations?fields=all&key=${Constants.manifest.extra.secretKey}`)
 			.then((res) => {
                 const fetchedGenerations = res.data.result.map(entry => {
                     return {

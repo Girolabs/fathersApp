@@ -3,8 +3,7 @@ import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, Activity
 import Colors from '../constants/Colors';
 import { Ionicons } from 'expo-vector-icons';
 import Constants from 'expo-constants';
-import axios from 'axios';
-
+import axios from '../../axios-instance';
 class SearchScreen extends Component {
 	state = {
 		results: [],
@@ -14,7 +13,7 @@ class SearchScreen extends Component {
 
 	componentDidMount() {
 		axios
-			.get(`https://schoenstatt-fathers.link/en/api/v1/persons?fields=all&key=${Constants.manifest.extra.secretKey}`)
+			.get(`persons?fields=all&key=${Constants.manifest.extra.secretKey}`)
 			.then((res) => {
 				if (res.status == 200) {
 					this.setState({ results: res.data.result, loading: false });

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator, Image, TouchableOpacity, FlatList, TouchableNativeFeedback, Platform } from 'react-native';
-import axios from 'axios';
+import axios from '../../axios-instance';
 import Constants from 'expo-constants';
 import Colors from '../constants/Colors'
 import { I18nContext } from '../context/I18nProvider';
@@ -25,10 +25,10 @@ class HouseDetailScreen extends Component {
     const { navigation } = this.props;
     const houseId = navigation.getParam('houseId');
     axios.
-      get(`https://schoenstatt-fathers.link/en/api/v1/houses/${houseId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
+      get(`houses/${houseId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
       .then((resHouse) => {
         let house = resHouse.data.result;
-        axios.get(`https://schoenstatt-fathers.link/en/api/v1/filiations/${house.filiationId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
+        axios.get(`filiations/${house.filiationId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
           .then(resFiliation => {
             const filiation = resFiliation.data.result
             const membersHouse = filiation.persons.filter(person => person.activeLivingSituation.houseId == house.houseId)

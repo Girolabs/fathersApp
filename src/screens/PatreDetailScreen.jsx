@@ -21,7 +21,7 @@ import { Ionicons } from 'expo-vector-icons';
 import { I18nContext } from '../context/I18nProvider';
 import Constants from 'expo-constants';
 import countries from "i18n-iso-countries";
-import axios from 'axios';
+import axios from '../../axios-instance';
 import * as Contacts from "expo-contacts";
 
 
@@ -115,7 +115,7 @@ const PatreDetailScreen = ({ navigation }) => {
       }
     })()
     const fatherId = navigation.getParam('fatherId');
-    axios.get(`https://schoenstatt-fathers.link/en/api/v1/persons/${fatherId}?fields=all&key=${Constants.manifest.extra.secretKey}`).then(response => {
+    axios.get(`persons/${fatherId}?fields=all&key=${Constants.manifest.extra.secretKey}`).then(response => {
       console.log('[PatreDetail]', response.data.result)
       const resFather = response.data.result;
       setFather(resFather)
