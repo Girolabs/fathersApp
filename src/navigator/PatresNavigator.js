@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
@@ -25,6 +25,8 @@ import CourseDetailScreen from '../screens/CourseDetailScreen';
 import GenerationDetailScreen from '../screens/GenerationDetailScreen';
 import FreeCommunityScreen from "../screens/FreeCommunityScreen";
 import AssignmentsScreen from '../screens/AssignmentsScreen';
+import AuthScreen from '../screens/AuthScreen';
+
 
 
 
@@ -192,7 +194,7 @@ const AssignmentsNavigator = createStackNavigator({
   }
 })
 
-const MainNavigator = createDrawerNavigator({
+const DrawerNavigator = createDrawerNavigator({
   HomeSearch: {
     screen: HomeSearchTabNavigator,
     navigationOptions: {
@@ -223,8 +225,6 @@ const MainNavigator = createDrawerNavigator({
       drawerLabel: 'Cargos'
     }
   }
-
-
 }, {
   contentComponent: (props) => <DefaultDrawer {...props} />,
   drawerBackgroundColor: Colors.primaryColor,
@@ -237,6 +237,17 @@ const MainNavigator = createDrawerNavigator({
     },
   },
 });
+
+const AuthNavigator = createStackNavigator({
+  Auth:AuthScreen
+})
+
+const MainNavigator = createSwitchNavigator({
+  Auth: AuthNavigator,
+  Drawer: DrawerNavigator, 
+})
+
+
 
 export default createAppContainer(MainNavigator);
 

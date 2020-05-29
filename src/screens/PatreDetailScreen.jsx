@@ -138,7 +138,7 @@ const PatreDetailScreen = ({ navigation }) => {
                     resizMode="center"
                     source={{ uri: `https://schoenstatt-fathers.link${father.photo}` }}
                   />
-                  <View style={{ padding: 15 }}>
+                  <View style={{ padding: 15, width:'80%' }}>
                     <Text
                       style={{
                         fontFamily: 'work-sans-semibold',
@@ -174,9 +174,6 @@ const PatreDetailScreen = ({ navigation }) => {
                   )
                 }
 
-                {
-
-                }
                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 10 }}>
                   {showSaveContact &&
                     <TouchableComp onPress={
@@ -380,45 +377,51 @@ const DefaultItem = ({
 
 
   return (
-    <TouchableComp
-      onPress={() => {
-        console.log('Apretado')
-        selected ? selected() : null
-      }}
-    >
-      <View
-        style={{
-          padding: 15,
-          backgroundColor: Colors.surfaceColorSecondary,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-
-        <View>
-          {title &&
-            <Text style={styles.listItemTitle}>{i18n.t(title)}</Text>
-          }
-
-          {country_code &&
-            <Text style={styles.listItemBody}>{countries.getName(country_code, lang)}</Text>
-          }
-          {date &&
-            <Text style={styles.listItemBody}>{formatedDate}</Text>
-          }
-
-          {body &&
-            <Text style={styles.listItemBody}>{body}</Text>
-          }
-        </View>
-        {img && (
-          <View>
-            <Flag id={img} size={0.2} />
+    <Fragment>
+      {(body || date) &&
+          <TouchableComp
+          onPress={() => {
+            console.log('Apretado')
+            selected ? selected() : null
+          }}
+        >
+          <View
+            style={{
+              padding: 15,
+              backgroundColor: Colors.surfaceColorSecondary,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+    
+            <View>
+              {title &&
+                <Text style={styles.listItemTitle}>{i18n.t(title)}</Text>
+              }
+    
+              {country_code &&
+                <Text style={styles.listItemBody}>{countries.getName(country_code, lang)}</Text>
+              }
+              {date &&
+                <Text style={styles.listItemBody}>{formatedDate}</Text>
+              }
+    
+              {body &&
+                <Text style={styles.listItemBody}>{body}</Text>
+              }
+            </View>
+            {img && (
+              <View>
+                <Flag id={img} size={0.2} />
+              </View>
+            )}
           </View>
-        )}
-      </View>
-    </TouchableComp>
+        </TouchableComp>
+      }
+    </Fragment>
+  
+
   );
 };
 

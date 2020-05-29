@@ -9,21 +9,39 @@ const I18nContext = createContext();
 
 class I18nProvider extends Component {
     state = {
-        lang:String(Localization.locale).split('-')[0],
+        lang:null,
     }
     componentDidMount(){
         console.log('antes', i18n.translations)
+        
         i18n.translations = {
             
             en: EN,
             es: ES,
           };
           console.log('despues', i18n.translations)
+          
 
-        i18n.locale = this.state.lang;
+        i18n.locale = String(Localization.locale).split('-')[0] ;
         i18n.fallbacks = true;
+        this.setState({lang:String(Localization.locale).split('-')[0]})
+        
 
-        i18n.locale = this.state.lang;
+      
+    }
+    componentDidUpdate() {
+        console.log('[Provider componentDidUpdate]')
+        
+
+    }
+    
+    changeLang = (newLang) => {
+        console.log('prov',newLang)
+        i18n.locale = newLang.lang;
+        i18n.fallbacks = true;
+        this.setState({lang:newLang.lang})
+        
+     
     }
 
    
@@ -40,7 +58,7 @@ class I18nProvider extends Component {
                 {(this.state.lang && i18n.translations) ?
                 <I18nContext.Provider value={{
                     lang:this.state.lang,
-                    changeLang: (newLang) => this.setState({lang:newLang})
+                    changeLang: (newLang) => this.changeLang({lang:newLang})
                 }}>
                     {this.props.children}
                 </I18nContext.Provider>

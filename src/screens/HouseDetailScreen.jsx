@@ -51,6 +51,9 @@ class HouseDetailScreen extends Component {
           moment.locale(value.lang);
           return (
             <SafeAreaView>
+              <ScrollView>
+
+              
               {house ? (
                 <View>
                   <View style={styles.titleContainer}>
@@ -126,6 +129,7 @@ class HouseDetailScreen extends Component {
                 </View>
               )
                 : <ActivityIndicator size="large" color={Colors.primaryColor} />}
+                </ScrollView>
             </SafeAreaView>
           )
         }}

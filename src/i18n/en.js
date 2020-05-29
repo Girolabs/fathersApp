@@ -3,6 +3,11 @@ exports.EN = {
     FREE_COMMUNITY:'Free community',
     GENERAL_COMMUNITY: 'Oficial community'
   },
+  AUTH_SCREEN: {
+    EMAIL_PLACEHOLDER:'email',
+    NEXT: "Next",
+    CODE:" Already have a code",
+  },
   HOME_SCREEN: {
     REMINDERS: 'Reminders',
     COMMUNITY_PRAYER: 'Community prayers',
