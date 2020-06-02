@@ -1,10 +1,10 @@
 import React from 'react';
 
-
 import { useFonts } from '@use-expo/font';
 import { AppLoading } from 'expo';
 import PatresNavigator from './src/navigator/PatresNavigator';
 import I18nProvider from './src/context/I18nProvider';
+import AuthProvider from './src/context/AuthProvider';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -18,8 +18,10 @@ export default function App() {
     return <AppLoading />;
   }
   return (
-    <I18nProvider>
-      <PatresNavigator />
-    </I18nProvider>
+    <AuthProvider>
+      <I18nProvider>
+        <PatresNavigator />
+      </I18nProvider>
+    </AuthProvider>
   );
 }

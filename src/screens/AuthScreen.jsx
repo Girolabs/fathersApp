@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { ScrollView, StyleSheet, KeyboardAvoidingView, View, Text, Image } from 'react-native';
 import  { I18nContext } from '../context/I18nProvider';
+import { AuthContext } from '../context/AuthProvider';
 import Colors from '../constants/Colors';
 import logo from '../../assets/img/icono.png';
 import Card from '../components/Card';
@@ -11,6 +12,7 @@ import Select from '../components/Select';
 import moment from 'moment';
 import 'moment/min/locales';
 import i18n from 'i18n-js';
+import Constants from 'expo-constants';
 
 class AuthScreen extends Component {
   render() {
@@ -21,6 +23,9 @@ class AuthScreen extends Component {
     return (
 			<I18nContext.Consumer>
 				{(value) => {
+					return ( 
+					<AuthContext.Consumer>
+						{(authValue) => {
 				/* 	moment.locale(value.lang); */
 					return(
 						<KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={50} style={styles.screen}>
@@ -46,7 +51,8 @@ class AuthScreen extends Component {
 									valueChange={value.changeLang}
 								/>
 								<Button onPress={() => {
-									this.props.navigation.navigate('Drawer')
+									authValue.handleLogin(Constants.manifest.extra.user,Constants.manifest.extra.password,this.props.navigation)
+									//this.props.navigation.navigate('Drawer')
 								}}>
 									<View style={styles.btnPrimary}>
 										<Text style={styles.btnText}>{i18n.t('AUTH_SCREEN.NEXT')}</Text>
@@ -62,8 +68,11 @@ class AuthScreen extends Component {
 					</KeyboardAvoidingView>
 					)
 				}}
+				
 
-
+				</AuthContext.Consumer>
+				)
+			}}
 			</I18nContext.Consumer>
 
     );
