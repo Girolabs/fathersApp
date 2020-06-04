@@ -25,6 +25,7 @@ import FreeCommunityScreen from '../screens/FreeCommunityScreen';
 import AssignmentsScreen from '../screens/AssignmentsScreen';
 import AuthScreen from '../screens/AuthScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import StartupScreen from '../screens/StartupScreen';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -282,6 +283,9 @@ const AuthNavigator = createStackNavigator({
 });
 
 const MainNavigator = createSwitchNavigator({
+  Startup:{
+    screen:StartupScreen,
+  },
   Auth: AuthNavigator,
   Drawer: DrawerNavigator,
 });

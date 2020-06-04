@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     width:'100%'
   },
   text: {
-    fontFamily:'work-sans-bold',
+    fontFamily:'work-sans-medium',
     fontSize: 18,
     lineHeight: 21,
     color: Colors.primaryColor
