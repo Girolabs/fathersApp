@@ -4,9 +4,15 @@ exports.ES = {
     GENERAL_COMMUNITY: 'Comunidad oficial'
   },
   AUTH_SCREEN: {
-    EMAIL_PLACEHOLDER:'correo electronico',
+    IDENTITY_PLACEHOLDER:'identidad',
     NEXT: "Siguiente",
     CODE: "Ya tengo un código",
+    SEND: "Enviar código",
+    GO_BACK: "Volver",
+    TOKEN_PLACEHOLDER:'token',
+    EMPTY_IDENTITY: 'Identidad esta vacio',
+    EMPTY_FIELDS: 'Hay campos vacios',
+    ERROR:'Ocurrio un error en la consulta'
   },
   HOME_SCREEN: {
     REMINDERS: 'Recordatorios',
@@ -110,6 +116,9 @@ exports.ES = {
     COURSES: 'Cursos',
     GENERATION: 'Generación',
     COURSE: 'Curso'
+  },
+  SETTINGS: {
+    LOGOUT: 'Cerrar sesión',
   }
 };
 

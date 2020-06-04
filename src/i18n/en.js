@@ -4,9 +4,15 @@ exports.EN = {
     GENERAL_COMMUNITY: 'Oficial community'
   },
   AUTH_SCREEN: {
-    EMAIL_PLACEHOLDER:'email',
+    IDENTITY_PLACEHOLDER:'identity',
     NEXT: "Next",
     CODE:" Already have a code",
+    SEND: "Send code",
+    GO_BACK: "Go back",
+    TOKEN_PLACEHOLDER:'token',
+    EMPTY_IDENTITY: 'Identity is empty',
+    EMPTY_FIELDS: 'Empty fields',
+    ERROR:'An error occurred in the request'
   },
   HOME_SCREEN: {
     REMINDERS: 'Reminders',
@@ -110,5 +116,8 @@ exports.EN = {
     COURSES: 'Courses',
     GENERATION: 'Generation',
     COURSE: 'Course'
+  },
+  SETTINGS: {
+    LOGOUT: 'Logout',
   }
 };

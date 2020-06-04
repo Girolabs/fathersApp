@@ -22,6 +22,8 @@ class Select extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: Colors.surfaceColorSecondary,
+    borderRadius:5,
+    marginVertical:10
   },
 });
 
