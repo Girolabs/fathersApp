@@ -111,6 +111,7 @@ const tabScreenConfig = {
   Home: {
     screen: HomeNavigator,
     navigationOptions: {
+      tabBarLabel:i18n.t('GENERAL.HOME'),
       tabBarIcon: (tabInfo) => {
         console.log(tabInfo);
         return <Ionicons name="ios-home" size={25} color={tabInfo.tintColor} />;
@@ -121,7 +122,7 @@ const tabScreenConfig = {
   Search: {
     screen: SearchNavigator,
     navigationOptions: {
-      tabBarLabel: 'Search',
+      tabBarLabel: i18n.t('GENERAL.SEARCH'),
       tabBarIcon: (tabInfo) => <Ionicons name="ios-search" size={25} color={tabInfo.tintColor} />,
       tabBarColor: Colors.secondaryColor,
     },
@@ -230,37 +231,37 @@ const DrawerNavigator = createDrawerNavigator(
     HomeSearch: {
       screen: HomeSearchTabNavigator,
       navigationOptions: {
-        drawerLabel: 'Principal',
+        drawerLabel: i18n.t('GENERAL.HOME'),
       },
     },
     Profile: {
       screen: ProfileNavigator,
       navigationOptions: {
-        drawerLabel: 'Perfil',
+        drawerLabel: i18n.t('GENERAL.PROFILE'),
       },
     },
     Community: {
       screen: CommunityNavigator,
       navigationOptions: {
-        drawerLabel: 'Comunidad oficial',
+        drawerLabel: i18n.t('GENERAL.GENERAL_COMMUNITY'),
       },
     },
     FreeCommunity: {
       screen: FreeCommunityNavigator,
       navigationOptions: {
-        drawerLabel: 'Comunidad Libre',
+        drawerLabel: i18n.t('GENERAL.FREE_COMMUNITY'),
       },
     },
     Assignments: {
       screen: AssignmentsNavigator,
       navigationOptions: {
-        drawerLabel: 'Cargos',
+        drawerLabel: i18n.t('GENERAL.ASSIGNMENTS'),
       },
     },
     Settings: {
       screen: SettingsNavigator,
       navigationOptions: {
-        drawerLabel: 'Configuraciones',
+        drawerLabel: i18n.t('GENERAL.SETTINGS'),
       },
     },
   },
@@ -323,7 +324,7 @@ const DefaultDrawer = (props) => {
               paddingHorizontal: 15,
             }}
           >
-            Padres de Schoenstatt
+            {i18n.t('GENERAL.FATHERS')}
           </Text>
         </View>
         <DrawerItems {...props} />

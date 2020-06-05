@@ -103,7 +103,7 @@ class AuthScreen extends Component {
                     <View style={styles.container}>
                       <View style={styles.titleContainer}>
                         <Image source={logo} style={{ width: 80, height: 80 }} />
-                        <Text style={styles.title}>Padres de Schoenstatt</Text>
+                        <Text style={styles.title}>{i18n.t('GENERAL.FATHERS')}</Text>
                       </View>
                       {this.state.hasToken ? (
                         <Card style={styles.authContainer}>

@@ -1,7 +1,13 @@
 exports.ES = {
   GENERAL:{
+    FATHERS: "Padres de Schoenstatt",
+    HOME:"Principal",
+    PROFILE:"PROFILE",
     FREE_COMMUNITY:'Comunidad libre',
-    GENERAL_COMMUNITY: 'Comunidad oficial'
+    GENERAL_COMMUNITY: 'Comunidad oficial',
+    ASSIGNMENTS:"Cargos",
+    SETTINGS:"Configuraciones",
+    SEARCH:'Buscar'
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER:'identidad',
