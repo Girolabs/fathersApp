@@ -33,6 +33,8 @@ class I18nProvider extends Component {
   }
   componentDidUpdate() {
     console.log('[Provider componentDidUpdate]');
+    i18n.locale = this.state.lang;
+    i18n.fallbacks = true;
   }
 
   changeLang = (newLang) => {
@@ -43,6 +45,7 @@ class I18nProvider extends Component {
   };
 
   render() {
+    console.log('[Rendering]: I18nProvider')
     return (
       <Fragment>
         {this.state.lang && i18n.translations ? (

@@ -6,7 +6,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
 import { SafeAreaView, Image, View, Text } from 'react-native';
-import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
+import { createDrawerNavigator, DrawerItems, DrawerNavigatorItems } from 'react-navigation-drawer';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
@@ -26,6 +26,7 @@ import AssignmentsScreen from '../screens/AssignmentsScreen';
 import AuthScreen from '../screens/AuthScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import StartupScreen from '../screens/StartupScreen';
+import DefaultDrawer from '../components/DefaultDrawer';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -110,23 +111,26 @@ const SearchNavigator = createStackNavigator(
 const tabScreenConfig = {
   Home: {
     screen: HomeNavigator,
-    navigationOptions: {
-      tabBarLabel:i18n.t('GENERAL.HOME'),
-      tabBarIcon: (tabInfo) => {
+    navigationOptions: (navigationData) => {
+      return {
+        tabBarLabel: i18n.t('GENERAL.HOME'),
+        tabBarIcon: (tabInfo) => {
         console.log(tabInfo);
         return <Ionicons name="ios-home" size={25} color={tabInfo.tintColor} />;
       },
       tabBarColor: Colors.surfaceColorPrimary,
-    },
+      }
+    }
   },
   Search: {
     screen: SearchNavigator,
     navigationOptions: {
-      tabBarLabel: i18n.t('GENERAL.SEARCH'),
-      tabBarIcon: (tabInfo) => <Ionicons name="ios-search" size={25} color={tabInfo.tintColor} />,
-      tabBarColor: Colors.secondaryColor,
-    },
-  },
+        tabBarLabel: i18n.t('GENERAL.SEARCH'),
+        tabBarIcon: (tabInfo) => <Ionicons name="ios-search" size={25} color={tabInfo.tintColor} />,
+        tabBarColor: Colors.secondaryColor,
+      
+    }
+  }
 };
 
 const HomeSearchTabNavigator = createMaterialBottomTabNavigator(tabScreenConfig, {
@@ -151,7 +155,7 @@ const CommunityNavigator = createStackNavigator(
     Comunidad: {
       screen: CommunityScreen,
       navigationOptions: {
-        headerTitle: 'Comunidad Oficial',
+        headerTitle: '',
       },
     },
     FiliationDetail: {
@@ -182,7 +186,7 @@ const FreeCommunityNavigator = createStackNavigator({
   FreeCommunity: {
     screen: FreeCommunityScreen,
     navigationOptions: {
-      headerTitle: 'Comunidad Libre',
+      headerTitle: '',
     },
   },
   GenerationDetail: {
@@ -226,109 +230,76 @@ const SettingsNavigator = createStackNavigator(
   },
 );
 
-const DrawerNavigator = createDrawerNavigator(
-  {
-    HomeSearch: {
-      screen: HomeSearchTabNavigator,
-      navigationOptions: {
-        drawerLabel: i18n.t('GENERAL.HOME'),
+const DrawerNavigator = () =>{
+  console.log('Render DrawerNavigator')
+  return createDrawerNavigator(
+    {
+      HomeSearch: {
+        screen: HomeSearchTabNavigator,
+        navigationOptions: {
+          drawerLabel: i18n.t('GENERAL.HOME'),
+        },
+      },
+      Profile: {
+        screen: ProfileNavigator,
+        navigationOptions: {
+          drawerLabel: i18n.t('GENERAL.PROFILE'),
+        },
+      },
+      Community: {
+        screen: CommunityNavigator,
+        navigationOptions: {
+          drawerLabel: i18n.t('GENERAL.GENERAL_COMMUNITY'),
+        },
+      },
+      FreeCommunity: {
+        screen: FreeCommunityNavigator,
+        navigationOptions: {
+          drawerLabel: i18n.t('GENERAL.FREE_COMMUNITY'),
+        },
+      },
+      Assignments: {
+        screen: AssignmentsNavigator,
+        navigationOptions: {
+          drawerLabel: i18n.t('GENERAL.ASSIGNMENTS'),
+        },
+      },
+      Settings: {
+        screen: SettingsNavigator,
+        navigationOptions: {
+          drawerLabel: i18n.t('GENERAL.SETTINGS'),
+        },
       },
     },
-    Profile: {
-      screen: ProfileNavigator,
-      navigationOptions: {
-        drawerLabel: i18n.t('GENERAL.PROFILE'),
+    {
+      contentComponent: (props) => <DefaultDrawer {...props} />,
+      drawerBackgroundColor: Colors.primaryColor,
+      contentOptions: {
+        activeTintColor: Colors.secondaryColor,
+        inactiveTintColor: Colors.surfaceColorPrimary,
+        labelStyle: {
+          fontFamily: 'work-sans-semibold',
+          fontSize: 18,
+        },
       },
     },
-    Community: {
-      screen: CommunityNavigator,
-      navigationOptions: {
-        drawerLabel: i18n.t('GENERAL.GENERAL_COMMUNITY'),
-      },
-    },
-    FreeCommunity: {
-      screen: FreeCommunityNavigator,
-      navigationOptions: {
-        drawerLabel: i18n.t('GENERAL.FREE_COMMUNITY'),
-      },
-    },
-    Assignments: {
-      screen: AssignmentsNavigator,
-      navigationOptions: {
-        drawerLabel: i18n.t('GENERAL.ASSIGNMENTS'),
-      },
-    },
-    Settings: {
-      screen: SettingsNavigator,
-      navigationOptions: {
-        drawerLabel: i18n.t('GENERAL.SETTINGS'),
-      },
-    },
-  },
-  {
-    contentComponent: (props) => <DefaultDrawer {...props} />,
-    drawerBackgroundColor: Colors.primaryColor,
-    contentOptions: {
-      activeTintColor: Colors.secondaryColor,
-      inactiveTintColor: Colors.surfaceColorPrimary,
-      labelStyle: {
-        fontFamily: 'work-sans-semibold',
-        fontSize: 18,
-      },
-    },
-  },
-);
+  )
+
+
+};
 
 const AuthNavigator = createStackNavigator({
   Auth: AuthScreen,
 });
 
-const MainNavigator = createSwitchNavigator({
+
+const MainNavigator = () => (createSwitchNavigator({
   Startup:{
     screen:StartupScreen,
   },
   Auth: AuthNavigator,
-  Drawer: DrawerNavigator,
-});
+  Drawer: DrawerNavigator(),
+}));
 
-export default createAppContainer(MainNavigator);
+export default createAppContainer(MainNavigator());
 
-const DefaultDrawer = (props) => {
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <TouchableOpacity
-        style={{ margin: 15, padding: 15 }}
-        onPress={() => {
-          props.navigation.toggleDrawer();
-        }}
-      >
-        <Ionicons name="md-close" size={36} color={Colors.surfaceColorPrimary} />
-      </TouchableOpacity>
-      <ScrollView
-        contentContainerStyle={{
-          justifyContent: 'flex-start',
-          alignItems: 'flex-start',
-          height: '100%',
-          padding: 15,
-        }}
-      >
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 15 }}>
-          <Image source={require('../../assets/img/icono.png')} style={{ width: 88, height: 88 }} />
-          <Text
-            numberOfLines={2}
-            style={{
-              width: '70%',
-              fontSize: 18,
-              fontFamily: 'work-sans',
-              color: 'white',
-              paddingHorizontal: 15,
-            }}
-          >
-            {i18n.t('GENERAL.FATHERS')}
-          </Text>
-        </View>
-        <DrawerItems {...props} />
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
