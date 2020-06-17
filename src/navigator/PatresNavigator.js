@@ -113,7 +113,7 @@ const tabScreenConfig = {
     screen: HomeNavigator,
     navigationOptions: (navigationData) => {
       return {
-        tabBarLabel: i18n.t('GENERAL.HOME'),
+        tabBarLabel: '',
         tabBarIcon: (tabInfo) => {
         console.log(tabInfo);
         return <Ionicons name="ios-home" size={25} color={tabInfo.tintColor} />;
@@ -125,7 +125,7 @@ const tabScreenConfig = {
   Search: {
     screen: SearchNavigator,
     navigationOptions: {
-        tabBarLabel: i18n.t('GENERAL.SEARCH'),
+        tabBarLabel: '',
         tabBarIcon: (tabInfo) => <Ionicons name="ios-search" size={25} color={tabInfo.tintColor} />,
         tabBarColor: Colors.secondaryColor,
       
@@ -135,6 +135,7 @@ const tabScreenConfig = {
 
 const HomeSearchTabNavigator = createMaterialBottomTabNavigator(tabScreenConfig, {
   activeColor: Colors.primaryColor,
+  labeled: false,
   shifting: true,
   barStyle: {
     backgroundColor: Colors.surfaceColorPrimary,
