@@ -1,7 +1,7 @@
 export const PRAYERS = [{
-    id:'p1',
-    title: 'Salutación',
-    data: ` 
+  id: 'p1',
+  title: 'Salutación',
+  data: ` 
     En el nombre del Padre y del Hijo y del Espíritu Santo. Amen.
     (Ante el Santísimo Sacramento, saludo eucarístico, con estos u otros textos similares. Los dos últimos precedidos por la invocación "Señor Jesús", "Pastor de Sión" u otra semejante)
 
@@ -12,26 +12,26 @@ export const PRAYERS = [{
     • Eres pan de los hijos de Dios, vino del que nacen almas virginales, alimento que reverencian los mártires, manantial para alegres heraldos de la Redención. 
 
     • Te adoro con fe y me ofrezco a ti como instrumento, nada retengo para mí, tu honra es mi felicidad.
-    `
+    `,
 
 
 },
 {
-    id:'p2',
-    title: 'Peregrinacion Al Monte Sión',
-    data: `
+  id: 'p2',
+  title: 'Peregrinacion Al Monte Sión',
+  data: `
     Nos unimos en el Espíritu a todos nuestros hermanos, a lo ancho del mundo, en nuestro Santuario del Monte Sión y... (a elección:)
 
     • oramos: Angelus/ o una Hora del Oficio del Hacia el Padre /o de la Liturgia de las Horas/ o texto del Rosario del instrumento/ o algún salmo que se refiera a Sión.
     • cantamos: canto de Sión o correspondiente al tiempo litúrgico.
     • escuchamos un texto tomado de la Sagrada Escritura o de nuestro Padre o de nuestra Comunidad.
     • hacemos adoración en silencio
-    `
+    `,
 },
 {
-    id:'p3',
-    title: 'Renovación De La Alianza De Sión',
-    data: `
+  id: 'p3',
+  title: 'Renovación De La Alianza De Sión',
+  data: `
     U : Renovamos nuestra Alianza de Sión:
     ¡Querida Madre, Reina y Victoriosa tres veces Admirable de Schoenstatt!
 
@@ -52,11 +52,11 @@ export const PRAYERS = [{
 
     T : Padre, nuestro corazón en tu corazón, nuestro pensamiento en tu pensamiento,
     nuestra mano en tu mano.
-    `
-},{
-    id:'p4',
-    title: 'Peticiones De Alianza',
-    data:`
+    `,
+}, {
+  id: 'p4',
+  title: 'Peticiones De Alianza',
+  data: `
     Por los pueblos de la tierra:
 
     • Acepta que te proclámenos Reina del Universo; enciéndenos en un ardiente amor por ti;
@@ -110,6 +110,6 @@ export const PRAYERS = [{
 
     Dales, Señor, el descanso eterno y brille para ellos la luz perpetua.
     Que las almas de los fieles difuntos descansen en paz.
-        `
-    }
-]
+        `,
+},
+];
