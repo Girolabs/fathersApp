@@ -125,7 +125,11 @@ exports.ES = {
   },
   SETTINGS: {
     LOGOUT: 'Cerrar sesión',
-  }
+  },
+  SEARCH: {
+    DECEASED: 'Mostrar fallecidos',
+    EX: 'Mostrar ex miembros',
+  },
 };
 
 

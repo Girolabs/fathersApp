@@ -125,5 +125,9 @@ exports.EN = {
   },
   SETTINGS: {
     LOGOUT: 'Logout',
-  }
+  },
+  SEARCH: {
+    DECEASED: 'Show deceased',
+    EX: 'Show ex members',
+  },
 };

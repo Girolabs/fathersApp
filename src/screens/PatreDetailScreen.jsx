@@ -214,7 +214,6 @@ const PatreDetailScreen = ({ navigation }) => {
                         style={{
                           backgroundColor: 'white',
                           borderColor: Colors.primaryColor,
-
                           borderRadius: 5,
                           borderWidth: 2,
                           paddingHorizontal: 10,
