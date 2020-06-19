@@ -24,7 +24,7 @@ class FreeCommunityScreen extends Component {
 
 	componentDidMount() {
 		axios
-			.get(`generations?fields=all&key=${Constants.manifest.extra.secretKey}`)
+			.get(`en/api/v1/generations?fields=all&key=${Constants.manifest.extra.secretKey}`)
 			.then((res) => {
                 const fetchedGenerations = res.data.result.map(entry => {
                     return {

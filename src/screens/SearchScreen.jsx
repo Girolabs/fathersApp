@@ -17,7 +17,7 @@ class SearchScreen extends Component {
   };
 
   componentDidMount() {
-    axios.get(`persons?fields=all&key=${Constants.manifest.extra.secretKey}`).then((res) => {
+    axios.get(`en/api/v1/persons?fields=all&key=${Constants.manifest.extra.secretKey}`).then((res) => {
       if (res.status == 200) {
         this.setState({ results: res.data.result, loading: false });
       }

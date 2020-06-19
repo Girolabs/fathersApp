@@ -23,7 +23,6 @@ import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { I18nContext } from '../context/I18nProvider';
 
-
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -92,7 +91,6 @@ const styles = StyleSheet.create({
   },
 });
 
-
 const HomeScreen = ({ navigation }) => {
   const [reminders, setReminders] = useState([]);
   const [selectedReminder, setSelectedReminder] = useState(null);
@@ -104,12 +102,14 @@ const HomeScreen = ({ navigation }) => {
   }
 
   useEffect(() => {
-    axios.get(`date-tiles?daysInAdvance=8&key=${Constants.manifest.extra.secretKey}`).then((res) => {
-      console.log(res.data.result);
-      const fetchedReminders = res.data.result;
-      setReminders(fetchedReminders);
-      setLoading(false);
-    });
+    axios
+      .get(`${i18n.locale}/api/v1/date-tiles?daysInAdvance=8&key=${Constants.manifest.extra.secretKey}`)
+      .then((res) => {
+        console.log(res.data.result);
+        const fetchedReminders = res.data.result;
+        setReminders(fetchedReminders);
+        setLoading(false);
+      });
   }, []);
   console.log('render: HomeScreen');
   return (
@@ -174,7 +174,7 @@ const HomeScreen = ({ navigation }) => {
                             <View style={{ flexDirection: 'row' }}>
                               <Ionicons name="ios-calendar" size={23} color={Colors.surfaceColorPrimary} />
                               <Text style={styles.reminderHeaderTitle}>
-                                {item[0].importantText.replace('%s', item[0].yearsAgo)}
+                                {`${item[0].text} ${item[0].importantText.replace('%s', item[0].yearsAgo)} `}
                               </Text>
                             </View>
                             {selectedReminder === index ? (
@@ -297,6 +297,5 @@ HomeScreen.propTypes = {
     navigate: PropTypes.func.isRequired,
   }).isRequired,
 };
-
 
 export default HomeScreen;

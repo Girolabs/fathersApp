@@ -25,7 +25,7 @@ class CommunityScreen extends Component {
 
 	componentDidMount() {
 		axios
-			.get(`territories?fields=all&key=${Constants.manifest.extra.secretKey}`)
+			.get(`en/api/v1/territories?fields=all&key=${Constants.manifest.extra.secretKey}`)
 			.then((res) => {
 				console.log(res)
 				if (res.data.status == "OK") {

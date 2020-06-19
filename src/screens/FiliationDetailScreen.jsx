@@ -19,7 +19,7 @@ class FiliationDetailScreen extends Component {
     const { navigation } = this.props;
     const filiationId = navigation.getParam('filiationId');
     axios.
-      get(`filiations/${filiationId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
+      get(`en/api/v1/filiations/${filiationId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
       .then((res) => {
         this.setState({ filiation: res.data.result });
       });

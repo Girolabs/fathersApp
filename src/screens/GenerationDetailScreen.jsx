@@ -26,7 +26,7 @@ class GenerationDetailScreen extends Component {
     const generationId = navigation.getParam('generationId');
     axios
       .get(
-        `generations/${generationId}?fields=all&key=${Constants.manifest.extra.secretKey}`,
+        `en/api/v1/generations/${generationId}?fields=all&key=${Constants.manifest.extra.secretKey}`,
       )
       .then((res) => {
         this.setState({ generation: res.data.result });

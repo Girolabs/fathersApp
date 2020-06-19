@@ -34,10 +34,10 @@ class AssignmentsScreen extends Component {
     courses: [],
   };
   componentDidMount() {
-    axios.get(`territories?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resTerritory) => {
+    axios.get(`en/api/v1/territories?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resTerritory) => {
       let territories = resTerritory.data.result;
 
-      axios.get(`filiations?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resFiliations) => {
+      axios.get(`en/api/v1/filiations?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resFiliations) => {
         let filiations = resFiliations.data.result;
         territories = territories.map((territory) => {
           let resfiliations = [];
@@ -86,11 +86,11 @@ class AssignmentsScreen extends Component {
           };
         });
 
-        axios.get(`generations?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resGenerations) => {
+        axios.get(`en/api/v1/generations?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resGenerations) => {
           let generations = resGenerations.data.result;
-          axios.get(`courses?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resCourses) => {
+          axios.get(`en/api/v1/courses?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resCourses) => {
             let courses = resCourses.data.result;
-            axios.get(`persons?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resPersons) => {
+            axios.get(`en/api/v1/persons?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resPersons) => {
               let persons = resPersons.data.result;
 
               generations = generations.map((generation) => {

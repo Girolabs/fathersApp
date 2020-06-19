@@ -31,7 +31,7 @@ class DelegationDetailScreen extends Component {
     const { navigation } = this.props;
     const territoryId = navigation.getParam('delegationId');
     console.log('territoryID', territoryId)
-    axios.get(`territories/${territoryId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
+    axios.get(`en/api/v1/territories/${territoryId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
       .then((res) => {
         this.setState({ territory: res.data.result });
         console.log('[Territory]', res.data.result);

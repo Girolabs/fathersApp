@@ -25,10 +25,10 @@ class HouseDetailScreen extends Component {
     const { navigation } = this.props;
     const houseId = navigation.getParam('houseId');
     axios.
-      get(`houses/${houseId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
+      get(`en/api/v1/houses/${houseId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
       .then((resHouse) => {
         let house = resHouse.data.result;
-        axios.get(`filiations/${house.filiationId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
+        axios.get(`en/api/v1/filiations/${house.filiationId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
           .then(resFiliation => {
             const filiation = resFiliation.data.result
             const membersHouse = filiation.persons.filter(person => person.activeLivingSituation.houseId == house.houseId)
