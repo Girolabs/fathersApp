@@ -1,24 +1,24 @@
 exports.EN = {
-  GENERAL:{
-    FATHERS: "Fathers of Schoenstatt",
-    HOME:"Home",
-    PROFILE:"Profile",
-    FREE_COMMUNITY:'Free community',
+  GENERAL: {
+    FATHERS: 'Fathers of Schoenstatt',
+    HOME: 'Home',
+    PROFILE: 'Profile',
+    FREE_COMMUNITY: 'Free community',
     GENERAL_COMMUNITY: 'Oficial community',
-    ASSIGNMENTS:"Assignments",
-    SETTINGS:"Settings",
-    SEARCH:'Search'
+    ASSIGNMENTS: 'Assignments',
+    SETTINGS: 'Settings',
+    SEARCH: 'Search',
   },
   AUTH_SCREEN: {
-    IDENTITY_PLACEHOLDER:'identity',
-    NEXT: "Next",
-    CODE:" Already have a code",
-    SEND: "Send code",
-    GO_BACK: "Go back",
-    TOKEN_PLACEHOLDER:'token',
+    IDENTITY_PLACEHOLDER: 'identity',
+    NEXT: 'Next',
+    CODE: 'Already have a code',
+    SEND: 'Send code',
+    GO_BACK: 'Go back',
+    TOKEN_PLACEHOLDER: 'token',
     EMPTY_IDENTITY: 'Identity is empty',
     EMPTY_FIELDS: 'Empty fields',
-    ERROR:'An error occurred in the request'
+    ERROR: 'An error occurred in the request',
   },
   HOME_SCREEN: {
     REMINDERS: 'Reminders',
@@ -77,20 +77,20 @@ exports.EN = {
   },
   HOUSE_DETAIL: {
     HOUSE_INFO: 'House information',
-    PHONE:  'Phone',
+    PHONE: 'Phone',
     FAX: 'Fax',
     DIOCESE: 'Diocese',
     ADDRESS: 'Address',
     EMAIL: 'Email',
     MAIN_HOUSE: 'Main house',
     MEMBERS: 'Members of the house',
-    FILIAL: 'Filial'
+    FILIAL: 'Filial',
   },
   GENERATION: {
     GENERATION_INFO: 'Generation information',
     CELEBRATION_DATE: 'Celebration date',
     FOUNDATION_DATE: 'Foundation date',
-    COURSES: 'Courses'
+    COURSES: 'Courses',
   },
   COURSE: {
     INFORMATION: 'Course information',
@@ -105,13 +105,13 @@ exports.EN = {
     SCHOLASTICATE_RECTORS: 'Scholasticate Rectors',
     FIRST_TERTIANSHIP: 'First tertianship',
     FILIATION: 'Filiation',
-    MASTER:'Master',
+    MASTER: 'Master',
     SECOND_TERTIANSHIP: 'Second tertianship',
     SION_TIME: 'Sion Time',
     STATEMENT: 'Ideal Statement',
     MEMBERS: 'Course members',
     START_DATE: 'Start date',
-    END_DATE: 'End date'
+    END_DATE: 'End date',
   },
   ASSIGNMENTS: {
     TERRITORY: 'Terr.',
@@ -121,7 +121,7 @@ exports.EN = {
     GENERATIONS: 'Gen.',
     COURSES: 'Courses',
     GENERATION: 'Generation',
-    COURSE: 'Course'
+    COURSE: 'Course',
   },
   SETTINGS: {
     LOGOUT: 'Logout',
@@ -129,5 +129,6 @@ exports.EN = {
   SEARCH: {
     DECEASED: 'Show deceased',
     EX: 'Show ex members',
+    PLACEHOLDER: 'firstname or lastname',
   },
 };

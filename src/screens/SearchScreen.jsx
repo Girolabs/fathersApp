@@ -84,7 +84,7 @@ class SearchScreen extends Component {
         {!this.state.loading ? (
           <Fragment>
             <View style={styles.inputBox}>
-              <TextInput placeholder="Search" onChangeText={(text) => this.handleFilter(text)} />
+              <TextInput placeholder={i18n.t('SEARCH.PLACEHOLDER')} onChangeText={(text) => this.handleFilter(text)} />
               <Ionicons name="ios-search" size={25} colors={Colors.primaryColor} />
             </View>
             <View style={styles.filtersContainer}>

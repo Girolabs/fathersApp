@@ -1,24 +1,24 @@
 exports.ES = {
-  GENERAL:{
-    FATHERS: "Padres de Schoenstatt",
-    HOME:"Principal",
-    PROFILE:"Perfil",
-    FREE_COMMUNITY:'Comunidad libre',
+  GENERAL: {
+    FATHERS: 'Padres de Schoenstatt',
+    HOME: 'Principal',
+    PROFILE: 'Perfil',
+    FREE_COMMUNITY: 'Comunidad libre',
     GENERAL_COMMUNITY: 'Comunidad oficial',
-    ASSIGNMENTS:"Cargos",
-    SETTINGS:"Configuraciones",
-    SEARCH:'Buscar'
+    ASSIGNMENTS: 'Cargos',
+    SETTINGS: 'Configuraciones',
+    SEARCH: 'Buscar',
   },
   AUTH_SCREEN: {
-    IDENTITY_PLACEHOLDER:'identidad',
-    NEXT: "Siguiente",
-    CODE: "Ya tengo un código",
-    SEND: "Enviar código",
-    GO_BACK: "Volver",
-    TOKEN_PLACEHOLDER:'token',
+    IDENTITY_PLACEHOLDER: 'identidad',
+    NEXT: 'Siguiente',
+    CODE: 'Ya tengo un código',
+    SEND: 'Enviar código',
+    GO_BACK: 'Volver',
+    TOKEN_PLACEHOLDER: 'token',
     EMPTY_IDENTITY: 'Identidad esta vacio',
     EMPTY_FIELDS: 'Hay campos vacios',
-    ERROR:'Ocurrio un error en la consulta'
+    ERROR: 'Ocurrio un error en la consulta',
   },
   HOME_SCREEN: {
     REMINDERS: 'Recordatorios',
@@ -65,7 +65,7 @@ exports.ES = {
     MEMBERS_OF_TERRITORY: 'Miembros de este territorio de origen',
     PRIESTS: 'Sacerdotes',
     STUDENTS: 'Estudiantes',
-    DECEASED: 'Fallecidos'
+    DECEASED: 'Fallecidos',
   },
   FILIAL_DETAIL: {
     FILIAL_INFO: 'Información de filial',
@@ -73,24 +73,24 @@ exports.ES = {
     SUPERIOR: 'Superior',
     HOUSES: 'CASAS',
     MAIN_HOUSE: 'Casa principal',
-    MEMBERS: 'Miembros de la filial'
+    MEMBERS: 'Miembros de la filial',
   },
   HOUSE_DETAIL: {
     HOUSE_INFO: 'Información de la casa',
-    PHONE:  'Teléfono',
+    PHONE: 'Teléfono',
     FAX: 'Fax',
     DIOCESE: 'Diócesis',
     ADDRESS: 'Domicilio',
     EMAIL: 'Email',
     MAIN_HOUSE: 'Casa principal',
     MEMBERS: 'Miembros de la casa',
-    FILIAL: 'Filial'
+    FILIAL: 'Filial',
   },
   GENERATION: {
     GENERATION_INFO: 'Información de la generación',
     CELEBRATION_DATE: 'Fecha de celebración',
     FOUNDATION_DATE: 'Fecha de fundación',
-    COURSES: 'Cursos'
+    COURSES: 'Cursos',
   },
   COURSE: {
     INFORMATION: 'Información del curso',
@@ -105,13 +105,13 @@ exports.ES = {
     SCHOLASTICATE_RECTORS: 'Rectores del estudiantado',
     FIRST_TERTIANSHIP: 'Primer terciado',
     FILIATION: 'Filial',
-    MASTER:'Maestro',
+    MASTER: 'Maestro',
     SECOND_TERTIANSHIP: 'Segundo terciado',
     SION_TIME: 'Tiempo de Sion',
     STATEMENT: 'Ideal Statement',
     MEMBERS: 'Miembros del curso',
     START_DATE: 'Fecha de inicio',
-    END_DATE: 'Fecha de fin'
+    END_DATE: 'Fecha de fin',
   },
   ASSIGNMENTS: {
     TERRITORY: 'Terr.',
@@ -121,7 +121,7 @@ exports.ES = {
     GENERATIONS: 'Gen.',
     COURSES: 'Cursos',
     GENERATION: 'Generación',
-    COURSE: 'Curso'
+    COURSE: 'Curso',
   },
   SETTINGS: {
     LOGOUT: 'Cerrar sesión',
@@ -129,9 +129,6 @@ exports.ES = {
   SEARCH: {
     DECEASED: 'Mostrar fallecidos',
     EX: 'Mostrar ex miembros',
+    PLACEHOLDER: 'nombre o apellido',
   },
 };
-
-
-
-
