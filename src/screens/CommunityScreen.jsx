@@ -32,9 +32,9 @@ class CommunityScreen extends Component {
 					const fetchedDelegations = res.data.result.map(entry => {
 						return {
 							...entry,
-							data: entry.filiations
+							data: entry.filiations.filter(filiation => filiation.isActive)
 						}
-					})
+					}).filter( commuunity => commuunity.isActive == true)
 					this.setState({ delegations: fetchedDelegations });
 				}
 			});
