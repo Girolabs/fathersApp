@@ -34,142 +34,122 @@ class AssignmentsScreen extends Component {
     courses: [],
   };
   componentDidMount() {
-    axios
-      .get(
-        `territories?fields=all&key=${Constants.manifest.extra.secretKey}`,
-      )
-      .then((resTerritory) => {
-        let territories = resTerritory.data.result;
+    axios.get(`territories?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resTerritory) => {
+      let territories = resTerritory.data.result;
 
-        axios
-          .get(
-            `filiations?fields=all&key=${Constants.manifest.extra.secretKey}`,
-          )
-          .then((resFiliations) => {
-            let filiations = resFiliations.data.result;
-            territories = territories.map((territory) => {
-              let resfiliations = [];
-              if (territory.filiations) {
-                resfiliations = territory.filiations.map((tFiliation) => {
-                  let returnFiliation = null;
-                  filiations.forEach((filiation) => {
-                    if (tFiliation.filiationId == filiation.filiationId) {
-                      returnFiliation = {
-                        ...tFiliation,
-                        data: filiation.assignments,
-                      };
-                    }
-                  });
-                  if (returnFiliation != null) {
-                    return returnFiliation;
-                  } else {
-                    return tFiliation;
-                  }
-                });
-                return {
-                  ...territory,
-                  filiations: resfiliations,
-                };
-              }
-            });
-            territories = territories.map((territory) => {
-              let filiations = territory.filiations.map((filiation) => {
-                if (filiation.isActive == true) {
-                  return filiation;
+      axios.get(`filiations?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resFiliations) => {
+        let filiations = resFiliations.data.result;
+        territories = territories.map((territory) => {
+          let resfiliations = [];
+          if (territory.filiations) {
+            resfiliations = territory.filiations.map((tFiliation) => {
+              let returnFiliation = null;
+              filiations.forEach((filiation) => {
+                if (tFiliation.filiationId == filiation.filiationId) {
+                  returnFiliation = {
+                    ...tFiliation,
+                    data: filiation.assignments,
+                  };
                 }
               });
-              filiations = filiations.filter((filiation) => filiation != undefined);
-              return {
-                ...territory,
-                filiations,
-              };
+              if (returnFiliation != null) {
+                return returnFiliation;
+              } else {
+                return tFiliation;
+              }
             });
-
-            console.log('t', territories);
-
-            territories = territories.map((territory) => {
-              return {
-                ...territory,
-                data: territory.assignments,
-              };
-            });
-
-            axios
-              .get(
-                `generations?fields=all&key=${Constants.manifest.extra.secretKey}`,
-              )
-              .then((resGenerations) => {
-                let generations = resGenerations.data.result;
-                axios
-                  .get(
-                    `courses?fields=all&key=${Constants.manifest.extra.secretKey}`,
-                  )
-                  .then((resCourses) => {
-                    let courses = resCourses.data.result;
-                    axios
-                      .get(
-                        `persons?fields=all&key=${Constants.manifest.extra.secretKey}`,
-                      )
-                      .then((resPersons) => {
-                        let persons = resPersons.data.result;
-
-                        generations = generations.map((generation) => {
-                          if (generation.mainAssignment) {
-                            let person = null;
-
-                            persons.map((el) => {
-                              if (el.personId == generation.mainAssignment.personId) {
-                                person = el;
-                              }
-                            });
-                            return {
-                              ...generation,
-                              mainAssignment: {
-                                ...generation.mainAssignment,
-                                person: person,
-                              },
-                            };
-                          } else {
-                            return {
-                              ...generation,
-                            };
-                          }
-                        });
-
-                        console.log('g', generations);
-
-                        this.setState({ generations });
-
-                        courses = courses.map((course) => {
-                          if (course.leaderAssignment) {
-                            let person = null;
-
-                            persons.map((el) => {
-                              if (el.personId == course.leaderAssignment.personId) {
-                                person = el;
-                              }
-                            });
-                            return {
-                              ...course,
-                              leaderAssignment: {
-                                ...course.leaderAssignment,
-                                person: person,
-                              },
-                            };
-                          } else {
-                            return {
-                              ...course,
-                            };
-                          }
-                        });
-                        console.log('c', courses);
-                        this.setState({ courses });
-                      });
-                  });
-              });
-            this.setState({ territories, loading: false });
+            return {
+              ...territory,
+              filiations: resfiliations,
+            };
+          }
+        });
+        territories = territories.map((territory) => {
+          let filiations = territory.filiations.map((filiation) => {
+            if (filiation.isActive == true) {
+              return filiation;
+            }
           });
+          filiations = filiations.filter((filiation) => filiation != undefined);
+          return {
+            ...territory,
+            filiations,
+          };
+        });
+
+        console.log('t', territories);
+
+        territories = territories.map((territory) => {
+          return {
+            ...territory,
+            data: territory.assignments,
+          };
+        });
+
+        axios.get(`generations?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resGenerations) => {
+          let generations = resGenerations.data.result;
+          axios.get(`courses?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resCourses) => {
+            let courses = resCourses.data.result;
+            axios.get(`persons?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resPersons) => {
+              let persons = resPersons.data.result;
+
+              generations = generations.map((generation) => {
+                if (generation.mainAssignment) {
+                  let person = null;
+
+                  persons.map((el) => {
+                    if (el.personId == generation.mainAssignment.personId) {
+                      person = el;
+                    }
+                  });
+                  return {
+                    ...generation,
+                    mainAssignment: {
+                      ...generation.mainAssignment,
+                      person: person,
+                    },
+                  };
+                } else {
+                  return {
+                    ...generation,
+                  };
+                }
+              });
+
+              console.log('g', generations);
+
+              this.setState({ generations });
+
+              courses = courses.map((course) => {
+                if (course.leaderAssignment) {
+                  let person = null;
+
+                  persons.map((el) => {
+                    if (el.personId == course.leaderAssignment.personId) {
+                      person = el;
+                    }
+                  });
+                  return {
+                    ...course,
+                    leaderAssignment: {
+                      ...course.leaderAssignment,
+                      person: person,
+                    },
+                  };
+                } else {
+                  return {
+                    ...course,
+                  };
+                }
+              });
+              console.log('c', courses);
+              this.setState({ courses });
+            });
+          });
+        });
+        this.setState({ territories, loading: false });
       });
+    });
   }
   render() {
     const { territories, selectedtTab } = this.state;
@@ -372,7 +352,7 @@ class AssignmentsScreen extends Component {
           break;
         case 3:
           list = (
-            <ScrollView>
+            <ScrollView >
               {this.state.generations.map((generation) => {
                 return (
                   <ListItemGC
@@ -464,7 +444,7 @@ class AssignmentsScreen extends Component {
                       );
                     })}
                   </View>
-                  <View>{filtered && <Fragment>{list}</Fragment>}</View>
+                  <View style={styles.scrollContainer} >{filtered && <Fragment>{list}</Fragment>}</View>
                 </Fragment>
               ) : (
                 <ActivityIndicator size="large" color={Colors.primaryColor} />
@@ -652,6 +632,9 @@ const styles = StyleSheet.create({
     fontFamily: 'work-sans-semibold',
     color: Colors.primaryColor,
   },
+  scrollContainer:{
+    paddingBottom:80
+  }
 });
 
 export default AssignmentsScreen;
