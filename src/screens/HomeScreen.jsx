@@ -35,9 +35,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.secondaryColor,
     width: '100%',
-
     padding: 15,
     borderRadius: 15,
+    marginVertical: 10,
   },
   prayerCardTitle: {
     fontFamily: 'work-sans-semibold',
@@ -133,10 +133,24 @@ const HomeScreen = ({ navigation }) => {
                 </View>
               </TouchableComp>
 
+              <TouchableComp
+                onPress={() => {
+                  navigation.navigate('Miscellaneous');
+                }}
+              >
+                <View style={styles.prayerCard}>
+                  <Text style={styles.prayerCardTitle}>
+                    {' '}
+                    {i18n.t('HOME_SCREEN.MISC')}
+                  </Text>
+                  <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
+                </View>
+              </TouchableComp>
+
               <Text style={styles.title}>{i18n.t('HOME_SCREEN.REMINDERS')}</Text>
 
               <FlatList
-                data={reminders}
+                data={reminders.slice(0, 4)}
                 renderItem={({ item, index }) => {
                   moment.locale(value.lang);
                   const date = moment.utc(item[0].date).format('dddd,  Do MMMM YYYY');

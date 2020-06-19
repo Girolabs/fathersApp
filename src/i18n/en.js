@@ -23,6 +23,7 @@ exports.EN = {
   HOME_SCREEN: {
     REMINDERS: 'Reminders',
     COMMUNITY_PRAYER: 'Community prayers',
+    MISC: 'Miscellaneous',
   },
   FATHER_DETAIL: {
     LAST_UPDATE: 'Last update',

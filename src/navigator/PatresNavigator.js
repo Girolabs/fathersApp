@@ -6,8 +6,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
 import { SafeAreaView, Image, View, Text } from 'react-native';
-import { createDrawerNavigator, DrawerItems, DrawerNavigatorItems } from 'react-navigation-drawer';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
 import HomeScreen from '../screens/HomeScreen';
@@ -23,6 +22,7 @@ import CourseDetailScreen from '../screens/CourseDetailScreen';
 import GenerationDetailScreen from '../screens/GenerationDetailScreen';
 import FreeCommunityScreen from '../screens/FreeCommunityScreen';
 import AssignmentsScreen from '../screens/AssignmentsScreen';
+import MiscellaneousScreen from '../screens/MiscellaneousScreen';
 import AuthScreen from '../screens/AuthScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import StartupScreen from '../screens/StartupScreen';
@@ -73,6 +73,9 @@ const HomeNavigator = createStackNavigator(
     CourseDetail: {
       screen: CourseDetailScreen,
     },
+    Miscellaneous: {
+      screen: MiscellaneousScreen,
+    },
   },
   {
     defaultNavigationOptions: defaultStackNavOptions,
@@ -111,26 +114,25 @@ const SearchNavigator = createStackNavigator(
 const tabScreenConfig = {
   Home: {
     screen: HomeNavigator,
-    navigationOptions: (navigationData) => {
+    navigationOptions: () => {
       return {
         tabBarLabel: '',
         tabBarIcon: (tabInfo) => {
-        console.log(tabInfo);
-        return <Ionicons name="ios-home" size={25} color={tabInfo.tintColor} />;
-      },
-      tabBarColor: Colors.surfaceColorPrimary,
-      }
-    }
+          console.log(tabInfo);
+          return <Ionicons name="ios-home" size={25} color={tabInfo.tintColor} />;
+        },
+        tabBarColor: Colors.surfaceColorPrimary,
+      };
+    },
   },
   Search: {
     screen: SearchNavigator,
     navigationOptions: {
-        tabBarLabel: '',
-        tabBarIcon: (tabInfo) => <Ionicons name="ios-search" size={25} color={tabInfo.tintColor} />,
-        tabBarColor: Colors.secondaryColor,
-      
-    }
-  }
+      tabBarLabel: '',
+      tabBarIcon: (tabInfo) => <Ionicons name="ios-search" size={25} color={tabInfo.tintColor} />,
+      tabBarColor: Colors.secondaryColor,
+    },
+  },
 };
 
 const HomeSearchTabNavigator = createMaterialBottomTabNavigator(tabScreenConfig, {
@@ -201,7 +203,6 @@ const FreeCommunityNavigator = createStackNavigator({
 const AssignmentsNavigator = createStackNavigator({
   Assignments: {
     screen: AssignmentsScreen,
-   
   },
   CourseDetail: {
     screen: CourseDetailScreen,
@@ -231,8 +232,8 @@ const SettingsNavigator = createStackNavigator(
   },
 );
 
-const DrawerNavigator = () =>{
-  console.log('Render DrawerNavigator')
+const DrawerNavigator = () => {
+  console.log('Render DrawerNavigator');
   return createDrawerNavigator(
     {
       HomeSearch: {
@@ -284,23 +285,20 @@ const DrawerNavigator = () =>{
         },
       },
     },
-  )
-
-
+  );
 };
 
 const AuthNavigator = createStackNavigator({
   Auth: AuthScreen,
 });
 
-
-const MainNavigator = () => (createSwitchNavigator({
-  Startup:{
-    screen:StartupScreen,
-  },
-  Auth: AuthNavigator,
-  Drawer: DrawerNavigator(),
-}));
+const MainNavigator = () =>
+  createSwitchNavigator({
+    Startup: {
+      screen: StartupScreen,
+    },
+    Auth: AuthNavigator,
+    Drawer: DrawerNavigator(),
+  });
 
 export default createAppContainer(MainNavigator());
-
