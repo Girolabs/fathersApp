@@ -1,5 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet,Platform, SafeAreaView, AsyncStorage, TouchableNativeFeedback, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  SafeAreaView,
+  AsyncStorage,
+  TouchableNativeFeedback,
+  TouchableOpacity,
+} from 'react-native';
 import { I18nContext } from '../context/I18nProvider';
 import moment from 'moment';
 import 'moment/min/locales';
@@ -11,17 +20,43 @@ import HeaderButton from '../components/HeaderButton';
 
 import Select from '../components/Select';
 
+const styles = StyleSheet.create({
+  screen: {
+    alignItems: 'center',
+  },
+  select: {
+    width: '100%',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+  },
+  textContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderRadius: 5,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    backgroundColor: Colors.surfaceColorSecondary,
+    width: '100%',
+  },
+  text: {
+    fontFamily: 'work-sans-medium',
+    fontSize: 18,
+    lineHeight: 21,
+    color: Colors.primaryColor,
+  },
+});
+
 const SettingsScreen = (props) => {
   const lng = [
     { name: 'ES', value: 'es' },
     { name: 'EN', value: 'en' },
   ];
   let TouchableComp = TouchableOpacity;
-    if (Platform.OS == 'android' && Platform.Version >= 21) {
-      TouchableComp = TouchableNativeFeedback;
-    }
+  if (Platform.OS === 'android' && Platform.Version >= 21) {
+    TouchableComp = TouchableNativeFeedback;
+  }
   return (
-    
     <I18nContext.Consumer>
       {(value) => {
         moment.locale(value.lang);
@@ -30,22 +65,18 @@ const SettingsScreen = (props) => {
             <Select style={styles.select} elements={lng} value={value.lang} valueChange={value.changeLang} />
             <View style={styles.textContainer}>
               <Text style={styles.text}>{i18n.t('SETTINGS.LOGOUT')}</Text>
-              <TouchableComp onPress={async () => {
-                  try{
+              <TouchableComp
+                onPress={async () => {
+                  try {
                     await AsyncStorage.removeItem('token');
                     props.navigation.navigate('Auth');
-                  }catch(e) {
-                    console.log(e)
+                  } catch (e) {
+                    console.log(e);
                   }
-               
-              }}>
-              <Ionicons
-                name="md-close-circle"
-                size={23}
-                color={Colors.primaryColor}
-              />
+                }}
+              >
+                <Ionicons name="md-close-circle" size={23} color={Colors.primaryColor} />
               </TouchableComp>
-              
             </View>
           </SafeAreaView>
         );
@@ -70,30 +101,3 @@ SettingsScreen.navigationOptions = (navigationData) => ({
 });
 
 export default SettingsScreen;
-
-const styles = StyleSheet.create({
-  screen: {
-    alignItems: 'center',
-  },
-  select: {
-    width: '100%',
-    borderRadius: 5,
-    paddingHorizontal:10,
-  },
-  textContainer : {
-    flexDirection: 'row',
-    alignItems:'center',
-    justifyContent:'space-between',
-    borderRadius: 5,
-    paddingHorizontal:20,
-    paddingVertical:15,
-    backgroundColor:Colors.surfaceColorSecondary,
-    width:'100%'
-  },
-  text: {
-    fontFamily:'work-sans-medium',
-    fontSize: 18,
-    lineHeight: 21,
-    color: Colors.primaryColor
-  }
-});

@@ -45,7 +45,7 @@ class AuthScreen extends Component {
     const { identity } = this.state;
     this.setState({ loading: true })
     axios
-      .get(`en/api/v1/users/request-verification-token?identity=${encodeURIComponent(identity)}`, { data: null })
+      .get(`${i18n.locale}/api/v1/users/request-verification-token?identity=${encodeURIComponent(identity)}`, { data: null })
       .then((res) => {
         const status = res.data.status;
         if (status == 'OK') {
@@ -60,7 +60,7 @@ class AuthScreen extends Component {
     const { identity, token } = this.state;
     this.setState({loading:true})
     axios
-      .get(`en/api/v1/users/login-with-verification-token?identity=${encodeURIComponent(identity)}&token=${token}`, { data: null })
+      .get(`${i18n.locale}/api/v1/users/login-with-verification-token?identity=${encodeURIComponent(identity)}&token=${token}`, { data: null })
       .then(async (res) => {
         console.log(res)
         const data = JSON.stringify(res.data.result)

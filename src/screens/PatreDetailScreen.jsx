@@ -143,7 +143,7 @@ const PatreDetailScreen = ({ navigation }) => {
       }
     })();
     const fatherId = navigation.getParam('fatherId');
-    axios.get(`en/api/v1/persons/${fatherId}?fields=all&key=${Constants.manifest.extra.secretKey}`).then((response) => {
+    axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&key=${Constants.manifest.extra.secretKey}`).then((response) => {
       console.log('[PatreDetail]', response.data.result);
       const resFather = response.data.result;
       setFather(resFather);

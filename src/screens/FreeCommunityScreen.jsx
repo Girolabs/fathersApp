@@ -16,6 +16,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Colors from '../constants/Colors';
 import axios from '../../axios-instance';
 import Constants from 'expo-constants';
+import i18n from 'i18n-js';
 
 class FreeCommunityScreen extends Component {
 	state = {
@@ -24,7 +25,7 @@ class FreeCommunityScreen extends Component {
 
 	componentDidMount() {
 		axios
-			.get(`en/api/v1/generations?fields=all&key=${Constants.manifest.extra.secretKey}`)
+			.get(`${i18n.locale}/api/v1/generations?fields=all&key=${Constants.manifest.extra.secretKey}`)
 			.then((res) => {
                 const fetchedGenerations = res.data.result.map(entry => {
                     return {

@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
-import { AsyncStorage, ActivityIndicator, View, StyleSheet } from 'react-native';
+import {
+  AsyncStorage, ActivityIndicator, View, StyleSheet,
+} from 'react-native';
 import Colors from '../constants/Colors';
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 class StartupScreen extends Component {
   componentDidMount() {
@@ -35,12 +45,6 @@ class StartupScreen extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
+
 
 export default StartupScreen;

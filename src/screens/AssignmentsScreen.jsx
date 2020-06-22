@@ -34,10 +34,10 @@ class AssignmentsScreen extends Component {
     courses: [],
   };
   componentDidMount() {
-    axios.get(`en/api/v1/territories?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resTerritory) => {
+    axios.get(`${i18n.locale}/api/v1/territories?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resTerritory) => {
       let territories = resTerritory.data.result;
 
-      axios.get(`en/api/v1/filiations?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resFiliations) => {
+      axios.get(`${i18n.locale}/api/v1/filiations?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resFiliations) => {
         let filiations = resFiliations.data.result;
         territories = territories.map((territory) => {
           let resfiliations = [];
@@ -86,11 +86,11 @@ class AssignmentsScreen extends Component {
           };
         });
 
-        axios.get(`en/api/v1/generations?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resGenerations) => {
+        axios.get(`${i18n.locale}/api/v1/generations?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resGenerations) => {
           let generations = resGenerations.data.result;
-          axios.get(`en/api/v1/courses?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resCourses) => {
+          axios.get(`${i18n.locale}/api/v1/courses?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resCourses) => {
             let courses = resCourses.data.result;
-            axios.get(`en/api/v1/persons?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resPersons) => {
+            axios.get(`${i18n.locale}/api/v1/persons?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resPersons) => {
               let persons = resPersons.data.result;
 
               generations = generations.map((generation) => {
@@ -116,7 +116,7 @@ class AssignmentsScreen extends Component {
                 }
               });
 
-              console.log('g', generations);
+              //console.log('g', generations);
 
               this.setState({ generations });
 
@@ -142,7 +142,6 @@ class AssignmentsScreen extends Component {
                   };
                 }
               });
-              console.log('c', courses);
               this.setState({ courses });
             });
           });
