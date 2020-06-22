@@ -17,12 +17,12 @@ class CourseDetailScreen extends Component {
 		const { navigation } = this.props;
 		const courseId = navigation.getParam('courseId');
 		axios
-			.get((`en/api/v1/courses/${courseId}?fields=all&key=${Constants.manifest.extra.secretKey}`))
+			.get((`${i18n.locale}/api/v1/courses/${courseId}?fields=all&key=${Constants.manifest.extra.secretKey}`))
 			.then((res) => {
 				let course = res.data.result
 				this.setState({ course })
 				axios
-					.get(`en/api/v1/persons/${course.leaderAssignment.personId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
+					.get(`${i18n.locale}/api/v1/persons/${course.leaderAssignment.personId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
 					.then((respPerson) => {
 						const person = respPerson.data.result;
 
