@@ -8,6 +8,7 @@ exports.EN = {
     ASSIGNMENTS: 'Assignments',
     SETTINGS: 'Settings',
     SEARCH: 'Search',
+    NO_INTERNET: 'No internet conection',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'identity',

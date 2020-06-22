@@ -17,6 +17,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Colors from '../constants/Colors';
 import axios from '../../axios-instance';
 import Constants from 'expo-constants';
+import i18n from 'i18n-js';
 
 class CommunityScreen extends Component {
 	state = {

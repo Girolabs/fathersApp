@@ -17,11 +17,14 @@ import i18n from 'i18n-js';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Flag } from 'react-native-svg-flagkit';
+import * as Network from 'expo-network';
 import axios from '../../axios-instance';
 import 'moment/min/locales';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { I18nContext } from '../context/I18nProvider';
+import { Snackbar } from 'react-native-paper';
+import { setDetectionImagesAsync } from 'expo/build/AR';
 
 const styles = StyleSheet.create({
   screen: {
@@ -92,27 +95,38 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.surfaceColorPrimary,
     backgroundColor: Colors.surfaceColorSecondary,
   },
+  snackError: {
+    backgroundColor: Colors.secondaryColor,
+  },
 });
 
 const HomeScreen = ({ navigation }) => {
   const [reminders, setReminders] = useState([]);
   const [selectedReminder, setSelectedReminder] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const [snackMsg, setSnackMsg] = useState('');
 
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableComp = TouchableNativeFeedback;
   }
 
-  useEffect(() => {
-    axios
-      .get(`${i18n.locale}/api/v1/date-tiles?daysInAdvance=8&key=${Constants.manifest.extra.secretKey}`)
-      .then((res) => {
-        console.log(res.data.result);
-        const fetchedReminders = res.data.result;
-        setReminders(fetchedReminders);
-        setLoading(false);
-      });
+  useEffect(async () => {
+    const status = await Network.getNetworkStateAsync();
+    if (status.isConnected === true) {
+      axios
+        .get(`${i18n.locale}/api/v1/date-tiles?daysInAdvance=8&key=${Constants.manifest.extra.secretKey}`)
+        .then((res) => {
+          console.log(res.data.result);
+          const fetchedReminders = res.data.result;
+          setReminders(fetchedReminders);
+          setLoading(false);
+        });
+    } else {
+      setVisible(true);
+      setSnackMsg(i18n.t(i18n.t('GENERAL.NO_INTERNET')));
+    }
   }, []);
   console.log('render: HomeScreen');
   return (
@@ -128,10 +142,7 @@ const HomeScreen = ({ navigation }) => {
                 }}
               >
                 <View style={styles.prayerCard}>
-                  <Text style={styles.prayerCardTitle}>
-                    {' '}
-                    {i18n.t('HOME_SCREEN.COMMUNITY_PRAYER')}
-                  </Text>
+                  <Text style={styles.prayerCardTitle}> {i18n.t('HOME_SCREEN.COMMUNITY_PRAYER')}</Text>
                   <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
                 </View>
               </TouchableComp>
@@ -142,10 +153,7 @@ const HomeScreen = ({ navigation }) => {
                 }}
               >
                 <View style={styles.prayerCard}>
-                  <Text style={styles.prayerCardTitle}>
-                    {' '}
-                    {i18n.t('HOME_SCREEN.MISC')}
-                  </Text>
+                  <Text style={styles.prayerCardTitle}> {i18n.t('HOME_SCREEN.MISC')}</Text>
                   <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
                 </View>
               </TouchableComp>
@@ -249,9 +257,9 @@ const HomeScreen = ({ navigation }) => {
                                 </View>
                               </View>
 
-                              {item.entityObject.phones !== undefined
-                                && item.entityObject.phones.length > 0
-                                && item.entityObject.phones[0].whatsApp && (
+                              {item.entityObject.phones !== undefined &&
+                                item.entityObject.phones.length > 0 &&
+                                item.entityObject.phones[0].whatsApp && (
                                   <TouchableComp
                                     onPress={() => {
                                       Linking.openURL(
@@ -261,7 +269,7 @@ const HomeScreen = ({ navigation }) => {
                                   >
                                     <Ionicons name="logo-whatsapp" size={23} color={Colors.onSurfaceColorSecondary} />
                                   </TouchableComp>
-                              )}
+                                )}
                             </View>
                           )}
                         />
@@ -274,6 +282,9 @@ const HomeScreen = ({ navigation }) => {
           ) : (
             <ActivityIndicator size="large" color={Colors.primaryColor} />
           )}
+          <Snackbar visible={visible} onDismiss={this._onDismissSnackBar} style={styles.snackError}>
+            {snackMsg}
+          </Snackbar>
         </View>
       )}
     </I18nContext.Consumer>

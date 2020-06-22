@@ -16,12 +16,13 @@ import 'moment/min/locales';
 import i18n from 'i18n-js';
 import Constants from 'expo-constants';
 import { AsyncStorage } from 'react-native';
+import * as Network from 'expo-network';
 
 class AuthScreen extends Component {
   state = {
     hasToken: false,
     identity: 'gcaballero',
-    token: 'YF9LjF',
+    token: '4wxyYG',
     visible:false,
     snackMsg: '',
     loading:false,
@@ -40,10 +41,12 @@ class AuthScreen extends Component {
     this.setState({ token: text });
   };
 
-  handleSendIdentity = () => {
+  handleSendIdentity = async () => {
     const data = {};
     const { identity } = this.state;
     this.setState({ loading: true })
+    const status = await Network.getNetworkStateAsync();
+    if( status.isConnected == true ) {
     axios
       .get(`${i18n.locale}/api/v1/users/request-verification-token?identity=${encodeURIComponent(identity)}`, { data: null })
       .then((res) => {
@@ -54,12 +57,18 @@ class AuthScreen extends Component {
       }).catch((e) => {
         this.setState({snackMsg:i18n.t('AUTH_SCREEN.ERROR'),visible:true,loading:false})
       });
+    } else {
+      this.setState({snackMsg:i18n.t('GENERAL.NO_INTERNET'),visible:true,loading:false})
+    }
   };
-  handleSendToken = () => {
+  handleSendToken = async () => {
     const data = {};
     const { identity, token } = this.state;
-    this.setState({loading:true})
-    axios
+    this.setState({loading:true});
+    const status = await Network.getNetworkStateAsync();
+    console.log(status)
+    if( status.isConnected == true ) {
+      axios
       .get(`${i18n.locale}/api/v1/users/login-with-verification-token?identity=${encodeURIComponent(identity)}&token=${token}`, { data: null })
       .then(async (res) => {
         console.log(res)
@@ -81,6 +90,10 @@ class AuthScreen extends Component {
       }).catch((e) => {
         this.setState({snackMsg:i18n.t('AUTH_SCREEN.ERROR'),visible:true,loading:false})
       });
+    }else {
+      this.setState({snackMsg:i18n.t('GENERAL.NO_INTERNET'),visible:true,loading:false})
+    }
+   
   };
 
   render() {

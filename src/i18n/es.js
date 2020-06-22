@@ -8,6 +8,7 @@ exports.ES = {
     ASSIGNMENTS: 'Cargos',
     SETTINGS: 'Configuraciones',
     SEARCH: 'Buscar',
+    NO_INTERNET: 'No hay conexión de internet',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'identidad',
