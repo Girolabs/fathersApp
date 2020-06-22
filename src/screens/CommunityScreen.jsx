@@ -38,6 +38,9 @@ class CommunityScreen extends Component {
 					}).filter( commuunity => commuunity.isActive == true)
 					this.setState({ delegations: fetchedDelegations });
 				}
+			}).
+			catch(error => {
+				
 			});
 	}
 
