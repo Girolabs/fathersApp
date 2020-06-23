@@ -9,6 +9,7 @@ exports.EN = {
     SETTINGS: 'Settings',
     SEARCH: 'Search',
     NO_INTERNET: 'No internet conection',
+    ERROR: 'Error with the request',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'identity',

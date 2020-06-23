@@ -22,6 +22,8 @@ import axios from '../../axios-instance';
 import { I18nContext } from '../context/I18nProvider';
 import Colors from '../constants/Colors';
 import SocialIcons from '../components/SocialIcons';
+import * as Network from 'expo-network';
+import { Snackbar } from 'react-native-paper';
 
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
@@ -54,11 +56,18 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: Colors.onSurfaceColorPrimary,
   },
+  snackError: {
+    backgroundColor: Colors.secondaryColor,
+  },
+
 });
 
 const PatreDetailScreen = ({ navigation }) => {
   const [father, setFather] = useState(null);
   const [showSaveContact, setShowSaveContact] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const [snackMsg, setSnackMsg] = useState('');
 
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -142,14 +151,32 @@ const PatreDetailScreen = ({ navigation }) => {
         setShowSaveContact(true);
       }
     })();
-    const fatherId = navigation.getParam('fatherId');
-    axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&key=${Constants.manifest.extra.secretKey}`).then((response) => {
-      console.log('[PatreDetail]', response.data.result);
-      const resFather = response.data.result;
-      setFather(resFather);
+    const loadPerson = async () => {
+      const status = await Network.getNetworkStateAsync();
+      if (status.isConnected === true) {
+        const fatherId = navigation.getParam('fatherId');
+        axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&key=${Constants.manifest.extra.secretKey}`).then((response) => {
+          console.log('[PatreDetail]', response.data.result);
+          const resFather = response.data.result;
+          setFather(resFather);
 
-      console.log('father', father);
-    });
+          console.log('father', father);
+        }).catch(err => {
+          setLoading(false);
+          setVisible(true);
+          setSnackMsg(i18n.t('GENERAL.ERROR'))
+
+        });
+      } else {
+        setLoading(false);
+        setVisible(true);
+        setSnackMsg(i18n.t('GENERAL.NO_INTERNET'))
+
+      }
+
+    }
+    loadPerson()
+
   }, []);
 
   return (
@@ -182,7 +209,7 @@ const PatreDetailScreen = ({ navigation }) => {
                           father.personalInfoUpdatedOn
                             ? moment.utc(father.personalInfoUpdatedOn).format('Do MMMM YYYY')
                             : ''
-                        }`}
+                          }`}
                       </Text>
                     </View>
                   </View>
@@ -390,8 +417,11 @@ const PatreDetailScreen = ({ navigation }) => {
                 )}
               </ScrollView>
             ) : (
-              <ActivityIndicator size="large" color={Colors.primaryColor} />
-            )}
+                <ActivityIndicator size="large" color={Colors.primaryColor} />
+              )}
+            <Snackbar visible={visible} onDismiss={() => setVisible(false)} style={styles.snackError}>
+              {snackMsg}
+            </Snackbar>
           </View>
         );
       }}

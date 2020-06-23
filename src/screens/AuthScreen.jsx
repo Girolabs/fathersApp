@@ -22,7 +22,7 @@ class AuthScreen extends Component {
   state = {
     hasToken: false,
     identity: 'gcaballero',
-    token: '4wxyYG',
+    token: 'QUkZe8',
     visible:false,
     snackMsg: '',
     loading:false,

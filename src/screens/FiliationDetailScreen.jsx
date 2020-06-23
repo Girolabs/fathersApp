@@ -9,20 +9,30 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Flag } from 'react-native-svg-flagkit';
 import moment from 'moment';
 import 'moment/min/locales';
+import * as Network from 'expo-network';
+import { Snackbar } from 'react-native-paper';
 
 class FiliationDetailScreen extends Component {
   state = {
     filiation: null
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { navigation } = this.props;
     const filiationId = navigation.getParam('filiationId');
-    axios.
-      get(`${i18n.locale}/api/v1/filiations/${filiationId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
-      .then((res) => {
-        this.setState({ filiation: res.data.result });
-      });
+    const status = await Network.getNetworkStateAsync();
+    if (status.isConnected === true) {
+      axios.
+        get(`${i18n.locale}/api/v1/filiations/${filiationId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
+        .then((res) => {
+          this.setState({ filiation: res.data.result });
+        }).catch(err => {
+          this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
+        });
+    } else {
+      this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false })
+    }
+
   }
   render() {
     const { navigation } = this.props;
@@ -120,6 +130,9 @@ class FiliationDetailScreen extends Component {
                   </View>
                 </ScrollView>
               ) : <ActivityIndicator size="large" color={Colors.primaryColor} />}
+              <Snackbar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })} style={styles.snackError}>
+                {this.state.snackMsg}
+              </Snackbar>
             </SafeAreaView>
           )
         }}
@@ -148,7 +161,8 @@ const styles = StyleSheet.create({
     fontFamily: 'work-sans-semibold',
     fontSize: 27,
     color: Colors.primaryColor,
-    marginRight: 10
+    marginRight: 10,
+    width: '80%'
   },
   sectionHeader: {
     fontFamily: 'work-sans-medium',
@@ -210,6 +224,9 @@ const styles = StyleSheet.create({
     padding: 15,
     borderBottomColor: Colors.onSurfaceColorSecondary,
     borderBottomWidth: 0.5,
-  }
+  },
+  snackError: {
+    backgroundColor: Colors.secondaryColor,
+  },
 });
 export default FiliationDetailScreen;

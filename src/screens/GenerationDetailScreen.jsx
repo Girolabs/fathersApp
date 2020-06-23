@@ -17,20 +17,29 @@ import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
 import moment from 'moment';
 import 'moment/min/locales';
+import * as Network from 'expo-network';
+import { Snackbar } from 'react-native-paper';
+
 class GenerationDetailScreen extends Component {
   state = {
     generation: [],
   };
-  componentDidMount() {
+  async componentDidMount() {
     const { navigation } = this.props;
     const generationId = navigation.getParam('generationId');
-    axios
-      .get(
-        `${i18n.locale}/api/v1/generations/${generationId}?fields=all&key=${Constants.manifest.extra.secretKey}`,
-      )
-      .then((res) => {
-        this.setState({ generation: res.data.result });
-      });
+    const status = await Network.getNetworkStateAsync();
+    if (status.isConnected == true) {
+      axios
+        .get(
+          `${i18n.locale}/api/v1/generations/${generationId}?fields=all&key=${Constants.manifest.extra.secretKey}`,
+        )
+        .then((res) => {
+          this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
+        });
+    } else {
+      this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false })
+    }
+
   }
   render() {
     let TouchableComp = TouchableOpacity;
@@ -101,8 +110,11 @@ class GenerationDetailScreen extends Component {
                     </View>
                   </Fragment>
                 ) : (
-                  <ActivityIndicator size="large" color={Colors.primaryColor} />
-                )}
+                    <ActivityIndicator size="large" color={Colors.primaryColor} />
+                  )}
+                <Snackbar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })} style={styles.snackError}>
+                  {this.state.snackMsg}
+                </Snackbar>
               </ScrollView>
             </SafeAreaView>
           );
@@ -186,6 +198,9 @@ const styles = StyleSheet.create({
     fontFamily: 'work-sans-semibold',
     textAlign: 'left',
     width: '50%',
+  },
+  snackError: {
+    backgroundColor: Colors.secondaryColor,
   },
 });
 

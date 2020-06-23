@@ -10,6 +10,8 @@ import moment from 'moment';
 import 'moment/min/locales';
 import { ScrollView } from 'react-native-gesture-handler';
 import countries from "i18n-iso-countries";
+import * as Network from 'expo-network';
+import { Snackbar } from 'react-native-paper';
 
 
 countries.registerLocale(require("i18n-iso-countries/langs/en.json"));
@@ -21,10 +23,12 @@ class HouseDetailScreen extends Component {
     house: null
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { navigation } = this.props;
     const houseId = navigation.getParam('houseId');
-    axios.
+    const status = await Network.getNetworkStateAsync();
+    if(status.isConnected === true) {
+      axios.
       get(`${i18n.locale}/api/v1/houses/${houseId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
       .then((resHouse) => {
         let house = resHouse.data.result;
@@ -34,7 +38,13 @@ class HouseDetailScreen extends Component {
             const membersHouse = filiation.persons.filter(person => person.activeLivingSituation.houseId == house.houseId)
             this.setState({ house: { ...house, membersHouse, filiationName: filiation.name } });
           })
+      }).catch(err => {
+        this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
       })
+    }else {
+      this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false })
+    }
+
   }
 
   render() {
@@ -129,6 +139,9 @@ class HouseDetailScreen extends Component {
                 </View>
               )
                 : <ActivityIndicator size="large" color={Colors.primaryColor} />}
+                <Snackbar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })} style={styles.snackError}>
+									{this.state.snackMsg}
+								</Snackbar>
                 </ScrollView>
             </SafeAreaView>
           )
@@ -191,6 +204,9 @@ const styles = StyleSheet.create({
     padding: 15,
     borderBottomColor: Colors.onSurfaceColorSecondary,
     borderBottomWidth: 0.5,
+  },
+  snackError: {
+    backgroundColor: Colors.secondaryColor,
   },
 })
 

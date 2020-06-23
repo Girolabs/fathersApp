@@ -8,41 +8,49 @@ import moment from 'moment';
 import 'moment/min/locales';
 import { Flag } from 'react-native-svg-flagkit';
 import axios from '../../axios-instance';
+import * as Network from 'expo-network';
+import { Snackbar } from 'react-native-paper';
 
 class CourseDetailScreen extends Component {
 	state = {
 		course: null
 	}
-	componentDidMount() {
+	async componentDidMount() {
 		const { navigation } = this.props;
 		const courseId = navigation.getParam('courseId');
-		axios
-			.get((`${i18n.locale}/api/v1/courses/${courseId}?fields=all&key=${Constants.manifest.extra.secretKey}`))
-			.then((res) => {
-				let course = res.data.result
-				this.setState({ course })
-				axios
-					.get(`${i18n.locale}/api/v1/persons/${course.leaderAssignment.personId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
-					.then((respPerson) => {
-						const person = respPerson.data.result;
+		const status = await Network.getNetworkStateAsync();
+		if (status.isConnected === true) {
+			axios
+				.get((`${i18n.locale}/api/v1/courses/${courseId}?fields=all&key=${Constants.manifest.extra.secretKey}`))
+				.then((res) => {
+					let course = res.data.result
+					this.setState({ course })
+					axios
+						.get(`${i18n.locale}/api/v1/persons/${course.leaderAssignment.personId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
+						.then((respPerson) => {
+							const person = respPerson.data.result;
 
-						let leaderAssignment = {
-							...course.leaderAssignment,
-							person
-						}
-						console.log('mirar', leaderAssignment)
-						course = {
-							...course,
-							leaderAssignment
+							let leaderAssignment = {
+								...course.leaderAssignment,
+								person
+							}
+							console.log('mirar', leaderAssignment)
+							course = {
+								...course,
+								leaderAssignment
 
-						}
-						this.setState({ course })
-					}).catch(error => {
+							}
+							this.setState({ course })
+						}).catch(error => {
+							this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
+						})
+				}).catch(error => {
+					this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
+				})
+		} else {
+			this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false })
+		}
 
-					})
-			}).catch(error => {
-
-			})
 	}
 	render() {
 		let TouchableComp = TouchableOpacity;
@@ -384,6 +392,9 @@ class CourseDetailScreen extends Component {
 										</View>
 									</Fragment>
 								) : <ActivityIndicator size="large" color={Colors.primaryColor} />}
+								<Snackbar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })} style={styles.snackError}>
+									{this.state.snackMsg}
+								</Snackbar>
 							</ScrollView>
 						</SafeAreaView>
 					)
@@ -445,6 +456,9 @@ const styles = StyleSheet.create({
 		padding: 15,
 		borderBottomColor: Colors.onSurfaceColorSecondary,
 		borderBottomWidth: 0.5,
+	},
+	snackError: {
+		backgroundColor: Colors.secondaryColor,
 	},
 
 })

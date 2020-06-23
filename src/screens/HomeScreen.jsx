@@ -24,7 +24,7 @@ import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { I18nContext } from '../context/I18nProvider';
 import { Snackbar } from 'react-native-paper';
-import { setDetectionImagesAsync } from 'expo/build/AR';
+
 
 const styles = StyleSheet.create({
   screen: {
@@ -112,21 +112,28 @@ const HomeScreen = ({ navigation }) => {
     TouchableComp = TouchableNativeFeedback;
   }
 
-  useEffect(async () => {
-    const status = await Network.getNetworkStateAsync();
-    if (status.isConnected === true) {
-      axios
-        .get(`${i18n.locale}/api/v1/date-tiles?daysInAdvance=8&key=${Constants.manifest.extra.secretKey}`)
-        .then((res) => {
-          console.log(res.data.result);
-          const fetchedReminders = res.data.result;
-          setReminders(fetchedReminders);
-          setLoading(false);
-        });
-    } else {
-      setVisible(true);
-      setSnackMsg(i18n.t(i18n.t('GENERAL.NO_INTERNET')));
+  useEffect(() => {
+    const loadDates = async () => {
+      const status = await Network.getNetworkStateAsync();
+      if (status.isConnected === true) {
+        axios
+          .get(`${i18n.locale}/api/v1/date-tiles?daysInAdvance=8&key=${Constants.manifest.extra.secretKey}`)
+          .then((res) => {
+            console.log(res.data.result);
+            const fetchedReminders = res.data.result;
+            setReminders(fetchedReminders);
+            setLoading(false);
+          }).catch(err => {
+            setVisible(true);
+            setSnackMsg(i18n.t('GENERAL.ERROR'));
+          });
+      } else {
+        setVisible(true);
+        setSnackMsg(i18n.t('GENERAL.NO_INTERNET'));
+      }
     }
+    loadDates();
+
   }, []);
   console.log('render: HomeScreen');
   return (
@@ -191,37 +198,37 @@ const HomeScreen = ({ navigation }) => {
                             {selectedReminder === index ? (
                               <Ionicons name="md-arrow-dropup" size={23} color={Colors.surfaceColorPrimary} />
                             ) : (
-                              <Ionicons name="md-arrow-dropdown" size={23} color={Colors.surfaceColorPrimary} />
-                            )}
+                                <Ionicons name="md-arrow-dropdown" size={23} color={Colors.surfaceColorPrimary} />
+                              )}
                           </View>
                         </TouchableComp>
                       ) : (
-                        <TouchableComp
-                          style={{ flex: 1 }}
-                          onPress={() => {
-                            if (selectedReminder == null) {
-                              setSelectedReminder(index);
-                            } else if (selectedReminder === index) {
-                              setSelectedReminder(null);
-                            } else {
-                              setSelectedReminder(index);
-                            }
-                          }}
-                        >
-                          <View style={styles.reminderHeader}>
-                            <View style={{ flexDirection: 'row' }}>
-                              <Ionicons name="ios-calendar" size={23} color={Colors.surfaceColorPrimary} />
-                              <Text style={styles.reminderHeaderTitle}>{date}</Text>
-                            </View>
+                          <TouchableComp
+                            style={{ flex: 1 }}
+                            onPress={() => {
+                              if (selectedReminder == null) {
+                                setSelectedReminder(index);
+                              } else if (selectedReminder === index) {
+                                setSelectedReminder(null);
+                              } else {
+                                setSelectedReminder(index);
+                              }
+                            }}
+                          >
+                            <View style={styles.reminderHeader}>
+                              <View style={{ flexDirection: 'row' }}>
+                                <Ionicons name="ios-calendar" size={23} color={Colors.surfaceColorPrimary} />
+                                <Text style={styles.reminderHeaderTitle}>{date}</Text>
+                              </View>
 
-                            {selectedReminder === index ? (
-                              <Ionicons name="md-arrow-dropup" size={23} color={Colors.surfaceColorPrimary} />
-                            ) : (
-                              <Ionicons name="md-arrow-dropdown" size={23} color={Colors.surfaceColorPrimary} />
-                            )}
-                          </View>
-                        </TouchableComp>
-                      )}
+                              {selectedReminder === index ? (
+                                <Ionicons name="md-arrow-dropup" size={23} color={Colors.surfaceColorPrimary} />
+                              ) : (
+                                  <Ionicons name="md-arrow-dropdown" size={23} color={Colors.surfaceColorPrimary} />
+                                )}
+                            </View>
+                          </TouchableComp>
+                        )}
                       {selectedReminder === index && (
                         <FlatList
                           data={item}
@@ -231,14 +238,14 @@ const HomeScreen = ({ navigation }) => {
                                 {item.entityCountry != null ? (
                                   <Flag id={item.entityCountry} size={0.1} />
                                 ) : (
-                                  <Ionicons name="ios-flag" size={23} color={Colors.onSurfaceColorSecondary} />
-                                )}
+                                    <Ionicons name="ios-flag" size={23} color={Colors.onSurfaceColorSecondary} />
+                                  )}
                                 <View style={{ marginLeft: 15 }}>
                                   {item.isImportant ? (
                                     <Text style={{ fontFamily: 'work-sans', fontSize: 15 }}>{date}</Text>
                                   ) : (
-                                    <Text style={{ fontFamily: 'work-sans', fontSize: 15 }}>{item.text}</Text>
-                                  )}
+                                      <Text style={{ fontFamily: 'work-sans', fontSize: 15 }}>{item.text}</Text>
+                                    )}
 
                                   <TouchableComp
                                     onPress={() => {
@@ -280,9 +287,9 @@ const HomeScreen = ({ navigation }) => {
               />
             </>
           ) : (
-            <ActivityIndicator size="large" color={Colors.primaryColor} />
-          )}
-          <Snackbar visible={visible} onDismiss={this._onDismissSnackBar} style={styles.snackError}>
+              <ActivityIndicator size="large" color={Colors.primaryColor} />
+            )}
+          <Snackbar visible={visible} onDismiss={() => setVisible(false)} style={styles.snackError}>
             {snackMsg}
           </Snackbar>
         </View>

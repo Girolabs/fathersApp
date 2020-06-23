@@ -6,6 +6,9 @@ import Constants from 'expo-constants';
 import axios from '../../axios-instance';
 import { Checkbox } from 'react-native-paper';
 import i18n from 'i18n-js';
+import * as Network from 'expo-network';
+import { Snackbar } from 'react-native-paper';
+
 class SearchScreen extends Component {
   state = {
     results: [],
@@ -16,12 +19,20 @@ class SearchScreen extends Component {
     searchText: '',
   };
 
-  componentDidMount() {
-    axios.get(`${i18n.locale}/api/v1/persons?fields=all&key=${Constants.manifest.extra.secretKey}`).then((res) => {
-      if (res.status == 200) {
-        this.setState({ results: res.data.result, loading: false });
-      }
-    });
+  async componentDidMount() {
+    const status = await Network.getNetworkStateAsync();
+    if (status.isConnected) {
+      axios.get(`${i18n.locale}/api/v1/persons?fields=all&key=${Constants.manifest.extra.secretKey}`).then((res) => {
+        if (res.status == 200) {
+          this.setState({ results: res.data.result, loading: false });
+        }
+      }).catch(err => {
+        this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
+      });
+    } else {
+      this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false })
+    }
+
   }
 
   handleFilter = (keyword) => {
@@ -126,8 +137,11 @@ class SearchScreen extends Component {
             />
           </Fragment>
         ) : (
-          <ActivityIndicator size="large" color={Colors.primaryColor} />
-        )}
+            <ActivityIndicator size="large" color={Colors.primaryColor} />
+          )}
+        <Snackbar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })} style={styles.snackError}>
+          {this.state.snackMsg}
+        </Snackbar>
       </View>
     );
   }
@@ -169,6 +183,9 @@ const styles = StyleSheet.create({
   optionContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  snackError: {
+    backgroundColor: Colors.secondaryColor,
   },
   option: {},
 });

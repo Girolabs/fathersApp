@@ -20,6 +20,8 @@ import moment from 'moment';
 import 'moment/min/locales';
 import { I18nContext } from '../context/I18nProvider';
 import axios from '../../axios-instance';
+import * as Network from 'expo-network';
+import { Snackbar } from 'react-native-paper';
 
 
 class DelegationDetailScreen extends Component {
@@ -27,15 +29,23 @@ class DelegationDetailScreen extends Component {
     territory: null
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { navigation } = this.props;
     const territoryId = navigation.getParam('delegationId');
     console.log('territoryID', territoryId)
-    axios.get(`${i18n.locale}/api/v1/territories/${territoryId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
-      .then((res) => {
-        this.setState({ territory: res.data.result });
-        console.log('[Territory]', res.data.result);
-      });
+    const status = await Network.getNetworkStateAsync();
+    if (status.isConnected === true) {
+      axios.get(`${i18n.locale}/api/v1/territories/${territoryId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
+        .then((res) => {
+          this.setState({ territory: res.data.result });
+          console.log('[Territory]', res.data.result);
+        }).catch(err => {
+          this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
+        });
+    } else {
+      this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false })
+    }
+
   }
 
   render() {
@@ -159,6 +169,10 @@ class DelegationDetailScreen extends Component {
                   </ScrollView>
                 )
                 : <ActivityIndicator size="large" color={Colors.primaryColor} />}
+
+              <Snackbar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })} style={styles.snackError}>
+                {this.state.snackMsg}
+              </Snackbar>
             </SafeAreaView>
           )
         }}
@@ -269,7 +283,10 @@ const styles = StyleSheet.create({
     color: Colors.onSurfaceColorPrimary,
     paddingVertical: 10,
     fontFamily: 'work-sans-medium'
-  }
+  },
+  snackError: {
+    backgroundColor: Colors.secondaryColor,
+  },
 });
 
 export default DelegationDetailScreen;

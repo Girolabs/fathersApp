@@ -18,30 +18,41 @@ import Colors from '../constants/Colors';
 import axios from '../../axios-instance';
 import Constants from 'expo-constants';
 import i18n from 'i18n-js';
+import * as Network from 'expo-network';
+import { Snackbar } from 'react-native-paper';
 
 class CommunityScreen extends Component {
 	state = {
 		delegations: [],
 	};
 
-	componentDidMount() {
-		axios
-			.get(`${i18n.locale}/api/v1/territories?fields=all&key=${Constants.manifest.extra.secretKey}`)
-			.then((res) => {
-				console.log(res)
-				if (res.data.status == "OK") {
-					const fetchedDelegations = res.data.result.map(entry => {
-						return {
-							...entry,
-							data: entry.filiations.filter(filiation => filiation.isActive)
-						}
-					}).filter( commuunity => commuunity.isActive == true)
-					this.setState({ delegations: fetchedDelegations });
-				}
-			}).
-			catch(error => {
-				
-			});
+	_onToggleSnackBar = () => this.setState({ visible: !this.state.visible });
+	_onDismissSnackBar = () => this.setState({ visible: false });
+
+	async componentDidMount() {
+		const status = await Network.getNetworkStateAsync();
+		if (status.isConnected === true) {
+			axios
+				.get(`${i18n.locale}/api/v1/territories?fields=all&key=${Constants.manifest.extra.secretKey}`)
+				.then((res) => {
+					console.log(res)
+					if (res.data.status == "OK") {
+						const fetchedDelegations = res.data.result.map(entry => {
+							return {
+								...entry,
+								data: entry.filiations.filter(filiation => filiation.isActive)
+							}
+						}).filter(commuunity => commuunity.isActive == true)
+						this.setState({ delegations: fetchedDelegations });
+					}
+				}).
+				catch(error => {
+					this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
+				});
+		} else {
+			this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false })
+		}
+
 	}
 
 	render() {
@@ -73,6 +84,9 @@ class CommunityScreen extends Component {
 						<ActivityIndicator size="large" color={Colors.primaryColor} />
 					</View>
 				}
+				<Snackbar visible={this.state.visible} onDismiss={() => this.setState({visible: false})} style={styles.snackError}>
+					{this.state.snackMsg}
+				</Snackbar>
 
 			</SafeAreaView>
 		);
@@ -154,6 +168,9 @@ const styles = StyleSheet.create({
 		color: Colors.primaryColor,
 		paddingHorizontal: 10
 	},
+	snackError: {
+		backgroundColor: Colors.secondaryColor,
+	  },
 });
 
 export default CommunityScreen;
