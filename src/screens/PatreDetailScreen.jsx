@@ -27,6 +27,8 @@ import { Snackbar } from 'react-native-paper';
 
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
+countries.registerLocale(require('i18n-iso-countries/langs/de.json'));
+countries.registerLocale(require('i18n-iso-countries/langs/pt.json'));
 
 const styles = StyleSheet.create({
   screen: {

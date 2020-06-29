@@ -51,6 +51,8 @@ const SettingsScreen = (props) => {
   const lng = [
     { name: 'ES', value: 'es' },
     { name: 'EN', value: 'en' },
+    { name: 'DE', value: 'de' },
+    { name: 'PT', value: 'pt' },
   ];
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {

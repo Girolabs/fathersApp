@@ -232,73 +232,69 @@ const SettingsNavigator = createStackNavigator(
   },
 );
 
-const DrawerNavigator = () => {
-  console.log('Render DrawerNavigator');
-  return createDrawerNavigator(
-    {
-      HomeSearch: {
-        screen: HomeSearchTabNavigator,
-        navigationOptions: {
-          drawerLabel: i18n.t('GENERAL.HOME'),
-        },
-      },
-      Profile: {
-        screen: ProfileNavigator,
-        navigationOptions: {
-          drawerLabel: i18n.t('GENERAL.PROFILE'),
-        },
-      },
-      Community: {
-        screen: CommunityNavigator,
-        navigationOptions: {
-          drawerLabel: i18n.t('GENERAL.GENERAL_COMMUNITY'),
-        },
-      },
-      FreeCommunity: {
-        screen: FreeCommunityNavigator,
-        navigationOptions: {
-          drawerLabel: i18n.t('GENERAL.FREE_COMMUNITY'),
-        },
-      },
-      Assignments: {
-        screen: AssignmentsNavigator,
-        navigationOptions: {
-          drawerLabel: i18n.t('GENERAL.ASSIGNMENTS'),
-        },
-      },
-      Settings: {
-        screen: SettingsNavigator,
-        navigationOptions: {
-          drawerLabel: i18n.t('GENERAL.SETTINGS'),
-        },
+const DrawerNavigator = createDrawerNavigator(
+  {
+    HomeSearch: {
+      screen: HomeSearchTabNavigator,
+      navigationOptions: {
+        drawerLabel: i18n.t('GENERAL.HOME'),
       },
     },
-    {
-      contentComponent: (props) => <DefaultDrawer {...props} />,
-      drawerBackgroundColor: Colors.primaryColor,
-      contentOptions: {
-        activeTintColor: Colors.secondaryColor,
-        inactiveTintColor: Colors.surfaceColorPrimary,
-        labelStyle: {
-          fontFamily: 'work-sans-semibold',
-          fontSize: 18,
-        },
+    Profile: {
+      screen: ProfileNavigator,
+      navigationOptions: {
+        drawerLabel: i18n.t('GENERAL.PROFILE'),
       },
     },
-  );
-};
+    Community: {
+      screen: CommunityNavigator,
+      navigationOptions: {
+        drawerLabel: i18n.t('GENERAL.GENERAL_COMMUNITY'),
+      },
+    },
+    FreeCommunity: {
+      screen: FreeCommunityNavigator,
+      navigationOptions: {
+        drawerLabel: i18n.t('GENERAL.FREE_COMMUNITY'),
+      },
+    },
+    Assignments: {
+      screen: AssignmentsNavigator,
+      navigationOptions: {
+        drawerLabel: i18n.t('GENERAL.ASSIGNMENTS'),
+      },
+    },
+    Settings: {
+      screen: SettingsNavigator,
+      navigationOptions: {
+        drawerLabel: i18n.t('GENERAL.SETTINGS'),
+      },
+    },
+  },
+  {
+    contentComponent: (props) => <DefaultDrawer {...props} />,
+    drawerBackgroundColor: Colors.primaryColor,
+    contentOptions: {
+      activeTintColor: Colors.secondaryColor,
+      inactiveTintColor: Colors.surfaceColorPrimary,
+      labelStyle: {
+        fontFamily: 'work-sans-semibold',
+        fontSize: 18,
+      },
+    },
+  },
+);
 
 const AuthNavigator = createStackNavigator({
   Auth: AuthScreen,
 });
 
-const MainNavigator = () =>
-  createSwitchNavigator({
-    Startup: {
-      screen: StartupScreen,
-    },
-    Auth: AuthNavigator,
-    Drawer: DrawerNavigator(),
-  });
+const MainNavigator = createSwitchNavigator({
+  Startup: {
+    screen: StartupScreen,
+  },
+  Auth: AuthNavigator,
+  Drawer: DrawerNavigator,
+});
 
-export default createAppContainer(MainNavigator());
+export default createAppContainer(MainNavigator);
