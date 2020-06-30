@@ -27,6 +27,7 @@ import AuthScreen from '../screens/AuthScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import StartupScreen from '../screens/StartupScreen';
 import DefaultDrawer from '../components/DefaultDrawer';
+import FatherFormScreen from '../screens/FatherFormScreen';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -145,7 +146,7 @@ const HomeSearchTabNavigator = createMaterialBottomTabNavigator(tabScreenConfig,
 });
 const ProfileNavigator = createStackNavigator(
   {
-    screen: PatreDetailScreen,
+    screen: FatherFormScreen,
   },
   {
     navigationOptions: {},
