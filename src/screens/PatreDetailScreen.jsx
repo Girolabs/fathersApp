@@ -166,13 +166,13 @@ const PatreDetailScreen = ({ navigation }) => {
         }).catch(err => {
           setLoading(false);
           setVisible(true);
-          setSnackMsg(i18n.t('GENERAL.ERROR'))
+          setSnackMsg(i18n.t('GENERAL.ERROR'));
 
         });
       } else {
         setLoading(false);
         setVisible(true);
-        setSnackMsg(i18n.t('GENERAL.NO_INTERNET'))
+        setSnackMsg(i18n.t('GENERAL.NO_INTERNET'));
 
       }
 

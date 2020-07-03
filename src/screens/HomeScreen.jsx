@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: Colors.secondaryColor,
     borderRadius: 15,
-    marginTop: 15,
+    marginTop: 5,
   },
   reminderListItem: {
     flexDirection: 'row',
