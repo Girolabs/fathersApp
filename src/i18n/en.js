@@ -134,4 +134,11 @@ exports.EN = {
     EX: 'Show ex members',
     PLACEHOLDER: 'firstname or lastname',
   },
+  FATHER_EDIT: {
+    TWITTER: 'Twitter',
+    INSTAGRAM: 'Instagram',
+    SLACK: 'Slack',
+    SAVE: 'Guardar',
+    EDIT: 'Edit Profile',
+  },
 };

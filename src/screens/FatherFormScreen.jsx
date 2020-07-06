@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, StyleSheet, Button, AsyncStorage } from 'react-native';
+import { View, Text, StyleSheet, Button, AsyncStorage, Platform, TouchableNativeFeedback, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import InputWithFormik from '../components/InputWithFormik';
@@ -14,6 +14,7 @@ import jwt from 'jwt-decode' // import dependency
 import Constants from 'expo-constants';
 import { Snackbar } from 'react-native-paper';
 import Colors from '../constants/Colors';
+import { NavigationEvents, SafeAreaView } from 'react-navigation';
 
 
 
@@ -21,28 +22,89 @@ const styles = StyleSheet.create({
   snackError: {
     backgroundColor: Colors.secondaryColor,
   },
+  btnContainer: {
+    backgroundColor: 'white',
+    borderColor: Colors.primaryColor,
+    borderRadius: 5,
+    borderWidth: 2,
+    paddingHorizontal: 10,
+    width: '45%',
+    height: 50,
+    marginHorizontal: 15,
+    justifyContent: 'center',
+    marginVertical:10
+  },
+  btnText:{
+    textAlign:'center',
+    fontSize: 12,
+    fontFamily:'work-sans-bold',
+    textTransform:'uppercase',
+    color:Colors.primaryColor
+  }
 })
 
 class FatherFormScreen extends Component {
   state = {
     father:{},
-    loading:false
+    loading:false,
+    updateFields:[]
   }
   async componentDidMount() {
     await this.loadPerson();
-    await this.loadInterfaceData();
+    
   };
 
-  loadInterfaceData = () => {
+  loadInterfaceData = async  () => {
     this.setState({loading:true});
+    const status = await Network.getNetworkStateAsync();
     if(status.isConnected == true ) {
       axios.get(`${i18n.locale}/api/v1/interface-data`).then (response => {
+        console.log('father', this.state.father)
+        const viewPermRole = this.state.father.viewPermissionForCurrentUser;
+        const updatePermRole = this.state.father.updatePermissionForCurrentUser;
+
+        const personFieldsByViewPermission = response.data.result.personFieldsByViewPermission;
+        const personFieldsByUpdatePermission = response.data.result.personFieldsByUpdatePermission;
+
         
-      
+
+        let updateRoles = Object.keys(personFieldsByUpdatePermission);
+        
+        const arrayOfRoles = updateRoles.map(rol => {
+          return personFieldsByUpdatePermission[rol];
+        })
+        console.log(arrayOfRoles)
+
+        const accumulatedFieldsPerRol = arrayOfRoles.map((rol,index) => {
+          let accu = [];
+          arrayOfRoles.forEach((el,i) => {
+            if (i<=index) {
+              accu = accu.concat(el);
+            }
+          })
+          return accu
+        })
+
+        let index = updateRoles.indexOf(
+          updatePermRole
+        );
+        const updateFields = accumulatedFieldsPerRol[index];
+
+        this.setState({updateFields})
+
+        console.log('final', accumulatedFieldsPerRol);
+        const regex = {
+          instagramUserRegex:response.data.result.instagramUserRegex,
+          skypeUserRegex:response.data.result.skypeUserRegex,
+          slackUserRegex:response.data.result.slackUserRegex,
+          twitterUserRegex:response.data.result.twitterUserRegex,
+        }
+        this.setState({fieldsPerm : accumulatedFieldsPerRol,regex:regex,loading:false});    
       })
-    }
-    
+    }   
   }
+
+  
 
   loadPerson = async () => {
     this.setState({loading:true})
@@ -54,8 +116,14 @@ class FatherFormScreen extends Component {
         .then(response =>{
           const father = response.data.result;
           this.setState({father, loading:false})
+          axios.get(`${i18n.locale}/api/v1/interface-data`).then (response => {
+            console.log('father', this.state.father)
+            this.loadInterfaceData();
           
-        })
+          })
+        }
+          
+        )
       }else {
         let decode = await AsyncStorage.getItem('token');
         decode = JSON.parse(decode);
@@ -67,6 +135,7 @@ class FatherFormScreen extends Component {
             .then(response => {
               const father = response.data.result;
               this.setState({father,loading:false})
+              this.loadInterfaceData();
             },(error) => {
               this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
             })
@@ -79,20 +148,85 @@ class FatherFormScreen extends Component {
       this.setState({loading:false,visible:true, snackMsg:i18n.t('GENERAL.NO_INTERNET')});
     }
   }
+
+  /* onSubmit = (values) => {
+    console.log('calling on submit',values);
+    this.setState({loading:true});
+    this.setState({loading:false})
+
+  
+  } */
+
   render() {
+    let TouchableComp = TouchableOpacity;
+    if(Platform.OS === 'android' && Platform.Version >= 21) {
+      TouchableComp = TouchableNativeFeedback;
+    }
+    
+
+    const { father, updateFields, regex, loading } = this.state;
+    let validationSchema 
+    if(regex) {
+    validationSchema = Yup.object().shape({
+        ...(updateFields.indexOf('slackUser') != -1 && !!father.slackUser ? {slackUser:Yup.string().matches(regex.slackUserRegex)}:null),
+        ...(updateFields.indexOf('instagramUser') != -1 && !!father.instagramUser ? {instagramUser:Yup.string().matches(regex.instagramUserRegex)}:null),
+        //...(updateFields.indexOf('instagramUser') != -1 && !!father.instagramUser ? {instagramUser:father.instagramUser}:null),
+        //...(updateFields.indexOf('twitterUser') != -1 && !!father.twitterUser ? {twitterUser:father.twitterUser}:null)  
+      })
+    }
+    
+
     return (<>
-      <Formik initialValues={{ email: 'ola' }} onSubmit={(values) => console.log(values)}>
+      <NavigationEvents onDidFocus={async () => {
+        await this.loadPerson();
+      }} />
+      {!loading ?
+      <>
+      <View style={{ paddingHorizontal:15, marginVertical:30, width: '80%' }}>
+        <Text style={{
+                        fontFamily: 'work-sans-semibold',
+                        fontSize: 24,
+                        color: Colors.onSurfaceColorPrimary,
+                      }}>{i18n.t('FATHER_EDIT.EDIT')}</Text>
+      </View>
+      <Formik initialValues={{ 
+       // email: (!!father.email && father.email) || null,
+        ...(updateFields.indexOf('slackUser') != -1 && !!father.slackUser ? {slackUser:father.slackUser}:{slackUser:null}),
+        ...(updateFields.indexOf('instagramUser') != -1 && !!father.instagramUser ? {instagramUser:father.instagramUser}:{instagramUser:null}),
+        ...(updateFields.indexOf('twitterUser') != -1 && !!father.twitterUser ? {twitterUser:father.twitterUser}:{twitterUser:null})  
+        
+        }} onSubmit={
+          values => {
+            console.log(values);
+            axios.put(`${i18n.locale}/api/v1/persons/${this.state.father.personId}`,values).then(response => {
+
+            })
+          }
+          }
+          enableReinitialize
+          validationSchema={validationSchema}
+          >
         {({ handleChange, handleBlur, handleSubmit, values }) => (
+          
           <Fragment>
-            <InputWithFormik label="email" name="email" />
-            <InputWithFormik label="contactNotes" name="contactNotes" />
-            <Button onPress={handleSubmit} title="Submit" />
+            <InputWithFormik hasPerm={updateFields.indexOf('slackUser') != -1} label={i18n.t("FATHER_EDIT.INSTAGRAM")} name="instagramUser" />
+            <InputWithFormik hasPerm={updateFields.indexOf('slackUser') != -1} label={i18n.t("FATHER_EDIT.SLACK")} name="slackUser" />
+            <InputWithFormik hasPerm={updateFields.indexOf('slackUser') != -1} label={i18n.t("FATHER_EDIT.TWITTER")} name = "twitterUser" />
+            <TouchableComp
+              onPress={handleSubmit}>
+              <View style={styles.btnContainer}>
+                <Text style={styles.btnText}>{i18n.t('FATHER_EDIT.SAVE')}</Text>
+              </View>
+            </TouchableComp>
+           
           </Fragment>
         )}
       </Formik>
       <Snackbar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })} style={styles.snackError}>
             {this.state.snackMsg}
       </Snackbar>
+      </>
+      :  (<ActivityIndicator size="large" color={Colors.primaryColor} />)}
       </>
     );
   }
