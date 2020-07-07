@@ -168,10 +168,10 @@ class FatherFormScreen extends Component {
     let validationSchema 
     if(regex) {
     validationSchema = Yup.object().shape({
-        ...(updateFields.indexOf('slackUser') != -1 && !!father.slackUser ? {slackUser:Yup.string().matches(regex.slackUserRegex)}:null),
+        ...(updateFields.indexOf('slackUser') != -1 && !!father.slackUser ? {slackUser:Yup.string().matches('^[a-z0-9][a-z0-9._-]*$')}:null),
         ...(updateFields.indexOf('instagramUser') != -1 && !!father.instagramUser ? {instagramUser:Yup.string().matches(regex.instagramUserRegex)}:null),
         //...(updateFields.indexOf('instagramUser') != -1 && !!father.instagramUser ? {instagramUser:father.instagramUser}:null),
-        //...(updateFields.indexOf('twitterUser') != -1 && !!father.twitterUser ? {twitterUser:father.twitterUser}:null)  
+        ...(updateFields.indexOf('twitterUser') != -1 && !!father.twitterUser ? {twitterUser:Yup.string().matches(regex.twitterUserRegex)}:null)  
       })
     }
     
