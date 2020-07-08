@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 });
 
 const InputWithFormik = ({
-  name, label, formik, hasPerm, ...props
+  name, label, formik, hasPerm, placeholder, ...props
 }) => {
   const value = _.get(formik.values, name) || '';
   const error = pathHasError(name, formik.touched, formik.errors);
@@ -31,6 +31,7 @@ const InputWithFormik = ({
     name,
     value,
     onChangeText,
+    placeholder,
   };
   const textFieldProps = { ...innerProps };
 

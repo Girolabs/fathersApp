@@ -137,7 +137,11 @@ exports.ES = {
   FATHER_EDIT: {
     TWITTER: 'Twitter',
     INSTAGRAM: 'Instagram',
+    FACEBOOK: 'Facebook',
     SLACK: 'Slack',
+    SKYPE: 'Skype',
+    PHONE1: 'Telefono 1',
+    PHONE2: 'Telefono 2',
     SAVE: 'Guardar',
     EDIT: 'Edit Profile',
   },

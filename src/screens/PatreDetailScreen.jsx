@@ -24,6 +24,7 @@ import Colors from '../constants/Colors';
 import SocialIcons from '../components/SocialIcons';
 import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
+import { Ionicons } from 'expo-vector-icons';
 
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
@@ -216,7 +217,16 @@ const PatreDetailScreen = ({ navigation }) => {
                     </View>
                   </View>
                 </View>
-                <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CONTACT_INFO')}</Text>
+                <View style={{ flexDirection: 'row', alignItems:'center',justifyContent:'space-between', paddingHorizontal:20}}>
+                  <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CONTACT_INFO')}</Text>
+                  {/* <TouchableComp onPress = {() => {
+                    navigation.navigate
+                  }}>
+                  <Ionicons  name="md-create" size={23} color={Colors.primaryColor} />
+                  </TouchableComp> */}
+                  
+                </View>
+                
                 <DefaultItem title="FATHER_DETAIL.EMAIL" body={father.email} />
                 {father.phones.length >= 1 && (
                   <DefaultItem
