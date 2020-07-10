@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
   snackError: {
     backgroundColor: Colors.secondaryColor,
   },
-
 });
 
 const PatreDetailScreen = ({ navigation }) => {
@@ -71,6 +70,7 @@ const PatreDetailScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
+  const [viewFatherFields, setViewFatherFields] = useState([]);
 
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -147,6 +147,39 @@ const PatreDetailScreen = ({ navigation }) => {
     console.log(contactId);
   };
 
+  const loadInterfaceData = async (tempFather) => {
+    const status = await Network.getNetworkStateAsync();
+
+    if (status.isConnected == true) {
+      axios.get(`${i18n.locale}/api/v1/interface-data`).then((response) => {
+        const viewPermRole = tempFather.viewPermissionForCurrentUser;
+        const personFieldsByViewPermission = response.data.result.personFieldsByViewPermission;
+
+        let viewRoles = Object.keys(personFieldsByViewPermission);
+
+        const arrayOfRoles = viewRoles.map((rol) => {
+          return personFieldsByViewPermission[rol];
+        });
+
+        const accumulatedFieldsPerRol = arrayOfRoles.map((rol, index) => {
+          /* let accu = [];
+          arrayOfRoles.forEach((el,i) => {
+            if(i <= index) {
+              accu = accu.concat(el);
+            }
+          }) */
+          return rol;
+        });
+
+        let index = viewRoles.indexOf(viewPermRole);
+
+        const viewFields = accumulatedFieldsPerRol[index];
+
+        setViewFatherFields(viewFields);
+      });
+    }
+  };
+
   useEffect(() => {
     (async () => {
       const { status } = await Contacts.requestPermissionsAsync();
@@ -158,30 +191,33 @@ const PatreDetailScreen = ({ navigation }) => {
       const status = await Network.getNetworkStateAsync();
       if (status.isConnected === true) {
         const fatherId = navigation.getParam('fatherId');
-        axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&key=${Constants.manifest.extra.secretKey}`).then((response) => {
-          console.log('[PatreDetail]', response.data.result);
-          const resFather = response.data.result;
-          setFather(resFather);
+        axios
+          .get(
+            `${i18n.locale}/api/v1/persons/${fatherId}?fields=all&authorized=true&key=${Constants.manifest.extra.secretKey}`,
+          )
+          .then((response) => {
+            console.log('[PatreDetail]', response.data.result);
+            const resFather = response.data.result;
+            setFather(resFather);
+            loadInterfaceData(resFather);
 
-          console.log('father', father);
-        }).catch(err => {
-          setLoading(false);
-          setVisible(true);
-          setSnackMsg(i18n.t('GENERAL.ERROR'));
-
-        });
+            console.log('father', father);
+          })
+          .catch((err) => {
+            setLoading(false);
+            setVisible(true);
+            setSnackMsg(i18n.t('GENERAL.ERROR'));
+          });
       } else {
         setLoading(false);
         setVisible(true);
         setSnackMsg(i18n.t('GENERAL.NO_INTERNET'));
-
       }
-
-    }
-    loadPerson()
-
+    };
+    loadPerson();
   }, []);
 
+  console.log('[PatreDetail]', viewFatherFields);
   return (
     <I18nContext.Consumer>
       {(value) => {
@@ -212,22 +248,35 @@ const PatreDetailScreen = ({ navigation }) => {
                           father.personalInfoUpdatedOn
                             ? moment.utc(father.personalInfoUpdatedOn).format('Do MMMM YYYY')
                             : ''
-                          }`}
+                        }`}
                       </Text>
                     </View>
                   </View>
                 </View>
-                <View style={{ flexDirection: 'row', alignItems:'center',justifyContent:'space-between', paddingHorizontal:20}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    paddingHorizontal: 20,
+                  }}
+                >
                   <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CONTACT_INFO')}</Text>
-                  {/* <TouchableComp onPress = {() => {
-                    navigation.navigate
-                  }}>
-                  <Ionicons  name="md-create" size={23} color={Colors.primaryColor} />
-                  </TouchableComp> */}
-                  
+                  {father.personId && (
+                    <TouchableComp
+                      onPress={() => {
+                        console.log('go to fatherform');
+                        navigation.navigate('FatherForm', {
+                          fatherId: father.personId,
+                        });
+                      }}
+                    >
+                      <Ionicons name="md-create" size={23} color={Colors.primaryColor} />
+                    </TouchableComp>
+                  )}
                 </View>
-                
-                <DefaultItem title="FATHER_DETAIL.EMAIL" body={father.email} />
+
+                <DefaultItem show={viewFatherFields.indexOf('email')} title="FATHER_DETAIL.EMAIL" body={father.email} />
                 {father.phones.length >= 1 && (
                   <DefaultItem
                     title="FATHER_DETAIL.MAIN_CELL_PHONE"
@@ -237,6 +286,7 @@ const PatreDetailScreen = ({ navigation }) => {
 
                 {father.phones.length > 1 && (
                   <DefaultItem
+                    show={viewFatherFields.indexOf('phones')}
                     title="FATHER_DETAIL.HOME"
                     body={father.phones[1] != undefined ? father.phones[1].number : ''}
                   />
@@ -294,6 +344,7 @@ const PatreDetailScreen = ({ navigation }) => {
                 {father.activeLivingSituation && (
                   <>
                     <DefaultItem
+                      show={viewFatherFields.indexOf('activeLivingSituation')}
                       title="FATHER_DETAIL.FILIATION"
                       body={father.activeLivingSituation.filiationName}
                       img={father.activeLivingSituation.filiationCountry}
@@ -305,6 +356,7 @@ const PatreDetailScreen = ({ navigation }) => {
                     />
 
                     <DefaultItem
+                      show={viewFatherFields.indexOf('activeLivingSituation')}
                       title="FATHER_DETAIL.HOME"
                       body={father.activeLivingSituation.houseName}
                       img={father.activeLivingSituation.houseCountry}
@@ -313,6 +365,7 @@ const PatreDetailScreen = ({ navigation }) => {
                       }}
                     />
                     <DefaultItem
+                      show={viewFatherFields.indexOf('activeLivingSituation')}
                       title="FATHER_DETAIL.RESPONSIBLE_TERRITORY"
                       body={father.activeLivingSituation.responsibleTerritoryName}
                       selected={() => {
@@ -327,6 +380,7 @@ const PatreDetailScreen = ({ navigation }) => {
                 <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PERSONAL_INFO')}</Text>
 
                 <DefaultItem
+                  show={viewFatherFields.indexOf('country')}
                   title="FATHER_DETAIL.HOME_COUNTRY"
                   img={father.country}
                   country_code={father.country}
@@ -334,6 +388,7 @@ const PatreDetailScreen = ({ navigation }) => {
                 />
 
                 <DefaultItem
+                  show={viewFatherFields.indexOf('homeTerritoyName')}
                   title="FATHER_DETAIL.HOME_TERRITORY"
                   body={father.homeTerritoryName}
                   selected={() => {
@@ -343,6 +398,7 @@ const PatreDetailScreen = ({ navigation }) => {
                   }}
                 />
                 <DefaultItem
+                  show={viewFatherFields.indexOf('courseName')}
                   title="FATHER_DETAIL.COURSE"
                   body={father.courseName}
                   selected={() => {
@@ -351,6 +407,7 @@ const PatreDetailScreen = ({ navigation }) => {
                 />
 
                 <DefaultItem
+                  show={viewFatherFields.indexOf('generationName')}
                   title="FATHER_DETAIL.GENERATION"
                   body={father.generationName}
                   selected={() => {
@@ -358,26 +415,32 @@ const PatreDetailScreen = ({ navigation }) => {
                   }}
                 />
                 <DefaultItem
+                  show={viewFatherFields.indexOf('birthDate')}
                   title="FATHER_DETAIL.BIRTHDAY"
                   body={father.birthDate ? moment.utc(father.birthDate).format('Do MMMM YYYY') : null}
                 />
                 <DefaultItem
+                  show={viewFatherFields.indexOf('nameDay')}
                   title="FATHER_DETAIL.NAMEDAY"
                   body={father.nameDay ? moment.utc(father.nameDay).format('Do MMMM YYYY') : null}
                 />
                 <DefaultItem
+                  show={viewFatherFields.indexOf('baptismDate')}
                   title="FATHER_DETAIL.BAPTISM"
                   body={father.baptismDate ? moment.utc(father.baptismDate).format('Do MMMM YYYY') : null}
                 />
                 <DefaultItem
+                  show={viewFatherFields.indexOf('postulancyDate') !== -1}
                   title="FATHER_DETAIL.POSTULANCY_ADMITTANCE"
                   body={father.postulancyDate ? moment.utc(father.postulancyDate).format('Do MMMM YYYY') : null}
                 />
                 <DefaultItem
+                  show={viewFatherFields.indexOf('novitiateDate') !== -1}
                   title="FATHER_DETAIL.NOVITIATE_START"
                   body={father.novitiateDate ? moment.utc(father.novitiateDate).format('Do MMMM YYYY') : null}
                 />
                 <DefaultItem
+                  show={viewFatherFields.indexOf('communityMembershipDate') !== -1}
                   title="FATHER_DETAIL.COMMUNITY_MEMBERSHIP"
                   body={
                     father.communityMembershipDate
@@ -386,6 +449,7 @@ const PatreDetailScreen = ({ navigation }) => {
                   }
                 />
                 <DefaultItem
+                  show={viewFatherFields.indexOf('perpetualContractDate') !== -1}
                   title="FATHER_DETAIL.PERPETUAL_CONTRACT"
                   body={
                     father.perpetualContractDate
@@ -394,33 +458,43 @@ const PatreDetailScreen = ({ navigation }) => {
                   }
                 />
                 <DefaultItem
+                  show={viewFatherFields.indexOf('deaconDate') !== -1}
                   title="FATHER_DETAIL.DIACONATE_ORDINATION"
                   body={father.deaconDate ? moment.utc(father.deaconDate).format('Do MMMM YYYY') : null}
                 />
                 <DefaultItem
+                  show={viewFatherFields.indexOf('priestYears') !== -1}
                   title="FATHER_DETAIL.PRIESTLY_ORDINATION"
                   body={father.priestDate ? moment.utc(father.priestDate).format('Do MMMM YYYY') : null}
                 />
                 {father.livingSituations && (
                   <>
                     <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PAST_HOMES')}</Text>
-                    {profile.livingSituations.map((pastHomes) => (
+                    {father.livingSituations.map((pastHomes) => (
                       <View>
                         <DefaultItem
+                          show={viewFatherFields.indexOf('livingSituations') !== -1}
                           title="FATHER_DETAIL.FILIATION"
                           body={pastHomes.filiationName}
                           img={pastHomes.filiationCountry}
                         />
                         <DefaultItem
+                          show={viewFatherFields.indexOf('livingSituations') !== -1}
                           title="FATHER_DETAIL.HOME"
                           body={pastHomes.houseName}
                           img={pastHomes.houseCountry}
                         />
                         <DefaultItem
+                          show={viewFatherFields.indexOf('livingSituations') !== -1}
                           title="FATHER_DETAIL.RESPONSIBLE_TERRITORY"
                           body={pastHomes.responsibleTerritoryName}
                         />
-                        <DefaultItem title="FATHER_DETAIL.START_DATE" date={pastHomes.startDate} lang={value.lang} />
+                        <DefaultItem
+                          show={viewFatherFields.indexOf('livingSituations') !== -1}
+                          title="FATHER_DETAIL.START_DATE"
+                          date={pastHomes.startDate}
+                          lang={value.lang}
+                        />
                         <DefaultItem title="FATHER_DETAIL.END_DATE" date={pastHomes.endDate} lang={value.lang} />
                         <Text style={styles.sectionHeader} />
                       </View>
@@ -429,8 +503,8 @@ const PatreDetailScreen = ({ navigation }) => {
                 )}
               </ScrollView>
             ) : (
-                <ActivityIndicator size="large" color={Colors.primaryColor} />
-              )}
+              <ActivityIndicator size="large" color={Colors.primaryColor} />
+            )}
             <Snackbar visible={visible} onDismiss={() => setVisible(false)} style={styles.snackError}>
               {snackMsg}
             </Snackbar>
@@ -445,7 +519,7 @@ PatreDetailScreen.navigationOptions = () => ({
   headerTitle: '',
 });
 
-const DefaultItem = ({ title, body, selected, img, country_code, lang, date, id }) => {
+const DefaultItem = ({ title, body, selected, img, country_code, lang, date, id, show }) => {
   let TouchableComp = TouchableOpacity;
   let formatedDate;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -459,37 +533,41 @@ const DefaultItem = ({ title, body, selected, img, country_code, lang, date, id 
 
   return (
     <>
-      {(body || date) && (
-        <TouchableComp
-          onPress={() => {
-            console.log('Apretado');
-            selected ? selected() : null;
-          }}
-        >
-          <View
-            style={{
-              padding: 15,
-              backgroundColor: Colors.surfaceColorSecondary,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <View>
-              {title && <Text style={styles.listItemTitle}>{i18n.t(title)}</Text>}
+      {show && (
+        <>
+          {(body || date) && (
+            <TouchableComp
+              onPress={() => {
+                console.log('Apretado');
+                selected ? selected() : null;
+              }}
+            >
+              <View
+                style={{
+                  padding: 15,
+                  backgroundColor: Colors.surfaceColorSecondary,
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <View>
+                  {title && <Text style={styles.listItemTitle}>{i18n.t(title)}</Text>}
 
-              {country_code && <Text style={styles.listItemBody}>{countries.getName(country_code, lang)}</Text>}
-              {date && <Text style={styles.listItemBody}>{formatedDate}</Text>}
+                  {country_code && <Text style={styles.listItemBody}>{countries.getName(country_code, lang)}</Text>}
+                  {date && <Text style={styles.listItemBody}>{formatedDate}</Text>}
 
-              {body && <Text style={styles.listItemBody}>{body}</Text>}
-            </View>
-            {img && (
-              <View>
-                <Flag id={img} size={0.2} />
+                  {body && <Text style={styles.listItemBody}>{body}</Text>}
+                </View>
+                {img && (
+                  <View>
+                    <Flag id={img} size={0.2} />
+                  </View>
+                )}
               </View>
-            )}
-          </View>
-        </TouchableComp>
+            </TouchableComp>
+          )}
+        </>
       )}
     </>
   );

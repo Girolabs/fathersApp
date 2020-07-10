@@ -51,12 +51,12 @@ class FatherFormScreen extends Component {
     updateFields:[]
   }
   async componentDidMount() {
+    this.setState({loading:true})
     await this.loadPerson();
     
   };
 
   loadInterfaceData = async  () => {
-    this.setState({loading:true});
     const status = await Network.getNetworkStateAsync();
     if(status.isConnected == true ) {
       axios.get(`${i18n.locale}/api/v1/interface-data`).then (response => {
@@ -77,13 +77,13 @@ class FatherFormScreen extends Component {
         console.log(arrayOfRoles)
 
         const accumulatedFieldsPerRol = arrayOfRoles.map((rol,index) => {
-          let accu = [];
+          /* let accu = [];
           arrayOfRoles.forEach((el,i) => {
             if (i<=index) {
               accu = accu.concat(el);
             }
-          })
-          return accu
+          }) */
+          return rol
         })
 
         let index = updateRoles.indexOf(
@@ -111,7 +111,7 @@ class FatherFormScreen extends Component {
   
 
   loadPerson = async () => {
-    this.setState({loading:true})
+   this.setState({loading:true})
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true ) {
       const fatherId = this.props.navigation.getParam('fatherId');
@@ -119,7 +119,7 @@ class FatherFormScreen extends Component {
         axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&$key=${Constants.manifest.extra.secrekey}`)
         .then(response =>{
           const father = response.data.result;
-          this.setState({father, loading:false})
+          this.setState({father})
           axios.get(`${i18n.locale}/api/v1/interface-data`).then (response => {
             console.log('father', this.state.father)
             this.loadInterfaceData();
@@ -138,7 +138,7 @@ class FatherFormScreen extends Component {
           axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&key=${Constants.manifest.extra.secrekey}`)
             .then(response => {
               const father = response.data.result;
-              this.setState({father,loading:false})
+              this.setState({father})
               this.loadInterfaceData();
             },(error) => {
               this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
@@ -188,6 +188,7 @@ class FatherFormScreen extends Component {
 
     return (<>
       <NavigationEvents onDidFocus={async () => {
+        
         await this.loadPerson();
       }} />
       {!loading ?
@@ -208,14 +209,16 @@ class FatherFormScreen extends Component {
         ...(updateFields.indexOf('facebookUrl') != -1 && !!father.facebookUrl ? {facebookUrl:father.facebookUrl}:{facebookUrl:null}),
         ...(updateFields.indexOf('skypeUser') != -1 && !!father.skypeUser ? {skypeUser:father.skypeUser}:{skypeUser:null}),
         ...(updateFields.indexOf('phone1') != -1 && !!father.phones.length > 0 ? {phone1:father.phones[0].number}:{phone1:null}),
-        ...(updateFields.indexOf('phone2') != -1 && !!father.phones.length >=1 ? {phone2:father.phones[1].number}:{phone2:null}),     
+        ...(updateFields.indexOf('phone2') != -1 && !!father.phones.length & !!father.phones[1] ? {phone2:father.phones[1].number}:{phone2:null}),     
         
         }} onSubmit={
-          values => {
-            console.log(values);
+          (values) => {
             this.setState({loading:true})
+            console.log(values);
+            //this.setState({loading:true})
             axios.put(`${i18n.locale}/api/v1/persons/${this.state.father.personId}`,values).then(response => {
-              this.setState({loading:false})
+              this.loadPerson();
+              this.setState(this.setState({ snackMsg: i18n.t('GENERAL.EDIT_SUCCESS'), visible: true, loading: false }));
             },
             err => {
               this.setState(this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false }));
@@ -258,20 +261,36 @@ class FatherFormScreen extends Component {
   }
 }
 
-FatherFormScreen.navigationOptions = (navigationData) => ({
-  headerTitle: '',
-  headerLeft: (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-});
+FatherFormScreen.navigationOptions = (navigationData) => {
+ 
+
+  console.log('navigationData',navigationData);
+  const showMenu = navigationData.navigation.isFirstRouteInParent();
+
+  if ( showMenu ) {
+    return {
+      headerTitle: '',
+      headerLeft: (
+        <HeaderButtons HeaderButtonComponent={HeaderButton}>
+          <Item
+            title="Menu"
+            iconName="md-menu"
+            onPress={() => {
+              navigationData.navigation.toggleDrawer();
+            }}
+          />
+        </HeaderButtons>
+      ),
+    }
+  }else {
+    return {
+      headerTitle: '',
+    }
+    
+  }
+  
+  
+};
 
 
 

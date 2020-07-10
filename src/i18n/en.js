@@ -10,6 +10,7 @@ exports.EN = {
     SEARCH: 'Search',
     NO_INTERNET: 'No internet conection',
     ERROR: 'Error with the request',
+    EDIT_SUCCESS: 'Correct edit',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'identity',

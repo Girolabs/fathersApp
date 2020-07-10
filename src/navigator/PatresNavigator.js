@@ -77,6 +77,9 @@ const HomeNavigator = createStackNavigator(
     Miscellaneous: {
       screen: MiscellaneousScreen,
     },
+    FatherForm: {
+      screen: FatherFormScreen,
+    },
   },
   {
     defaultNavigationOptions: defaultStackNavOptions,
@@ -90,6 +93,9 @@ const SearchNavigator = createStackNavigator(
     },
     PatreDetail: {
       screen: PatreDetailScreen,
+    },
+    FatherForm: {
+      screen: FatherFormScreen,
     },
     FiliationDetail: {
       screen: FiliationDetailScreen,
@@ -171,6 +177,9 @@ const CommunityNavigator = createStackNavigator(
     PatreDetail: {
       screen: PatreDetailScreen,
     },
+    FatherForm: {
+      screen: FatherFormScreen,
+    },
     GenerationDetail: {
       screen: GenerationDetailScreen,
     },
@@ -210,6 +219,9 @@ const AssignmentsNavigator = createStackNavigator({
   },
   PatreDetail: {
     screen: PatreDetailScreen,
+  },
+  FatherForm: {
+    screen: FatherFormScreen,
   },
   GenerationDetail: {
     screen: GenerationDetailScreen,

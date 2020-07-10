@@ -10,6 +10,7 @@ exports.ES = {
     SEARCH: 'Buscar',
     NO_INTERNET: 'No hay conexión de internet',
     ERROR: 'Error con la consulta',
+    EDIT_SUCCESS: 'Edición correcta',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'identidad',
@@ -143,6 +144,6 @@ exports.ES = {
     PHONE1: 'Telefono 1',
     PHONE2: 'Telefono 2',
     SAVE: 'Guardar',
-    EDIT: 'Edit Profile',
+    EDIT: 'Editar perfil',
   },
 };
