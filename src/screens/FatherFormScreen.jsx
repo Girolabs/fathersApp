@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
 class FatherFormScreen extends Component {
   state = {
     father:{},
-    loading:false,
+    loading:true,
     updateFields:[]
   }
   async componentDidMount() {
@@ -56,13 +56,13 @@ class FatherFormScreen extends Component {
     
   };
 
-  loadInterfaceData = async  () => {
+  loadInterfaceData = async  (father) => {
     const status = await Network.getNetworkStateAsync();
     if(status.isConnected == true ) {
       axios.get(`${i18n.locale}/api/v1/interface-data`).then (response => {
-        console.log('father', this.state.father)
-        const viewPermRole = this.state.father.viewPermissionForCurrentUser;
-        const updatePermRole = this.state.father.updatePermissionForCurrentUser;
+        console.log('father', father)
+        const viewPermRole = father.viewPermissionForCurrentUser;
+        const updatePermRole = father.updatePermissionForCurrentUser;
 
         const personFieldsByViewPermission = response.data.result.personFieldsByViewPermission;
         const personFieldsByUpdatePermission = response.data.result.personFieldsByUpdatePermission;
@@ -120,11 +120,10 @@ class FatherFormScreen extends Component {
         .then(response =>{
           const father = response.data.result;
           this.setState({father})
-          axios.get(`${i18n.locale}/api/v1/interface-data`).then (response => {
-            console.log('father', this.state.father)
-            this.loadInterfaceData();
+      
+          this.loadInterfaceData(response.data.result);
           
-          })
+          
         }
           
         )
@@ -139,7 +138,7 @@ class FatherFormScreen extends Component {
             .then(response => {
               const father = response.data.result;
               this.setState({father})
-              this.loadInterfaceData();
+              this.loadInterfaceData(father);
             },(error) => {
               this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
             })
@@ -188,7 +187,7 @@ class FatherFormScreen extends Component {
 
     return (<>
       <NavigationEvents onDidFocus={async () => {
-        
+        console.log('DidFocus')
         await this.loadPerson();
       }} />
       {!loading ?
@@ -218,7 +217,7 @@ class FatherFormScreen extends Component {
             //this.setState({loading:true})
             axios.put(`${i18n.locale}/api/v1/persons/${this.state.father.personId}`,values).then(response => {
               this.loadPerson();
-              this.setState(this.setState({ snackMsg: i18n.t('GENERAL.EDIT_SUCCESS'), visible: true, loading: false }));
+              this.setState(this.setState({ snackMsg: i18n.t('GENERAL.EDIT_SUCCESS'), visible: true}));
             },
             err => {
               this.setState(this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false }));
