@@ -145,5 +145,6 @@ exports.ES = {
     PHONE2: 'Telefono 2',
     SAVE: 'Guardar',
     EDIT: 'Editar perfil',
+    EDIT_LIVING:'Editar situación de vivienda'
   },
 };

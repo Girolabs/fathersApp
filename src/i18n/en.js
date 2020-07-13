@@ -133,7 +133,7 @@ exports.EN = {
   SEARCH: {
     DECEASED: 'Show deceased',
     EX: 'Show ex members',
-    PLACEHOLDER: 'firstname or lastname',
+    PLACEHOLDER: 'first name or lastname',
   },
   FATHER_EDIT: {
     TWITTER: 'Twitter',
@@ -145,5 +145,6 @@ exports.EN = {
     PHONE2: 'Phone 2',
     SAVE: 'Guardar',
     EDIT: 'Edit Profile',
+    EDIT_LIVING: 'Edit living situation'
   },
 };

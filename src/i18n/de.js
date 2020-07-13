@@ -10,6 +10,7 @@ exports.DE = {
     SEARCH: 'Suche',
     NO_INTERNET: 'Keine Internetverbindung',
     ERROR: 'Fehler bei der Anfrage',
+    EDIT_SUCCESS: 'Richtige Bearbeitung',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'Identität',
@@ -133,5 +134,17 @@ exports.DE = {
     DECEASED: 'Show verstorben',
     EX: 'Ex-Mitglieder anzeigen',
     PLACEHOLDER: 'Vorname oder Nachname',
+  },
+  FATHER_EDIT: {
+    TWITTER: 'Twitter',
+    INSTAGRAM: 'Instagram',
+    SLACK: 'Slack',
+    FACEBOOK: 'Facebook',
+    SKYPE: 'Skype',
+    PHONE1: 'Telefon 1',
+    PHONE2: 'Telefon 2',
+    SAVE: 'Sparen',
+    EDIT: 'Profil bearbeiten',
+    EDIT_LIVING: 'Lebenssituation bearbeiten'
   },
 };

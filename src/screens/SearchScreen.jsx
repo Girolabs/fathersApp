@@ -42,13 +42,13 @@ class SearchScreen extends Component {
       let filterResults = [];
       const texto = keyword.toLowerCase();
       filterResults = this.state.results.filter((persona) => {
-        if ((persona.firstNameWithoutAccents + ' ' + persona.lastNameWithoutAccents).trim().startsWith(texto)) {
+        if (persona.firstNameWithoutAccents && persona.lastNameWithoutAccents && (persona.firstNameWithoutAccents + ' ' + persona.lastNameWithoutAccents).trim().startsWith(texto)) {
           return persona;
         }
-        if (persona.firstNameWithoutAccents.trim().startsWith(texto)) {
+        if (persona.firstNameWithoutAccents && persona.firstNameWithoutAccents.trim().startsWith(texto)) {
           return persona;
         }
-        if (persona.lastNameWithoutAccents.trim().startsWith(texto)) {
+        if ( persona.lastNameWithoutAccents &&  persona.lastNameWithoutAccents.trim().startsWith(texto)) {
           return persona;
         }
       });
@@ -70,13 +70,13 @@ class SearchScreen extends Component {
       const texto = this.state.searchText.toLowerCase();
 
       let filterResults = this.state.results.filter((persona) => {
-        if ((persona.firstNameWithoutAccents + ' ' + persona.lastNameWithoutAccents).trim().startsWith(texto)) {
+        if (persona.firstNameWithoutAccents && persona.lastNameWithoutAccents && (persona.firstNameWithoutAccents + ' ' + persona.lastNameWithoutAccents).trim().startsWith(texto)) {
           return persona;
         }
-        if (persona.firstNameWithoutAccents.trim().startsWith(texto)) {
+        if (persona.firstNameWithoutAccents && persona.firstNameWithoutAccents.trim().startsWith(texto)) {
           return persona;
         }
-        if (persona.lastNameWithoutAccents.trim().startsWith(texto)) {
+        if (persona.lastNameWithoutAccents &&  persona.lastNameWithoutAccents.trim().startsWith(texto)) {
           return persona;
         }
       });

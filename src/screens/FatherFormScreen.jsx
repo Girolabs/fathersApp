@@ -41,6 +41,11 @@ const styles = StyleSheet.create({
     fontFamily:'work-sans-bold',
     textTransform:'uppercase',
     color:Colors.primaryColor
+  },
+  buttonsContainer:{
+    flexDirection:'row',
+    paddingRight:20,
+    justifyContent:'space-between'
   }
 })
 
@@ -116,7 +121,7 @@ class FatherFormScreen extends Component {
     if (status.isConnected === true ) {
       const fatherId = this.props.navigation.getParam('fatherId');
       if (!!fatherId) {
-        axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&$key=${Constants.manifest.extra.secrekey}`)
+        axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&authorized=true&$key=${Constants.manifest.extra.secrekey}`)
         .then(response =>{
           const father = response.data.result;
           this.setState({father})
@@ -131,10 +136,10 @@ class FatherFormScreen extends Component {
         let decode = await AsyncStorage.getItem('token');
         decode = JSON.parse(decode);
         decode = jwt(decode.jwt).sub;
-        axios.get(`${i18n.locale}/api/v1/persons?userId=${5}&fields=all&key=${Constants.manifest.extra.secretKey}`).
+        axios.get(`${i18n.locale}/api/v1/persons?userId=${5}&authorized=true&fields=all&key=${Constants.manifest.extra.secretKey}`).
         then(response => {
           const fatherId = !!response.data.result && response.data.result[0].personId;
-          axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&key=${Constants.manifest.extra.secrekey}`)
+          axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&authorized=true&key=${Constants.manifest.extra.secrekey}`)
             .then(response => {
               const father = response.data.result;
               this.setState({father})
@@ -168,6 +173,7 @@ class FatherFormScreen extends Component {
     
 
     const { father, updateFields, regex, loading } = this.state;
+    let { navigation } = this.props;
     let validationSchema 
     if(regex) {
     validationSchema = Yup.object().shape({
@@ -238,12 +244,24 @@ class FatherFormScreen extends Component {
             <InputWithFormik hasPerm={updateFields.indexOf('phone1') != -1} label={i18n.t("FATHER_EDIT.PHONE1")} placeholder={'+1 262 473-4782'}  name = "phone1" />
             <InputWithFormik hasPerm={updateFields.indexOf('phone2') != -1} label={i18n.t("FATHER_EDIT.PHONE2")} placeholder={'+1 262 473-4782'}  name = "phone2" />
             {/* //<InputWithFormik hasPerm={updateFields.indexOf('') != -1} label={i18n.t("FATHER_EDIT.FACEBOOK")} placeholder = {'https://www.facebook.com/'} name = "facebookUrl" /> */}
+            <View style={styles.buttonsContainer}>
+          {/*   { updateFields.indexOf('living')} */}
+            <TouchableComp
+              onPress={() => {
+                navigation.navigate('LivingSituations')
+              }}>
+              <View style={styles.btnContainer}>
+                <Text style={styles.btnText}>{i18n.t('FATHER_EDIT.EDIT_LIVING')}</Text>
+              </View>
+            </TouchableComp>
             <TouchableComp
               onPress={handleSubmit}>
               <View style={styles.btnContainer}>
                 <Text style={styles.btnText}>{i18n.t('FATHER_EDIT.SAVE')}</Text>
               </View>
             </TouchableComp>
+            </View>
+           
            
           </Fragment>
         )}
