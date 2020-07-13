@@ -134,4 +134,16 @@ exports.PT = {
     EX: 'Mostrar ex-membros',
     PLACEHOLDER: 'nome ou sobrenome',
   },
+  FATHER_EDIT: {
+    TWITTER: 'Twitter',
+    INSTAGRAM: 'Instagram',
+    SLACK: 'Slack',
+    FACEBOOK: 'Facebook',
+    SKYPE: 'Skype',
+    PHONE1: 'Telefone 1',
+    PHONE2: 'Telefone 2',
+    SAVE: 'Salve',
+    EDIT: 'Editar Perfil',
+    EDIT_LIVING: 'Editar situação de vida'
+  },
 };

@@ -41,13 +41,18 @@ const styles = StyleSheet.create({
     fontFamily:'work-sans-bold',
     textTransform:'uppercase',
     color:Colors.primaryColor
+  },
+  buttonsContainer:{
+    flexDirection:'row',
+    paddingRight:20,
+    justifyContent:'space-between'
   }
 })
 
 class FatherFormScreen extends Component {
   state = {
     father:{},
-    loading:false,
+    loading:true,
     updateFields:[]
   }
   async componentDidMount() {
@@ -56,13 +61,13 @@ class FatherFormScreen extends Component {
     
   };
 
-  loadInterfaceData = async  () => {
+  loadInterfaceData = async  (father) => {
     const status = await Network.getNetworkStateAsync();
     if(status.isConnected == true ) {
       axios.get(`${i18n.locale}/api/v1/interface-data`).then (response => {
-        console.log('father', this.state.father)
-        const viewPermRole = this.state.father.viewPermissionForCurrentUser;
-        const updatePermRole = this.state.father.updatePermissionForCurrentUser;
+        console.log('father', father)
+        const viewPermRole = father.viewPermissionForCurrentUser;
+        const updatePermRole = father.updatePermissionForCurrentUser;
 
         const personFieldsByViewPermission = response.data.result.personFieldsByViewPermission;
         const personFieldsByUpdatePermission = response.data.result.personFieldsByUpdatePermission;
@@ -116,15 +121,14 @@ class FatherFormScreen extends Component {
     if (status.isConnected === true ) {
       const fatherId = this.props.navigation.getParam('fatherId');
       if (!!fatherId) {
-        axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&$key=${Constants.manifest.extra.secrekey}`)
+        axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&authorized=true&$key=${Constants.manifest.extra.secrekey}`)
         .then(response =>{
           const father = response.data.result;
           this.setState({father})
-          axios.get(`${i18n.locale}/api/v1/interface-data`).then (response => {
-            console.log('father', this.state.father)
-            this.loadInterfaceData();
+      
+          this.loadInterfaceData(response.data.result);
           
-          })
+          
         }
           
         )
@@ -132,14 +136,14 @@ class FatherFormScreen extends Component {
         let decode = await AsyncStorage.getItem('token');
         decode = JSON.parse(decode);
         decode = jwt(decode.jwt).sub;
-        axios.get(`${i18n.locale}/api/v1/persons?userId=${5}&fields=all&key=${Constants.manifest.extra.secretKey}`).
+        axios.get(`${i18n.locale}/api/v1/persons?userId=${5}&authorized=true&fields=all&key=${Constants.manifest.extra.secretKey}`).
         then(response => {
           const fatherId = !!response.data.result && response.data.result[0].personId;
-          axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&key=${Constants.manifest.extra.secrekey}`)
+          axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&authorized=true&key=${Constants.manifest.extra.secrekey}`)
             .then(response => {
               const father = response.data.result;
               this.setState({father})
-              this.loadInterfaceData();
+              this.loadInterfaceData(father);
             },(error) => {
               this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
             })
@@ -169,6 +173,7 @@ class FatherFormScreen extends Component {
     
 
     const { father, updateFields, regex, loading } = this.state;
+    let { navigation } = this.props;
     let validationSchema 
     if(regex) {
     validationSchema = Yup.object().shape({
@@ -188,7 +193,7 @@ class FatherFormScreen extends Component {
 
     return (<>
       <NavigationEvents onDidFocus={async () => {
-        
+        console.log('DidFocus')
         await this.loadPerson();
       }} />
       {!loading ?
@@ -218,7 +223,7 @@ class FatherFormScreen extends Component {
             //this.setState({loading:true})
             axios.put(`${i18n.locale}/api/v1/persons/${this.state.father.personId}`,values).then(response => {
               this.loadPerson();
-              this.setState(this.setState({ snackMsg: i18n.t('GENERAL.EDIT_SUCCESS'), visible: true, loading: false }));
+              this.setState(this.setState({ snackMsg: i18n.t('GENERAL.EDIT_SUCCESS'), visible: true}));
             },
             err => {
               this.setState(this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false }));
@@ -239,12 +244,24 @@ class FatherFormScreen extends Component {
             <InputWithFormik hasPerm={updateFields.indexOf('phone1') != -1} label={i18n.t("FATHER_EDIT.PHONE1")} placeholder={'+1 262 473-4782'}  name = "phone1" />
             <InputWithFormik hasPerm={updateFields.indexOf('phone2') != -1} label={i18n.t("FATHER_EDIT.PHONE2")} placeholder={'+1 262 473-4782'}  name = "phone2" />
             {/* //<InputWithFormik hasPerm={updateFields.indexOf('') != -1} label={i18n.t("FATHER_EDIT.FACEBOOK")} placeholder = {'https://www.facebook.com/'} name = "facebookUrl" /> */}
+            <View style={styles.buttonsContainer}>
+          {/*   { updateFields.indexOf('living')} */}
+            <TouchableComp
+              onPress={() => {
+                navigation.navigate('LivingSituations')
+              }}>
+              <View style={styles.btnContainer}>
+                <Text style={styles.btnText}>{i18n.t('FATHER_EDIT.EDIT_LIVING')}</Text>
+              </View>
+            </TouchableComp>
             <TouchableComp
               onPress={handleSubmit}>
               <View style={styles.btnContainer}>
                 <Text style={styles.btnText}>{i18n.t('FATHER_EDIT.SAVE')}</Text>
               </View>
             </TouchableComp>
+            </View>
+           
            
           </Fragment>
         )}
