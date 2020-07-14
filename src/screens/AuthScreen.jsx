@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, KeyboardAvoidingView, View, Text, Image,Activit
 import { I18nContext } from '../context/I18nProvider';
 import { AuthContext } from '../context/AuthProvider';
 import Colors from '../constants/Colors';
-import logo from '../../assets/img/icon.png';
+import logo from '../../assets/img/fatherIcon.png';
 import Card from '../components/Card';
 import Input from '../components/Input';
 import Button from '../components/Button';

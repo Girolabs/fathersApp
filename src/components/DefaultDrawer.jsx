@@ -66,7 +66,7 @@ const DefaultDrawer = (props) => {
           }}
         >
           <View style={styles(props).banner}>
-            <Image source={require('../../assets/img/icon.png')} style={styles(props).image} />
+            <Image source={require('../../assets/img/fatherIcon.png')} style={styles(props).image} />
             <Text
               numberOfLines={2}
               style={styles(props).title}
