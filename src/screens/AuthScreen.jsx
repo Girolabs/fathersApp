@@ -21,8 +21,8 @@ import * as Network from 'expo-network';
 class AuthScreen extends Component {
   state = {
     hasToken: false,
-    identity: 'gcaballero',
-    token: 'QUkZe8',
+    identity: '',
+    token: '',
     visible:false,
     snackMsg: '',
     loading:false,

@@ -136,7 +136,7 @@ class FatherFormScreen extends Component {
         let decode = await AsyncStorage.getItem('token');
         decode = JSON.parse(decode);
         decode = jwt(decode.jwt).sub;
-        axios.get(`${i18n.locale}/api/v1/persons?userId=${5}&authorized=true&fields=all&key=${Constants.manifest.extra.secretKey}`).
+        axios.get(`${i18n.locale}/api/v1/persons?userId=${decode}&authorized=true&fields=all&key=${Constants.manifest.extra.secretKey}`).
         then(response => {
           const fatherId = !!response.data.result && response.data.result[0].personId;
           axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&authorized=true&key=${Constants.manifest.extra.secrekey}`)
