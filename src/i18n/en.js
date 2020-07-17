@@ -147,4 +147,10 @@ exports.EN = {
     EDIT: 'Edit Profile',
     EDIT_LIVING: 'Edit living situation'
   },
+  LIVING_SITUATION: {
+    EDIT_TITLE: 'Edit Active Living Situation',
+    CREATE_TITLE: 'New Active Living Situation',
+    RESPONSIBLE_TERRITORY: 'Responsible territory:',
+    STATUS: 'Status'
+  }
 };

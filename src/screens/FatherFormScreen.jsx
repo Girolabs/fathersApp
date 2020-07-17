@@ -248,7 +248,9 @@ class FatherFormScreen extends Component {
           {/*   { updateFields.indexOf('living')} */}
             <TouchableComp
               onPress={() => {
-                navigation.navigate('LivingSituations')
+                navigation.navigate('LivingSituationForm', {
+                  livingSituation: father.activeLivingSituation ? father.activeLivingSituation: null
+                })
               }}>
               <View style={styles.btnContainer}>
                 <Text style={styles.btnText}>{i18n.t('FATHER_EDIT.EDIT_LIVING')}</Text>

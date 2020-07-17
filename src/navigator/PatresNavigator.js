@@ -5,7 +5,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
-import { SafeAreaView, Image, View, Text } from 'react-native';
+import {
+  SafeAreaView, Image, View, Text,
+} from 'react-native';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
@@ -28,6 +30,7 @@ import SettingsScreen from '../screens/SettingsScreen';
 import StartupScreen from '../screens/StartupScreen';
 import DefaultDrawer from '../components/DefaultDrawer';
 import FatherFormScreen from '../screens/FatherFormScreen';
+import LivingSituationsFormScreen from '../screens/LivingSituations';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -153,7 +156,11 @@ const HomeSearchTabNavigator = createMaterialBottomTabNavigator(tabScreenConfig,
 const ProfileNavigator = createStackNavigator(
   {
     screen: FatherFormScreen,
+    LivingSituationForm: {
+      screen: LivingSituationsFormScreen,
+    },
   },
+
   {
     navigationOptions: {},
     defaultNavigationOptions: defaultStackNavOptions,
