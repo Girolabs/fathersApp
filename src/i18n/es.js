@@ -151,6 +151,10 @@ exports.ES = {
     EDIT_TITLE: 'Edit Active Living Situation',
     CREATE_TITLE: 'New Active Living Situation',
     RESPONSIBLE_TERRITORY: 'Responsible territory:',
-    STATUS: 'Status'
+    STATUS: 'Status',
+    START_DATE: 'Start date',
+    END_DATE: 'End date',
+    PUBLIC_NOTES: 'Public Notes',
+    ADMIN_NOTES: 'Admin notes'
   }
 };
