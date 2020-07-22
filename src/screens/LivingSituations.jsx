@@ -20,6 +20,8 @@ import { Ionicons } from 'expo-vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Formik } from 'formik';
 import { HeaderTitle } from 'react-navigation-stack';
+import * as Network from 'expo-network';
+import Constants from 'expo-constants';
 
 const styles = StyleSheet.create({
   title: {
@@ -111,17 +113,37 @@ const styles = StyleSheet.create({
 const LivingSituationsFormScreen = ({ navigation }) => {
   const [livingSituation, setLivingSituation] = useState({});
   const [isCreate, setIsCreate] = useState(false);
+  const [territories, setTerritories] = useState([]);
 
   useEffect(() => {
     const livingSituation = navigation.getParam('livingSituation');
     if (!!livingSituation) {
       setIsCreate(true);
     }
+    loadTerritory();
 
     setLivingSituation(livingSituation);
   }, []);
 
-  const loadTerritory = () => {};
+  const loadTerritory = async () => {
+    const status = await (await Network.getNetworkStateAsync());
+    if ( status.isConnected ===true) {
+      axios.get(`${i18n.locale}/api/v1/territories?fields=all&ey=${Constants.manifest.extra.secretKey}`)
+        .then((res) => {
+          if( res.data.status === "OK") {
+            const fetchedDelegations =res.data.result.map(delegation =>{
+              return {
+                label: delegation.name,
+                value: delegation.territoryId,
+              }
+            });
+            //setLivingSituation(fetchedDelegations);
+            setTerritories(fetchedDelegations);
+          }
+        })
+    }
+    
+  };
   const showDatePicker = () => {
     setShow(true);
   };
@@ -156,11 +178,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                   },
                 }}
                 onValueChange={(value) => console.log(value)}
-                items={[
-                  { label: 'Football', value: 'football' },
-                  { label: 'Baseball', value: 'baseball' },
-                  { label: 'Hockey', value: 'hockey' },
-                ]}
+                items={territories}
                 Icon={() => {
                   return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
                 }}
