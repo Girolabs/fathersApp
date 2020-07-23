@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   SafeAreaView,
-  Picker,
   TextInput,
   KeyboardAvoidingView,
   Platform,
@@ -19,7 +18,7 @@ import axios from '../../axios-instance';
 import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from 'expo-vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Formik } from 'formik';
+import { Formik, setFieldValue } from 'formik';
 import { HeaderTitle } from 'react-navigation-stack';
 import * as Network from 'expo-network';
 import Constants from 'expo-constants';
@@ -119,13 +118,23 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   const [openEndDate, setOpenEndDate] = useState(false);
   const [endDate, setEndDate] = useState();
   const [loading, setLoading] = useState(true);
+  const [filiations, setFiliations] = useState([]);
+  const [houses, setHouses] = useState([]);
 
   useEffect(() => {
     const livingSituation = navigation.getParam('livingSituation');
-    if (!!livingSituation) {
+    console.log('living', livingSituation);
+
+    //const living
+    if (!livingSituation || livingSituation.endDate) {
       setIsCreate(true);
+      console.log('isCreate');
+      loadFiliations();
+      loadHouses();
     }
+
     loadTerritory();
+
     let transFormedLiving = {
       ...livingSituation,
       startDate: livingSituation && livingSituation.startDate ? livingSituation.startDate.split('T')[0] : null,
@@ -137,6 +146,25 @@ const LivingSituationsFormScreen = ({ navigation }) => {
 
     setLivingSituation(transFormedLiving);
   }, []);
+
+  const loadHouses = async () => {
+    const status = await Network.getNetworkStateAsync();
+
+    if (status.isConnected == true) {
+      axios.get(`${i18n.locale}/api/v1/houses?fields=all&ey=${Constants.manifest.extra.secretKey}`).then((response) => {
+        console.log('houses', response);
+        const fetchedHouses = response.data.result.map((house) => {
+          if (house.isActive == true) {
+            return {
+              label: house.name,
+              value: house.houseId,
+            };
+          }
+        });
+        setHouses(fetchedHouses);
+      });
+    }
+  };
 
   const loadStatusCondition = async () => {
     const status = await Network.getNetworkStateAsync();
@@ -161,18 +189,43 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     }
   };
 
+  const loadFiliations = async () => {
+    const status = await Network.getNetworkStateAsync();
+
+    if (status.isConnected == true) {
+      axios
+        .get(`${i18n.locale}/api/v1/filiations?fields=all&ey=${Constants.manifest.extra.secretKey}`)
+        .then((response) => {
+          console.log('filiations', response);
+          const fetchedFiliations = response.data.result
+            .map((filiation) => {
+              if (filiation.isActive == true) {
+                return {
+                  label: filiation.name,
+                  value: filiation.filiationId,
+                };
+              }
+            })
+            .filter((el) => el != undefined);
+          setFiliations(fetchedFiliations);
+        });
+    }
+  };
+
   const loadTerritory = async () => {
-    const status = await await Network.getNetworkStateAsync();
+    const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
       axios.get(`${i18n.locale}/api/v1/territories?fields=all&ey=${Constants.manifest.extra.secretKey}`).then((res) => {
         loadStatusCondition();
         if (res.data.status === 'OK') {
-          const fetchedDelegations = res.data.result.map((delegation) => {
-            return {
-              label: delegation.name,
-              value: delegation.territoryId,
-            };
-          });
+          const fetchedDelegations = res.data.result
+            .map((delegation) => {
+              return {
+                label: delegation.name,
+                value: delegation.territoryId,
+              };
+            })
+            .filter((el) => el != undefined);
           //setLivingSituation(fetchedDelegations);
           setTerritories(fetchedDelegations);
         }
@@ -181,8 +234,9 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   };
 
   const onChangeStartDate = (event, selectedDate) => {
+    console.log(selectedDate);
     setOpenStartDate(false);
-    var newDate = new Date();
+    let newDate = new Date();
     newDate.setTime(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60 * 1000);
     selectedDate = newDate;
 
@@ -200,7 +254,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
 
   const onChangeEndDate = (event, selectedDate) => {
     setOpenEndDate(false);
-    var newDate = new Date();
+    let newDate = new Date();
     newDate.setTime(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60 * 1000);
     selectedDate = newDate;
     let year = selectedDate.getUTCFullYear();
@@ -231,30 +285,31 @@ const LivingSituationsFormScreen = ({ navigation }) => {
           {!loading ? (
             <ScrollView>
               {isCreate ? (
-                <Text style={styles.title}>{i18n.t('LIVING_SITUATION.EDIT_TITLE')}</Text>
-              ) : (
                 <Text style={styles.title}>{i18n.t('LIVING_SITUATION.CREATE_TITLE')}</Text>
+              ) : (
+                <Text style={styles.title}>{i18n.t('LIVING_SITUATION.EDIT_TITLE')}</Text>
               )}
 
               <Formik
                 enableReinitialize
                 initialValues={{
-                  responsibleTerritoryName: livingSituation && {
-                    label: livingSituation.responsibleTerritoryName,
-                    value: livingSituation.responsibleTerritoryId,
-                  },
+                  responsibleTerritoryName: livingSituation && livingSituation.responsibleTerritoryId,
                   startDate: startDate,
                   endDate: endDate,
-                  status: { label: livingSituation.status, value: livingSituation.status },
+                  status: livingSituation.status,
                   publicNotes: livingSituation && livingSituation.publicNotes,
                   adminNotes: '',
+                  filiationId: livingSituation && livingSituation.filiationId,
+                  houseId: livingSituation && livingSituation.houseId,
                 }}
-                //validate={values}
-
+                validationSchema={Yup.object().shape({
+                  startDate: Yup.date(),
+                  endDate: Yup.date().min(Yup.ref('startDate'), i18n.t('LIVING_SITUATION.ERROR_END_DATE')),
+                })}
                 onSubmit={(values) => {
                   let transformValues = {
                     ...values,
-                    responsibleTerritory: values.responsibleTerritoryName && values.responsibleTerritoryName.value,
+                    //responsibleTerritoryId: values.responsibleTerritoryName,
                     status: values.status.value ? values.status.value : values.status,
                   };
 
@@ -300,14 +355,13 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                   }
                 }}
               >
-                {({ handleChange, values, handleSubmit, errors }) => (
+                {({ handleChange, values, handleSubmit, errors, setFieldValue, touched }) => (
                   <>
                     <View>
                       {openStartDate && (
                         <DateTimePicker
                           value={startDate ? new Date(startDate) : new Date()}
                           mode={'date'}
-                          //is24Hour={true}
                           display="default"
                           onChange={onChangeStartDate}
                         />
@@ -316,14 +370,60 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                         <DateTimePicker
                           value={endDate ? new Date(endDate) : new Date()}
                           mode={'date'}
-                          //is24Hour={true}
                           display="default"
                           onChange={onChangeEndDate}
                         />
                       )}
+                      {isCreate && (
+                        <>
+                          <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>
+                          <RNPickerSelect
+                            name="filiationId"
+                            style={{
+                              inputAndroid: {
+                                backgroundColor: Colors.surfaceColorSecondary,
+                                borderRadius: 10,
+                              },
+                              iconContainer: {
+                                top: 10,
+                                right: 15,
+                              },
+                            }}
+                            onValueChange={(e) => setFieldValue('filiationId', e)}
+                            value={_.get(values, 'filiationId') || ''}
+                            items={filiations}
+                            Icon={() => {
+                              return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
+                            }}
+                          />
+                          <Text style={styles.label}>{i18n.t('LIVING_SITUATION.HOUSE')}</Text>
+                          <RNPickerSelect
+                            name="houseId"
+                            style={{
+                              inputAndroid: {
+                                backgroundColor: Colors.surfaceColorSecondary,
+                                borderRadius: 10,
+                              },
+                              iconContainer: {
+                                top: 10,
+                                right: 15,
+                              },
+                            }}
+                            onValueChange={(e) => console.log(e)}
+                            value={_.get(values, 'houseId').value || ''}
+                            onValueChange={(e) => setFieldValue('houseId', e)}
+                            value={_.get(values, 'houseId') || ''}
+                            items={houses}
+                            Icon={() => {
+                              return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
+                            }}
+                          />
+                        </>
+                      )}
+
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.RESPONSIBLE_TERRITORY')}</Text>
                       <RNPickerSelect
-                        name="responsibleTerritoryName"
+                        name="responsibleTerritoryId"
                         style={{
                           inputAndroid: {
                             backgroundColor: Colors.surfaceColorSecondary,
@@ -334,8 +434,9 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                             right: 15,
                           },
                         }}
-                        onValueChange={(value) => console.log(value)}
-                        value={_.get(values, 'responsibleTerritoryName').value || ''}
+                        onValueChange={(e) => setFieldValue('responsibleTerritoryId', e)}
+                        value={_.get(values, 'responsibleTerritoryId') || ''}
+                        //value= { console.log(values) && 5}
                         items={territories}
                         Icon={() => {
                           return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
@@ -356,7 +457,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                             right: 15,
                           },
                         }}
-                        onValueChange={handleChange('status')}
+                        onValueChange={(e) => setFieldValue('status', e)}
+                        value={_.get(values, 'status') || ''}
                         items={statusLabels}
                         Icon={() => {
                           return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
@@ -375,6 +477,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                     <View>
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.END_DATE')}</Text>
                       <TouchableOpacity onPress={() => setOpenEndDate(true)}>
+                        {console.log(errors)}
                         <View style={styles.inputContainer}>
                           <Text style={styles.inputDatePicker}>{endDate}</Text>
                           <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
@@ -401,12 +504,17 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                     </View>
 
                     <View style={styles.buttonsContainer}>
-                      <TouchableOpacity style={{ flex: 1 }}>
+                      {/* <TouchableOpacity style={{ flex: 1 }}>
                         <View style={styles.btnContainerSecondary}>
                           <Text style={styles.btnTextSecondary}>{i18n.t('LIVING_SITUATION.ADD')}</Text>
                         </View>
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={handleSubmit} style={{ flex: 1 }}>
+                      </TouchableOpacity> */}
+                      <TouchableOpacity
+                        onPress={() => {
+                          handleSubmit();
+                        }}
+                        style={{ flex: 1 }}
+                      >
                         <View style={styles.btnContainerPrimary}>
                           <Text style={styles.btnTextPrimary}>{i18n.t('LIVING_SITUATION.SAVE')}</Text>
                         </View>

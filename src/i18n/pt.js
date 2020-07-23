@@ -144,6 +144,11 @@ exports.PT = {
     PHONE2: 'Telefone 2',
     SAVE: 'Salve',
     EDIT: 'Editar Perfil',
-    EDIT_LIVING: 'Editar situação de vida'
+    EDIT_LIVING: 'Editar situação de vida',
+    ADMIN_NOTES: 'Admin notes',
+    SAVE:'Save',
+    ADD: 'Add new',
+    FILIATION: ' Filiations',
+    HOUSE: 'House'
   },
 };

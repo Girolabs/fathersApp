@@ -157,6 +157,9 @@ exports.EN = {
     PUBLIC_NOTES: 'Public Notes',
     ADMIN_NOTES: 'Admin notes',
     SAVE:'Save',
-    ADD: 'Add new'
+    ADD: 'Add new',
+    FILIATION: ' Filiation',
+    HOUSE: 'House',
+    ERROR_END_DATE: 'End date cant be before start date',
   }
 };

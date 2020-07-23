@@ -155,6 +155,10 @@ exports.ES = {
     START_DATE: 'Start date',
     END_DATE: 'End date',
     PUBLIC_NOTES: 'Public Notes',
-    ADMIN_NOTES: 'Admin notes'
+    ADMIN_NOTES: 'Admin notes',
+    SAVE:'Save',
+    ADD: 'Add new',
+    FILIATION: ' Filiations',
+    HOUSE: 'House'
   }
 };

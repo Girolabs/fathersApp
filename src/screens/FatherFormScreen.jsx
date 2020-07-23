@@ -121,7 +121,7 @@ class FatherFormScreen extends Component {
     if (status.isConnected === true ) {
       const fatherId = this.props.navigation.getParam('fatherId');
       if (!!fatherId) {
-        axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&authorized=true&$key=${Constants.manifest.extra.secrekey}`)
+        axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&authorized=true&$key=${Constants.manifest.extra.secretkey}`)
         .then(response =>{
           const father = response.data.result;
           this.setState({father})
@@ -139,7 +139,7 @@ class FatherFormScreen extends Component {
         axios.get(`${i18n.locale}/api/v1/persons?userId=${decode}&authorized=true&fields=all&key=${Constants.manifest.extra.secretKey}`).
         then(response => {
           const fatherId = !!response.data.result && response.data.result[0].personId;
-          axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&authorized=true&key=${Constants.manifest.extra.secrekey}`)
+          axios.get(`${i18n.locale}/api/v1/persons/${fatherId}?fields=all&authorized=true&key=${Constants.manifest.extra.secretkey}`)
             .then(response => {
               const father = response.data.result;
               this.setState({father})
