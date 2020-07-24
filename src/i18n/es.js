@@ -11,6 +11,7 @@ exports.ES = {
     NO_INTERNET: 'No hay conexión de internet',
     ERROR: 'Error con la consulta',
     EDIT_SUCCESS: 'Edición correcta',
+    CREATE_SUCCESS: 'Correcta creación',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'identidad',

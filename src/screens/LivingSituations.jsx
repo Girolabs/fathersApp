@@ -24,6 +24,8 @@ import * as Network from 'expo-network';
 import Constants from 'expo-constants';
 import * as _ from 'lodash';
 import * as Yup from 'yup';
+import { Snackbar } from 'react-native-paper';
+import { set } from 'lodash';
 
 const styles = StyleSheet.create({
   title: {
@@ -106,6 +108,12 @@ const styles = StyleSheet.create({
   itemContainer: {
     marginVertical: 10,
   },
+  errorText: {
+    color: Colors.primaryColor,
+  },
+  snackError: {
+    backgroundColor: Colors.secondaryColor,
+  },
 });
 
 const LivingSituationsFormScreen = ({ navigation }) => {
@@ -120,31 +128,30 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [filiations, setFiliations] = useState([]);
   const [houses, setHouses] = useState([]);
+  const [personId, setPersonId] = useState(null);
+  const [snackMsg, setSnackMsg] = useState('');
+  const [visible, setVisible] = useState('');
 
   useEffect(() => {
     const livingSituation = navigation.getParam('livingSituation');
+    const paramPersonId = navigation.getParam('personId');
     console.log('living', livingSituation);
 
-    //const living
     if (!livingSituation || livingSituation.endDate) {
       setIsCreate(true);
-      console.log('isCreate');
+
       loadFiliations();
       loadHouses();
+    }else {
+      const transFormedLiving = {
+        ...livingSituation,
+        startDate: livingSituation && livingSituation.startDate ? livingSituation.startDate.split('T')[0] : null,
+        endDate: livingSituation && livingSituation.endDate ? livingSituation.endDate.split('T')[0] : null,
+      };
+      setLivingSituation(transFormedLiving);
     }
-
     loadTerritory();
-
-    let transFormedLiving = {
-      ...livingSituation,
-      startDate: livingSituation && livingSituation.startDate ? livingSituation.startDate.split('T')[0] : null,
-      endDate: livingSituation && livingSituation.endDate ? livingSituation.endDate.split('T')[0] : null,
-    };
-
-    setStartDate(transFormedLiving.startDate);
-    setEndDate(transFormedLiving.endDate);
-
-    setLivingSituation(transFormedLiving);
+    setPersonId(paramPersonId); 
   }, []);
 
   const loadHouses = async () => {
@@ -226,34 +233,13 @@ const LivingSituationsFormScreen = ({ navigation }) => {
               };
             })
             .filter((el) => el != undefined);
-          //setLivingSituation(fetchedDelegations);
           setTerritories(fetchedDelegations);
         }
       });
     }
   };
 
-  const onChangeStartDate = (event, selectedDate) => {
-    console.log(selectedDate);
-    setOpenStartDate(false);
-    let newDate = new Date();
-    newDate.setTime(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60 * 1000);
-    selectedDate = newDate;
-
-    let year = selectedDate.getUTCFullYear();
-    let month =
-      selectedDate.getUTCMonth() + 1 < 10 ? '0' + (selectedDate.getUTCMonth() + 1) : selectedDate.getUTCMonth() + 1;
-    let day = selectedDate.getUTCDate() - 1;
-    let dateString = year + '-' + month + '-' + day;
-
-    console.log(selectedDate);
-    console.log(dateString);
-
-    setStartDate(dateString);
-  };
-
-  const onChangeEndDate = (event, selectedDate) => {
-    setOpenEndDate(false);
+  const formatDate = (selectedDate) => {
     let newDate = new Date();
     newDate.setTime(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60 * 1000);
     selectedDate = newDate;
@@ -265,12 +251,35 @@ const LivingSituationsFormScreen = ({ navigation }) => {
 
     console.log(selectedDate);
     console.log(dateString);
-
-    setEndDate(dateString);
+    return dateString;
   };
 
-  const onChangeTerritory = (item) => {
-    //set;
+  const editLivingSituation = (values) => {
+    axios.put(`${i18n.locale}/api/v1/living-situations/${livingSituation.livingSituationId}`, values).then(
+      (response) => {
+        setSnackMsg(i18n.t('GENERAL.EDIT_SUCCESS'));
+        setVisible(true);
+        navigation.goBack();
+      },
+      (err) => {
+        setSnackMsg(i18n.t('GENERAL.ERROR'));
+        setVisible(true);
+      },
+    );
+  };
+
+  const createLivingSituation = (values) => {
+    axios.post(`${i18n.locale}/api/v1/living-situations`, values).then(
+      (response) => {
+        setSnackMsg(i18n.t('GENERAL.CREATE_SUCCESS'));
+        setVisible(true);
+        navigation.goBack();
+      },
+      (err) => {
+        setSnackMsg(i18n.t('GENERAL.ERROR'));
+        setVisible(true);
+      },
+    );
   };
 
   return (
@@ -293,9 +302,9 @@ const LivingSituationsFormScreen = ({ navigation }) => {
               <Formik
                 enableReinitialize
                 initialValues={{
-                  responsibleTerritoryName: livingSituation && livingSituation.responsibleTerritoryId,
-                  startDate: startDate,
-                  endDate: endDate,
+                  responsibleTerritoryId: livingSituation && livingSituation.responsibleTerritoryId,
+                  startDate: livingSituation && livingSituation.startDate,
+                  endDate: livingSituation && livingSituation.endDate,
                   status: livingSituation.status,
                   publicNotes: livingSituation && livingSituation.publicNotes,
                   adminNotes: '',
@@ -304,55 +313,25 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                 }}
                 validationSchema={Yup.object().shape({
                   startDate: Yup.date(),
-                  endDate: Yup.date().min(Yup.ref('startDate'), i18n.t('LIVING_SITUATION.ERROR_END_DATE')),
+                  endDate: Yup.date()
+                    .nullable(true)
+                    .min(Yup.ref('startDate'), i18n.t('LIVING_SITUATION.ERROR_END_DATE')),
                 })}
                 onSubmit={(values) => {
                   let transformValues = {
                     ...values,
-                    //responsibleTerritoryId: values.responsibleTerritoryName,
                     status: values.status.value ? values.status.value : values.status,
+                    personId: personId,
                   };
+                  if (isCreate) {
+                    createLivingSituation(transformValues);
+                  } else {
+                    editLivingSituation(transformValues);
+                  }
 
                   console.log('values', values);
 
                   console.log(transformValues);
-                  if (transformValues.endDate) {
-                    if (transformValues.endDate > transformValues.startDate) {
-                      axios
-                        .put(
-                          `${i18n.locale}/api/v1/living-situations/${livingSituation.livingSituationId}`,
-                          transformValues,
-                        )
-                        .then(
-                          (response) => {
-                            console.log('edicion');
-
-                            //this.setState(this.setState({ snackMsg: i18n.t('GENERAL.EDIT_SUCCESS'), visible: true}));
-                          },
-                          (err) => {
-                            //this.setState(this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false }));
-                          },
-                        );
-                    } else {
-                      console.log('error');
-                    }
-                  } else {
-                    axios
-                      .put(
-                        `${i18n.locale}/api/v1/living-situations/${livingSituation.livingSituationId}`,
-                        transformValues,
-                      )
-                      .then(
-                        (response) => {
-                          console.log('edicion');
-                          //this.loadPerson();
-                          //this.setState(this.setState({ snackMsg: i18n.t('GENERAL.EDIT_SUCCESS'), visible: true}));
-                        },
-                        (err) => {
-                          //this.setState(this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false }));
-                        },
-                      );
-                  }
                 }}
               >
                 {({ handleChange, values, handleSubmit, errors, setFieldValue, touched }) => (
@@ -363,7 +342,11 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                           value={startDate ? new Date(startDate) : new Date()}
                           mode={'date'}
                           display="default"
-                          onChange={onChangeStartDate}
+                          onChange={(event, selectedDate) => {
+                            setOpenStartDate(false);
+                            const dateFormated = formatDate(selectedDate);
+                            setFieldValue('startDate', dateFormated);
+                          }}
                         />
                       )}
                       {openEndDate && (
@@ -371,7 +354,11 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                           value={endDate ? new Date(endDate) : new Date()}
                           mode={'date'}
                           display="default"
-                          onChange={onChangeEndDate}
+                          onChange={(event, selectedDate) => {
+                            setOpenEndDate(false);
+                            const dateFormated = formatDate(selectedDate);
+                            setFieldValue('endDate', dateFormated);
+                          }}
                         />
                       )}
                       {isCreate && (
@@ -409,8 +396,6 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                                 right: 15,
                               },
                             }}
-                            onValueChange={(e) => console.log(e)}
-                            value={_.get(values, 'houseId').value || ''}
                             onValueChange={(e) => setFieldValue('houseId', e)}
                             value={_.get(values, 'houseId') || ''}
                             items={houses}
@@ -436,7 +421,6 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                         }}
                         onValueChange={(e) => setFieldValue('responsibleTerritoryId', e)}
                         value={_.get(values, 'responsibleTerritoryId') || ''}
-                        //value= { console.log(values) && 5}
                         items={territories}
                         Icon={() => {
                           return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
@@ -469,7 +453,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.START_DATE')}</Text>
                       <TouchableOpacity onPress={() => setOpenStartDate(true)}>
                         <View style={styles.inputContainer}>
-                          <Text style={styles.inputDatePicker}>{startDate}</Text>
+                          <Text style={styles.inputDatePicker}>{_.get(values, 'startDate') || ''}</Text>
                           <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
                         </View>
                       </TouchableOpacity>
@@ -478,10 +462,15 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.END_DATE')}</Text>
                       <TouchableOpacity onPress={() => setOpenEndDate(true)}>
                         {console.log(errors)}
-                        <View style={styles.inputContainer}>
-                          <Text style={styles.inputDatePicker}>{endDate}</Text>
-                          <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
-                        </View>
+                        <>
+                          <View style={styles.inputContainer}>
+                            <Text style={styles.inputDatePicker}>{_.get(values, 'endDate') || ''}</Text>
+                            <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+                          </View>
+                          {errors && errors.endDate && (
+                            <Text style={styles.errorText}>{i18n.t('LIVING_SITUATION.ERROR_END_DATE')}</Text>
+                          )}
+                        </>
                       </TouchableOpacity>
                     </View>
 
@@ -527,6 +516,9 @@ const LivingSituationsFormScreen = ({ navigation }) => {
           ) : (
             <ActivityIndicator size="large" color={Colors.primaryColor} />
           )}
+          <Snackbar visible={visible} onDismiss={() => setVisible(false)} style={styles.snackError}>
+            {snackMsg}
+      </Snackbar>
         </SafeAreaView>
       </KeyboardAvoidingView>
     </>
