@@ -11,6 +11,7 @@ exports.ES = {
     NO_INTERNET: 'No hay conexión de internet',
     ERROR: 'Error con la consulta',
     EDIT_SUCCESS: 'Edición correcta',
+    CREATE_SUCCESS: 'Correcta creación',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'identidad',
@@ -155,6 +156,10 @@ exports.ES = {
     START_DATE: 'Start date',
     END_DATE: 'End date',
     PUBLIC_NOTES: 'Public Notes',
-    ADMIN_NOTES: 'Admin notes'
+    ADMIN_NOTES: 'Admin notes',
+    SAVE:'Save',
+    ADD: 'Add new',
+    FILIATION: ' Filiations',
+    HOUSE: 'House'
   }
 };

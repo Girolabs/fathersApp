@@ -11,6 +11,7 @@ exports.EN = {
     NO_INTERNET: 'No internet conection',
     ERROR: 'Error with the request',
     EDIT_SUCCESS: 'Correct edit',
+    CREATE_SUCCESS: 'Correct create',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'identity',
@@ -157,6 +158,10 @@ exports.EN = {
     PUBLIC_NOTES: 'Public Notes',
     ADMIN_NOTES: 'Admin notes',
     SAVE:'Save',
-    ADD: 'Add new'
+    ADD: 'Add new',
+    FILIATION: ' Filiation',
+    HOUSE: 'House',
+    ERROR_END_DATE: 'End date cant be before start date',
+    
   }
 };
