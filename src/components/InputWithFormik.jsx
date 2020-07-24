@@ -12,16 +12,16 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: 'work-sans-semibold',
     fontSize: 18,
-    color: Colors.onSurfaceColorPrimary,
+    color: Colors.primaryColor,
   },
   container: {
     padding: 15,
-    backgroundColor: Colors.surfaceColorSecondary,
+    
   }
 });
 
 const InputWithFormik = ({
-  name, label, formik, hasPerm, placeholder, ...props
+  name, label, formik, hasPerm, placeholder, mode, underlineColor, ...props
 }) => {
   const value = _.get(formik.values, name) || '';
   const error = pathHasError(name, formik.errors);
@@ -35,6 +35,8 @@ const InputWithFormik = ({
     value,
     onChangeText,
     placeholder,
+    mode,
+    underlineColor
   };
   const textFieldProps = { ...innerProps };
 

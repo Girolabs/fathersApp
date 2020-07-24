@@ -144,7 +144,7 @@ exports.EN = {
     SKYPE: 'Skype',
     PHONE1: 'Phone 1',
     PHONE2: 'Phone 2',
-    SAVE: 'Guardar',
+    SAVE: 'SAVE',
     EDIT: 'Edit Profile',
     EDIT_LIVING: 'Edit living situation'
   },

@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
+  SafeAreaView
 } from 'react-native';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
@@ -25,7 +26,7 @@ import jwt from 'jwt-decode'; // import dependency
 import Constants from 'expo-constants';
 import { Snackbar } from 'react-native-paper';
 import Colors from '../constants/Colors';
-import { NavigationEvents, SafeAreaView } from 'react-navigation';
+import { NavigationEvents} from 'react-navigation';
 
 const styles = StyleSheet.create({
   snackError: {
@@ -55,6 +56,9 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     justifyContent: 'space-between',
   },
+  screen: {
+    backgroundColor: Colors.surfaceColorPrimary,
+  }
 });
 
 class FatherFormScreen extends Component {
@@ -223,13 +227,14 @@ class FatherFormScreen extends Component {
         />
         {!loading ? (
           <>
+          <SafeAreaView style={styles.screen} >
             <ScrollView>
               <View style={{ paddingHorizontal: 15, marginVertical: 30, width: '80%' }}>
                 <Text
                   style={{
                     fontFamily: 'work-sans-semibold',
                     fontSize: 24,
-                    color: Colors.onSurfaceColorPrimary,
+                    color: Colors.primaryColor,
                   }}
                 >
                   {i18n.t('FATHER_EDIT.EDIT')}
@@ -285,39 +290,53 @@ class FatherFormScreen extends Component {
                       hasPerm={updateFields.indexOf('instagramUser') != -1}
                       label={i18n.t('FATHER_EDIT.INSTAGRAM')}
                       name="instagramUser"
+                      mode='outlined'
+                      selectionColor={Colors.primaryColor}
                     />
                     <InputWithFormik
                       hasPerm={updateFields.indexOf('slackUser') != -1}
                       label={i18n.t('FATHER_EDIT.SLACK')}
                       name="slackUser"
+                      mode='outlined'
+                      selectionColor={Colors.primaryColor}
                     />
                     <InputWithFormik
                       hasPerm={updateFields.indexOf('twitterUSer') != -1}
                       label={i18n.t('FATHER_EDIT.TWITTER')}
                       name="twitterUser"
+                      mode='outlined'
+                      selectionColor={Colors.primaryColor}
                     />
                     <InputWithFormik
                       hasPerm={updateFields.indexOf('facebookUrl') != -1}
                       label={i18n.t('FATHER_EDIT.FACEBOOK')}
                       placeholder={'https://www.facebook.com/my_name'}
                       name="facebookUrl"
+                      mode='outlined'
+                      selectionColor={Colors.primaryColor}
                     />
                     <InputWithFormik
                       hasPerm={updateFields.indexOf('skypeUser') != -1}
                       label={i18n.t('FATHER_EDIT.SKYPE')}
                       name="skypeUser"
+                      mode='outlined'
+                      selectionColor={Colors.primaryColor}
                     />
                     <InputWithFormik
                       hasPerm={updateFields.indexOf('phone1') != -1}
                       label={i18n.t('FATHER_EDIT.PHONE1')}
                       placeholder={'+1 262 473-4782'}
                       name="phone1"
+                      mode='outlined'
+                      selectionColor={Colors.primaryColor}
                     />
                     <InputWithFormik
                       hasPerm={updateFields.indexOf('phone2') != -1}
                       label={i18n.t('FATHER_EDIT.PHONE2')}
                       placeholder={'+1 262 473-4782'}
                       name="phone2"
+                      mode='outlined'
+                      underlineColor={Colors.primaryColor}
                     />
                     {/* //<InputWithFormik hasPerm={updateFields.indexOf('') != -1} label={i18n.t("FATHER_EDIT.FACEBOOK")} placeholder = {'https://www.facebook.com/'} name = "facebookUrl" /> */}
                     <View style={styles.buttonsContainer}>
@@ -355,6 +374,7 @@ class FatherFormScreen extends Component {
                 {this.state.snackMsg}
               </Snackbar>
             </ScrollView>
+            </SafeAreaView>
           </>
         ) : (
           <ActivityIndicator size="large" color={Colors.primaryColor} />
