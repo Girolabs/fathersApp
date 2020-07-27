@@ -230,6 +230,7 @@ class AssignmentsScreen extends Component {
                   return {
                     ...asg,
                     filiationName: filiation.name,
+                    filiationId:filiation.filiationId,
                     country: filiation.country,
                   };
                 }),
@@ -258,6 +259,7 @@ class AssignmentsScreen extends Component {
                       </View>
                     </TouchableComp>
                     {territory.filiations.map((filiation) => {
+                      console.log(filiation);
                       return (
                         <Fragment>
                           {filiation.data.map((asg) => {

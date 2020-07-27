@@ -25,7 +25,8 @@ class CourseDetailScreen extends Component {
 				.then((res) => {
 					let course = res.data.result
 					this.setState({ course })
-					axios
+					if(course.leaderAssignment){
+						axios
 						.get(`${i18n.locale}/api/v1/persons/${course.leaderAssignment.personId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
 						.then((respPerson) => {
 							const person = respPerson.data.result;
@@ -44,6 +45,8 @@ class CourseDetailScreen extends Component {
 						}).catch(error => {
 							this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
 						})
+					}
+					
 				}).catch(error => {
 					this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
 				})
