@@ -33,6 +33,7 @@ exports.EN = {
     LAST_UPDATE: 'Last update',
     CONTACT_INFO: 'Contact information',
     SAVE_CONTACT: 'Save Contact',
+    SAVED_CONTACT: 'Saved contact',
     EMAIL: 'Email',
     MAIN_CELL_PHONE: 'Main cell phone',
     CURRENT_HOME: 'Current home',
