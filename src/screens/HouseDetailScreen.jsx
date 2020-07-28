@@ -35,7 +35,7 @@ class HouseDetailScreen extends Component {
         axios.get(`${i18n.locale}/api/v1/filiations/${house.filiationId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
           .then(resFiliation => {
             const filiation = resFiliation.data.result
-            const membersHouse = filiation.persons.filter(person => person.activeLivingSituation.houseId == house.houseId)
+            const membersHouse = filiation.persons.filter(person => person.activeLivingSituation.houseId == house.houseId).filter(person => (person.isActive == true && person.isMember == true))
             this.setState({ house: { ...house, membersHouse, filiationName: filiation.name } });
           })
       }).catch(err => {

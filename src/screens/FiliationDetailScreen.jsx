@@ -25,7 +25,12 @@ class FiliationDetailScreen extends Component {
       axios.
         get(`${i18n.locale}/api/v1/filiations/${filiationId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
         .then((res) => {
-          this.setState({ filiation: res.data.result });
+          const fetchedFiliation = {
+            ...res.data.result,
+            persons: res.data.result.persons.filter(person => (person.isActive == true && person.isMember == true))
+            
+          }
+          this.setState({ filiation: fetchedFiliation });
         }).catch(err => {
           this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
         });

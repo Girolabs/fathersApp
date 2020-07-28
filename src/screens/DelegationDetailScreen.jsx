@@ -37,8 +37,11 @@ class DelegationDetailScreen extends Component {
     if (status.isConnected === true) {
       axios.get(`${i18n.locale}/api/v1/territories/${territoryId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
         .then((res) => {
-          this.setState({ territory: res.data.result });
-          console.log('[Territory]', res.data.result);
+          const fetchedDelegation= {
+            ...res.data.result,
+            homeTerritoryMembers: res.data.result.homeTerritoryMembers.filter( member => (member.isActive == true && member.isMember == true) ),
+          }
+          this.setState({ territory: fetchedDelegation });
         }).catch(err => {
           this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
         });

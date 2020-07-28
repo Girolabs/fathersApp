@@ -35,13 +35,15 @@ class CourseDetailScreen extends Component {
 								...course.leaderAssignment,
 								person
 							}
-							console.log('mirar', leaderAssignment)
+							
 							course = {
 								...course,
-								leaderAssignment
+								leaderAssignment,
+								persons: course.persons.filter(person => (person.isActive== true && person.isMember == true) )
 
 							}
-							this.setState({ course })
+							this.setState({ course });
+							
 						}).catch(error => {
 							this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
 						})
