@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
   TouchableNativeFeedback,
   ScrollView,
   ActivityIndicator,
-  Alert,
+  Clipboard
 } from 'react-native';
 import { Flag } from 'react-native-svg-flagkit';
 import moment from 'moment';
