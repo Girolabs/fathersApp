@@ -40,13 +40,13 @@ class SearchScreen extends Component {
   onChangeFilter = (texto) => {
     let filterResults = [];
 
-    if (this.state.showDeceased == true && this.state.showExMember == true) {
+    if (this.state.showDeceased && this.state.showExMember) {
       console.log('Ambos filtros');
       filterResults = this.state.results;
-    } else if (this.state.showDeceased == true && this.state.showExMember == false) {
+    } else if (this.state.showDeceased && !this.state.showExMemberfalse) {
       console.log('Mostrar fallecidos');
       filterResults = this.state.results.filter((persona) => persona.isMember != false);
-    } else if (this.state.showDeceased == false && this.state.showExMember == true) {
+    } else if (!this.state.showDeceased && this.state.showExMember) {
       console.log('Mostrar ex miembros');
       filterResults = this.state.results.filter((persona) => persona.isLiving != false);
     } else {
@@ -57,18 +57,15 @@ class SearchScreen extends Component {
 
     filterResults = filterResults.filter((persona) => {
       if (
-        persona.firstNameWithoutAccents &&
+        (persona.firstNameWithoutAccents &&
         persona.lastNameWithoutAccents &&
-        (persona.firstNameWithoutAccents + ' ' + persona.lastNameWithoutAccents).trim().startsWith(texto)
+        (persona.firstNameWithoutAccents + ' ' + persona.lastNameWithoutAccents).trim().startsWith(texto)) 
+        || (persona.firstNameWithoutAccents && persona.firstNameWithoutAccents.trim().startsWith(texto)) 
+        || (persona.lastNameWithoutAccents && persona.lastNameWithoutAccents.trim().startsWith(texto))
       ) {
         return persona;
       }
-      if (persona.firstNameWithoutAccents && persona.firstNameWithoutAccents.trim().startsWith(texto)) {
-        return persona;
-      }
-      if (persona.lastNameWithoutAccents && persona.lastNameWithoutAccents.trim().startsWith(texto)) {
-        return persona;
-      }
+      
     });
     this.setState({ filterResults: filterResults, loading: false });
   };
@@ -103,6 +100,7 @@ class SearchScreen extends Component {
             <View style={styles.filtersContainer}>
               <View style={styles.optionContainer}>
                 <Checkbox
+                  color = {Colors.primaryColor}
                   status={this.state.showDeceased ? 'checked' : 'unchecked'}
                   onPress={() => this.setState({ showDeceased: !this.state.showDeceased })}
                 />
@@ -111,6 +109,7 @@ class SearchScreen extends Component {
 
               <View style={styles.optionContainer}>
                 <Checkbox
+                  color = {Colors.primaryColor}
                   status={this.state.showExMember ? 'checked' : 'unchecked'}
                   onPress={() => this.setState({ showExMember: !this.state.showExMember })}
                 />
@@ -182,6 +181,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderRadius: 15,
+    marginTop:5
   },
   filtersContainer: {
     flexDirection: 'row',
