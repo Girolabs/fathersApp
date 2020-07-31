@@ -11,6 +11,8 @@ exports.DE = {
     NO_INTERNET: 'Keine Internetverbindung',
     ERROR: 'Fehler bei der Anfrage',
     EDIT_SUCCESS: 'Richtige Bearbeitung',
+    CREATE_SUCCESS: 'Richtig erstellen',
+    COPY_CLIPBOARD: 'In die Zwischenablage kopiert',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'Identität',

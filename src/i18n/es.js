@@ -12,6 +12,7 @@ exports.ES = {
     ERROR: 'Error con la consulta',
     EDIT_SUCCESS: 'Edición correcta',
     CREATE_SUCCESS: 'Correcta creación',
+    COPY_CLIPBOARD: 'Copiado al portapapeles',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'identidad',
@@ -147,7 +148,7 @@ exports.ES = {
     PHONE2: 'Telefono 2',
     SAVE: 'Guardar',
     EDIT: 'Editar perfil',
-    EDIT_LIVING:'Editar situación de vivienda'
+    EDIT_LIVING: 'Editar situación de vivienda',
   },
   LIVING_SITUATION: {
     EDIT_TITLE: 'Edit Active Living Situation',
@@ -158,9 +159,9 @@ exports.ES = {
     END_DATE: 'End date',
     PUBLIC_NOTES: 'Public Notes',
     ADMIN_NOTES: 'Admin notes',
-    SAVE:'Save',
+    SAVE: 'Save',
     ADD: 'Add new',
     FILIATION: ' Filiations',
-    HOUSE: 'House'
-  }
+    HOUSE: 'House',
+  },
 };

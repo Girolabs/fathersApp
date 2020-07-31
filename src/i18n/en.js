@@ -12,6 +12,7 @@ exports.EN = {
     ERROR: 'Error with the request',
     EDIT_SUCCESS: 'Correct edit',
     CREATE_SUCCESS: 'Correct create',
+    COPY_CLIPBOARD: 'Copied to clipboard',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'identity',
