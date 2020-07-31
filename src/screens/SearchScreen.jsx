@@ -43,7 +43,7 @@ class SearchScreen extends Component {
     if (this.state.showDeceased && this.state.showExMember) {
       console.log('Ambos filtros');
       filterResults = this.state.results;
-    } else if (this.state.showDeceased && !this.state.showExMemberfalse) {
+    } else if (this.state.showDeceased && !this.state.showExMember) {
       console.log('Mostrar fallecidos');
       filterResults = this.state.results.filter((persona) => persona.isMember != false);
     } else if (!this.state.showDeceased && this.state.showExMember) {
