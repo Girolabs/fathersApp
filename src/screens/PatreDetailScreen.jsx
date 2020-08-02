@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
   TouchableNativeFeedback,
   ScrollView,
   ActivityIndicator,
-  Alert,
+  Clipboard
 } from 'react-native';
 import { Flag } from 'react-native-svg-flagkit';
 import moment from 'moment';
@@ -78,28 +78,32 @@ const PatreDetailScreen = ({ navigation }) => {
   }
 
   const handleSaveContact = async (father) => {
-    try {
-      const contact = {
-        [Contacts.Fields.FirstName]: father.friendlyFirstName,
-        [Contacts.Fields.LastName]: father.friendlyLastName,
-        [Contacts.Fields.PhoneNumbers]: [
-          {
-            label: 'mobile',
-            number: father.phones ? father.phones[0].number : null,
-          },
-        ],
-        [Contacts.Fields.Emails]: [
-          {
-            email: father.email ? father.email : null,
-          },
-        ],
-      };
-      console.log('contact', contact);
-      console.log('spanshot', contact);
-      const contactId = await Contacts.addContactAsync(contact);
+    const { status } = await Contacts.requestPermissionsAsync();
+    if (status === 'granted') {
+      try {
+        const contact = {
+          [Contacts.Fields.FirstName]: father.friendlyFirstName,
+          [Contacts.Fields.LastName]: father.friendlyLastName,
+          [Contacts.Fields.PhoneNumbers]: [
+            {
+              label: 'mobile',
+              number: father.phones ? father.phones[0].number : null,
+            },
+          ],
+          [Contacts.Fields.Emails]: [
+            {
+              email: father.email ? father.email : null,
+            },
+          ],
+        };
+        console.log('contact', contact);
+        console.log('spanshot', contact);
+        const contactId = await Contacts.addContactAsync(contact);
+        setVisible(true);
+        setSnackMsg(i18n.t('FATHER_DETAIL.SAVED_CONTACT'));
 
-      if (contactId) {
-        /*  Alert.alert(
+        if (contactId) {
+          /*  Alert.alert(
            "Contact Saved.",
            "My Alert Msg",
            [
@@ -112,8 +116,8 @@ const PatreDetailScreen = ({ navigation }) => {
            ],
            { cancelable: false }
          ); */
-      } else {
-        /*   Alert.alert(
+        } else {
+          /*   Alert.alert(
             "Contact not saved.",
             "My Alert Msg",
             [
@@ -126,9 +130,9 @@ const PatreDetailScreen = ({ navigation }) => {
             ],
             { cancelable: false }
           ); */
-      }
-    } catch (err) {
-      /*  Alert.alert(
+        }
+      } catch (err) {
+        /*  Alert.alert(
          "Contact not Saved.problem",
          "My Alert Msg",
          [
@@ -141,10 +145,13 @@ const PatreDetailScreen = ({ navigation }) => {
          ],
          { cancelable: false }
        ); */
-    }
+      }
 
-    const contactId = await Contacts.addContactAsync(contact);
-    console.log(contactId);
+      /*  const contactId = await Contacts.addContactAsync(contact);
+      console.log(contactId); */
+    } else {
+      console.log('no tengo');
+    }
   };
 
   const loadInterfaceData = async (tempFather) => {
@@ -181,12 +188,12 @@ const PatreDetailScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    (async () => {
+    /* (async () => {
       const { status } = await Contacts.requestPermissionsAsync();
       if (status === 'granted') {
         setShowSaveContact(true);
       }
-    })();
+    })(); */
     const loadPerson = async () => {
       const status = await Network.getNetworkStateAsync();
       if (status.isConnected === true) {
@@ -293,39 +300,37 @@ const PatreDetailScreen = ({ navigation }) => {
                 )}
 
                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 10 }}>
-                  {showSaveContact && (
-                    <TouchableComp
-                      onPress={() => {
-                        handleSaveContact(father);
+                  <TouchableComp
+                    onPress={() => {
+                      handleSaveContact(father);
+                    }}
+                  >
+                    <View
+                      style={{
+                        backgroundColor: 'white',
+                        borderColor: Colors.primaryColor,
+                        borderRadius: 5,
+                        borderWidth: 2,
+                        paddingHorizontal: 10,
+                        width: '45%',
+                        height: 50,
+                        marginHorizontal: 15,
+                        justifyContent: 'center',
                       }}
                     >
-                      <View
+                      <Text
                         style={{
-                          backgroundColor: 'white',
-                          borderColor: Colors.primaryColor,
-                          borderRadius: 5,
-                          borderWidth: 2,
-                          paddingHorizontal: 10,
-                          width: '45%',
-                          height: 50,
-                          marginHorizontal: 15,
-                          justifyContent: 'center',
+                          textAlign: 'center',
+                          fontSize: 12,
+                          fontFamily: 'work-sans-bold',
+                          textTransform: 'uppercase',
+                          color: Colors.primaryColor,
                         }}
                       >
-                        <Text
-                          style={{
-                            textAlign: 'center',
-                            fontSize: 12,
-                            fontFamily: 'work-sans-bold',
-                            textTransform: 'uppercase',
-                            color: Colors.primaryColor,
-                          }}
-                        >
-                          {i18n.t('FATHER_DETAIL.SAVE_CONTACT')}
-                        </Text>
-                      </View>
-                    </TouchableComp>
-                  )}
+                        {i18n.t('FATHER_DETAIL.SAVE_CONTACT')}
+                      </Text>
+                    </View>
+                  </TouchableComp>
 
                   <SocialIcons
                     wa={
@@ -393,7 +398,7 @@ const PatreDetailScreen = ({ navigation }) => {
                   body={father.homeTerritoryName}
                   selected={() => {
                     navigation.navigate('DelegationDetail', {
-                      delegationId: father.activeLivingSituation.homeTerritoryId,
+                      delegationId: father.homeTerritoryId,
                     });
                   }}
                 />
