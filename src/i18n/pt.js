@@ -12,6 +12,7 @@ exports.PT = {
     ERROR: 'Erro com a solicitação',
     EDIT_SUCCESS: 'Edição correta',
     CREATE_SUCCESS: 'Criação correta',
+    COPY_CLIPBOARD: 'Copiado para a área de transferência',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'Identidade',

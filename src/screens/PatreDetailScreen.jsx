@@ -9,7 +9,7 @@ import {
   TouchableNativeFeedback,
   ScrollView,
   ActivityIndicator,
-  Clipboard
+  Clipboard,
 } from 'react-native';
 import { Flag } from 'react-native-svg-flagkit';
 import moment from 'moment';
@@ -18,13 +18,13 @@ import 'moment/min/locales';
 import Constants from 'expo-constants';
 import countries from 'i18n-iso-countries';
 import * as Contacts from 'expo-contacts';
+import * as Network from 'expo-network';
+import { Snackbar } from 'react-native-paper';
+import { Ionicons } from 'expo-vector-icons';
 import axios from '../../axios-instance';
 import { I18nContext } from '../context/I18nProvider';
 import Colors from '../constants/Colors';
 import SocialIcons from '../components/SocialIcons';
-import * as Network from 'expo-network';
-import { Snackbar } from 'react-native-paper';
-import { Ionicons } from 'expo-vector-icons';
 
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
@@ -160,9 +160,9 @@ const PatreDetailScreen = ({ navigation }) => {
     if (status.isConnected == true) {
       axios.get(`${i18n.locale}/api/v1/interface-data`).then((response) => {
         const viewPermRole = tempFather.viewPermissionForCurrentUser;
-        const personFieldsByViewPermission = response.data.result.personFieldsByViewPermission;
+        const { personFieldsByViewPermission } = response.data.result;
 
-        let viewRoles = Object.keys(personFieldsByViewPermission);
+        const viewRoles = Object.keys(personFieldsByViewPermission);
 
         const arrayOfRoles = viewRoles.map((rol) => {
           return personFieldsByViewPermission[rol];
@@ -178,7 +178,7 @@ const PatreDetailScreen = ({ navigation }) => {
           return rol;
         });
 
-        let index = viewRoles.indexOf(viewPermRole);
+        const index = viewRoles.indexOf(viewPermRole);
 
         const viewFields = accumulatedFieldsPerRol[index];
 
@@ -283,11 +283,29 @@ const PatreDetailScreen = ({ navigation }) => {
                   )}
                 </View>
 
-                <DefaultItem show={viewFatherFields.indexOf('email')} title="FATHER_DETAIL.EMAIL" body={father.email} />
+                <DefaultItem
+                  show={viewFatherFields.indexOf('email')}
+                  title="FATHER_DETAIL.EMAIL"
+                  body={father.email}
+                  icon={<Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />}
+                  selected={() => {
+                    const value = father.email;
+                    Clipboard.setString(value);
+                    setVisible(true);
+                    setSnackMsg(i18n.t('GENERAL.COPY_CLIPBOARD'));
+                  }}
+                />
                 {father.phones.length >= 1 && (
                   <DefaultItem
                     title="FATHER_DETAIL.MAIN_CELL_PHONE"
-                    body={father.phones[0] != undefined ? father.phones[0].number : null}
+                    body={father.phones[0] !== undefined ? father.phones[0].number : null}
+                    icon={<Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />}
+                    selected={() => {
+                      const value = father.phones[0] !== undefined ? father.phones[0].number : null;
+                      Clipboard.setString(value);
+                      setVisible(true);
+                      setSnackMsg(i18n.t('GENERAL.COPY_CLIPBOARD'));
+                    }}
                   />
                 )}
 
@@ -295,7 +313,14 @@ const PatreDetailScreen = ({ navigation }) => {
                   <DefaultItem
                     show={viewFatherFields.indexOf('phones')}
                     title="FATHER_DETAIL.HOME"
-                    body={father.phones[1] != undefined ? father.phones[1].number : ''}
+                    body={father.phones[1] !== undefined ? father.phones[1].number : ''}
+                    icon={<Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />}
+                    selected={() => {
+                      const value = father.phones[1] !== undefined ? father.phones[1].number : '';
+                      Clipboard.setString(value);
+                      setVisible(true);
+                      setSnackMsg(i18n.t('GENERAL.COPY_CLIPBOARD'));
+                    }}
                   />
                 )}
 
@@ -524,7 +549,7 @@ PatreDetailScreen.navigationOptions = () => ({
   headerTitle: '',
 });
 
-const DefaultItem = ({ title, body, selected, img, country_code, lang, date, id, show }) => {
+const DefaultItem = ({ title, body, selected, img, country_code, lang, date, id, show, icon }) => {
   let TouchableComp = TouchableOpacity;
   let formatedDate;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -569,6 +594,7 @@ const DefaultItem = ({ title, body, selected, img, country_code, lang, date, id,
                     <Flag id={img} size={0.2} />
                   </View>
                 )}
+                {icon && icon}
               </View>
             </TouchableComp>
           )}

@@ -25,7 +25,6 @@ import HeaderButton from '../components/HeaderButton';
 import { I18nContext } from '../context/I18nProvider';
 import { Snackbar } from 'react-native-paper';
 
-
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -123,7 +122,7 @@ const HomeScreen = ({ navigation }) => {
             const fetchedReminders = res.data.result;
             setReminders(fetchedReminders);
             setLoading(false);
-          }).catch(err => {
+          }).catch((err) => {
             setVisible(true);
             setSnackMsg(i18n.t('GENERAL.ERROR'));
           });
@@ -131,9 +130,8 @@ const HomeScreen = ({ navigation }) => {
         setVisible(true);
         setSnackMsg(i18n.t('GENERAL.NO_INTERNET'));
       }
-    }
+    };
     loadDates();
-
   }, []);
   console.log('render: HomeScreen');
   return (
@@ -149,7 +147,10 @@ const HomeScreen = ({ navigation }) => {
                 }}
               >
                 <View style={styles.prayerCard}>
-                  <Text style={styles.prayerCardTitle}> {i18n.t('HOME_SCREEN.COMMUNITY_PRAYER')}</Text>
+                  <Text style={styles.prayerCardTitle}>
+                    {' '}
+                    {i18n.t('HOME_SCREEN.COMMUNITY_PRAYER')}
+                  </Text>
                   <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
                 </View>
               </TouchableComp>
@@ -160,7 +161,10 @@ const HomeScreen = ({ navigation }) => {
                 }}
               >
                 <View style={styles.prayerCard}>
-                  <Text style={styles.prayerCardTitle}> {i18n.t('HOME_SCREEN.MISC')}</Text>
+                  <Text style={styles.prayerCardTitle}>
+                    {' '}
+                    {i18n.t('HOME_SCREEN.MISC')}
+                  </Text>
                   <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
                 </View>
               </TouchableComp>
@@ -198,37 +202,37 @@ const HomeScreen = ({ navigation }) => {
                             {selectedReminder === index ? (
                               <Ionicons name="md-arrow-dropup" size={23} color={Colors.surfaceColorPrimary} />
                             ) : (
-                                <Ionicons name="md-arrow-dropdown" size={23} color={Colors.surfaceColorPrimary} />
-                              )}
+                              <Ionicons name="md-arrow-dropdown" size={23} color={Colors.surfaceColorPrimary} />
+                            )}
                           </View>
                         </TouchableComp>
                       ) : (
-                          <TouchableComp
-                            style={{ flex: 1 }}
-                            onPress={() => {
-                              if (selectedReminder == null) {
-                                setSelectedReminder(index);
-                              } else if (selectedReminder === index) {
-                                setSelectedReminder(null);
-                              } else {
-                                setSelectedReminder(index);
-                              }
-                            }}
-                          >
-                            <View style={styles.reminderHeader}>
-                              <View style={{ flexDirection: 'row' }}>
-                                <Ionicons name="ios-calendar" size={23} color={Colors.surfaceColorPrimary} />
-                                <Text style={styles.reminderHeaderTitle}>{date}</Text>
-                              </View>
-
-                              {selectedReminder === index ? (
-                                <Ionicons name="md-arrow-dropup" size={23} color={Colors.surfaceColorPrimary} />
-                              ) : (
-                                  <Ionicons name="md-arrow-dropdown" size={23} color={Colors.surfaceColorPrimary} />
-                                )}
+                        <TouchableComp
+                          style={{ flex: 1 }}
+                          onPress={() => {
+                            if (selectedReminder == null) {
+                              setSelectedReminder(index);
+                            } else if (selectedReminder === index) {
+                              setSelectedReminder(null);
+                            } else {
+                              setSelectedReminder(index);
+                            }
+                          }}
+                        >
+                          <View style={styles.reminderHeader}>
+                            <View style={{ flexDirection: 'row' }}>
+                              <Ionicons name="ios-calendar" size={23} color={Colors.surfaceColorPrimary} />
+                              <Text style={styles.reminderHeaderTitle}>{date}</Text>
                             </View>
-                          </TouchableComp>
-                        )}
+
+                            {selectedReminder === index ? (
+                              <Ionicons name="md-arrow-dropup" size={23} color={Colors.surfaceColorPrimary} />
+                            ) : (
+                              <Ionicons name="md-arrow-dropdown" size={23} color={Colors.surfaceColorPrimary} />
+                            )}
+                          </View>
+                        </TouchableComp>
+                      )}
                       {selectedReminder === index && (
                         <FlatList
                           data={item}
@@ -238,14 +242,14 @@ const HomeScreen = ({ navigation }) => {
                                 {item.entityCountry != null ? (
                                   <Flag id={item.entityCountry} size={0.1} />
                                 ) : (
-                                    <Ionicons name="ios-flag" size={23} color={Colors.onSurfaceColorSecondary} />
-                                  )}
+                                  <Ionicons name="ios-flag" size={23} color={Colors.onSurfaceColorSecondary} />
+                                )}
                                 <View style={{ marginLeft: 15 }}>
                                   {item.isImportant ? (
                                     <Text style={{ fontFamily: 'work-sans', fontSize: 15 }}>{date}</Text>
                                   ) : (
-                                      <Text style={{ fontFamily: 'work-sans', fontSize: 15 }}>{item.text}</Text>
-                                    )}
+                                    <Text style={{ fontFamily: 'work-sans', fontSize: 15 }}>{item.text}</Text>
+                                  )}
 
                                   <TouchableComp
                                     onPress={() => {
@@ -264,9 +268,9 @@ const HomeScreen = ({ navigation }) => {
                                 </View>
                               </View>
 
-                              {item.entityObject.phones !== undefined &&
-                                item.entityObject.phones.length > 0 &&
-                                item.entityObject.phones[0].whatsApp && (
+                              {item.entityObject.phones !== undefined
+                                && item.entityObject.phones.length > 0
+                                && item.entityObject.phones[0].whatsApp && (
                                   <TouchableComp
                                     onPress={() => {
                                       Linking.openURL(
@@ -276,7 +280,7 @@ const HomeScreen = ({ navigation }) => {
                                   >
                                     <Ionicons name="logo-whatsapp" size={23} color={Colors.onSurfaceColorSecondary} />
                                   </TouchableComp>
-                                )}
+                              )}
                             </View>
                           )}
                         />
@@ -287,8 +291,8 @@ const HomeScreen = ({ navigation }) => {
               />
             </>
           ) : (
-              <ActivityIndicator size="large" color={Colors.primaryColor} />
-            )}
+            <ActivityIndicator size="large" color={Colors.primaryColor} />
+          )}
           <Snackbar visible={visible} onDismiss={() => setVisible(false)} style={styles.snackError}>
             {snackMsg}
           </Snackbar>
