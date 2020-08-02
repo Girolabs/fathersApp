@@ -23,6 +23,7 @@ exports.EN = {
     EMPTY_IDENTITY: 'Identity is empty',
     EMPTY_FIELDS: 'Empty fields',
     ERROR: 'An error occurred in the request',
+    SEND_EMAIL: 'An email was sent to your email',
   },
   HOME_SCREEN: {
     REMINDERS: 'Reminders',
@@ -33,6 +34,7 @@ exports.EN = {
     LAST_UPDATE: 'Last update',
     CONTACT_INFO: 'Contact information',
     SAVE_CONTACT: 'Save Contact',
+    SAVED_CONTACT: 'Saved contact',
     EMAIL: 'Email',
     MAIN_CELL_PHONE: 'Main cell phone',
     CURRENT_HOME: 'Current home',

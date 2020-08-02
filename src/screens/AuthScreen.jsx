@@ -52,7 +52,7 @@ class AuthScreen extends Component {
       .then((res) => {
         const status = res.data.status;
         if (status == 'OK') {
-          this.setState({ hasToken: true,snackMsg: 'Se envio un correo a tu email',visible: true,loading:false });
+          this.setState({ hasToken: true,snackMsg: 'AUTH_SCREEN.SEND_EMAIL',visible: true,loading:false });
         }
       }).catch((e) => {
         this.setState({snackMsg:i18n.t('AUTH_SCREEN.ERROR'),visible:true,loading:false})

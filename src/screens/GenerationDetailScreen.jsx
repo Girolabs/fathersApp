@@ -22,7 +22,8 @@ import { Snackbar } from 'react-native-paper';
 
 class GenerationDetailScreen extends Component {
   state = {
-    generation: [],
+    generation: {},
+    loading: true,
   };
   async componentDidMount() {
     const { navigation } = this.props;
@@ -30,16 +31,17 @@ class GenerationDetailScreen extends Component {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected == true) {
       axios
-        .get(
-          `${i18n.locale}/api/v1/generations/${generationId}?fields=all&key=${Constants.manifest.extra.secretKey}`,
-        )
+        .get(`${i18n.locale}/api/v1/generations/${generationId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
         .then((res) => {
-          this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
+          const generation = res.data.result;
+          this.setState({ generation: generation, loading: false });
+        })
+        .catch((e) => {
+          this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
         });
     } else {
-      this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false })
+      this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
-
   }
   render() {
     let TouchableComp = TouchableOpacity;
@@ -53,7 +55,7 @@ class GenerationDetailScreen extends Component {
           return (
             <SafeAreaView>
               <ScrollView>
-                {this.state.generation ? (
+                {!this.state.loading ? (
                   <Fragment>
                     <View style={styles.titleContainer}>
                       <Text style={styles.title}>{this.state.generation.name}</Text>
@@ -110,9 +112,13 @@ class GenerationDetailScreen extends Component {
                     </View>
                   </Fragment>
                 ) : (
-                    <ActivityIndicator size="large" color={Colors.primaryColor} />
-                  )}
-                <Snackbar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })} style={styles.snackError}>
+                  <ActivityIndicator size="large" color={Colors.primaryColor} />
+                )}
+                <Snackbar
+                  visible={this.state.visible}
+                  onDismiss={() => this.setState({ visible: false })}
+                  style={styles.snackError}
+                >
                   {this.state.snackMsg}
                 </Snackbar>
               </ScrollView>

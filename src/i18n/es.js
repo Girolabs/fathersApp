@@ -23,6 +23,7 @@ exports.ES = {
     EMPTY_IDENTITY: 'Identidad está vacio',
     EMPTY_FIELDS: 'Hay campos vacios',
     ERROR: 'Ocurrió un error en la consulta',
+    SEND_EMAIL: 'Se envio un correo a tu email',
   },
   HOME_SCREEN: {
     REMINDERS: 'Recordatorios',
