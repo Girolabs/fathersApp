@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { ScrollView, StyleSheet, KeyboardAvoidingView, View, Text, Image,ActivityIndicator } from 'react-native';
+import { ScrollView, StyleSheet, KeyboardAvoidingView, View, Text, Image, ActivityIndicator } from 'react-native';
 import { I18nContext } from '../context/I18nProvider';
 import { AuthContext } from '../context/AuthProvider';
 import Colors from '../constants/Colors';
@@ -23,15 +23,14 @@ class AuthScreen extends Component {
     hasToken: false,
     identity: '',
     token: '',
-    visible:false,
+    visible: false,
     snackMsg: '',
-    loading:false,
+    loading: false,
   };
 
   static contextType = AuthContext;
 
-
-  _onToggleSnackBar = () => this.setState({visible: !this.state.visible});
+  _onToggleSnackBar = () => this.setState({ visible: !this.state.visible });
   _onDismissSnackBar = () => this.setState({ visible: false });
 
   handleIdentity = (text) => {
@@ -44,62 +43,69 @@ class AuthScreen extends Component {
   handleSendIdentity = async () => {
     const data = {};
     const { identity } = this.state;
-    this.setState({ loading: true })
+    this.setState({ loading: true });
     const status = await Network.getNetworkStateAsync();
-    if( status.isConnected == true ) {
-    axios
-      .get(`${i18n.locale}/api/v1/users/request-verification-token?identity=${encodeURIComponent(identity)}`, { data: null })
-      .then((res) => {
-        const status = res.data.status;
-        if (status == 'OK') {
-          this.setState({ hasToken: true,snackMsg: 'AUTH_SCREEN.SEND_EMAIL',visible: true,loading:false });
-        }
-      }).catch((e) => {
-        this.setState({snackMsg:i18n.t('AUTH_SCREEN.ERROR'),visible:true,loading:false})
-      });
+    if (status.isConnected == true) {
+      axios
+        .get(`${i18n.locale}/api/v1/users/request-verification-token?identity=${encodeURIComponent(identity)}`, {
+          data: null,
+        })
+        .then((res) => {
+          const status = res.data.status;
+          if (status == 'OK') {
+            this.setState({ hasToken: true, snackMsg: 'AUTH_SCREEN.SEND_EMAIL', visible: true, loading: false });
+          }
+        })
+        .catch((e) => {
+          this.setState({ snackMsg: i18n.t('AUTH_SCREEN.ERROR'), visible: true, loading: false });
+        });
     } else {
-      this.setState({snackMsg:i18n.t('GENERAL.NO_INTERNET'),visible:true,loading:false})
+      this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
   };
   handleSendToken = async () => {
     const data = {};
     const { identity, token } = this.state;
-    this.setState({loading:true});
+    this.setState({ loading: true });
     const status = await Network.getNetworkStateAsync();
-    console.log(status)
-    if( status.isConnected == true ) {
+    console.log(status);
+    if (status.isConnected == true) {
       axios
-      .get(`${i18n.locale}/api/v1/users/login-with-verification-token?identity=${encodeURIComponent(identity)}&token=${token}`, { data: null })
-      .then(async (res) => {
-        console.log(res)
-        const data = JSON.stringify(res.data.result)
+        .get(
+          `${i18n.locale}/api/v1/users/login-with-verification-token?identity=${encodeURIComponent(
+            identity,
+          )}&token=${token}`,
+          { data: null },
+        )
+        .then(async (res) => {
+          console.log(res);
+          const data = JSON.stringify(res.data.result);
 
-        //await AsyncStorage.setItem('token',res.data.result)
-        try {
-          await AsyncStorage.setItem(
-            'token',
-            data
-          );
-        } catch (error) {
-          // Error saving data
-          console.log('try',error)
-        }
-        /* this.context.storeJwt(res.data.result); */
-        this.setState({loading:false})
-        this.props.navigation.navigate('Drawer')
-      }).catch((e) => {
-        this.setState({snackMsg:i18n.t('AUTH_SCREEN.ERROR'),visible:true,loading:false})
-      });
-    }else {
-      this.setState({snackMsg:i18n.t('GENERAL.NO_INTERNET'),visible:true,loading:false})
+          //await AsyncStorage.setItem('token',res.data.result)
+          try {
+            await AsyncStorage.setItem('token', data);
+          } catch (error) {
+            // Error saving data
+            console.log('try', error);
+          }
+          /* this.context.storeJwt(res.data.result); */
+          this.setState({ loading: false });
+          this.props.navigation.navigate('Drawer');
+        })
+        .catch((e) => {
+          this.setState({ snackMsg: i18n.t('AUTH_SCREEN.ERROR'), visible: true, loading: false });
+        });
+    } else {
+      this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
-   
   };
 
   render() {
     const lng = [
       { name: 'ES', value: 'es' },
       { name: 'EN', value: 'en' },
+      { name: 'PT', value: 'pt' },
+      { name: 'DE', value: 'de' },
     ];
 
     const { visible, snackMsg } = this.state;
@@ -120,116 +126,106 @@ class AuthScreen extends Component {
                       </View>
                       {this.state.hasToken ? (
                         <Card style={styles.authContainer}>
-                         {!this.state.loading ? 
-                         <Fragment>
+                          {!this.state.loading ? (
+                            <Fragment>
+                              <Input
+                                id="identity"
+                                label="Identity"
+                                required
+                                autoCapitalize="none"
+                                placeholder={i18n.t('AUTH_SCREEN.IDENTITY_PLACEHOLDER')}
+                                value={this.state.identity}
+                                onChange={this.handleIdentity}
+                              />
 
-                         
-                        
-                            <Input
-                              id="identity"
-                              label="Identity"
-                              required
-                              autoCapitalize="none"
-                              
-                              placeholder={i18n.t('AUTH_SCREEN.IDENTITY_PLACEHOLDER')}
-                              
-                              value={this.state.identity}
-                              onChange={this.handleIdentity}
-                            />
-                         
+                              <Input
+                                id="token"
+                                label="Token"
+                                required
+                                autoCapitalize="none"
+                                keyboardType="email-addres"
+                                placeholder={i18n.t('AUTH_SCREEN.TOKEN_PLACEHOLDER')}
+                                value={this.state.token}
+                                onChange={this.handleToken}
+                              />
+                              <Button
+                                onPress={() => {
+                                  if ((this.state.token != '') & (this.state.identity != '')) {
+                                    this.handleSendToken();
+                                  } else {
+                                    this.setState({ snackMsg: i18n.t('AUTH_SCREEN.EMPTY_FIELDS'), visible: true });
+                                  }
 
-                          <Input
-                            id="token"
-                            label="Token"
-                            required
-                            autoCapitalize="none"
-                            keyboardType="email-addres"
-                            placeholder={i18n.t('AUTH_SCREEN.TOKEN_PLACEHOLDER')}
-                            
-                            value={this.state.token}
-                            onChange={this.handleToken}
-                          />
-                          <Button
-                            onPress={() => {
-                              if( this.state.token != '' & this.state.identity != ''){
-                                this.handleSendToken();
-                              }else{
-                                this.setState({snackMsg:i18n.t('AUTH_SCREEN.EMPTY_FIELDS'),visible:true})
-                              }
-                              
-                              //this.props.navigation.navigate('Drawer')
-                            }}
-                          >
-                            <View style={styles.btnPrimary}>
-                              <Text style={styles.btnText}>{i18n.t('AUTH_SCREEN.SEND')}</Text>
-                            </View>
-                          </Button>
-                          <Button
-                            onPress={() => {
-                              this.setState({ hasToken: false });
-                            }}
-                          >
-                            <View style={styles.btnSecondary}>
-                              <Text style={styles.btnText}>{i18n.t('AUTH_SCREEN.GO_BACK')}</Text>
-                            </View>
-                          </Button>
-                          </Fragment>
-                          :<ActivityIndicator size="large" color={Colors.primaryColor} />}
+                                  //this.props.navigation.navigate('Drawer')
+                                }}
+                              >
+                                <View style={styles.btnPrimary}>
+                                  <Text style={styles.btnText}>{i18n.t('AUTH_SCREEN.SEND')}</Text>
+                                </View>
+                              </Button>
+                              <Button
+                                onPress={() => {
+                                  this.setState({ hasToken: false });
+                                }}
+                              >
+                                <View style={styles.btnSecondary}>
+                                  <Text style={styles.btnText}>{i18n.t('AUTH_SCREEN.GO_BACK')}</Text>
+                                </View>
+                              </Button>
+                            </Fragment>
+                          ) : (
+                            <ActivityIndicator size="large" color={Colors.primaryColor} />
+                          )}
                         </Card>
                       ) : (
                         <Card style={styles.authContainer}>
-                          {!this.state.loading ?
-                          <Fragment>
-                       
-                          <Input
-                            id="email"
-                            label="Email"
-                            required
-                            email
-                            autoCapitalize="none"
-                            keyboardType="email-addres"
-                            placeholder={i18n.t('AUTH_SCREEN.IDENTITY_PLACEHOLDER')}
-                            
-                            value={this.state.identity}
-                            onChange={this.handleIdentity}
-                          />
-                          <Select elements={lng} value={value.lang} valueChange={value.changeLang} />
-                          <Button
-                            onPress={() => {
-                              if ( this.state.identity != '') {
-                                this.handleSendIdentity();
-                              }else {
-                                this.setState({snackMsg:i18n.t('AUTH_SCREEN.EMPTY_IDENTITY'),visible:true})
-                              }
-                              
-                              //this.props.navigation.navigate('Drawer')
-                            }}
-                          >
-                            <View style={styles.btnPrimary}>
-                              <Text style={styles.btnText}>{i18n.t('AUTH_SCREEN.NEXT')}</Text>
-                            </View>
-                          </Button>
-                          <Button
-                            onPress={() => {
-                              this.setState({ hasToken: true });
-                            }}
-                          >
-                            <View style={styles.btnSecondary}>
-                              <Text style={styles.btnText}>{i18n.t('AUTH_SCREEN.CODE')}</Text>
-                            </View>
-                          </Button>
-                          </Fragment>
-                           :<ActivityIndicator size="large" color={Colors.primaryColor} />}
+                          {!this.state.loading ? (
+                            <Fragment>
+                              <Input
+                                id="email"
+                                label="Email"
+                                required
+                                email
+                                autoCapitalize="none"
+                                keyboardType="email-addres"
+                                placeholder={i18n.t('AUTH_SCREEN.IDENTITY_PLACEHOLDER')}
+                                value={this.state.identity}
+                                onChange={this.handleIdentity}
+                              />
+                              <Select elements={lng} value={value.lang} valueChange={value.changeLang} />
+                              <Button
+                                onPress={() => {
+                                  if (this.state.identity != '') {
+                                    this.handleSendIdentity();
+                                  } else {
+                                    this.setState({ snackMsg: i18n.t('AUTH_SCREEN.EMPTY_IDENTITY'), visible: true });
+                                  }
+
+                                  //this.props.navigation.navigate('Drawer')
+                                }}
+                              >
+                                <View style={styles.btnPrimary}>
+                                  <Text style={styles.btnText}>{i18n.t('AUTH_SCREEN.NEXT')}</Text>
+                                </View>
+                              </Button>
+                              <Button
+                                onPress={() => {
+                                  this.setState({ hasToken: true });
+                                }}
+                              >
+                                <View style={styles.btnSecondary}>
+                                  <Text style={styles.btnText}>{i18n.t('AUTH_SCREEN.CODE')}</Text>
+                                </View>
+                              </Button>
+                            </Fragment>
+                          ) : (
+                            <ActivityIndicator size="large" color={Colors.primaryColor} />
+                          )}
                         </Card>
                       )}
 
-                      <Snackbar
-                        visible={visible}
-                        onDismiss= {this._onDismissSnackBar}
-                        style={styles.snackSuccess}
-                      >
+                      <Snackbar visible={visible} onDismiss={this._onDismissSnackBar} style={styles.snackSuccess}>
                         {snackMsg}
-                        
                       </Snackbar>
                     </View>
                   </KeyboardAvoidingView>
@@ -302,13 +298,12 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     fontFamily: 'work-sans-bold',
   },
-  snackSuccess:{
+  snackSuccess: {
     backgroundColor: Colors.secondaryColor,
-
   },
   snackError: {
-    backgroundColor:Colors.secondaryColor,
-  }
+    backgroundColor: Colors.secondaryColor,
+  },
 });
 
 export default AuthScreen;

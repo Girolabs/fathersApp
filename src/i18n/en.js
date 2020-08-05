@@ -149,7 +149,7 @@ exports.EN = {
     PHONE2: 'Phone 2',
     SAVE: 'Save',
     EDIT: 'Edit Profile',
-    EDIT_LIVING: 'Edit living situation'
+    EDIT_LIVING: 'Edit living situation',
   },
   LIVING_SITUATION: {
     EDIT_TITLE: 'Edit Active Living Situation',
@@ -160,11 +160,10 @@ exports.EN = {
     END_DATE: 'End date',
     PUBLIC_NOTES: 'Public Notes',
     ADMIN_NOTES: 'Admin notes',
-    SAVE:'Save',
+    SAVE: 'Save',
     ADD: 'Add new',
     FILIATION: ' Filiation',
     HOUSE: 'House',
     ERROR_END_DATE: 'End date cant be before start date',
-    
-  }
+  },
 };

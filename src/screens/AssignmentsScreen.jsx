@@ -438,7 +438,7 @@ class AssignmentsScreen extends Component {
                                 this.state.selectedtTab === index ? styles.tabButtonTextSelected : styles.tabButtonText,
                               ]}
                             >
-                              {tab.text}
+                              {(tab.text && tab.text.length >=6) ? tab.text.slice(0,6): tab.text }
                             </Text>
                           </View>
                         </TouchableComp>

@@ -15,7 +15,7 @@ exports.ES = {
     COPY_CLIPBOARD: 'Copiado al portapapeles',
   },
   AUTH_SCREEN: {
-    IDENTITY_PLACEHOLDER: 'identidad',
+    IDENTITY_PLACEHOLDER: 'Correo o usuario',
     NEXT: 'Siguiente',
     CODE: 'Ya tengo un código',
     SEND: 'Enviar código',
@@ -35,6 +35,7 @@ exports.ES = {
     LAST_UPDATE: 'Ultima actualización',
     CONTACT_INFO: 'Información de contacto',
     SAVE_CONTACT: 'Guardar Contacto',
+    SAVED_CONTACT: 'Contacto guardado',
     EMAIL: 'Email',
     MAIN_CELL_PHONE: 'Teléfono principal',
     CURRENT_HOME: 'Casa',
@@ -148,7 +149,7 @@ exports.ES = {
     PHONE2: 'Teléfono 2',
     SAVE: 'Guardar',
     EDIT: 'Editar perfil',
-    EDIT_LIVING: 'Editar situación de vivienda'
+    EDIT_LIVING: 'Editar situación de vivienda',
   },
   LIVING_SITUATION: {
     EDIT_TITLE: 'Editar situación de vivienda activa',
@@ -159,9 +160,10 @@ exports.ES = {
     END_DATE: 'Fecha de fin',
     PUBLIC_NOTES: 'Notas públicas',
     ADMIN_NOTES: 'Notas de administrador',
-    SAVE:'Guardar',
+    SAVE: 'Guardar',
     ADD: 'Agregar nuevo',
     FILIATION: ' Filiales',
-    HOUSE: 'Casa'
-  }
+    HOUSE: 'Casa',
+    ERROR_END_DATE: 'La fecha de finalización no puede ser anterior a la fecha de inicio',
+  },
 };
