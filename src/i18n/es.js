@@ -15,7 +15,7 @@ exports.ES = {
     COPY_CLIPBOARD: 'Copiado al portapapeles',
   },
   AUTH_SCREEN: {
-    IDENTITY_PLACEHOLDER: 'identidad',
+    IDENTITY_PLACEHOLDER: 'Correo o usuario',
     NEXT: 'Siguiente',
     CODE: 'Ya tengo un código',
     SEND: 'Enviar código',

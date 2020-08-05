@@ -15,7 +15,7 @@ exports.DE = {
     COPY_CLIPBOARD: 'In die Zwischenablage kopiert',
   },
   AUTH_SCREEN: {
-    IDENTITY_PLACEHOLDER: 'Identität',
+    IDENTITY_PLACEHOLDER: 'E-Mail Adresse oder Benutzername',
     NEXT: 'Weiter',
     CODE: 'Habe bereits einen Code',
     SEND: 'Code senden',
