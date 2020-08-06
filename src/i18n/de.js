@@ -55,7 +55,7 @@ exports.DE = {
     NOVITIATE_START: 'Noviziatsbeginn',
     COMMUNITY_MEMBERSHIP: 'Anfangsdatum der Mitgliedschaft',
     PERPETUAL_CONTRACT: 'Ewigvertragsweihe',
-    IACONATE_ORDINATION: 'Diakonenweihe',
+    DIACONATE_ORDINATION: 'Diakonenweihe',
     PRIESTLY_ORDINATION: 'Priesterweihe',
     START_DATE: 'Anfangsdatum',
     END_DATE: 'Enddatum',
