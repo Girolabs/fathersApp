@@ -1,7 +1,7 @@
 exports.DE = {
   GENERAL: {
     FATHERS: 'Schönstatt Patres',
-    HOME: 'Haus',
+    HOME: 'Home',
     PROFILE: 'Profil',
     FREE_COMMUNITY: 'Freie Gemeinschaft',
     GENERAL_COMMUNITY: 'Offizielle Gemeinschaft',
@@ -27,7 +27,7 @@ exports.DE = {
     SEND_EMAIL: 'Wir haben Ihnen gerade eine E-Mail gesendet. Denken Sie daran, auch Spam zu überprüfen',
   },
   HOME_SCREEN: {
-    REMINDERS: 'Nicht vergessen',
+    REMINDERS: 'Kalender',
     COMMUNITY_PRAYER: 'Gemeinschaftsgebet',
     MISC: 'Verschiedenes',
   },
@@ -42,7 +42,7 @@ exports.DE = {
     PERSONAL_INFO: 'Persönliche Information',
     PAST_HOMES: 'Frühere Adressen',
     FILIATION: 'Filiale',
-    HOME: 'Home',
+    HOME: 'Haus',
     RESPONSIBLE_TERRITORY: 'Verantwortliches Gebiet',
     HOME_COUNTRY: 'Heimatland',
     HOME_TERRITORY: 'Heimatgebiet',
@@ -122,11 +122,11 @@ exports.DE = {
     END_DATE: 'Enddatum',
   },
   ASSIGNMENTS: {
-    TERRITORY: 'Gebiet',
+    TERRITORY: 'Gebiete',
     ALL: 'Alle',
-    HISTORICAL: ' Historisch',
-    FILIATIONS: 'Filialen',
-    GENERATIONS: 'Generationen',
+    HISTORICAL: ' Histor.',
+    FILIATIONS: 'Filial.',
+    GENERATIONS: 'Generat.',
     COURSES: 'Kurse',
     GENERATION: 'Generation',
     COURSE: 'Kurs',
