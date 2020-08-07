@@ -8,6 +8,7 @@ exports.DE = {
     ASSIGNMENTS: 'Ämter/Aufgaben',
     SETTINGS: 'Einstellungen',
     SEARCH: 'Suche',
+    BULLETIN: 'Schwarzes Brett',
     NO_INTERNET: 'Keine Internetverbindung',
     ERROR: 'Fehler bei der Anfrage',
     EDIT_SUCCESS: 'Bearbeitung erfolgreich',
@@ -30,6 +31,7 @@ exports.DE = {
     REMINDERS: 'Nicht vergessen',
     COMMUNITY_PRAYER: 'Gemeinschaftsgebet',
     MISC: 'Verschiedenes',
+    BULLETIN: 'Schwarzes Brett',
   },
   FATHER_DETAIL: {
     LAST_UPDATE: 'Letzte Aktualisierung',

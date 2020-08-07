@@ -8,6 +8,7 @@ exports.EN = {
     ASSIGNMENTS: 'Assignments',
     SETTINGS: 'Settings',
     SEARCH: 'Search',
+    BULLETIN: 'Bulletin board',
     NO_INTERNET: 'No internet conection',
     ERROR: 'Error with the request',
     EDIT_SUCCESS: 'Edit was successful',
@@ -30,6 +31,7 @@ exports.EN = {
     REMINDERS: 'Reminders',
     COMMUNITY_PRAYER: 'Community prayer',
     MISC: 'Miscellaneous',
+    BULLETIN: 'Bulletin board',
   },
   FATHER_DETAIL: {
     LAST_UPDATE: 'Last update',

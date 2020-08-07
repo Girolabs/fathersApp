@@ -31,6 +31,8 @@ import StartupScreen from '../screens/StartupScreen';
 import DefaultDrawer from '../components/DefaultDrawer';
 import FatherFormScreen from '../screens/FatherFormScreen';
 import LivingSituationsFormScreen from '../screens/LivingSituations';
+import BulletinScreen from '../screens/BulletinScreen';
+import BulletinDetailScreen from '../screens/BulletinDetailScreen';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -44,6 +46,13 @@ const defaultStackNavOptions = {
   },
   headerTintColor: Colors.onSurfaceColorPrimary,
 };
+
+/* const BulletinNavigator = createStackNavigator({
+  screen: BulletinScreen,
+  BulletinDetail: {
+    screen: BulletinDetailScreen,
+  },
+}); */
 
 const HomeNavigator = createStackNavigator(
   {
@@ -83,11 +92,20 @@ const HomeNavigator = createStackNavigator(
     FatherForm: {
       screen: FatherFormScreen,
     },
+    Bulletin: {
+      screen:BulletinScreen,
+    },
+    BulletinDetail: {
+      screen: BulletinDetailScreen,
+    },
+
   },
   {
     defaultNavigationOptions: defaultStackNavOptions,
   },
 );
+
+
 
 const SearchNavigator = createStackNavigator(
   {

@@ -122,7 +122,8 @@ const HomeScreen = ({ navigation }) => {
             const fetchedReminders = res.data.result;
             setReminders(fetchedReminders);
             setLoading(false);
-          }).catch((err) => {
+          })
+          .catch((err) => {
             setVisible(true);
             setSnackMsg(i18n.t('GENERAL.ERROR'));
           });
@@ -142,8 +143,20 @@ const HomeScreen = ({ navigation }) => {
             <>
               <TouchableComp
                 onPress={() => {
+                  navigation.navigate('Bulletin');
+                }}
+              >
+                <View style={styles.prayerCard}>
+                  <Text style={styles.prayerCardTitle}>
+                    {' '}
+                    {i18n.t('HOME_SCREEN.BULLETIN')}
+                  </Text>
+                  <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
+                </View>
+              </TouchableComp>
+              {/*   <TouchableComp
+                onPress={() => {
                   navigation.navigate('Prayers');
-                  /*  console.log('El idioma', lang); */
                 }}
               >
                 <View style={styles.prayerCard}>
@@ -154,8 +167,8 @@ const HomeScreen = ({ navigation }) => {
                   <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
                 </View>
               </TouchableComp>
-
-              <TouchableComp
+ */}
+              {/* <TouchableComp
                 onPress={() => {
                   navigation.navigate('Miscellaneous');
                 }}
@@ -167,7 +180,7 @@ const HomeScreen = ({ navigation }) => {
                   </Text>
                   <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
                 </View>
-              </TouchableComp>
+              </TouchableComp> */}
 
               <Text style={styles.title}>{i18n.t('HOME_SCREEN.REMINDERS')}</Text>
 

@@ -8,6 +8,7 @@ exports.ES = {
     ASSIGNMENTS: 'Cargos',
     SETTINGS: 'Configuraciones',
     SEARCH: 'Buscar',
+    BULLETIN: 'Tablón de anuncios',
     NO_INTERNET: 'No hay conexión de internet',
     ERROR: 'Error con la consulta',
     EDIT_SUCCESS: 'La edición fue exitosa',
@@ -30,6 +31,7 @@ exports.ES = {
     REMINDERS: 'Recordatorios',
     COMMUNITY_PRAYER: 'Oración de comunidad',
     MISC: 'Misceláneos',
+    BULLETIN: 'Tablón de anuncios',
   },
   FATHER_DETAIL: {
     LAST_UPDATE: 'Ultima actualización',

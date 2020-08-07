@@ -8,6 +8,7 @@ exports.PT = {
     ASSIGNMENTS: 'Cargos & Tarefas',
     SETTINGS: 'Configurações',
     SEARCH: 'Busca',
+    BULLETIN: 'Quadro de avisos',
     NO_INTERNET: 'Sem ligação à internet',
     ERROR: 'Erro',
     EDIT_SUCCESS: 'Edição bem sucedida',
@@ -30,6 +31,7 @@ exports.PT = {
     REMINDERS: 'Calendário',
     COMMUNITY_PRAYER: 'Oração de comunidade',
     MISC: 'Diversos',
+    BULLETIN: 'Quadro de avisos',
   },
   FATHER_DETAIL: {
     LAST_UPDATE: 'Última atualização',
