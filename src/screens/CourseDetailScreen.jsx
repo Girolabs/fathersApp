@@ -123,7 +123,7 @@ class CourseDetailScreen extends Component {
 																<View style={{ flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center' }}>
 																	<Text style={styles.listItemBody}>{course.leaderAssignment.person.fullName}</Text>
 																	<Text style={styles.listItemBody}>
-																		{`${moment.utc(course.leaderAssignment.startDate).format('Do MMMM YYYY')} ${moment.utc(course.leaderAssignment.endDate).format('Do MMMM YYYY')}`}
+																		{`${course.leaderAssignment.startDate ? moment.utc(course.leaderAssignment.startDate).format('Do MMMM YYYY'):''} ${course.leaderAssignment.endDate ?  moment.utc(course.leaderAssignment.endDate).format('Do MMMM YYYY'):''}`}
 																	</Text>
 																</View>
 															}

@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
 
 const HomeScreen = ({ navigation }) => {
   const [reminders, setReminders] = useState([]);
-  const [selectedReminder, setSelectedReminder] = useState(null);
+  const [selectedReminder, setSelectedReminder] = useState(0);
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');

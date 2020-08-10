@@ -249,15 +249,16 @@ const PatreDetailScreen = ({ navigation }) => {
                     >
                       {father.fullName}
                     </Text>
-                    <View style={{ width: '75%' }}>
-                      <Text style={{ color: Colors.onSurfaceColorSecondary, fontFamily: 'work-sans' }}>
-                        {`${i18n.t('FATHER_DETAIL.LAST_UPDATE')}:${
-                          father.personalInfoUpdatedOn
-                            ? moment.utc(father.personalInfoUpdatedOn).format('Do MMMM YYYY')
-                            : ''
-                        }`}
-                      </Text>
-                    </View>
+                    {father.personalInfoUpdatedOn && (
+                      <View style={{ width: '75%' }}>
+                        <Text style={{ color: Colors.onSurfaceColorSecondary, fontFamily: 'work-sans' }}>
+                          {`${i18n.t('FATHER_DETAIL.LAST_UPDATE')}`}
+                        </Text>
+                        <Text style={{ color: Colors.onSurfaceColorSecondary, fontFamily: 'work-sans' }}>
+                          {`${moment.utc(father.personalInfoUpdatedOn).format('Do MMMM YYYY')}`}
+                        </Text>
+                      </View>
+                    )}
                   </View>
                 </View>
                 <View

@@ -21,7 +21,6 @@ import moment from 'moment';
 import 'moment/min/locales';
 import { I18nContext } from '../context/I18nProvider';
 import { Flag } from 'react-native-svg-flagkit';
-
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
@@ -179,7 +178,7 @@ class AssignmentsScreen extends Component {
     if (territories.length > 0) {
       switch (selectedtTab) {
         case 0:
-          filtered = territories.map((territory) => {
+          filtered = territories.filter(territory => territory.isActive == true).map((territory) => {
             let data = territory.data.filter((assignment) => assignment.isActive === true);
             return {
               ...territory,
@@ -222,7 +221,7 @@ class AssignmentsScreen extends Component {
           break;
 
         case 1:
-          filtered = territories.map((territory) => {
+          filtered = territories.filter(territory => territory.isActive == true).map((territory) => {
             let filiations = territory.filiations.map((filiation) => {
               return {
                 ...filiation,
