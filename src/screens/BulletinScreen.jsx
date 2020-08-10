@@ -40,6 +40,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     width: '85%',
   },
+  leftSideListItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
 });
 
 const BulletinScreen = ({ navigation }) => {
@@ -48,7 +52,7 @@ const BulletinScreen = ({ navigation }) => {
 
   const loadPosts = async () => {
     const status = await Network.getNetworkStateAsync();
-    if (status.isConnected === true) {
+    if (status.isConnected) {
       axios
         .get(`${i18n.locale}/api/v1/bulletin-board`)
         .then((res) => {
@@ -94,7 +98,7 @@ const BulletinScreen = ({ navigation }) => {
               }}
             >
               <View style={styles.listItem}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={styles.leftSideListItem}>
                   <Ionicons name="md-book" size={25} color={Colors.primaryColor} />
                   <Text numberOfLines={2} style={styles.listItemTitle}>
                     {item.title}

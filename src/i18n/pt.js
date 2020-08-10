@@ -31,7 +31,6 @@ exports.PT = {
     REMINDERS: 'Calendário',
     COMMUNITY_PRAYER: 'Oração de comunidade',
     MISC: 'Diversos',
-    BULLETIN: 'Quadro de avisos',
   },
   FATHER_DETAIL: {
     LAST_UPDATE: 'Última atualização',

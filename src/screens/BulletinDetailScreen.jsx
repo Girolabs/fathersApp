@@ -41,7 +41,7 @@ const BulletinDetail = ({ navigation }) => {
   return (
     <View style={styles.screen}>
       {!loading ? (
-        <WebView originWhitelist={['*']} source={{ html: post.content }} style={{ flex: 1 }} />
+        <WebView originWhitelist={['*']} source={{ html: post.content }} />
       ) : (
         <ActivityIndicator size="large" color={Colors.primaryColor} />
       )}

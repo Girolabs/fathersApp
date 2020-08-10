@@ -148,42 +148,12 @@ const HomeScreen = ({ navigation }) => {
               >
                 <View style={styles.prayerCard}>
                   <Text style={styles.prayerCardTitle}>
-                    {' '}
-                    {i18n.t('HOME_SCREEN.BULLETIN')}
+                    {i18n.t('GENERAL.BULLETIN')}
                   </Text>
                   <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
                 </View>
               </TouchableComp>
-              {/*   <TouchableComp
-                onPress={() => {
-                  navigation.navigate('Prayers');
-                }}
-              >
-                <View style={styles.prayerCard}>
-                  <Text style={styles.prayerCardTitle}>
-                    {' '}
-                    {i18n.t('HOME_SCREEN.COMMUNITY_PRAYER')}
-                  </Text>
-                  <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
-                </View>
-              </TouchableComp>
- */}
-              {/* <TouchableComp
-                onPress={() => {
-                  navigation.navigate('Miscellaneous');
-                }}
-              >
-                <View style={styles.prayerCard}>
-                  <Text style={styles.prayerCardTitle}>
-                    {' '}
-                    {i18n.t('HOME_SCREEN.MISC')}
-                  </Text>
-                  <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
-                </View>
-              </TouchableComp> */}
-
               <Text style={styles.title}>{i18n.t('HOME_SCREEN.REMINDERS')}</Text>
-
               <FlatList
                 data={reminders.slice(0, 4)}
                 renderItem={({ item, index }) => {

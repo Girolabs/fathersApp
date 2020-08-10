@@ -31,7 +31,6 @@ exports.EN = {
     REMINDERS: 'Reminders',
     COMMUNITY_PRAYER: 'Community prayer',
     MISC: 'Miscellaneous',
-    BULLETIN: 'Bulletin board',
   },
   FATHER_DETAIL: {
     LAST_UPDATE: 'Last update',

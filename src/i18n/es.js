@@ -31,7 +31,6 @@ exports.ES = {
     REMINDERS: 'Recordatorios',
     COMMUNITY_PRAYER: 'Oración de comunidad',
     MISC: 'Misceláneos',
-    BULLETIN: 'Tablón de anuncios',
   },
   FATHER_DETAIL: {
     LAST_UPDATE: 'Ultima actualización',

@@ -31,7 +31,6 @@ exports.DE = {
     REMINDERS: 'Nicht vergessen',
     COMMUNITY_PRAYER: 'Gemeinschaftsgebet',
     MISC: 'Verschiedenes',
-    BULLETIN: 'Schwarzes Brett',
   },
   FATHER_DETAIL: {
     LAST_UPDATE: 'Letzte Aktualisierung',
