@@ -7,7 +7,7 @@
       "android",
       "web"
     ],
-    "version": "0.3",
+    "version": "0.4",
     "orientation": "portrait",
     "icon": "./assets/img/icon_app.png",
     "splash": {
@@ -21,7 +21,7 @@
     ],
     "android": {
       "package": "com.schoenstatt.fathersApp",
-      "versionCode": 3,
+      "versionCode": 4,
       "permissions": [
         "CAMERA",
         "WRITE_EXTERNAL_STORAGE",

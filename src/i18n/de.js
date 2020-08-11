@@ -8,6 +8,7 @@ exports.DE = {
     ASSIGNMENTS: 'Ämter/Aufgaben',
     SETTINGS: 'Einstellungen',
     SEARCH: 'Suche',
+    BULLETIN: 'Schwarzes Brett',
     NO_INTERNET: 'Keine Internetverbindung',
     ERROR: 'Fehler bei der Anfrage',
     EDIT_SUCCESS: 'Bearbeitung erfolgreich',

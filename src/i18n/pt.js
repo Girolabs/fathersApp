@@ -8,6 +8,7 @@ exports.PT = {
     ASSIGNMENTS: 'Cargos & Tarefas',
     SETTINGS: 'Configurações',
     SEARCH: 'Busca',
+    BULLETIN: 'Quadro de avisos',
     NO_INTERNET: 'Sem ligação à internet',
     ERROR: 'Erro',
     EDIT_SUCCESS: 'Edição bem sucedida',
