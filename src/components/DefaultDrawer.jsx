@@ -29,10 +29,6 @@ const DefaultDrawer = (props) => {
       label: i18n.t('GENERAL.BULLETIN'),
     },
     {
-      path: 'Profile',
-      label: i18n.t('GENERAL.PROFILE'),
-    },
-    {
       path: 'Community',
       label: i18n.t('GENERAL.GENERAL_COMMUNITY'),
     },
