@@ -100,6 +100,7 @@ exports.DE = {
     CELEBRATION_DATE: 'Hauptfest der Generation',
     FOUNDATION_DATE: 'Gründungsdatum',
     COURSES: 'Kurse',
+    WITHOUT_GENERATIONS: 'Ohne generation',
   },
   COURSE: {
     INFORMATION: 'Information zum Kurs',

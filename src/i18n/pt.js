@@ -100,6 +100,7 @@ exports.PT = {
     CELEBRATION_DATE: 'Data de comemoração',
     FOUNDATION_DATE: 'Data da fundação',
     COURSES: 'Cursos',
+    WITHOUT_GENERATIONS: 'Sem geração',
   },
   COURSE: {
     INFORMATION: 'Informação sobre o curso',
