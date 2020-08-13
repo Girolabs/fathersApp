@@ -30,12 +30,10 @@ class CommunityScreen extends Component {
   _onToggleSnackBar = () => this.setState({ visible: !this.state.visible });
   _onDismissSnackBar = () => this.setState({ visible: false });
 
-  const;
-
   async componentDidMount() {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      getTerritories('all',i18n.locale)
+      getTerritories('all', i18n.locale)
         .then((res) => {
           const fetchedDelegations = res.data.result
             .map((entry) => {
@@ -64,8 +62,8 @@ class CommunityScreen extends Component {
       <SafeAreaView style={styles.container}>
         {this.state.delegations.length > 0 ? (
           <SectionList
-			sections={this.state.delegations}
-			keyExtractor={(item) => item.filiationId}
+            sections={this.state.delegations}
+            keyExtractor={(item) => item.filiationId}
             renderItem={({ item }) => (
               <Filiation
                 title={item.name}
@@ -77,7 +75,6 @@ class CommunityScreen extends Component {
               <TouchableComp
                 key={territoryId}
                 onPress={(section) => {
-                  console.log(section);
                   this.props.navigation.navigate('DelegationDetail', { delegationId: territoryId });
                 }}
               >
@@ -130,8 +127,6 @@ const Filiation = ({ title, flag, onSelect, key }) => {
     <TouchableComp
       key={key}
       onPress={() => {
-        console.log('[Navegar a Filiation screen]');
-
         onSelect();
       }}
     >
