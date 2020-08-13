@@ -24,3 +24,7 @@ export default instance;
 export const getReminders = (lang) => {
   return instance.get(`${lang}/api/v1/date-tiles`);
 };
+
+export const getBoard = (lang) => {
+  return instance.get(`${lang}/api/v1/bulletin-board`);
+};
