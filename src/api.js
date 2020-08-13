@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 
+
 export const url = 'https://schoenstatt-fathers.link/';
 
 const instance = axios.create({
@@ -27,4 +28,8 @@ export const getReminders = (lang) => {
 
 export const getBoard = (lang) => {
   return instance.get(`${lang}/api/v1/bulletin-board`);
+};
+
+export const getBoardPost = (lang, postId) => {
+  return instance.get(`${lang}/api/v1/bulletin-board/${postId}`);
 };
