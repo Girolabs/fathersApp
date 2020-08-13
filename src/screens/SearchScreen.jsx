@@ -14,78 +14,77 @@ class SearchScreen extends Component {
     results: [],
     filterResults: [],
     loading: true,
-    deceased: false,
-    member: false,
+    showDeceased: false,
+    showExMember: false,
     searchText: '',
   };
 
   async componentDidMount() {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      axios.get(`${i18n.locale}/api/v1/persons?fields=all&key=${Constants.manifest.extra.secretKey}`).then((res) => {
-        if (res.status == 200) {
-          this.setState({ results: res.data.result, loading: false });
-        }
-      }).catch(err => {
-        this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
-      });
+      axios
+        .get(`${i18n.locale}/api/v1/persons?fields=all`)
+        .then((res) => {
+          if (res.status == 200) {
+            this.setState({ results: res.data.result, loading: false });
+          }
+        })
+        .catch((err) => {
+          this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
+        });
     } else {
-      this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false })
+      this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
-
   }
 
-  handleFilter = (keyword) => {
-    this.setState({ loading: true });
-    if (keyword) {
-      this.setState({ searchText: keyword.toLowerCase() });
-      let filterResults = [];
-      const texto = keyword.toLowerCase();
-      filterResults = this.state.results.filter((persona) => {
-        if (persona.firstNameWithoutAccents && persona.lastNameWithoutAccents && (persona.firstNameWithoutAccents + ' ' + persona.lastNameWithoutAccents).trim().startsWith(texto)) {
-          return persona;
-        }
-        if (persona.firstNameWithoutAccents && persona.firstNameWithoutAccents.trim().startsWith(texto)) {
-          return persona;
-        }
-        if ( persona.lastNameWithoutAccents &&  persona.lastNameWithoutAccents.trim().startsWith(texto)) {
-          return persona;
-        }
-      });
+  onChangeFilter = (texto) => {
+    let filterResults = [];
 
-      filterResults = filterResults.filter((persona) => {
-        if (persona.isMember == !this.state.member && persona.isLiving == !this.state.deceased) {
-          return persona;
-        }
-      });
-      this.setState({ filterResults: filterResults, loading: false });
+    if (this.state.showDeceased && this.state.showExMember) {
+      console.log('Ambos filtros');
+      filterResults = this.state.results;
+    } else if (this.state.showDeceased && !this.state.showExMember) {
+      console.log('Mostrar fallecidos');
+      filterResults = this.state.results.filter((persona) => persona.isMember != false);
+    } else if (!this.state.showDeceased && this.state.showExMember) {
+      console.log('Mostrar ex miembros');
+      filterResults = this.state.results.filter((persona) => persona.isLiving != false);
+    } else {
+      console.log('Ningun filtro');
+      filterResults = this.state.results.filter((persona) => persona.isLiving != false);
+      filterResults = filterResults.filter((persona) => persona.isMember != false);
     }
-    this.setState({ loading: false });
+
+    filterResults = filterResults.filter((persona) => {
+      if (
+        (persona.firstNameWithoutAccents &&
+        persona.lastNameWithoutAccents &&
+        (persona.firstNameWithoutAccents + ' ' + persona.lastNameWithoutAccents).trim().startsWith(texto)) 
+        || (persona.firstNameWithoutAccents && persona.firstNameWithoutAccents.trim().startsWith(texto)) 
+        || (persona.lastNameWithoutAccents && persona.lastNameWithoutAccents.trim().startsWith(texto))
+      ) {
+        return persona;
+      }
+      
+    });
+    this.setState({ filterResults: filterResults, loading: false });
+  };
+
+  handleFilter = (keyword) => {
+    if (keyword) {
+      this.setState({ searchText: keyword.toLowerCase(), loading: true });
+      const texto = keyword.toLowerCase();
+
+      this.onChangeFilter(texto);
+    }
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.member != this.state.member || prevState.deceased != this.state.deceased) {
+    if (prevState.showExMember != this.state.showExMember || prevState.showDeceased != this.state.showDeceased) {
+      console.log('DidUpdate');
       this.setState({ loading: true });
-
       const texto = this.state.searchText.toLowerCase();
-
-      let filterResults = this.state.results.filter((persona) => {
-        if (persona.firstNameWithoutAccents && persona.lastNameWithoutAccents && (persona.firstNameWithoutAccents + ' ' + persona.lastNameWithoutAccents).trim().startsWith(texto)) {
-          return persona;
-        }
-        if (persona.firstNameWithoutAccents && persona.firstNameWithoutAccents.trim().startsWith(texto)) {
-          return persona;
-        }
-        if (persona.lastNameWithoutAccents &&  persona.lastNameWithoutAccents.trim().startsWith(texto)) {
-          return persona;
-        }
-      });
-      filterResults = filterResults.filter((el) => {
-        if (el.isMember == !this.state.member && el.isLiving == !this.state.deceased) {
-          return el;
-        }
-      });
-      this.setState({ filterResults: filterResults, loading: false });
+      this.onChangeFilter(texto);
     }
   }
 
@@ -101,16 +100,18 @@ class SearchScreen extends Component {
             <View style={styles.filtersContainer}>
               <View style={styles.optionContainer}>
                 <Checkbox
-                  status={this.state.deceased ? 'checked' : 'unchecked'}
-                  onPress={() => this.setState({ deceased: !this.state.deceased })}
+                  color = {Colors.primaryColor}
+                  status={this.state.showDeceased ? 'checked' : 'unchecked'}
+                  onPress={() => this.setState({ showDeceased: !this.state.showDeceased })}
                 />
                 <Text style={styles.option}>{i18n.t('SEARCH.DECEASED')} </Text>
               </View>
 
               <View style={styles.optionContainer}>
                 <Checkbox
-                  status={this.state.member ? 'checked' : 'unchecked'}
-                  onPress={() => this.setState({ member: !this.state.member })}
+                  color = {Colors.primaryColor}
+                  status={this.state.showExMember ? 'checked' : 'unchecked'}
+                  onPress={() => this.setState({ showExMember: !this.state.showExMember })}
                 />
                 <Text style={styles.option}>{i18n.t('SEARCH.EX')} </Text>
               </View>
@@ -137,9 +138,13 @@ class SearchScreen extends Component {
             />
           </Fragment>
         ) : (
-            <ActivityIndicator size="large" color={Colors.primaryColor} />
-          )}
-        <Snackbar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })} style={styles.snackError}>
+          <ActivityIndicator size="large" color={Colors.primaryColor} />
+        )}
+        <Snackbar
+          visible={this.state.visible}
+          onDismiss={() => this.setState({ visible: false })}
+          style={styles.snackError}
+        >
           {this.state.snackMsg}
         </Snackbar>
       </View>
@@ -176,6 +181,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderRadius: 15,
+    marginTop:5
   },
   filtersContainer: {
     flexDirection: 'row',

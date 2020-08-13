@@ -25,8 +25,8 @@ const DefaultDrawer = (props) => {
       label: i18n.t('GENERAL.HOME'),
     },
     {
-      path: 'Profile',
-      label: i18n.t('GENERAL.PROFILE'),
+      path: 'Bulletin',
+      label: i18n.t('GENERAL.BULLETIN'),
     },
     {
       path: 'Community',
@@ -66,7 +66,7 @@ const DefaultDrawer = (props) => {
           }}
         >
           <View style={styles(props).banner}>
-            <Image source={require('../../assets/img/icono.png')} style={styles(props).image} />
+            <Image source={require('../../assets/img/fatherIcon.png')} style={styles(props).image} />
             <Text
               numberOfLines={2}
               style={styles(props).title}

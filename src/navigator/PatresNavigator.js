@@ -5,7 +5,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
-import { SafeAreaView, Image, View, Text } from 'react-native';
+import {
+  SafeAreaView, Image, View, Text,
+} from 'react-native';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
@@ -28,6 +30,9 @@ import SettingsScreen from '../screens/SettingsScreen';
 import StartupScreen from '../screens/StartupScreen';
 import DefaultDrawer from '../components/DefaultDrawer';
 import FatherFormScreen from '../screens/FatherFormScreen';
+import LivingSituationsFormScreen from '../screens/LivingSituations';
+import BulletinScreen from '../screens/BulletinScreen';
+import BulletinDetailScreen from '../screens/BulletinDetailScreen';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -41,6 +46,13 @@ const defaultStackNavOptions = {
   },
   headerTintColor: Colors.onSurfaceColorPrimary,
 };
+
+/* const BulletinNavigator = createStackNavigator({
+  screen: BulletinScreen,
+  BulletinDetail: {
+    screen: BulletinDetailScreen,
+  },
+}); */
 
 const HomeNavigator = createStackNavigator(
   {
@@ -80,11 +92,20 @@ const HomeNavigator = createStackNavigator(
     FatherForm: {
       screen: FatherFormScreen,
     },
+    Bulletin: {
+      screen:BulletinScreen,
+    },
+    BulletinDetail: {
+      screen: BulletinDetailScreen,
+    },
+
   },
   {
     defaultNavigationOptions: defaultStackNavOptions,
   },
 );
+
+
 
 const SearchNavigator = createStackNavigator(
   {
@@ -153,7 +174,11 @@ const HomeSearchTabNavigator = createMaterialBottomTabNavigator(tabScreenConfig,
 const ProfileNavigator = createStackNavigator(
   {
     screen: FatherFormScreen,
+    LivingSituationForm: {
+      screen: LivingSituationsFormScreen,
+    },
   },
+
   {
     navigationOptions: {},
     defaultNavigationOptions: defaultStackNavOptions,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
   TouchableNativeFeedback,
   ScrollView,
   ActivityIndicator,
-  Alert,
+  Clipboard,
 } from 'react-native';
 import { Flag } from 'react-native-svg-flagkit';
 import moment from 'moment';
@@ -18,13 +18,13 @@ import 'moment/min/locales';
 import Constants from 'expo-constants';
 import countries from 'i18n-iso-countries';
 import * as Contacts from 'expo-contacts';
+import * as Network from 'expo-network';
+import { Snackbar } from 'react-native-paper';
+import { Ionicons } from 'expo-vector-icons';
 import axios from '../../axios-instance';
 import { I18nContext } from '../context/I18nProvider';
 import Colors from '../constants/Colors';
 import SocialIcons from '../components/SocialIcons';
-import * as Network from 'expo-network';
-import { Snackbar } from 'react-native-paper';
-import { Ionicons } from 'expo-vector-icons';
 
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
@@ -78,28 +78,32 @@ const PatreDetailScreen = ({ navigation }) => {
   }
 
   const handleSaveContact = async (father) => {
-    try {
-      const contact = {
-        [Contacts.Fields.FirstName]: father.friendlyFirstName,
-        [Contacts.Fields.LastName]: father.friendlyLastName,
-        [Contacts.Fields.PhoneNumbers]: [
-          {
-            label: 'mobile',
-            number: father.phones ? father.phones[0].number : null,
-          },
-        ],
-        [Contacts.Fields.Emails]: [
-          {
-            email: father.email ? father.email : null,
-          },
-        ],
-      };
-      console.log('contact', contact);
-      console.log('spanshot', contact);
-      const contactId = await Contacts.addContactAsync(contact);
+    const { status } = await Contacts.requestPermissionsAsync();
+    if (status === 'granted') {
+      try {
+        const contact = {
+          [Contacts.Fields.FirstName]: father.friendlyFirstName,
+          [Contacts.Fields.LastName]: father.friendlyLastName,
+          [Contacts.Fields.PhoneNumbers]: [
+            {
+              label: 'mobile',
+              number: father.phones ? father.phones[0].number : null,
+            },
+          ],
+          [Contacts.Fields.Emails]: [
+            {
+              email: father.email ? father.email : null,
+            },
+          ],
+        };
+        console.log('contact', contact);
+        console.log('spanshot', contact);
+        const contactId = await Contacts.addContactAsync(contact);
+        setVisible(true);
+        setSnackMsg(i18n.t('FATHER_DETAIL.SAVED_CONTACT'));
 
-      if (contactId) {
-        /*  Alert.alert(
+        if (contactId) {
+          /*  Alert.alert(
            "Contact Saved.",
            "My Alert Msg",
            [
@@ -112,8 +116,8 @@ const PatreDetailScreen = ({ navigation }) => {
            ],
            { cancelable: false }
          ); */
-      } else {
-        /*   Alert.alert(
+        } else {
+          /*   Alert.alert(
             "Contact not saved.",
             "My Alert Msg",
             [
@@ -126,9 +130,9 @@ const PatreDetailScreen = ({ navigation }) => {
             ],
             { cancelable: false }
           ); */
-      }
-    } catch (err) {
-      /*  Alert.alert(
+        }
+      } catch (err) {
+        /*  Alert.alert(
          "Contact not Saved.problem",
          "My Alert Msg",
          [
@@ -141,10 +145,13 @@ const PatreDetailScreen = ({ navigation }) => {
          ],
          { cancelable: false }
        ); */
-    }
+      }
 
-    const contactId = await Contacts.addContactAsync(contact);
-    console.log(contactId);
+      /*  const contactId = await Contacts.addContactAsync(contact);
+      console.log(contactId); */
+    } else {
+      console.log('no tengo');
+    }
   };
 
   const loadInterfaceData = async (tempFather) => {
@@ -153,9 +160,9 @@ const PatreDetailScreen = ({ navigation }) => {
     if (status.isConnected == true) {
       axios.get(`${i18n.locale}/api/v1/interface-data`).then((response) => {
         const viewPermRole = tempFather.viewPermissionForCurrentUser;
-        const personFieldsByViewPermission = response.data.result.personFieldsByViewPermission;
+        const { personFieldsByViewPermission } = response.data.result;
 
-        let viewRoles = Object.keys(personFieldsByViewPermission);
+        const viewRoles = Object.keys(personFieldsByViewPermission);
 
         const arrayOfRoles = viewRoles.map((rol) => {
           return personFieldsByViewPermission[rol];
@@ -171,7 +178,7 @@ const PatreDetailScreen = ({ navigation }) => {
           return rol;
         });
 
-        let index = viewRoles.indexOf(viewPermRole);
+        const index = viewRoles.indexOf(viewPermRole);
 
         const viewFields = accumulatedFieldsPerRol[index];
 
@@ -181,12 +188,12 @@ const PatreDetailScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    (async () => {
+    /* (async () => {
       const { status } = await Contacts.requestPermissionsAsync();
       if (status === 'granted') {
         setShowSaveContact(true);
       }
-    })();
+    })(); */
     const loadPerson = async () => {
       const status = await Network.getNetworkStateAsync();
       if (status.isConnected === true) {
@@ -242,15 +249,16 @@ const PatreDetailScreen = ({ navigation }) => {
                     >
                       {father.fullName}
                     </Text>
-                    <View style={{ width: '75%' }}>
-                      <Text style={{ color: Colors.onSurfaceColorSecondary, fontFamily: 'work-sans' }}>
-                        {`${i18n.t('FATHER_DETAIL.LAST_UPDATE')}:${
-                          father.personalInfoUpdatedOn
-                            ? moment.utc(father.personalInfoUpdatedOn).format('Do MMMM YYYY')
-                            : ''
-                        }`}
-                      </Text>
-                    </View>
+                    {father.personalInfoUpdatedOn && (
+                      <View style={{ width: '75%' }}>
+                        <Text style={{ color: Colors.onSurfaceColorSecondary, fontFamily: 'work-sans' }}>
+                          {`${i18n.t('FATHER_DETAIL.LAST_UPDATE')}`}
+                        </Text>
+                        <Text style={{ color: Colors.onSurfaceColorSecondary, fontFamily: 'work-sans' }}>
+                          {`${moment.utc(father.personalInfoUpdatedOn).format('Do MMMM YYYY')}`}
+                        </Text>
+                      </View>
+                    )}
                   </View>
                 </View>
                 <View
@@ -276,11 +284,29 @@ const PatreDetailScreen = ({ navigation }) => {
                   )}
                 </View>
 
-                <DefaultItem show={viewFatherFields.indexOf('email')} title="FATHER_DETAIL.EMAIL" body={father.email} />
+                <DefaultItem
+                  show={viewFatherFields.indexOf('email')}
+                  title="FATHER_DETAIL.EMAIL"
+                  body={father.email}
+                  icon={<Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />}
+                  selected={() => {
+                    const value = father.email;
+                    Clipboard.setString(value);
+                    setVisible(true);
+                    setSnackMsg(i18n.t('GENERAL.COPY_CLIPBOARD'));
+                  }}
+                />
                 {father.phones.length >= 1 && (
                   <DefaultItem
                     title="FATHER_DETAIL.MAIN_CELL_PHONE"
-                    body={father.phones[0] != undefined ? father.phones[0].number : null}
+                    body={father.phones[0] !== undefined ? father.phones[0].number : null}
+                    icon={<Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />}
+                    selected={() => {
+                      const value = father.phones[0] !== undefined ? father.phones[0].number : null;
+                      Clipboard.setString(value);
+                      setVisible(true);
+                      setSnackMsg(i18n.t('GENERAL.COPY_CLIPBOARD'));
+                    }}
                   />
                 )}
 
@@ -288,44 +314,49 @@ const PatreDetailScreen = ({ navigation }) => {
                   <DefaultItem
                     show={viewFatherFields.indexOf('phones')}
                     title="FATHER_DETAIL.HOME"
-                    body={father.phones[1] != undefined ? father.phones[1].number : ''}
+                    body={father.phones[1] !== undefined ? father.phones[1].number : ''}
+                    icon={<Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />}
+                    selected={() => {
+                      const value = father.phones[1] !== undefined ? father.phones[1].number : '';
+                      Clipboard.setString(value);
+                      setVisible(true);
+                      setSnackMsg(i18n.t('GENERAL.COPY_CLIPBOARD'));
+                    }}
                   />
                 )}
 
                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 10 }}>
-                  {showSaveContact && (
-                    <TouchableComp
-                      onPress={() => {
-                        handleSaveContact(father);
+                  <TouchableComp
+                    onPress={() => {
+                      handleSaveContact(father);
+                    }}
+                  >
+                    <View
+                      style={{
+                        backgroundColor: 'white',
+                        borderColor: Colors.primaryColor,
+                        borderRadius: 5,
+                        borderWidth: 2,
+                        paddingHorizontal: 10,
+                        width: '45%',
+                        height: 50,
+                        marginHorizontal: 15,
+                        justifyContent: 'center',
                       }}
                     >
-                      <View
+                      <Text
                         style={{
-                          backgroundColor: 'white',
-                          borderColor: Colors.primaryColor,
-                          borderRadius: 5,
-                          borderWidth: 2,
-                          paddingHorizontal: 10,
-                          width: '45%',
-                          height: 50,
-                          marginHorizontal: 15,
-                          justifyContent: 'center',
+                          textAlign: 'center',
+                          fontSize: 12,
+                          fontFamily: 'work-sans-bold',
+                          textTransform: 'uppercase',
+                          color: Colors.primaryColor,
                         }}
                       >
-                        <Text
-                          style={{
-                            textAlign: 'center',
-                            fontSize: 12,
-                            fontFamily: 'work-sans-bold',
-                            textTransform: 'uppercase',
-                            color: Colors.primaryColor,
-                          }}
-                        >
-                          {i18n.t('FATHER_DETAIL.SAVE_CONTACT')}
-                        </Text>
-                      </View>
-                    </TouchableComp>
-                  )}
+                        {i18n.t('FATHER_DETAIL.SAVE_CONTACT')}
+                      </Text>
+                    </View>
+                  </TouchableComp>
 
                   <SocialIcons
                     wa={
@@ -393,7 +424,7 @@ const PatreDetailScreen = ({ navigation }) => {
                   body={father.homeTerritoryName}
                   selected={() => {
                     navigation.navigate('DelegationDetail', {
-                      delegationId: father.activeLivingSituation.homeTerritoryId,
+                      delegationId: father.homeTerritoryId,
                     });
                   }}
                 />
@@ -519,7 +550,7 @@ PatreDetailScreen.navigationOptions = () => ({
   headerTitle: '',
 });
 
-const DefaultItem = ({ title, body, selected, img, country_code, lang, date, id, show }) => {
+const DefaultItem = ({ title, body, selected, img, country_code, lang, date, id, show, icon }) => {
   let TouchableComp = TouchableOpacity;
   let formatedDate;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -564,6 +595,7 @@ const DefaultItem = ({ title, body, selected, img, country_code, lang, date, id,
                     <Flag id={img} size={0.2} />
                   </View>
                 )}
+                {icon && icon}
               </View>
             </TouchableComp>
           )}
