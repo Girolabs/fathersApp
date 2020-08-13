@@ -32,15 +32,14 @@ class FreeCommunityScreen extends Component {
       axios
         .get(`${i18n.locale}/api/v1/courses?fields=all&key=${Constants.manifest.extra.secretKey}`)
         .then((res) => {
-          var data = [];
-          for (var a of res.data.result) {
+          let data = [];
+          res.data.result.forEach((a) => {
             let i = a.generationId == null ? 0 : a.generationId;
             data[i] = data[i] || { data: [], name: '', generationId: '' };
-            data[i].name = a.generationName || 'Sin generacion';
+            data[i].name = a.generationName || i18n.t('GENERATION.WITHOUT_GENERATIONS');
             data[i].generationId = i;
             data[i].data.push(a);
-          }
-          console.log('data ', data);
+          });
           this.setState({ generations: data.reverse() });
         })
         .catch((err) => {
@@ -61,11 +60,10 @@ class FreeCommunityScreen extends Component {
         {this.state.generations.length > 0 ? (
           <SectionList
             sections={this.state.generations}
-            keyExtractor={(item, index) => item.courseId}
+            keyExtractor={(item) => item.courseId}
             renderItem={({ item }) => {
               return (
                 <Course
-                  key={item.courseId}
                   title={item.name}
                   onSelect={() => this.props.navigation.navigate('CourseDetail', { courseId: item.courseId })}
                 />
@@ -73,10 +71,9 @@ class FreeCommunityScreen extends Component {
             }}
             renderSectionHeader={({ section: { name, generationId } }) => (
               <TouchableComp
-                key={generationId ? generationId : 0}
                 onPress={(section) => {
-                  console.log(section);
-                  this.props.navigation.navigate('GenerationDetail', { generationId: generationId });
+                  console.log('Section', section);
+                  if (generationId) this.props.navigation.navigate('GenerationDetail', { generationId: generationId });
                 }}
               >
                 <View style={styles.sectionHeaderContainer}>
@@ -118,7 +115,7 @@ FreeCommunityScreen.navigationOptions = (navigationData) => ({
   ),
 });
 
-const Course = ({ title, onSelect, key }) => {
+const Course = ({ title, onSelect }) => {
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableComp = TouchableNativeFeedback;
@@ -126,7 +123,6 @@ const Course = ({ title, onSelect, key }) => {
 
   return (
     <TouchableComp
-      key={key}
       onPress={() => {
         console.log('[Navegar a Filiation screen]');
 
