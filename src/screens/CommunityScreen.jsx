@@ -15,8 +15,6 @@ import { Ionicons } from 'expo-vector-icons';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Colors from '../constants/Colors';
-import axios from '../../axios-instance';
-import Constants from 'expo-constants';
 import i18n from 'i18n-js';
 import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
@@ -30,24 +28,28 @@ class CommunityScreen extends Component {
   _onToggleSnackBar = () => this.setState({ visible: !this.state.visible });
   _onDismissSnackBar = () => this.setState({ visible: false });
 
+  loadTerritories = (fields, lang) => {
+    getTerritories(fields, lang)
+      .then((res) => {
+        const fetchedDelegations = res.data.result
+          .map((entry) => {
+            return {
+              ...entry,
+              data: entry.filiations.filter((filiation) => filiation.isActive),
+            };
+          })
+          .filter((commuunity) => commuunity.isActive == true);
+        this.setState({ delegations: fetchedDelegations });
+      })
+      .catch(() => {
+        this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
+      });
+  };
+
   async componentDidMount() {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      getTerritories('all', i18n.locale)
-        .then((res) => {
-          const fetchedDelegations = res.data.result
-            .map((entry) => {
-              return {
-                ...entry,
-                data: entry.filiations.filter((filiation) => filiation.isActive),
-              };
-            })
-            .filter((commuunity) => commuunity.isActive == true);
-          this.setState({ delegations: fetchedDelegations });
-        })
-        .catch(() => {
-          this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
-        });
+      this.loadTerritories('all', i18n.locale);
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }

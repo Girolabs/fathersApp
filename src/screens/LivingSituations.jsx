@@ -25,7 +25,7 @@ import Constants from 'expo-constants';
 import * as _ from 'lodash';
 import * as Yup from 'yup';
 import { Snackbar } from 'react-native-paper';
-import { set } from 'lodash';
+import { getFiliations, getTerritories, getHouses, getInterfaceData, saveLivingSituation, updateLivingSituation } from '../api';
 
 const styles = StyleSheet.create({
   title: {
@@ -135,6 +135,9 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   useEffect(() => {
     const livingSituation = navigation.getParam('livingSituation');
     const paramPersonId = navigation.getParam('personId');
+    if(!paramPersonId){
+      navigation.goBack();
+    }
     console.log('living', livingSituation);
 
     if (!livingSituation || livingSituation.endDate) {
@@ -222,6 +225,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   const loadTerritory = async () => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
+
+
       axios.get(`${i18n.locale}/api/v1/territories?fields=all&ey=${Constants.manifest.extra.secretKey}`).then((res) => {
         loadStatusCondition();
         if (res.data.status === 'OK') {
@@ -254,28 +259,28 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     return dateString;
   };
 
-  const editLivingSituation = (values) => {
-    axios.put(`${i18n.locale}/api/v1/living-situations/${livingSituation.livingSituationId}`, values).then(
-      (response) => {
+  const editLivingSituation = (livingSituationId, values, lang) => {
+    updateLivingSituation(livingSituationId, values, lang).then(
+      () => {
         setSnackMsg(i18n.t('GENERAL.EDIT_SUCCESS'));
         setVisible(true);
         navigation.goBack();
       },
-      (err) => {
+      () => {
         setSnackMsg(i18n.t('GENERAL.ERROR'));
         setVisible(true);
       },
     );
   };
 
-  const createLivingSituation = (values) => {
-    axios.post(`${i18n.locale}/api/v1/living-situations`, values).then(
-      (response) => {
+  const createLivingSituation = (values, lang) => {
+    saveLivingSituation(values, lang).then(
+      () => {
         setSnackMsg(i18n.t('GENERAL.CREATE_SUCCESS'));
         setVisible(true);
         navigation.goBack();
       },
-      (err) => {
+      () => {
         setSnackMsg(i18n.t('GENERAL.ERROR'));
         setVisible(true);
       },
@@ -324,9 +329,9 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                     personId: personId,
                   };
                   if (isCreate) {
-                    createLivingSituation(transformValues);
+                    createLivingSituation(transformValues, i18n.locale);
                   } else {
-                    editLivingSituation(transformValues);
+                    editLivingSituation(livingSituation.livingSituationId ,transformValues, i18n.locale);
                   }
 
                   console.log('values', values);

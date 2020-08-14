@@ -26,6 +26,8 @@ import { I18nContext } from '../context/I18nProvider';
 import Colors from '../constants/Colors';
 import SocialIcons from '../components/SocialIcons';
 
+import { getInterfaceData, getPerson } from '../api';
+
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/de.json'));
@@ -42,8 +44,10 @@ const styles = StyleSheet.create({
     color: Colors.onSurfaceColorPrimary,
     fontSize: 11,
     padding: 15,
+    textAlign:'left',
     letterSpacing: 2.5,
     textTransform: 'uppercase',
+    
   },
   listItem: {
     backgroundColor: Colors.surfaceColorPrimary,
@@ -157,24 +161,15 @@ const PatreDetailScreen = ({ navigation }) => {
   const loadInterfaceData = async (tempFather) => {
     const status = await Network.getNetworkStateAsync();
 
-    if (status.isConnected == true) {
-      axios.get(`${i18n.locale}/api/v1/interface-data`).then((response) => {
+    if (status.isConnected) {
+      getInterfaceData(i18n.locale).then((res) => {
         const viewPermRole = tempFather.viewPermissionForCurrentUser;
-        const { personFieldsByViewPermission } = response.data.result;
-
+        const { personFieldsByViewPermission } = res.data.result;
         const viewRoles = Object.keys(personFieldsByViewPermission);
-
         const arrayOfRoles = viewRoles.map((rol) => {
           return personFieldsByViewPermission[rol];
         });
-
-        const accumulatedFieldsPerRol = arrayOfRoles.map((rol, index) => {
-          /* let accu = [];
-          arrayOfRoles.forEach((el,i) => {
-            if(i <= index) {
-              accu = accu.concat(el);
-            }
-          }) */
+        const accumulatedFieldsPerRol = arrayOfRoles.map((rol) => {
           return rol;
         });
 
@@ -188,29 +183,17 @@ const PatreDetailScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    /* (async () => {
-      const { status } = await Contacts.requestPermissionsAsync();
-      if (status === 'granted') {
-        setShowSaveContact(true);
-      }
-    })(); */
     const loadPerson = async () => {
       const status = await Network.getNetworkStateAsync();
       if (status.isConnected === true) {
         const fatherId = navigation.getParam('fatherId');
-        axios
-          .get(
-            `${i18n.locale}/api/v1/persons/${fatherId}?fields=all&authorized=true&key=${Constants.manifest.extra.secretKey}`,
-          )
+        getPerson(fatherId, false, i18n.locale)
           .then((response) => {
-            console.log('[PatreDetail]', response.data.result);
             const resFather = response.data.result;
             setFather(resFather);
             loadInterfaceData(resFather);
-
-            console.log('father', father);
           })
-          .catch((err) => {
+          .catch(() => {
             setLoading(false);
             setVisible(true);
             setSnackMsg(i18n.t('GENERAL.ERROR'));
@@ -266,7 +249,7 @@ const PatreDetailScreen = ({ navigation }) => {
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    paddingHorizontal: 20,
+                    paddingRight: 15,
                   }}
                 >
                   <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CONTACT_INFO')}</Text>

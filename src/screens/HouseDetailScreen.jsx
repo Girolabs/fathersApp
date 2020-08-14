@@ -10,10 +10,8 @@ import {
   FlatList,
   TouchableNativeFeedback,
   Platform,
-  Clipboard
+  Clipboard,
 } from 'react-native';
-import axios from '../../axios-instance';
-import Constants from 'expo-constants';
 import Colors from '../constants/Colors';
 import { I18nContext } from '../context/I18nProvider';
 import { Flag } from 'react-native-svg-flagkit';
@@ -23,7 +21,8 @@ import 'moment/min/locales';
 import { ScrollView } from 'react-native-gesture-handler';
 import countries from 'i18n-iso-countries';
 import * as Network from 'expo-network';
-import { Snackbar, Portal } from 'react-native-paper';
+import { Snackbar } from 'react-native-paper';
+import { getHouse, getFiliation } from '../api';
 
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
@@ -33,30 +32,33 @@ class HouseDetailScreen extends Component {
     house: null,
   };
 
+  loadHouse = (houseId, fields, lang) => {
+    getHouse(houseId, fields, lang)
+      .then((resHouse) => {
+        const house = resHouse.data.result;
+        getFiliation(house.filiationId, fields, lang)
+          .then((resFiliation) => {
+            const filiation = resFiliation.data.result;
+            const membersHouse = filiation.persons
+              .filter((person) => person.activeLivingSituation.houseId == house.houseId)
+              .filter((person) => person.isActive == true && person.isMember == true);
+            this.setState({ house: { ...house, membersHouse, filiationName: filiation.name } });
+          })
+          .catch(() => {
+            this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
+          });
+      })
+      .catch(() => {
+        this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
+      });
+  };
+
   async componentDidMount() {
     const { navigation } = this.props;
     const houseId = navigation.getParam('houseId');
     const status = await Network.getNetworkStateAsync();
-    if (status.isConnected === true) {
-      axios
-        .get(`${i18n.locale}/api/v1/houses/${houseId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
-        .then((resHouse) => {
-          let house = resHouse.data.result;
-          axios
-            .get(
-              `${i18n.locale}/api/v1/filiations/${house.filiationId}?fields=all&key=${Constants.manifest.extra.secretKey}`,
-            )
-            .then((resFiliation) => {
-              const filiation = resFiliation.data.result;
-              const membersHouse = filiation.persons
-                .filter((person) => person.activeLivingSituation.houseId == house.houseId)
-                .filter((person) => person.isActive == true && person.isMember == true);
-              this.setState({ house: { ...house, membersHouse, filiationName: filiation.name } });
-            });
-        })
-        .catch((err) => {
-          this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
-        });
+    if (status.isConnected) {
+      this.loadHouse(houseId, false, i18n.locale);
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
@@ -117,10 +119,12 @@ class HouseDetailScreen extends Component {
                         </TouchableComp>
                       </View>
                       {house.fax && (
-                        <TouchableComp onPress={() => {
-                          Clipboard.setString(house.fax);
-                          this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
-                        }}>
+                        <TouchableComp
+                          onPress={() => {
+                            Clipboard.setString(house.fax);
+                            this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
+                          }}
+                        >
                           <View style={styles.listItem}>
                             <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.FAX')}</Text>
                             <Text style={styles.listItemBody}>{house.fax}</Text>
