@@ -5,9 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
-import {
-  SafeAreaView, Image, View, Text,
-} from 'react-native';
+import { SafeAreaView, Image, View, Text } from 'react-native';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
@@ -93,19 +91,16 @@ const HomeNavigator = createStackNavigator(
       screen: FatherFormScreen,
     },
     Bulletin: {
-      screen:BulletinScreen,
+      screen: BulletinScreen,
     },
     BulletinDetail: {
       screen: BulletinDetailScreen,
     },
-
   },
   {
     defaultNavigationOptions: defaultStackNavOptions,
   },
 );
-
-
 
 const SearchNavigator = createStackNavigator(
   {
@@ -272,8 +267,8 @@ const SettingsNavigator = createStackNavigator(
 
 const DrawerNavigator = createDrawerNavigator(
   {
-    HomeSearch: {
-      screen: HomeSearchTabNavigator,
+    Home: {
+      screen: HomeNavigator,
       navigationOptions: {
         drawerLabel: i18n.t('GENERAL.HOME'),
       },
