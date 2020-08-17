@@ -158,14 +158,6 @@ const tabScreenConfig = {
   },
 };
 
-const HomeSearchTabNavigator = createMaterialBottomTabNavigator(tabScreenConfig, {
-  activeColor: Colors.primaryColor,
-  labeled: false,
-  shifting: true,
-  barStyle: {
-    backgroundColor: Colors.surfaceColorPrimary,
-  },
-});
 const ProfileNavigator = createStackNavigator(
   {
     screen: FatherFormScreen,
@@ -267,7 +259,7 @@ const SettingsNavigator = createStackNavigator(
 
 const DrawerNavigator = createDrawerNavigator(
   {
-    Home: {
+    HomeSearch: {
       screen: HomeNavigator,
       navigationOptions: {
         drawerLabel: i18n.t('GENERAL.HOME'),
