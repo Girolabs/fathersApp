@@ -21,7 +21,7 @@ const DefaultDrawer = (props) => {
   }
   const routes = [
     {
-      path: 'HomeSearch',
+      path: 'Home',
       label: i18n.t('GENERAL.HOME'),
     },
     {

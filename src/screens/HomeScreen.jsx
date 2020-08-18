@@ -141,7 +141,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.screen}>
           {!loading ? (
             <>
-              <TouchableComp
+              {/* <TouchableComp
                 onPress={() => {
                   navigation.navigate('Bulletin');
                 }}
@@ -152,7 +152,7 @@ const HomeScreen = ({ navigation }) => {
                   </Text>
                   <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
                 </View>
-              </TouchableComp>
+              </TouchableComp> */}
               <Text style={styles.title}>{i18n.t('HOME_SCREEN.REMINDERS')}</Text>
               <FlatList
                 data={reminders.slice(0, 4)}
@@ -251,9 +251,9 @@ const HomeScreen = ({ navigation }) => {
                                 </View>
                               </View>
 
-                              {item.entityObject.phones !== undefined
-                                && item.entityObject.phones.length > 0
-                                && item.entityObject.phones[0].whatsApp && (
+                              {item.entityObject.phones !== undefined &&
+                                item.entityObject.phones.length > 0 &&
+                                item.entityObject.phones[0].whatsApp && (
                                   <TouchableComp
                                     onPress={() => {
                                       Linking.openURL(
@@ -263,7 +263,7 @@ const HomeScreen = ({ navigation }) => {
                                   >
                                     <Ionicons name="logo-whatsapp" size={23} color={Colors.onSurfaceColorSecondary} />
                                   </TouchableComp>
-                              )}
+                                )}
                             </View>
                           )}
                         />
