@@ -8,6 +8,8 @@ import { Checkbox } from 'react-native-paper';
 import i18n from 'i18n-js';
 import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import HeaderButton from '../components/HeaderButton';
 
 class SearchScreen extends Component {
   state = {
@@ -58,14 +60,13 @@ class SearchScreen extends Component {
     filterResults = filterResults.filter((persona) => {
       if (
         (persona.firstNameWithoutAccents &&
-        persona.lastNameWithoutAccents &&
-        (persona.firstNameWithoutAccents + ' ' + persona.lastNameWithoutAccents).trim().startsWith(texto)) 
-        || (persona.firstNameWithoutAccents && persona.firstNameWithoutAccents.trim().startsWith(texto)) 
-        || (persona.lastNameWithoutAccents && persona.lastNameWithoutAccents.trim().startsWith(texto))
+          persona.lastNameWithoutAccents &&
+          (persona.firstNameWithoutAccents + ' ' + persona.lastNameWithoutAccents).trim().startsWith(texto)) ||
+        (persona.firstNameWithoutAccents && persona.firstNameWithoutAccents.trim().startsWith(texto)) ||
+        (persona.lastNameWithoutAccents && persona.lastNameWithoutAccents.trim().startsWith(texto))
       ) {
         return persona;
       }
-      
     });
     this.setState({ filterResults: filterResults, loading: false });
   };
@@ -100,7 +101,7 @@ class SearchScreen extends Component {
             <View style={styles.filtersContainer}>
               <View style={styles.optionContainer}>
                 <Checkbox
-                  color = {Colors.primaryColor}
+                  color={Colors.primaryColor}
                   status={this.state.showDeceased ? 'checked' : 'unchecked'}
                   onPress={() => this.setState({ showDeceased: !this.state.showDeceased })}
                 />
@@ -109,7 +110,7 @@ class SearchScreen extends Component {
 
               <View style={styles.optionContainer}>
                 <Checkbox
-                  color = {Colors.primaryColor}
+                  color={Colors.primaryColor}
                   status={this.state.showExMember ? 'checked' : 'unchecked'}
                   onPress={() => this.setState({ showExMember: !this.state.showExMember })}
                 />
@@ -152,8 +153,19 @@ class SearchScreen extends Component {
   }
 }
 
-SearchScreen.navigationOptions = () => ({
+SearchScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
+  headerRight: (
+    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title="Menu"
+        iconName="md-menu"
+        onPress={() => {
+          navigationData.navigation.toggleDrawer();
+        }}
+      />
+    </HeaderButtons>
+  ),
 });
 
 const styles = StyleSheet.create({
@@ -181,7 +193,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderRadius: 15,
-    marginTop:5
+    marginTop: 5,
   },
   filtersContainer: {
     flexDirection: 'row',

@@ -10,7 +10,7 @@ import {
   FlatList,
   TouchableNativeFeedback,
   Platform,
-  Clipboard
+  Clipboard,
 } from 'react-native';
 import axios from '../../axios-instance';
 import Constants from 'expo-constants';
@@ -24,6 +24,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import countries from 'i18n-iso-countries';
 import * as Network from 'expo-network';
 import { Snackbar, Portal } from 'react-native-paper';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import HeaderButton from '../components/HeaderButton';
 
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
@@ -117,10 +119,12 @@ class HouseDetailScreen extends Component {
                         </TouchableComp>
                       </View>
                       {house.fax && (
-                        <TouchableComp onPress={() => {
-                          Clipboard.setString(house.fax);
-                          this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
-                        }}>
+                        <TouchableComp
+                          onPress={() => {
+                            Clipboard.setString(house.fax);
+                            this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
+                          }}
+                        >
                           <View style={styles.listItem}>
                             <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.FAX')}</Text>
                             <Text style={styles.listItemBody}>{house.fax}</Text>
@@ -188,8 +192,19 @@ class HouseDetailScreen extends Component {
     );
   }
 }
-HouseDetailScreen.navigationOptions = () => ({
+HouseDetailScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
+  headerRight: (
+    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title="Menu"
+        iconName="md-menu"
+        onPress={() => {
+          navigationData.navigation.toggleDrawer();
+        }}
+      />
+    </HeaderButtons>
+  ),
 });
 
 const styles = StyleSheet.create({

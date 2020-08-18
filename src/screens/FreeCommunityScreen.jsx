@@ -102,7 +102,7 @@ class FreeCommunityScreen extends Component {
 
 FreeCommunityScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerLeft: (
+  headerRight: (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

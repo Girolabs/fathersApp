@@ -22,33 +22,37 @@ import { I18nContext } from '../context/I18nProvider';
 import axios from '../../axios-instance';
 import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
-
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import HeaderButton from '../components/HeaderButton';
 
 class DelegationDetailScreen extends Component {
   state = {
-    territory: null
-  }
+    territory: null,
+  };
 
   async componentDidMount() {
     const { navigation } = this.props;
     const territoryId = navigation.getParam('delegationId');
-    console.log('territoryID', territoryId)
+    console.log('territoryID', territoryId);
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
-      axios.get(`${i18n.locale}/api/v1/territories/${territoryId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
+      axios
+        .get(`${i18n.locale}/api/v1/territories/${territoryId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
         .then((res) => {
-          const fetchedDelegation= {
+          const fetchedDelegation = {
             ...res.data.result,
-            homeTerritoryMembers: res.data.result.homeTerritoryMembers.filter( member => (member.isActive == true && member.isMember == true) ),
-          }
+            homeTerritoryMembers: res.data.result.homeTerritoryMembers.filter(
+              (member) => member.isActive == true && member.isMember == true,
+            ),
+          };
           this.setState({ territory: fetchedDelegation });
-        }).catch(err => {
-          this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
+        })
+        .catch((err) => {
+          this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
         });
     } else {
-      this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false })
+      this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
-
   }
 
   render() {
@@ -61,134 +65,162 @@ class DelegationDetailScreen extends Component {
     return (
       <I18nContext.Consumer>
         {(value) => {
-          moment.locale(value.lang)
+          moment.locale(value.lang);
           return (
             <SafeAreaView>
-              {territory
-                ? (
-                  <ScrollView>
-                    <View style={styles.titleContainer}>
-                      <Text style={styles.title}>{territory.name}</Text>
-                    </View>
-                    <View>
-                      <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_DETAIL.TERRITORY_INFO')}</Text>
-                      {territory.parentTerritory &&
-                        <TouchableComp onPress={() => {
-                          console.log('apreto', territory.parentTerritory.territoryId)
-                          navigation.push('DelegationDetail', { delegationId: territory.parentTerritory.territoryId })
-                        }}>
-                          <View style={styles.listItem}>
-                            <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.TERRITORY_CHARGE')}</Text>
-                            <Text style={styles.listItemBody}>{territory.parentTerritory.name}</Text>
-                          </View>
-                        </TouchableComp>
-                      }
-                      {territory.celebrationDate &&
+              {territory ? (
+                <ScrollView>
+                  <View style={styles.titleContainer}>
+                    <Text style={styles.title}>{territory.name}</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_DETAIL.TERRITORY_INFO')}</Text>
+                    {territory.parentTerritory && (
+                      <TouchableComp
+                        onPress={() => {
+                          console.log('apreto', territory.parentTerritory.territoryId);
+                          navigation.push('DelegationDetail', { delegationId: territory.parentTerritory.territoryId });
+                        }}
+                      >
                         <View style={styles.listItem}>
-                          <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.CELEBRATION_DATE')}</Text>
-                          <Text style={styles.listItemBody}>{moment.utc(territory.celebrationDate).format('Do MMMM YYYY')}</Text>
+                          <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.TERRITORY_CHARGE')}</Text>
+                          <Text style={styles.listItemBody}>{territory.parentTerritory.name}</Text>
                         </View>
-                      }
-                      <View style={[styles.listItem]}>
-                        <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.SUPERIOR')}</Text>
-                        {territory.assignments.map((asg) => {
-                          return (
-                            <TouchableComp onPress={() => {
-                              navigation.navigate('PatreDetail', { fatherId: asg.person.personId })
-                            }}>
-                              <View style={styles.fatherItem}>
-                                <Image
-                                  source={{ uri: `https://schoenstatt-fathers.link${asg.person.photo}` }}
-                                  style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }}
-                                />
-                                <View style={{ flexDirection: 'column' }}>
-                                  <Text style={styles.listItemBody}>{asg.roleTitle}</Text>
-                                  <Text style={styles.listItemBody}>{asg.person.fullName}</Text>
-                                  <Text style={styles.listItemBody}>
-                                    {`${moment.utc(asg.startDate).format('Do MMMM YYYY')} ${moment.utc(asg.endDate).format('Do MMMM YYYY')}`}
-                                  </Text>
-                                </View>
-                              </View>
-                            </TouchableComp>
-
-                          )
-                        })}
-
+                      </TouchableComp>
+                    )}
+                    {territory.celebrationDate && (
+                      <View style={styles.listItem}>
+                        <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.CELEBRATION_DATE')}</Text>
+                        <Text style={styles.listItemBody}>
+                          {moment.utc(territory.celebrationDate).format('Do MMMM YYYY')}
+                        </Text>
                       </View>
-                    </View>
-                    <View styles={{ marginTop: 10, marginBottom: 5, backgroundColor: Colors.surfaceColorSecondary }}>
-                      <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_DETAIL.TERRITORY_FILIATION')}</Text>
-                      <View>
-                        {territory.filiations.map(filiation => {
-                          return (
-                            <TouchableComp
-                              key={filiation.filiationId}
-                              onPress={() => {
-                                navigation.navigate('FiliationDetail', { filiationId: filiation.filiationId })
-                              }}>
-                              <View style={styles.card}>
-                                <View style={{ flexDirection: 'row', alignItems: 'center' }} >
-                                  <Flag id={filiation.country} size={0.1} />
-                                  <Text style={styles.cardTitle}>{filiation.name}</Text>
-                                </View>
-
-                                <View style={styles.cardBody}>
-                                  <Text style={styles.cardBodyText}>{i18n.t('TERRITORY_DETAIL.RECTOR')}</Text>
-                                  <Text style={styles.cardBodyTextBold}>{filiation.mainAssignment ? filiation.mainAssignment.person.fullName : null}</Text>
-                                </View>
-                              </View>
-                            </TouchableComp>
-
-                          )
-
-                        })
-                        }
-                      </View>
-                    </View>
-                    <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_DETAIL.MEMBERS_OF_TERRITORY')}</Text>
-                    <FlatList
-                      data={this.state.territory.homeTerritoryMembers}
-                      renderItem={({ item }) => {
+                    )}
+                    <View style={[styles.listItem]}>
+                      <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.SUPERIOR')}</Text>
+                      {territory.assignments.map((asg) => {
                         return (
-                          <TouchableComp onPress={() => navigation.navigate('PatreDetail', { fatherId: item.personId })}>
-                            <View style={styles.memberItem}
-                            >
+                          <TouchableComp
+                            onPress={() => {
+                              navigation.navigate('PatreDetail', { fatherId: asg.person.personId });
+                            }}
+                          >
+                            <View style={styles.fatherItem}>
                               <Image
-                                source={{ uri: `https://schoenstatt-fathers.link${item.photo}` }}
-                                style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
+                                source={{ uri: `https://schoenstatt-fathers.link${asg.person.photo}` }}
+                                style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }}
                               />
-                              <Text style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}>{item.fullName}</Text>
+                              <View style={{ flexDirection: 'column' }}>
+                                <Text style={styles.listItemBody}>{asg.roleTitle}</Text>
+                                <Text style={styles.listItemBody}>{asg.person.fullName}</Text>
+                                <Text style={styles.listItemBody}>
+                                  {`${moment.utc(asg.startDate).format('Do MMMM YYYY')} ${moment
+                                    .utc(asg.endDate)
+                                    .format('Do MMMM YYYY')}`}
+                                </Text>
+                              </View>
                             </View>
                           </TouchableComp>
-
                         );
-                      }}
-                    />
-                    <Text style={styles.statsText}> Total: {territory.statistics.total} </Text>
-                    <Text style={styles.statsText}> {`${i18n.t('TERRITORY_DETAIL.PRIESTS')}: ${territory.statistics.livingPerpetual}`} </Text>
-                    <Text style={styles.statsText}> {`${i18n.t('TERRITORY_DETAIL.STUDENTS')}: ${territory.statistics.students}`} </Text>
-                    <Text style={styles.statsText}> {`${i18n.t('TERRITORY_DETAIL.DECEASED')}: ${territory.statistics.deceased}`} </Text>
+                      })}
+                    </View>
+                  </View>
+                  <View styles={{ marginTop: 10, marginBottom: 5, backgroundColor: Colors.surfaceColorSecondary }}>
+                    <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_DETAIL.TERRITORY_FILIATION')}</Text>
+                    <View>
+                      {territory.filiations.map((filiation) => {
+                        return (
+                          <TouchableComp
+                            key={filiation.filiationId}
+                            onPress={() => {
+                              navigation.navigate('FiliationDetail', { filiationId: filiation.filiationId });
+                            }}
+                          >
+                            <View style={styles.card}>
+                              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <Flag id={filiation.country} size={0.1} />
+                                <Text style={styles.cardTitle}>{filiation.name}</Text>
+                              </View>
 
-                  </ScrollView>
-                )
-                : <ActivityIndicator size="large" color={Colors.primaryColor} />}
+                              <View style={styles.cardBody}>
+                                <Text style={styles.cardBodyText}>{i18n.t('TERRITORY_DETAIL.RECTOR')}</Text>
+                                <Text style={styles.cardBodyTextBold}>
+                                  {filiation.mainAssignment ? filiation.mainAssignment.person.fullName : null}
+                                </Text>
+                              </View>
+                            </View>
+                          </TouchableComp>
+                        );
+                      })}
+                    </View>
+                  </View>
+                  <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_DETAIL.MEMBERS_OF_TERRITORY')}</Text>
+                  <FlatList
+                    data={this.state.territory.homeTerritoryMembers}
+                    renderItem={({ item }) => {
+                      return (
+                        <TouchableComp onPress={() => navigation.navigate('PatreDetail', { fatherId: item.personId })}>
+                          <View style={styles.memberItem}>
+                            <Image
+                              source={{ uri: `https://schoenstatt-fathers.link${item.photo}` }}
+                              style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
+                            />
+                            <Text
+                              style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}
+                            >
+                              {item.fullName}
+                            </Text>
+                          </View>
+                        </TouchableComp>
+                      );
+                    }}
+                  />
+                  <Text style={styles.statsText}> Total: {territory.statistics.total} </Text>
+                  <Text style={styles.statsText}>
+                    {' '}
+                    {`${i18n.t('TERRITORY_DETAIL.PRIESTS')}: ${territory.statistics.livingPerpetual}`}{' '}
+                  </Text>
+                  <Text style={styles.statsText}>
+                    {' '}
+                    {`${i18n.t('TERRITORY_DETAIL.STUDENTS')}: ${territory.statistics.students}`}{' '}
+                  </Text>
+                  <Text style={styles.statsText}>
+                    {' '}
+                    {`${i18n.t('TERRITORY_DETAIL.DECEASED')}: ${territory.statistics.deceased}`}{' '}
+                  </Text>
+                </ScrollView>
+              ) : (
+                <ActivityIndicator size="large" color={Colors.primaryColor} />
+              )}
 
-              <Snackbar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })} style={styles.snackError}>
+              <Snackbar
+                visible={this.state.visible}
+                onDismiss={() => this.setState({ visible: false })}
+                style={styles.snackError}
+              >
                 {this.state.snackMsg}
               </Snackbar>
             </SafeAreaView>
-          )
+          );
         }}
       </I18nContext.Consumer>
-    )
+    );
   }
 }
 
-
-DelegationDetailScreen.navigationOptions = () => ({
-
+DelegationDetailScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-
+  headerRight: (
+    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title="Menu"
+        iconName="md-menu"
+        onPress={() => {
+          navigationData.navigation.toggleDrawer();
+        }}
+      />
+    </HeaderButtons>
+  ),
 });
 
 const styles = StyleSheet.create({
@@ -201,7 +233,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 30,
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
   },
   title: {
     fontFamily: 'work-sans-semibold',
@@ -243,7 +275,7 @@ const styles = StyleSheet.create({
     color: Colors.surfaceColorSecondary,
     fontSize: 18,
     fontFamily: 'work-sans-semibold',
-    marginLeft: 10
+    marginLeft: 10,
   },
   cardBody: {
     flexDirection: 'row',
@@ -285,7 +317,7 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     color: Colors.onSurfaceColorPrimary,
     paddingVertical: 10,
-    fontFamily: 'work-sans-medium'
+    fontFamily: 'work-sans-medium',
   },
   snackError: {
     backgroundColor: Colors.secondaryColor,

@@ -4,6 +4,8 @@ import { WebView } from 'react-native-webview';
 import i18n from 'i18n-js';
 import axios from '../../axios-instance';
 import Colors from '../constants/Colors';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import HeaderButton from '../components/HeaderButton';
 
 const styles = StyleSheet.create({
   screen: {
@@ -49,8 +51,19 @@ const BulletinDetail = ({ navigation }) => {
   );
 };
 
-BulletinDetail.navigationOptions = () => ({
+BulletinDetail.navigationOptions = (navigationData) => ({
   headerTitle: '',
+  headerRight: (
+    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title="Menu"
+        iconName="md-menu"
+        onPress={() => {
+          navigationData.navigation.toggleDrawer();
+        }}
+      />
+    </HeaderButtons>
+  ),
 });
 
 export default BulletinDetail;

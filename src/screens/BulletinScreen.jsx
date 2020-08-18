@@ -15,7 +15,8 @@ import { Ionicons } from 'expo-vector-icons';
 import * as Linking from 'expo-linking';
 import axios from '../../axios-instance';
 import Colors from '../constants/Colors';
-
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import HeaderButton from '../components/HeaderButton';
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -116,8 +117,19 @@ const BulletinScreen = ({ navigation }) => {
   );
 };
 
-BulletinScreen.navigationOptions = () => ({
+BulletinScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
+  headerRight: (
+    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title="Menu"
+        iconName="md-menu"
+        onPress={() => {
+          navigationData.navigation.toggleDrawer();
+        }}
+      />
+    </HeaderButtons>
+  ),
 });
 
 export default BulletinScreen;

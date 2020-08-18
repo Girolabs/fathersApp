@@ -26,7 +26,8 @@ import * as _ from 'lodash';
 import * as Yup from 'yup';
 import { Snackbar } from 'react-native-paper';
 import { set } from 'lodash';
-
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import HeaderButton from '../components/HeaderButton';
 const styles = StyleSheet.create({
   title: {
     fontFamily: 'work-sans-semibold',
@@ -142,7 +143,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
 
       loadFiliations();
       loadHouses();
-    }else {
+    } else {
       const transFormedLiving = {
         ...livingSituation,
         startDate: livingSituation && livingSituation.startDate ? livingSituation.startDate.split('T')[0] : null,
@@ -151,7 +152,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
       setLivingSituation(transFormedLiving);
     }
     loadTerritory();
-    setPersonId(paramPersonId); 
+    setPersonId(paramPersonId);
   }, []);
 
   const loadHouses = async () => {
@@ -518,15 +519,26 @@ const LivingSituationsFormScreen = ({ navigation }) => {
           )}
           <Snackbar visible={visible} onDismiss={() => setVisible(false)} style={styles.snackError}>
             {snackMsg}
-      </Snackbar>
+          </Snackbar>
         </SafeAreaView>
       </KeyboardAvoidingView>
     </>
   );
 };
 
-LivingSituationsFormScreen.navigationOptions = () => ({
+LivingSituationsFormScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
+  headerRight: (
+    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title="Menu"
+        iconName="md-menu"
+        onPress={() => {
+          navigationData.navigation.toggleDrawer();
+        }}
+      />
+    </HeaderButtons>
+  ),
 });
 
 export default LivingSituationsFormScreen;
