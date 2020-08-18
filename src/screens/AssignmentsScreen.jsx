@@ -23,6 +23,7 @@ import { I18nContext } from '../context/I18nProvider';
 import { Flag } from 'react-native-svg-flagkit';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { getTerritories, getFiliations, getGenerations, getCourses, getPersons } from '../api';
 
 class AssignmentsScreen extends Component {
   state = {
@@ -33,10 +34,9 @@ class AssignmentsScreen extends Component {
     courses: [],
   };
   componentDidMount() {
-    axios.get(`${i18n.locale}/api/v1/territories?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resTerritory) => {
+    getTerritories('all',i18n.locale).then((resTerritory) => {
       let territories = resTerritory.data.result;
-
-      axios.get(`${i18n.locale}/api/v1/filiations?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resFiliations) => {
+      getFiliations('all',i18n.locale).then((resFiliations) => {
         let filiations = resFiliations.data.result;
         territories = territories.map((territory) => {
           let resfiliations = [];
@@ -85,17 +85,15 @@ class AssignmentsScreen extends Component {
           };
         });
 
-        axios.get(`${i18n.locale}/api/v1/generations?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resGenerations) => {
+        getGenerations('all',i18n.locale).then((resGenerations) => {
           let generations = resGenerations.data.result;
-          axios.get(`${i18n.locale}/api/v1/courses?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resCourses) => {
+          getCourses('all',i18n.locale).then((resCourses) => {
             let courses = resCourses.data.result;
-            axios.get(`${i18n.locale}/api/v1/persons?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resPersons) => {
+            getPersons(false, i18n.locale).then((resPersons) => {
               let persons = resPersons.data.result;
-
               generations = generations.map((generation) => {
                 if (generation.mainAssignment) {
                   let person = null;
-
                   persons.map((el) => {
                     if (el.personId == generation.mainAssignment.personId) {
                       person = el;

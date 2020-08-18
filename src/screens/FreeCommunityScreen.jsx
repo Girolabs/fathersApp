@@ -72,7 +72,6 @@ class FreeCommunityScreen extends Component {
             renderSectionHeader={({ section: { name, generationId } }) => (
               <TouchableComp
                 onPress={(section) => {
-                  console.log('Section', section);
                   if (generationId) this.props.navigation.navigate('GenerationDetail', { generationId: generationId });
                 }}
               >

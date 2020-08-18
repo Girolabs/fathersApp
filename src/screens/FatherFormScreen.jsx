@@ -20,7 +20,6 @@ import * as Network from 'expo-network';
 import axios from '../../axios-instance';
 import i18n from 'i18n-js';
 import jwt from 'jwt-decode'; // import dependency
-import Constants from 'expo-constants';
 import { Snackbar } from 'react-native-paper';
 import Colors from '../constants/Colors';
 import { NavigationEvents } from 'react-navigation';

@@ -43,7 +43,7 @@ export const getTerritory = (territoryId, fields, lang) => {
 };
 
 export const getFiliations = (fields, lang) => {
-  return instance.get(`${lang}/api/v1/filiations/${fields ? `?fields=${fields}` : ''}`);
+  return instance.get(`${lang}/api/v1/filiations${fields ? `?fields=${fields}` : ''}`);
 };
 
 export const getFiliation = (filiationId, fields, lang) => {
@@ -73,6 +73,10 @@ export const getInterfaceData = (lang) => {
 export const getCourses = (fields, lang) => {
   return instance.get(`${lang}/api/v1/courses${fields ? `?fields=${fields}` : ''}`);
 };
+
+export const getGenerations = (fields, lang) => {
+  return instance.get(`${lang}/api/v1/generations${fields ? `?fields=${fields}` : ''}`);
+}
 
 export const getGeneration = (generationId, fields, lang) => {
   return instance.get(`${lang}/api/v1/generations/${generationId}${fields ? `?fields=${fields}` : ''}`);
