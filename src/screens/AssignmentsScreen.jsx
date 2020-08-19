@@ -14,8 +14,6 @@ import {
 } from 'react-native';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
-import axios from '../../axios-instance';
-import Constants from 'expo-constants';
 import { Ionicons } from 'expo-vector-icons';
 import moment from 'moment';
 import 'moment/min/locales';
@@ -57,7 +55,7 @@ class AssignmentsScreen extends Component {
                 filiations,
               };
             });
-
+          }
             console.log('t', territories);
 
             territories = territories.map((territory) => {
@@ -123,12 +121,15 @@ class AssignmentsScreen extends Component {
                         });
                         this.setState({ courses });
                       });
-                  });
-              });
+               
             this.setState({ territories, loading: false });
           });
       });
-  }
+    });
+  });
+});
+}
+
   render() {
     const { territories, selectedtTab } = this.state;
     let TouchableComp = TouchableOpacity;
