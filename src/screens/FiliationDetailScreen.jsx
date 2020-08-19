@@ -20,6 +20,8 @@ import moment from 'moment';
 import 'moment/min/locales';
 import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import HeaderButton from '../components/HeaderButton';
 import { getFiliation } from '../api';
 
 class FiliationDetailScreen extends Component {
@@ -187,8 +189,19 @@ class FiliationDetailScreen extends Component {
   }
 }
 
-FiliationDetailScreen.navigationOptions = () => ({
+FiliationDetailScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
+  headerRight: (
+    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title="Menu"
+        iconName="md-menu"
+        onPress={() => {
+          navigationData.navigation.toggleDrawer();
+        }}
+      />
+    </HeaderButtons>
+  ),
 });
 
 const styles = StyleSheet.create({

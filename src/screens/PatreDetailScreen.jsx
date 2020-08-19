@@ -15,16 +15,16 @@ import { Flag } from 'react-native-svg-flagkit';
 import moment from 'moment';
 import i18n from 'i18n-js';
 import 'moment/min/locales';
-import Constants from 'expo-constants';
 import countries from 'i18n-iso-countries';
 import * as Contacts from 'expo-contacts';
 import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
 import { Ionicons } from 'expo-vector-icons';
-import axios from '../../axios-instance';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { I18nContext } from '../context/I18nProvider';
 import Colors from '../constants/Colors';
 import SocialIcons from '../components/SocialIcons';
+import HeaderButton from '../components/HeaderButton';
 
 import { getInterfaceData, getPerson } from '../api';
 
@@ -44,10 +44,10 @@ const styles = StyleSheet.create({
     color: Colors.onSurfaceColorPrimary,
     fontSize: 11,
     padding: 15,
-    textAlign:'left',
+    textAlign: 'left',
     letterSpacing: 2.5,
     textTransform: 'uppercase',
-    
+
   },
   listItem: {
     backgroundColor: Colors.surfaceColorPrimary,
@@ -529,11 +529,24 @@ const PatreDetailScreen = ({ navigation }) => {
   );
 };
 
-PatreDetailScreen.navigationOptions = () => ({
+PatreDetailScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
+  headerRight: (
+    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title="Menu"
+        iconName="md-menu"
+        onPress={() => {
+          navigationData.navigation.toggleDrawer();
+        }}
+      />
+    </HeaderButtons>
+  ),
 });
 
-const DefaultItem = ({ title, body, selected, img, country_code, lang, date, id, show, icon }) => {
+const DefaultItem = ({
+  title, body, selected, img, country_code, lang, date, id, show, icon,
+}) => {
   let TouchableComp = TouchableOpacity;
   let formatedDate;
   if (Platform.OS === 'android' && Platform.Version >= 21) {

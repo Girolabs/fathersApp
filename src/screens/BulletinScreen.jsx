@@ -14,7 +14,9 @@ import i18n from 'i18n-js';
 import { Ionicons } from 'expo-vector-icons';
 import * as Linking from 'expo-linking';
 import { Snackbar } from 'react-native-paper';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Colors from '../constants/Colors';
+import HeaderButton from '../components/HeaderButton';
 import { getBoard } from '../api';
 
 const styles = StyleSheet.create({
@@ -126,8 +128,19 @@ const BulletinScreen = ({ navigation }) => {
   );
 };
 
-BulletinScreen.navigationOptions = () => ({
+BulletinScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
+  headerRight: (
+    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title="Menu"
+        iconName="md-menu"
+        onPress={() => {
+          navigationData.navigation.toggleDrawer();
+        }}
+      />
+    </HeaderButtons>
+  ),
 });
 
 export default BulletinScreen;

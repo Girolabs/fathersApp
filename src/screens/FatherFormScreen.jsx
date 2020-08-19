@@ -351,7 +351,7 @@ FatherFormScreen.navigationOptions = (navigationData) => {
   if (showMenu) {
     return {
       headerTitle: '',
-      headerLeft: (
+      headerRight: (
         <HeaderButtons HeaderButtonComponent={HeaderButton}>
           <Item
             title="Menu"
@@ -366,6 +366,17 @@ FatherFormScreen.navigationOptions = (navigationData) => {
   } else {
     return {
       headerTitle: '',
+      headerRight: (
+        <HeaderButtons HeaderButtonComponent={HeaderButton}>
+          <Item
+            title="Menu"
+            iconName="md-menu"
+            onPress={() => {
+              navigationData.navigation.toggleDrawer();
+            }}
+          />
+        </HeaderButtons>
+      ),
     };
   }
 };

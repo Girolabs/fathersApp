@@ -13,19 +13,22 @@ import {
 } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import i18n from 'i18n-js';
-import Colors from '../constants/Colors';
-import axios from '../../axios-instance';
 import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from 'expo-vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Formik, setFieldValue } from 'formik';
-import { HeaderTitle } from 'react-navigation-stack';
+import { Formik } from 'formik';
+
 import * as Network from 'expo-network';
-import Constants from 'expo-constants';
 import * as _ from 'lodash';
 import * as Yup from 'yup';
 import { Snackbar } from 'react-native-paper';
-import { getFiliations, getTerritories, getHouses, getInterfaceData, saveLivingSituation, updateLivingSituation } from '../api';
+import { set } from 'lodash';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import Colors from '../constants/Colors';
+import HeaderButton from '../components/HeaderButton';
+import {
+  getFiliations, getTerritories, getHouses, getInterfaceData, saveLivingSituation, updateLivingSituation,
+} from '../api';
 
 const styles = StyleSheet.create({
   title: {
@@ -179,8 +182,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected == true) {
       getInterfaceData().then((response) => {
-        let livingConditionStatusLabels = response.data.result.livingConditionStatusLabels;
-        let statusLabels = [];
+        const { livingConditionStatusLabels } = response.data.result;
+        const statusLabels = [];
         console.log(Object.keys(livingConditionStatusLabels));
         Object.keys(livingConditionStatusLabels).forEach((key) => {
           console.log(key);
@@ -239,14 +242,13 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   };
 
   const formatDate = (selectedDate) => {
-    let newDate = new Date();
+    const newDate = new Date();
     newDate.setTime(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60 * 1000);
     selectedDate = newDate;
-    let year = selectedDate.getUTCFullYear();
-    let month =
-      selectedDate.getUTCMonth() + 1 < 10 ? '0' + (selectedDate.getUTCMonth() + 1) : selectedDate.getUTCMonth() + 1;
-    let day = selectedDate.getUTCDate();
-    let dateString = year + '-' + month + '-' + day;
+    const year = selectedDate.getUTCFullYear();
+    const month = selectedDate.getUTCMonth() + 1 < 10 ? `0${selectedDate.getUTCMonth() + 1}` : selectedDate.getUTCMonth() + 1;
+    const day = selectedDate.getUTCDate();
+    const dateString = `${year}-${month}-${day}`;
 
     console.log(selectedDate);
     console.log(dateString);
@@ -295,8 +297,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
               {isCreate ? (
                 <Text style={styles.title}>{i18n.t('LIVING_SITUATION.CREATE_TITLE')}</Text>
               ) : (
-                  <Text style={styles.title}>{i18n.t('LIVING_SITUATION.EDIT_TITLE')}</Text>
-                )}
+                <Text style={styles.title}>{i18n.t('LIVING_SITUATION.EDIT_TITLE')}</Text>
+              )}
 
               <Formik
                 enableReinitialize
@@ -317,10 +319,10 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                     .min(Yup.ref('startDate'), i18n.t('LIVING_SITUATION.ERROR_END_DATE')),
                 })}
                 onSubmit={(values) => {
-                  let transformValues = {
+                  const transformValues = {
                     ...values,
                     status: values.status.value ? values.status.value : values.status,
-                    personId: personId,
+                    personId,
                   };
                   if (isCreate) {
                     createLivingSituation(transformValues);
@@ -333,76 +335,78 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                   console.log(transformValues);
                 }}
               >
-                {({ handleChange, values, handleSubmit, errors, setFieldValue, touched }) => (
+                {({
+                  handleChange, values, handleSubmit, errors, setFieldValue, touched,
+                }) => (
                   <>
                     <View>
                       {openStartDate && (
-                        <DateTimePicker
-                          value={startDate ? new Date(startDate) : new Date()}
-                          mode={'date'}
-                          display="default"
-                          onChange={(event, selectedDate) => {
-                            setOpenStartDate(false);
-                            const dateFormated = formatDate(selectedDate);
-                            setFieldValue('startDate', dateFormated);
-                          }}
-                        />
+                      <DateTimePicker
+                        value={startDate ? new Date(startDate) : new Date()}
+                        mode="date"
+                        display="default"
+                        onChange={(event, selectedDate) => {
+                          setOpenStartDate(false);
+                          const dateFormated = formatDate(selectedDate);
+                          setFieldValue('startDate', dateFormated);
+                        }}
+                      />
                       )}
                       {openEndDate && (
-                        <DateTimePicker
-                          value={endDate ? new Date(endDate) : new Date()}
-                          mode={'date'}
-                          display="default"
-                          onChange={(event, selectedDate) => {
-                            setOpenEndDate(false);
-                            const dateFormated = formatDate(selectedDate);
-                            setFieldValue('endDate', dateFormated);
-                          }}
-                        />
+                      <DateTimePicker
+                        value={endDate ? new Date(endDate) : new Date()}
+                        mode="date"
+                        display="default"
+                        onChange={(event, selectedDate) => {
+                          setOpenEndDate(false);
+                          const dateFormated = formatDate(selectedDate);
+                          setFieldValue('endDate', dateFormated);
+                        }}
+                      />
                       )}
                       {isCreate && (
-                        <>
-                          <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>
-                          <RNPickerSelect
-                            name="filiationId"
-                            style={{
-                              inputAndroid: {
-                                backgroundColor: Colors.surfaceColorSecondary,
-                                borderRadius: 10,
-                              },
-                              iconContainer: {
-                                top: 10,
-                                right: 15,
-                              },
-                            }}
-                            onValueChange={(e) => setFieldValue('filiationId', e)}
-                            value={_.get(values, 'filiationId') || ''}
-                            items={filiations}
-                            Icon={() => {
-                              return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
-                            }}
-                          />
-                          <Text style={styles.label}>{i18n.t('LIVING_SITUATION.HOUSE')}</Text>
-                          <RNPickerSelect
-                            name="houseId"
-                            style={{
-                              inputAndroid: {
-                                backgroundColor: Colors.surfaceColorSecondary,
-                                borderRadius: 10,
-                              },
-                              iconContainer: {
-                                top: 10,
-                                right: 15,
-                              },
-                            }}
-                            onValueChange={(e) => setFieldValue('houseId', e)}
-                            value={_.get(values, 'houseId') || ''}
-                            items={houses}
-                            Icon={() => {
-                              return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
-                            }}
-                          />
-                        </>
+                      <>
+                        <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>
+                        <RNPickerSelect
+                          name="filiationId"
+                          style={{
+                            inputAndroid: {
+                              backgroundColor: Colors.surfaceColorSecondary,
+                              borderRadius: 10,
+                            },
+                            iconContainer: {
+                              top: 10,
+                              right: 15,
+                            },
+                          }}
+                          onValueChange={(e) => setFieldValue('filiationId', e)}
+                          value={_.get(values, 'filiationId') || ''}
+                          items={filiations}
+                          Icon={() => {
+                            return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
+                          }}
+                        />
+                        <Text style={styles.label}>{i18n.t('LIVING_SITUATION.HOUSE')}</Text>
+                        <RNPickerSelect
+                          name="houseId"
+                          style={{
+                            inputAndroid: {
+                              backgroundColor: Colors.surfaceColorSecondary,
+                              borderRadius: 10,
+                            },
+                            iconContainer: {
+                              top: 10,
+                              right: 15,
+                            },
+                          }}
+                          onValueChange={(e) => setFieldValue('houseId', e)}
+                          value={_.get(values, 'houseId') || ''}
+                          items={houses}
+                          Icon={() => {
+                            return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
+                          }}
+                        />
+                      </>
                       )}
 
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.RESPONSIBLE_TERRITORY')}</Text>
@@ -467,7 +471,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                             <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
                           </View>
                           {errors && errors.endDate && (
-                            <Text style={styles.errorText}>{i18n.t('LIVING_SITUATION.ERROR_END_DATE')}</Text>
+                          <Text style={styles.errorText}>{i18n.t('LIVING_SITUATION.ERROR_END_DATE')}</Text>
                           )}
                         </>
                       </TouchableOpacity>
@@ -513,8 +517,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
               </Formik>
             </ScrollView>
           ) : (
-              <ActivityIndicator size="large" color={Colors.primaryColor} />
-            )}
+            <ActivityIndicator size="large" color={Colors.primaryColor} />
+          )}
           <Snackbar visible={visible} onDismiss={() => setVisible(false)} style={styles.snackError}>
             {snackMsg}
           </Snackbar>
@@ -524,8 +528,19 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   );
 };
 
-LivingSituationsFormScreen.navigationOptions = () => ({
+LivingSituationsFormScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
+  headerRight: (
+    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title="Menu"
+        iconName="md-menu"
+        onPress={() => {
+          navigationData.navigation.toggleDrawer();
+        }}
+      />
+    </HeaderButtons>
+  ),
 });
 
 export default LivingSituationsFormScreen;

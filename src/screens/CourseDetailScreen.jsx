@@ -21,6 +21,8 @@ import { Flag } from 'react-native-svg-flagkit';
 import axios from '../../axios-instance';
 import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import HeaderButton from '../components/HeaderButton';
 import { getCourse, getPerson } from '../api';
 
 class CourseDetailScreen extends Component {
@@ -502,8 +504,19 @@ class CourseDetailScreen extends Component {
   }
 }
 
-CourseDetailScreen.navigationOptions = () => ({
+CourseDetailScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
+  headerRight: (
+    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title="Menu"
+        iconName="md-menu"
+        onPress={() => {
+          navigationData.navigation.toggleDrawer();
+        }}
+      />
+    </HeaderButtons>
+  ),
 });
 
 const styles = StyleSheet.create({

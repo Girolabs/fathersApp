@@ -307,6 +307,7 @@ const DrawerNavigator = createDrawerNavigator(
         fontSize: 18,
       },
     },
+    drawerPosition: 'right',
   },
 );
 
