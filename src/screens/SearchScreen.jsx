@@ -18,8 +18,8 @@ class SearchScreen extends Component {
     searchText: '',
   };
 
-  loadPersons = (fields, lang) => {
-    getPersons(fields, lang).then((res) => {
+  loadPersons = (fields) => {
+    getPersons(fields).then((res) => {
       this.setState({ results: res.data.result, loading: false });
     }).catch(() => {
       this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
@@ -29,7 +29,7 @@ class SearchScreen extends Component {
   async componentDidMount() {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-     this.loadPersons('all',i18n.locale);
+     this.loadPersons('all');
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }

@@ -110,7 +110,7 @@ const HomeScreen = ({ navigation }) => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
       setLoading(true);
-      getReminders(i18n.locale)
+      getReminders()
         .then((res) => {
           const fetchedReminders = res.data.result;
           setReminders(fetchedReminders);

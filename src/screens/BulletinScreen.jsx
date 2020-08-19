@@ -56,7 +56,7 @@ const BulletinScreen = ({ navigation }) => {
   const loadPosts = async () => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      getBoard(i18n.locale)
+      getBoard()
         .then((res) => {
           const fetchedPosts = res.data.result;
           setPosts(fetchedPosts);

@@ -27,8 +27,8 @@ class DelegationDetailScreen extends Component {
     territory: null,
   };
 
-  loadTerritory = (territoryId, fields, lang) => {
-    getTerritory(territoryId, fields, lang)
+  loadTerritory = (territoryId, fields) => {
+    getTerritory(territoryId, fields)
       .then((res) => {
         const fetchedDelegation = {
           ...res.data.result,
@@ -48,7 +48,7 @@ class DelegationDetailScreen extends Component {
     const territoryId = navigation.getParam('delegationId');
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
-      this.loadTerritory(territoryId, false, i18n.locale);
+      this.loadTerritory(territoryId, false);
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }

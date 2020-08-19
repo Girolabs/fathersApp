@@ -44,7 +44,7 @@ class AuthScreen extends Component {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected == true) {
       axios
-        .get(`${i18n.locale}/api/v1/users/request-verification-token?identity=${encodeURIComponent(identity)}`, {
+        .get(`/api/v1/users/request-verification-token?identity=${encodeURIComponent(identity)}`, {
           data: null,
         })
         .then((res) => {
@@ -69,7 +69,7 @@ class AuthScreen extends Component {
     if (status.isConnected == true) {
       axios
         .get(
-          `${i18n.locale}/api/v1/users/login-with-verification-token?identity=${encodeURIComponent(
+          `/api/v1/users/login-with-verification-token?identity=${encodeURIComponent(
             identity,
           )}&token=${token}`,
           { data: null },

@@ -34,9 +34,9 @@ class AssignmentsScreen extends Component {
     courses: [],
   };
   componentDidMount() {
-    getTerritories('all',i18n.locale).then((resTerritory) => {
+    getTerritories('all').then((resTerritory) => {
       let territories = resTerritory.data.result;
-      getFiliations('all',i18n.locale).then((resFiliations) => {
+      getFiliations('all').then((resFiliations) => {
         let filiations = resFiliations.data.result;
         territories = territories.map((territory) => {
           let resfiliations = [];
@@ -85,11 +85,11 @@ class AssignmentsScreen extends Component {
           };
         });
 
-        getGenerations('all',i18n.locale).then((resGenerations) => {
+        getGenerations('all').then((resGenerations) => {
           let generations = resGenerations.data.result;
-          getCourses('all',i18n.locale).then((resCourses) => {
+          getCourses('all').then((resCourses) => {
             let courses = resCourses.data.result;
-            getPersons(false, i18n.locale).then((resPersons) => {
+            getPersons(false).then((resPersons) => {
               let persons = resPersons.data.result;
               generations = generations.map((generation) => {
                 if (generation.mainAssignment) {

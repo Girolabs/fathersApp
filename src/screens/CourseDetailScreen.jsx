@@ -28,13 +28,13 @@ class CourseDetailScreen extends Component {
     course: null,
   };
 
-  loadCourse = (courseId, fields, lang) => {
-    getCourse(courseId, fields, lang)
+  loadCourse = (courseId, fields) => {
+    getCourse(courseId, fields)
       .then((res) => {
         let course = res.data.result;
         this.setState({ course });
         if (course.leaderAssignment) {
-          getPerson(course.leaderAssignment.personId, false, i18n.locale)
+          getPerson(course.leaderAssignment.personId, false)
             .then((respPerson) => {
               const person = respPerson.data.result;
               let leaderAssignment = {

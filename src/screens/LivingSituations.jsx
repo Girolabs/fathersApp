@@ -161,7 +161,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     const status = await Network.getNetworkStateAsync();
 
     if (status.isConnected == true) {
-      getHouses(false, i18n.locale).then((response) => {
+      getHouses(false).then((response) => {
         const fetchedHouses = response.data.result.map((house) => {
           if (house.isActive == true) {
             return {
@@ -178,7 +178,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   const loadStatusCondition = async () => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected == true) {
-      getInterfaceData(i18n.locale).then((response) => {
+      getInterfaceData().then((response) => {
         let livingConditionStatusLabels = response.data.result.livingConditionStatusLabels;
         let statusLabels = [];
         console.log(Object.keys(livingConditionStatusLabels));
@@ -201,7 +201,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     const status = await Network.getNetworkStateAsync();
 
     if (status.isConnected == true) {
-      getFiliations(false, i18n.locale)
+      getFiliations(false)
         .then((response) => {
           const fetchedFiliations = response.data.result
             .map((filiation) => {
@@ -221,7 +221,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   const loadTerritory = async () => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
-      getTerritories(false, i18n.locale).then((res) => {
+      getTerritories(false).then((res) => {
         loadStatusCondition();
         if (res.data.status === 'OK') {
           const fetchedDelegations = res.data.result
@@ -253,8 +253,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     return dateString;
   };
 
-  const editLivingSituation = (livingSituationId, values, lang) => {
-    updateLivingSituation(livingSituationId, values, lang).then(
+  const editLivingSituation = (livingSituationId, values) => {
+    updateLivingSituation(livingSituationId, values).then(
       () => {
         setSnackMsg(i18n.t('GENERAL.EDIT_SUCCESS'));
         setVisible(true);
@@ -267,8 +267,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     );
   };
 
-  const createLivingSituation = (values, lang) => {
-    saveLivingSituation(values, lang).then(
+  const createLivingSituation = (values) => {
+    saveLivingSituation(values).then(
       () => {
         setSnackMsg(i18n.t('GENERAL.CREATE_SUCCESS'));
         setVisible(true);
@@ -323,9 +323,9 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                     personId: personId,
                   };
                   if (isCreate) {
-                    createLivingSituation(transformValues, i18n.locale);
+                    createLivingSituation(transformValues);
                   } else {
-                    editLivingSituation(livingSituation.livingSituationId, transformValues, i18n.locale);
+                    editLivingSituation(livingSituation.livingSituationId, transformValues);
                   }
 
                   console.log('values', values);

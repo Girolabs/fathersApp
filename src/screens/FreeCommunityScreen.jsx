@@ -24,8 +24,8 @@ class FreeCommunityScreen extends Component {
     generations: [],
   };
 
-  loadCourses = (fields, lang) => {
-    getCourses(fields,lang).then((res) => {
+  loadCourses = (fields) => {
+    getCourses(fields).then((res) => {
       let data = [];
       res.data.result.forEach((a) => {
         let i = a.generationId == null ? 0 : a.generationId;
@@ -44,7 +44,7 @@ class FreeCommunityScreen extends Component {
   async componentDidMount() {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      this.loadCourses(false,i18n.locale);
+      this.loadCourses(false);
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }

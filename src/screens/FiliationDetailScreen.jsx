@@ -27,8 +27,8 @@ class FiliationDetailScreen extends Component {
     filiation: null,
   };
 
-  loadFiliation = (filiationId, fields, lang) => {
-    getFiliation(filiationId, fields, lang)
+  loadFiliation = (filiationId, fields) => {
+    getFiliation(filiationId, fields)
       .then((res) => {
         const fetchedFiliation = {
           ...res.data.result,
@@ -46,7 +46,7 @@ class FiliationDetailScreen extends Component {
     const filiationId = navigation.getParam('filiationId');
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      this.loadFiliation(filiationId, false, i18n.locale);
+      this.loadFiliation(filiationId, false);
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }

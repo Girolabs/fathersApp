@@ -28,8 +28,8 @@ class CommunityScreen extends Component {
   _onToggleSnackBar = () => this.setState({ visible: !this.state.visible });
   _onDismissSnackBar = () => this.setState({ visible: false });
 
-  loadTerritories = (fields, lang) => {
-    getTerritories(fields, lang)
+  loadTerritories = (fields) => {
+    getTerritories(fields)
       .then((res) => {
         const fetchedDelegations = res.data.result
           .map((entry) => {
@@ -49,7 +49,7 @@ class CommunityScreen extends Component {
   async componentDidMount() {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      this.loadTerritories('all', i18n.locale);
+      this.loadTerritories('all');
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }

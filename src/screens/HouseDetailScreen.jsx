@@ -32,11 +32,11 @@ class HouseDetailScreen extends Component {
     house: null,
   };
 
-  loadHouse = (houseId, fields, lang) => {
-    getHouse(houseId, fields, lang)
+  loadHouse = (houseId, fields) => {
+    getHouse(houseId, fields)
       .then((resHouse) => {
         const house = resHouse.data.result;
-        getFiliation(house.filiationId, fields, lang)
+        getFiliation(house.filiationId, fields)
           .then((resFiliation) => {
             const filiation = resFiliation.data.result;
             const membersHouse = filiation.persons
@@ -58,7 +58,7 @@ class HouseDetailScreen extends Component {
     const houseId = navigation.getParam('houseId');
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      this.loadHouse(houseId, false, i18n.locale);
+      this.loadHouse(houseId, false);
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }

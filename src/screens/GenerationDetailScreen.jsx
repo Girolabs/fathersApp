@@ -25,8 +25,8 @@ class GenerationDetailScreen extends Component {
     loading: true,
   };
 
-  loadGeneration = (generationId, fields, lang) => {
-    getGeneration(generationId, fields, lang)
+  loadGeneration = (generationId, fields) => {
+    getGeneration(generationId, fields)
       .then((res) => {
         const generation = res.data.result;
         this.setState({ generation: generation, loading: false });
@@ -40,7 +40,7 @@ class GenerationDetailScreen extends Component {
     const generationId = navigation.getParam('generationId');
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      this.loadGeneration(generationId, false, i18n.locale);
+      this.loadGeneration(generationId, false);
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }

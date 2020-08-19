@@ -19,10 +19,10 @@ const BulletinDetail = ({ navigation }) => {
   const [visible, setVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
 
-  const loadPost = async (postId, lang) => {
+  const loadPost = async (postId) => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      getBoardPost(postId, lang)
+      getBoardPost(postId)
         .then((res) => {
           const { content } = res.data.result;
           const head =
@@ -53,7 +53,7 @@ const BulletinDetail = ({ navigation }) => {
   useEffect(() => {
     const postId = navigation.getParam('postId');
 
-    loadPost(postId, i18n.locale);
+    loadPost(postId);
   }, []);
 
   return (

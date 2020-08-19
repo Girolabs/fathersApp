@@ -162,7 +162,7 @@ const PatreDetailScreen = ({ navigation }) => {
     const status = await Network.getNetworkStateAsync();
 
     if (status.isConnected) {
-      getInterfaceData(i18n.locale).then((res) => {
+      getInterfaceData().then((res) => {
         const viewPermRole = tempFather.viewPermissionForCurrentUser;
         const { personFieldsByViewPermission } = res.data.result;
         const viewRoles = Object.keys(personFieldsByViewPermission);
@@ -187,7 +187,7 @@ const PatreDetailScreen = ({ navigation }) => {
       const status = await Network.getNetworkStateAsync();
       if (status.isConnected === true) {
         const fatherId = navigation.getParam('fatherId');
-        getPerson(fatherId, false, i18n.locale)
+        getPerson(fatherId, false)
           .then((response) => {
             const resFather = response.data.result;
             setFather(resFather);

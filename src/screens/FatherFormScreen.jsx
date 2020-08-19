@@ -23,7 +23,7 @@ import jwt from 'jwt-decode'; // import dependency
 import { Snackbar } from 'react-native-paper';
 import Colors from '../constants/Colors';
 import { NavigationEvents } from 'react-navigation';
-import { getPerson, getPersonByUser, getInterfaceData } from '../api';
+import { getPerson, getPersonByUser, getInterfaceData, updateFatherForm } from '../api';
 
 const styles = StyleSheet.create({
   snackError: {
@@ -72,7 +72,7 @@ class FatherFormScreen extends Component {
   loadInterfaceData = async (father) => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected == true) {
-      getInterfaceData(i18n.locale).then((response) => {
+      getInterfaceData().then((response) => {
         console.log('father', father);
         const viewPermRole = father.viewPermissionForCurrentUser;
         const updatePermRole = father.updatePermissionForCurrentUser;
@@ -135,7 +135,7 @@ class FatherFormScreen extends Component {
     if (status.isConnected === true) {
       const fatherId = this.props.navigation.getParam('fatherId');
       if (fatherId) {
-        getPerson(fatherId, 'all', i18n.locale).then((response) => {
+        getPerson(fatherId, 'all').then((response) => {
           const father = response.data.result;
           this.setState({ father });
 
@@ -229,12 +229,12 @@ class FatherFormScreen extends Component {
                     this.setState({ loading: true });
                     console.log(values);
                     //this.setState({loading:true})
-                    axios.put(`${i18n.locale}/api/v1/persons/${this.state.father.personId}`, values).then(
-                      (response) => {
+                    updateFatherForm(this.state.father.personId, values).then(
+                      () => {
                         this.loadPerson();
                         this.setState(this.setState({ snackMsg: i18n.t('GENERAL.EDIT_SUCCESS'), visible: true }));
                       },
-                      (err) => {
+                      () => {
                         this.setState(
                           this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false }),
                         );
