@@ -13,19 +13,22 @@ import {
 } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import i18n from 'i18n-js';
-import Colors from '../constants/Colors';
-import axios from '../../axios-instance';
 import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from 'expo-vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Formik, setFieldValue } from 'formik';
-import { HeaderTitle } from 'react-navigation-stack';
+import { Formik } from 'formik';
+
 import * as Network from 'expo-network';
-import Constants from 'expo-constants';
 import * as _ from 'lodash';
 import * as Yup from 'yup';
 import { Snackbar } from 'react-native-paper';
 import { set } from 'lodash';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import Colors from '../constants/Colors';
+import HeaderButton from '../components/HeaderButton';
+import {
+  getFiliations, getTerritories, getHouses, getInterfaceData, saveLivingSituation, updateLivingSituation,
+} from '../api';
 
 const styles = StyleSheet.create({
   title: {
@@ -135,6 +138,9 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   useEffect(() => {
     const livingSituation = navigation.getParam('livingSituation');
     const paramPersonId = navigation.getParam('personId');
+    if (!paramPersonId) {
+      navigation.goBack();
+    }
     console.log('living', livingSituation);
 
     if (!livingSituation || livingSituation.endDate) {
@@ -142,7 +148,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
 
       loadFiliations();
       loadHouses();
-    }else {
+    } else {
       const transFormedLiving = {
         ...livingSituation,
         startDate: livingSituation && livingSituation.startDate ? livingSituation.startDate.split('T')[0] : null,
@@ -151,15 +157,14 @@ const LivingSituationsFormScreen = ({ navigation }) => {
       setLivingSituation(transFormedLiving);
     }
     loadTerritory();
-    setPersonId(paramPersonId); 
+    setPersonId(paramPersonId);
   }, []);
 
   const loadHouses = async () => {
     const status = await Network.getNetworkStateAsync();
 
     if (status.isConnected == true) {
-      axios.get(`${i18n.locale}/api/v1/houses?fields=all&ey=${Constants.manifest.extra.secretKey}`).then((response) => {
-        console.log('houses', response);
+      getHouses(false).then((response) => {
         const fetchedHouses = response.data.result.map((house) => {
           if (house.isActive == true) {
             return {
@@ -176,10 +181,9 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   const loadStatusCondition = async () => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected == true) {
-      axios.get(`${i18n.locale}/api/v1/interface-data`).then((response) => {
-        let livingConditionStatusLabels = response.data.result.livingConditionStatusLabels;
-
-        let statusLabels = [];
+      getInterfaceData().then((response) => {
+        const { livingConditionStatusLabels } = response.data.result;
+        const statusLabels = [];
         console.log(Object.keys(livingConditionStatusLabels));
         Object.keys(livingConditionStatusLabels).forEach((key) => {
           console.log(key);
@@ -200,10 +204,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     const status = await Network.getNetworkStateAsync();
 
     if (status.isConnected == true) {
-      axios
-        .get(`${i18n.locale}/api/v1/filiations?fields=all&ey=${Constants.manifest.extra.secretKey}`)
+      getFiliations(false)
         .then((response) => {
-          console.log('filiations', response);
           const fetchedFiliations = response.data.result
             .map((filiation) => {
               if (filiation.isActive == true) {
@@ -222,7 +224,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   const loadTerritory = async () => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
-      axios.get(`${i18n.locale}/api/v1/territories?fields=all&ey=${Constants.manifest.extra.secretKey}`).then((res) => {
+      getTerritories(false).then((res) => {
         loadStatusCondition();
         if (res.data.status === 'OK') {
           const fetchedDelegations = res.data.result
@@ -240,28 +242,27 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   };
 
   const formatDate = (selectedDate) => {
-    let newDate = new Date();
+    const newDate = new Date();
     newDate.setTime(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60 * 1000);
     selectedDate = newDate;
-    let year = selectedDate.getUTCFullYear();
-    let month =
-      selectedDate.getUTCMonth() + 1 < 10 ? '0' + (selectedDate.getUTCMonth() + 1) : selectedDate.getUTCMonth() + 1;
-    let day = selectedDate.getUTCDate();
-    let dateString = year + '-' + month + '-' + day;
+    const year = selectedDate.getUTCFullYear();
+    const month = selectedDate.getUTCMonth() + 1 < 10 ? `0${selectedDate.getUTCMonth() + 1}` : selectedDate.getUTCMonth() + 1;
+    const day = selectedDate.getUTCDate();
+    const dateString = `${year}-${month}-${day}`;
 
     console.log(selectedDate);
     console.log(dateString);
     return dateString;
   };
 
-  const editLivingSituation = (values) => {
-    axios.put(`${i18n.locale}/api/v1/living-situations/${livingSituation.livingSituationId}`, values).then(
-      (response) => {
+  const editLivingSituation = (livingSituationId, values) => {
+    updateLivingSituation(livingSituationId, values).then(
+      () => {
         setSnackMsg(i18n.t('GENERAL.EDIT_SUCCESS'));
         setVisible(true);
         navigation.goBack();
       },
-      (err) => {
+      () => {
         setSnackMsg(i18n.t('GENERAL.ERROR'));
         setVisible(true);
       },
@@ -269,13 +270,13 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   };
 
   const createLivingSituation = (values) => {
-    axios.post(`${i18n.locale}/api/v1/living-situations`, values).then(
-      (response) => {
+    saveLivingSituation(values).then(
+      () => {
         setSnackMsg(i18n.t('GENERAL.CREATE_SUCCESS'));
         setVisible(true);
         navigation.goBack();
       },
-      (err) => {
+      () => {
         setSnackMsg(i18n.t('GENERAL.ERROR'));
         setVisible(true);
       },
@@ -318,15 +319,15 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                     .min(Yup.ref('startDate'), i18n.t('LIVING_SITUATION.ERROR_END_DATE')),
                 })}
                 onSubmit={(values) => {
-                  let transformValues = {
+                  const transformValues = {
                     ...values,
                     status: values.status.value ? values.status.value : values.status,
-                    personId: personId,
+                    personId,
                   };
                   if (isCreate) {
                     createLivingSituation(transformValues);
                   } else {
-                    editLivingSituation(transformValues);
+                    editLivingSituation(livingSituation.livingSituationId, transformValues);
                   }
 
                   console.log('values', values);
@@ -334,76 +335,78 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                   console.log(transformValues);
                 }}
               >
-                {({ handleChange, values, handleSubmit, errors, setFieldValue, touched }) => (
+                {({
+                  handleChange, values, handleSubmit, errors, setFieldValue, touched,
+                }) => (
                   <>
                     <View>
                       {openStartDate && (
-                        <DateTimePicker
-                          value={startDate ? new Date(startDate) : new Date()}
-                          mode={'date'}
-                          display="default"
-                          onChange={(event, selectedDate) => {
-                            setOpenStartDate(false);
-                            const dateFormated = formatDate(selectedDate);
-                            setFieldValue('startDate', dateFormated);
-                          }}
-                        />
+                      <DateTimePicker
+                        value={startDate ? new Date(startDate) : new Date()}
+                        mode="date"
+                        display="default"
+                        onChange={(event, selectedDate) => {
+                          setOpenStartDate(false);
+                          const dateFormated = formatDate(selectedDate);
+                          setFieldValue('startDate', dateFormated);
+                        }}
+                      />
                       )}
                       {openEndDate && (
-                        <DateTimePicker
-                          value={endDate ? new Date(endDate) : new Date()}
-                          mode={'date'}
-                          display="default"
-                          onChange={(event, selectedDate) => {
-                            setOpenEndDate(false);
-                            const dateFormated = formatDate(selectedDate);
-                            setFieldValue('endDate', dateFormated);
-                          }}
-                        />
+                      <DateTimePicker
+                        value={endDate ? new Date(endDate) : new Date()}
+                        mode="date"
+                        display="default"
+                        onChange={(event, selectedDate) => {
+                          setOpenEndDate(false);
+                          const dateFormated = formatDate(selectedDate);
+                          setFieldValue('endDate', dateFormated);
+                        }}
+                      />
                       )}
                       {isCreate && (
-                        <>
-                          <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>
-                          <RNPickerSelect
-                            name="filiationId"
-                            style={{
-                              inputAndroid: {
-                                backgroundColor: Colors.surfaceColorSecondary,
-                                borderRadius: 10,
-                              },
-                              iconContainer: {
-                                top: 10,
-                                right: 15,
-                              },
-                            }}
-                            onValueChange={(e) => setFieldValue('filiationId', e)}
-                            value={_.get(values, 'filiationId') || ''}
-                            items={filiations}
-                            Icon={() => {
-                              return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
-                            }}
-                          />
-                          <Text style={styles.label}>{i18n.t('LIVING_SITUATION.HOUSE')}</Text>
-                          <RNPickerSelect
-                            name="houseId"
-                            style={{
-                              inputAndroid: {
-                                backgroundColor: Colors.surfaceColorSecondary,
-                                borderRadius: 10,
-                              },
-                              iconContainer: {
-                                top: 10,
-                                right: 15,
-                              },
-                            }}
-                            onValueChange={(e) => setFieldValue('houseId', e)}
-                            value={_.get(values, 'houseId') || ''}
-                            items={houses}
-                            Icon={() => {
-                              return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
-                            }}
-                          />
-                        </>
+                      <>
+                        <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>
+                        <RNPickerSelect
+                          name="filiationId"
+                          style={{
+                            inputAndroid: {
+                              backgroundColor: Colors.surfaceColorSecondary,
+                              borderRadius: 10,
+                            },
+                            iconContainer: {
+                              top: 10,
+                              right: 15,
+                            },
+                          }}
+                          onValueChange={(e) => setFieldValue('filiationId', e)}
+                          value={_.get(values, 'filiationId') || ''}
+                          items={filiations}
+                          Icon={() => {
+                            return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
+                          }}
+                        />
+                        <Text style={styles.label}>{i18n.t('LIVING_SITUATION.HOUSE')}</Text>
+                        <RNPickerSelect
+                          name="houseId"
+                          style={{
+                            inputAndroid: {
+                              backgroundColor: Colors.surfaceColorSecondary,
+                              borderRadius: 10,
+                            },
+                            iconContainer: {
+                              top: 10,
+                              right: 15,
+                            },
+                          }}
+                          onValueChange={(e) => setFieldValue('houseId', e)}
+                          value={_.get(values, 'houseId') || ''}
+                          items={houses}
+                          Icon={() => {
+                            return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
+                          }}
+                        />
+                      </>
                       )}
 
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.RESPONSIBLE_TERRITORY')}</Text>
@@ -468,7 +471,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                             <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
                           </View>
                           {errors && errors.endDate && (
-                            <Text style={styles.errorText}>{i18n.t('LIVING_SITUATION.ERROR_END_DATE')}</Text>
+                          <Text style={styles.errorText}>{i18n.t('LIVING_SITUATION.ERROR_END_DATE')}</Text>
                           )}
                         </>
                       </TouchableOpacity>
@@ -518,15 +521,26 @@ const LivingSituationsFormScreen = ({ navigation }) => {
           )}
           <Snackbar visible={visible} onDismiss={() => setVisible(false)} style={styles.snackError}>
             {snackMsg}
-      </Snackbar>
+          </Snackbar>
         </SafeAreaView>
       </KeyboardAvoidingView>
     </>
   );
 };
 
-LivingSituationsFormScreen.navigationOptions = () => ({
+LivingSituationsFormScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
+  headerRight: (
+    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title="Menu"
+        iconName="md-menu"
+        onPress={() => {
+          navigationData.navigation.toggleDrawer();
+        }}
+      />
+    </HeaderButtons>
+  ),
 });
 
 export default LivingSituationsFormScreen;

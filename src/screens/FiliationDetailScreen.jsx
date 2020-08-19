@@ -1,7 +1,16 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, Image, ActivityIndicator, Platform, SafeAreaView, FlatList, TouchableNativeFeedback, TouchableOpacity } from 'react-native';
-import axios from '../../axios-instance';
-import Constants from 'expo-constants';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  ActivityIndicator,
+  Platform,
+  SafeAreaView,
+  FlatList,
+  TouchableNativeFeedback,
+  TouchableOpacity,
+} from 'react-native';
 import Colors from '../constants/Colors';
 import { I18nContext } from '../context/I18nProvider';
 import i18n from 'i18n-js';
@@ -11,33 +20,38 @@ import moment from 'moment';
 import 'moment/min/locales';
 import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import HeaderButton from '../components/HeaderButton';
+import { getFiliation } from '../api';
 
 class FiliationDetailScreen extends Component {
   state = {
-    filiation: null
-  }
+    filiation: null,
+  };
+
+  loadFiliation = (filiationId, fields) => {
+    getFiliation(filiationId, fields)
+      .then((res) => {
+        const fetchedFiliation = {
+          ...res.data.result,
+          persons: res.data.result.persons.filter((person) => person.isActive == true && person.isMember == true),
+        };
+        this.setState({ filiation: fetchedFiliation });
+      })
+      .catch((err) => {
+        this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
+      });
+  };
 
   async componentDidMount() {
     const { navigation } = this.props;
     const filiationId = navigation.getParam('filiationId');
     const status = await Network.getNetworkStateAsync();
-    if (status.isConnected === true) {
-      axios.
-        get(`${i18n.locale}/api/v1/filiations/${filiationId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
-        .then((res) => {
-          const fetchedFiliation = {
-            ...res.data.result,
-            persons: res.data.result.persons.filter(person => (person.isActive == true && person.isMember == true))
-            
-          }
-          this.setState({ filiation: fetchedFiliation });
-        }).catch(err => {
-          this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false })
-        });
+    if (status.isConnected) {
+      this.loadFiliation(filiationId, false);
     } else {
-      this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false })
+      this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
-
   }
   render() {
     const { navigation } = this.props;
@@ -63,23 +77,26 @@ class FiliationDetailScreen extends Component {
                     <TouchableComp
                       onPress={() => {
                         navigation.navigate('DelegationDetail', { delegationId: filiation.territory.territoryId });
-                      }}>
+                      }}
+                    >
                       <View style={styles.listItem}>
                         <Text style={styles.listItemTitle}>{i18n.t('FILIAL_DETAIL.TERRITORY')}</Text>
                         <Text style={styles.listItemBody}>{filiation.territory.name}</Text>
                       </View>
-
                     </TouchableComp>
-                    {filiation.mainAssignment &&
+                    {filiation.mainAssignment && (
                       <TouchableComp
                         onPress={() => {
                           navigation.navigate('PatreDetail', { fatherId: filiation.mainAssignment.person.personId });
-                        }}>
+                        }}
+                      >
                         <View style={styles.listItem}>
                           <Text style={styles.listItemTitle}>{i18n.t('FILIAL_DETAIL.SUPERIOR')}</Text>
                           <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 10 }}>
                             <Image
-                              source={{ uri: `https://schoenstatt-fathers.link${filiation.mainAssignment.person.photo}` }}
+                              source={{
+                                uri: `https://schoenstatt-fathers.link${filiation.mainAssignment.person.photo}`,
+                              }}
                               style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }}
                             />
 
@@ -87,46 +104,66 @@ class FiliationDetailScreen extends Component {
                               <Text style={styles.listItemBody}> {filiation.mainAssignment.roleTitle}</Text>
                               <Text style={styles.listItemBody}>{filiation.mainAssignment.person.fullName}</Text>
                               <Text style={styles.listItemBody}>
-                                {`${filiation.mainAssignment.startDate ? moment.utc(filiation.mainAssignment.startDate).format('Do MMMM YYYY') : ''} ${filiation.mainAssignment.endDate ? moment.utc(filiation.mainAssignment.endDate).format('Do MMMM YYYY') : ''}`}
+                                {`${
+                                  filiation.mainAssignment.startDate
+                                    ? moment.utc(filiation.mainAssignment.startDate).format('Do MMMM YYYY')
+                                    : ''
+                                } ${
+                                  filiation.mainAssignment.endDate
+                                    ? moment.utc(filiation.mainAssignment.endDate).format('Do MMMM YYYY')
+                                    : ''
+                                }`}
                               </Text>
                             </View>
                           </View>
                         </View>
                       </TouchableComp>
-                    }
+                    )}
                   </View>
-                  <View  >
+                  <View>
                     <Text style={styles.sectionHeader}>{i18n.t('FILIAL_DETAIL.HOMES')}</Text>
                     <View>
-                      {filiation.houses.filter(house => house.isActive == true).map(house => {
-                        return (
-                          <TouchableComp onPress={() => {
-                            navigation.navigate('HouseDetail', { houseId: house.houseId })
-                          }}>
-                            <View style={styles.card}>
-                              <Text style={styles.cardTitle}>{house.name}</Text>
-                              <View style={styles.cardBody}>
-                                <Text style={styles.cardBodyText}>{house.isMainFiliationHouse ? `${i18n.t('FILIAL_DETAIL.MAIN_HOUSE')}` : ''}</Text>
+                      {filiation.houses
+                        .filter((house) => house.isActive == true)
+                        .map((house) => {
+                          return (
+                            <TouchableComp
+                              onPress={() => {
+                                navigation.navigate('HouseDetail', { houseId: house.houseId });
+                              }}
+                            >
+                              <View style={styles.card}>
+                                <Text style={styles.cardTitle}>{house.name}</Text>
+                                <View style={styles.cardBody}>
+                                  <Text style={styles.cardBodyText}>
+                                    {house.isMainFiliationHouse ? `${i18n.t('FILIAL_DETAIL.MAIN_HOUSE')}` : ''}
+                                  </Text>
+                                </View>
                               </View>
-                            </View>
-                          </TouchableComp>
-                        )
-                      })}
+                            </TouchableComp>
+                          );
+                        })}
                     </View>
                   </View>
-                  <View >
+                  <View>
                     <Text style={styles.sectionHeader}>{i18n.t('FILIAL_DETAIL.MEMBERS')}</Text>
                     <FlatList
                       data={filiation.persons}
                       renderItem={({ item }) => {
                         return (
-                          <TouchableComp onPress={() => navigation.navigate('PatreDetail', { fatherId: item.personId })}>
+                          <TouchableComp
+                            onPress={() => navigation.navigate('PatreDetail', { fatherId: item.personId })}
+                          >
                             <View style={styles.memberItem}>
                               <Image
                                 source={{ uri: `https://schoenstatt-fathers.link${item.photo}` }}
                                 style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
                               />
-                              <Text style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}>{item.fullName}</Text>
+                              <Text
+                                style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}
+                              >
+                                {item.fullName}
+                              </Text>
                             </View>
                           </TouchableComp>
                         );
@@ -134,21 +171,37 @@ class FiliationDetailScreen extends Component {
                     />
                   </View>
                 </ScrollView>
-              ) : <ActivityIndicator size="large" color={Colors.primaryColor} />}
-              <Snackbar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })} style={styles.snackError}>
+              ) : (
+                <ActivityIndicator size="large" color={Colors.primaryColor} />
+              )}
+              <Snackbar
+                visible={this.state.visible}
+                onDismiss={() => this.setState({ visible: false })}
+                style={styles.snackError}
+              >
                 {this.state.snackMsg}
               </Snackbar>
             </SafeAreaView>
-          )
+          );
         }}
       </I18nContext.Consumer>
     );
   }
+}
 
-};
-
-FiliationDetailScreen.navigationOptions = () => ({
+FiliationDetailScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
+  headerRight: (
+    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title="Menu"
+        iconName="md-menu"
+        onPress={() => {
+          navigationData.navigation.toggleDrawer();
+        }}
+      />
+    </HeaderButtons>
+  ),
 });
 
 const styles = StyleSheet.create({
@@ -160,14 +213,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 30,
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
   },
   title: {
     fontFamily: 'work-sans-semibold',
     fontSize: 27,
     color: Colors.primaryColor,
     marginRight: 10,
-    width: '80%'
+    width: '80%',
   },
   sectionHeader: {
     fontFamily: 'work-sans-medium',
@@ -185,13 +238,12 @@ const styles = StyleSheet.create({
   listItemTitle: {
     fontFamily: 'work-sans-semibold',
     fontSize: 18,
-    color: Colors.onSurfaceColorPrimary
-
+    color: Colors.onSurfaceColorPrimary,
   },
   listItemBody: {
     fontFamily: 'work-sans',
     fontSize: 12,
-    color: Colors.onSurfaceColorPrimary
+    color: Colors.onSurfaceColorPrimary,
   },
   card: {
     width: '90%',
@@ -205,7 +257,7 @@ const styles = StyleSheet.create({
     color: Colors.surfaceColorSecondary,
     fontSize: 18,
     fontFamily: 'work-sans-semibold',
-    marginLeft: 10
+    marginLeft: 10,
   },
   cardBody: {
     flexDirection: 'row',

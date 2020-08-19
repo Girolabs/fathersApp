@@ -23,6 +23,7 @@ import { I18nContext } from '../context/I18nProvider';
 import { Flag } from 'react-native-svg-flagkit';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { getTerritories, getFiliations, getGenerations, getCourses, getPersons } from '../api';
 
 class AssignmentsScreen extends Component {
   state = {
@@ -33,10 +34,9 @@ class AssignmentsScreen extends Component {
     courses: [],
   };
   componentDidMount() {
-    axios.get(`${i18n.locale}/api/v1/territories?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resTerritory) => {
+    getTerritories('all').then((resTerritory) => {
       let territories = resTerritory.data.result;
-
-      axios.get(`${i18n.locale}/api/v1/filiations?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resFiliations) => {
+      getFiliations('all').then((resFiliations) => {
         let filiations = resFiliations.data.result;
         territories = territories.map((territory) => {
           let resfiliations = [];
@@ -51,51 +51,31 @@ class AssignmentsScreen extends Component {
                   };
                 }
               });
-              if (returnFiliation != null) {
-                return returnFiliation;
-              } else {
-                return tFiliation;
-              }
+              filiations = filiations.filter((filiation) => filiation != undefined);
+              return {
+                ...territory,
+                filiations,
+              };
             });
-            return {
-              ...territory,
-              filiations: resfiliations,
-            };
-          }
-        });
-        territories = territories.map((territory) => {
-          let filiations = territory.filiations.map((filiation) => {
-            if (filiation.isActive == true) {
-              return filiation;
-            }
-          });
-          filiations = filiations.filter((filiation) => filiation != undefined);
-          return {
-            ...territory,
-            filiations,
-          };
-        });
 
-        console.log('t', territories);
+            console.log('t', territories);
 
-        territories = territories.map((territory) => {
-          return {
-            ...territory,
-            data: territory.assignments,
-          };
-        });
+            territories = territories.map((territory) => {
+              return {
+                ...territory,
+                data: territory.assignments,
+              };
+            });
 
-        axios.get(`${i18n.locale}/api/v1/generations?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resGenerations) => {
+        getGenerations('all').then((resGenerations) => {
           let generations = resGenerations.data.result;
-          axios.get(`${i18n.locale}/api/v1/courses?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resCourses) => {
+          getCourses('all').then((resCourses) => {
             let courses = resCourses.data.result;
-            axios.get(`${i18n.locale}/api/v1/persons?fields=all&key=${Constants.manifest.extra.secretKey}`).then((resPersons) => {
+            getPersons(false).then((resPersons) => {
               let persons = resPersons.data.result;
-
               generations = generations.map((generation) => {
                 if (generation.mainAssignment) {
                   let person = null;
-
                   persons.map((el) => {
                     if (el.personId == generation.mainAssignment.personId) {
                       person = el;
@@ -115,39 +95,39 @@ class AssignmentsScreen extends Component {
                 }
               });
 
-              //console.log('g', generations);
+                        //console.log('g', generations);
 
-              this.setState({ generations });
+                        this.setState({ generations });
 
-              courses = courses.map((course) => {
-                if (course.leaderAssignment) {
-                  let person = null;
+                        courses = courses.map((course) => {
+                          if (course.leaderAssignment) {
+                            let person = null;
 
-                  persons.map((el) => {
-                    if (el.personId == course.leaderAssignment.personId) {
-                      person = el;
-                    }
+                            persons.map((el) => {
+                              if (el.personId == course.leaderAssignment.personId) {
+                                person = el;
+                              }
+                            });
+                            return {
+                              ...course,
+                              leaderAssignment: {
+                                ...course.leaderAssignment,
+                                person: person,
+                              },
+                            };
+                          } else {
+                            return {
+                              ...course,
+                            };
+                          }
+                        });
+                        this.setState({ courses });
+                      });
                   });
-                  return {
-                    ...course,
-                    leaderAssignment: {
-                      ...course.leaderAssignment,
-                      person: person,
-                    },
-                  };
-                } else {
-                  return {
-                    ...course,
-                  };
-                }
               });
-              this.setState({ courses });
-            });
+            this.setState({ territories, loading: false });
           });
-        });
-        this.setState({ territories, loading: false });
       });
-    });
   }
   render() {
     const { territories, selectedtTab } = this.state;
@@ -178,13 +158,15 @@ class AssignmentsScreen extends Component {
     if (territories.length > 0) {
       switch (selectedtTab) {
         case 0:
-          filtered = territories.filter(territory => territory.isActive == true).map((territory) => {
-            let data = territory.data.filter((assignment) => assignment.isActive === true);
-            return {
-              ...territory,
-              data,
-            };
-          });
+          filtered = territories
+            .filter((territory) => territory.isActive == true)
+            .map((territory) => {
+              let data = territory.data.filter((assignment) => assignment.isActive === true);
+              return {
+                ...territory,
+                data,
+              };
+            });
 
           list = (
             <SectionList
@@ -221,25 +203,27 @@ class AssignmentsScreen extends Component {
           break;
 
         case 1:
-          filtered = territories.filter(territory => territory.isActive == true).map((territory) => {
-            let filiations = territory.filiations.map((filiation) => {
+          filtered = territories
+            .filter((territory) => territory.isActive == true)
+            .map((territory) => {
+              let filiations = territory.filiations.map((filiation) => {
+                return {
+                  ...filiation,
+                  data: filiation.data.map((asg) => {
+                    return {
+                      ...asg,
+                      filiationName: filiation.name,
+                      filiationId: filiation.filiationId,
+                      country: filiation.country,
+                    };
+                  }),
+                };
+              });
               return {
-                ...filiation,
-                data: filiation.data.map((asg) => {
-                  return {
-                    ...asg,
-                    filiationName: filiation.name,
-                    filiationId:filiation.filiationId,
-                    country: filiation.country,
-                  };
-                }),
+                ...territory,
+                filiations,
               };
             });
-            return {
-              ...territory,
-              filiations,
-            };
-          });
           list = (
             <ScrollView>
               {filtered.map((territory) => {
@@ -352,7 +336,7 @@ class AssignmentsScreen extends Component {
           break;
         case 3:
           list = (
-            <ScrollView >
+            <ScrollView>
               {this.state.generations.map((generation) => {
                 return (
                   <ListItemGC
@@ -437,14 +421,14 @@ class AssignmentsScreen extends Component {
                                 this.state.selectedtTab === index ? styles.tabButtonTextSelected : styles.tabButtonText,
                               ]}
                             >
-                              {(tab.text && tab.text.length >=6) ? tab.text.slice(0,6): tab.text }
+                              {tab.text && tab.text.length >= 6 ? tab.text.slice(0, 6) : tab.text}
                             </Text>
                           </View>
                         </TouchableComp>
                       );
                     })}
                   </View>
-                  <View style={styles.scrollContainer} >{filtered && <Fragment>{list}</Fragment>}</View>
+                  <View style={styles.scrollContainer}>{filtered && <Fragment>{list}</Fragment>}</View>
                 </Fragment>
               ) : (
                 <ActivityIndicator size="large" color={Colors.primaryColor} />
@@ -459,7 +443,7 @@ class AssignmentsScreen extends Component {
 
 AssignmentsScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerLeft: (
+  headerRight: (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"
@@ -632,9 +616,9 @@ const styles = StyleSheet.create({
     fontFamily: 'work-sans-semibold',
     color: Colors.primaryColor,
   },
-  scrollContainer:{
-    paddingBottom:80
-  }
+  scrollContainer: {
+    paddingBottom: 80,
+  },
 });
 
 export default AssignmentsScreen;

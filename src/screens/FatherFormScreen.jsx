@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Button,
   AsyncStorage,
   Platform,
   TouchableNativeFeedback,
@@ -17,16 +16,14 @@ import * as Yup from 'yup';
 import InputWithFormik from '../components/InputWithFormik';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { pathHasError } from '../utils/form-utils';
 import * as Network from 'expo-network';
 import axios from '../../axios-instance';
 import i18n from 'i18n-js';
-import { jwtDecode } from '../utils/jwt-utils';
 import jwt from 'jwt-decode'; // import dependency
-import Constants from 'expo-constants';
 import { Snackbar } from 'react-native-paper';
 import Colors from '../constants/Colors';
 import { NavigationEvents } from 'react-navigation';
+import { getPerson, getPersonByUser, getInterfaceData, updateFatherForm } from '../api';
 
 const styles = StyleSheet.create({
   snackError: {
@@ -75,7 +72,7 @@ class FatherFormScreen extends Component {
   loadInterfaceData = async (father) => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected == true) {
-      axios.get(`${i18n.locale}/api/v1/interface-data`).then((response) => {
+      getInterfaceData().then((response) => {
         console.log('father', father);
         const viewPermRole = father.viewPermissionForCurrentUser;
         const updatePermRole = father.updatePermissionForCurrentUser;
@@ -133,46 +130,20 @@ class FatherFormScreen extends Component {
 
   loadPerson = async () => {
     this.setState({ loading: true });
+    const { navigation } = this.props;
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
       const fatherId = this.props.navigation.getParam('fatherId');
       if (fatherId) {
-        axios
-          .get(
-            `${i18n.locale}/api/v1/persons/${fatherId}?fields=all&authorized=true&$key=${Constants.manifest.extra.secretkey}`,
-          )
-          .then((response) => {
-            const father = response.data.result;
-            this.setState({ father });
+        getPerson(fatherId, 'all').then((response) => {
+          const father = response.data.result;
+          this.setState({ father });
 
-            this.loadInterfaceData(response.data.result);
-          });
+          this.loadInterfaceData(response.data.result);
+        });
       } else {
-        let decode = await AsyncStorage.getItem('token');
-        decode = JSON.parse(decode);
-        decode = jwt(decode.jwt).sub;
-        axios.get(`${i18n.locale}/api/v1/persons?userId=${decode}`).then(
-          (response) => {
-            const fatherId = !!response.data.result && response.data.result[0].personId;
-            axios
-              .get(
-                `${i18n.locale}/api/v1/persons/${fatherId}?fields=all&authorized=true&key=${Constants.manifest.extra.secretkey}`,
-              )
-              .then(
-                (response) => {
-                  const father = response.data.result;
-                  this.setState({ father });
-                  this.loadInterfaceData(father);
-                },
-                (error) => {
-                  this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
-                },
-              );
-          },
-          (error) => {
-            this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
-          },
-        );
+        console.log('need to go back')
+        this.props.navigation.navigate('Home')
       }
     } else {
       this.setState({ loading: false, visible: true, snackMsg: i18n.t('GENERAL.NO_INTERNET') });
@@ -258,12 +229,12 @@ class FatherFormScreen extends Component {
                     this.setState({ loading: true });
                     console.log(values);
                     //this.setState({loading:true})
-                    axios.put(`${i18n.locale}/api/v1/persons/${this.state.father.personId}`, values).then(
-                      (response) => {
+                    updateFatherForm(this.state.father.personId, values).then(
+                      () => {
                         this.loadPerson();
                         this.setState(this.setState({ snackMsg: i18n.t('GENERAL.EDIT_SUCCESS'), visible: true }));
                       },
-                      (err) => {
+                      () => {
                         this.setState(
                           this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false }),
                         );
@@ -380,7 +351,7 @@ FatherFormScreen.navigationOptions = (navigationData) => {
   if (showMenu) {
     return {
       headerTitle: '',
-      headerLeft: (
+      headerRight: (
         <HeaderButtons HeaderButtonComponent={HeaderButton}>
           <Item
             title="Menu"
@@ -395,6 +366,17 @@ FatherFormScreen.navigationOptions = (navigationData) => {
   } else {
     return {
       headerTitle: '',
+      headerRight: (
+        <HeaderButtons HeaderButtonComponent={HeaderButton}>
+          <Item
+            title="Menu"
+            iconName="md-menu"
+            onPress={() => {
+              navigationData.navigation.toggleDrawer();
+            }}
+          />
+        </HeaderButtons>
+      ),
     };
   }
 };
