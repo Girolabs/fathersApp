@@ -265,6 +265,12 @@ const DrawerNavigator = createDrawerNavigator(
         drawerLabel: i18n.t('GENERAL.HOME'),
       },
     },
+    Search: {
+      screen: SearchNavigator,
+      navigationOptions: {
+        drawerLabel: i18n.t('GENERAL.SEARCH'),
+      },
+    },
     Profile: {
       screen: ProfileNavigator,
       navigationOptions: {
