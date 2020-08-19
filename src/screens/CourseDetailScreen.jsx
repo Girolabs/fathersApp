@@ -23,49 +23,49 @@ import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
+import { getCourse, getPerson } from '../api';
 
 class CourseDetailScreen extends Component {
   state = {
     course: null,
   };
+
+  loadCourse = (courseId, fields) => {
+    getCourse(courseId, fields)
+      .then((res) => {
+        let course = res.data.result;
+        this.setState({ course });
+        if (course.leaderAssignment) {
+          getPerson(course.leaderAssignment.personId, false)
+            .then((respPerson) => {
+              const person = respPerson.data.result;
+              let leaderAssignment = {
+                ...course.leaderAssignment,
+                person,
+              };
+              course = {
+                ...course,
+                leaderAssignment,
+                persons: course.persons.filter((person) => person.isActive == true && person.isMember == true),
+              };
+              this.setState({ course });
+            })
+            .catch((error) => {
+              this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
+            });
+        }
+      })
+      .catch(() => {
+        this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
+      });
+  };
+
   async componentDidMount() {
     const { navigation } = this.props;
     const courseId = navigation.getParam('courseId');
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
-      axios
-        .get(`${i18n.locale}/api/v1/courses/${courseId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
-        .then((res) => {
-          let course = res.data.result;
-          this.setState({ course });
-          if (course.leaderAssignment) {
-            axios
-              .get(
-                `${i18n.locale}/api/v1/persons/${course.leaderAssignment.personId}?fields=all&key=${Constants.manifest.extra.secretKey}`,
-              )
-              .then((respPerson) => {
-                const person = respPerson.data.result;
-
-                let leaderAssignment = {
-                  ...course.leaderAssignment,
-                  person,
-                };
-
-                course = {
-                  ...course,
-                  leaderAssignment,
-                  persons: course.persons.filter((person) => person.isActive == true && person.isMember == true),
-                };
-                this.setState({ course });
-              })
-              .catch((error) => {
-                this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
-              });
-          }
-        })
-        .catch((error) => {
-          this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
-        });
+      this.loadCourse(courseId, false, i18n.locale);
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }

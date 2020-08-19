@@ -15,11 +15,10 @@ import { Ionicons } from 'expo-vector-icons';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Colors from '../constants/Colors';
-import axios from '../../axios-instance';
-import Constants from 'expo-constants';
 import i18n from 'i18n-js';
 import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
+import { getTerritories } from '../api';
 
 class CommunityScreen extends Component {
   state = {
@@ -29,6 +28,7 @@ class CommunityScreen extends Component {
   _onToggleSnackBar = () => this.setState({ visible: !this.state.visible });
   _onDismissSnackBar = () => this.setState({ visible: false });
 
+<<<<<<< HEAD
   async componentDidMount() {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
@@ -51,6 +51,30 @@ class CommunityScreen extends Component {
         .catch((error) => {
           this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
         });
+=======
+  loadTerritories = (fields) => {
+    getTerritories(fields)
+      .then((res) => {
+        const fetchedDelegations = res.data.result
+          .map((entry) => {
+            return {
+              ...entry,
+              data: entry.filiations.filter((filiation) => filiation.isActive),
+            };
+          })
+          .filter((commuunity) => commuunity.isActive == true);
+        this.setState({ delegations: fetchedDelegations });
+      })
+      .catch(() => {
+        this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
+      });
+  };
+
+  async componentDidMount() {
+    const status = await Network.getNetworkStateAsync();
+    if (status.isConnected) {
+      this.loadTerritories('all');
+>>>>>>> 2369f54abc28e3c8c02804ec0477c6493a92ec34
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
@@ -66,9 +90,15 @@ class CommunityScreen extends Component {
         {this.state.delegations.length > 0 ? (
           <SectionList
             sections={this.state.delegations}
+<<<<<<< HEAD
             renderItem={({ item }) => (
               <Filiation
                 key={item.filiationId}
+=======
+            keyExtractor={(item) => item.filiationId}
+            renderItem={({ item }) => (
+              <Filiation
+>>>>>>> 2369f54abc28e3c8c02804ec0477c6493a92ec34
                 title={item.name}
                 flag={item.country}
                 onSelect={() => this.props.navigation.navigate('FiliationDetail', { filiationId: item.filiationId })}
@@ -78,7 +108,10 @@ class CommunityScreen extends Component {
               <TouchableComp
                 key={territoryId}
                 onPress={(section) => {
+<<<<<<< HEAD
                   console.log(section);
+=======
+>>>>>>> 2369f54abc28e3c8c02804ec0477c6493a92ec34
                   this.props.navigation.navigate('DelegationDetail', { delegationId: territoryId });
                 }}
               >
@@ -108,7 +141,11 @@ class CommunityScreen extends Component {
 
 CommunityScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
+<<<<<<< HEAD
   headerRight: (
+=======
+  headerLeft: (
+>>>>>>> 2369f54abc28e3c8c02804ec0477c6493a92ec34
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"
@@ -131,8 +168,11 @@ const Filiation = ({ title, flag, onSelect, key }) => {
     <TouchableComp
       key={key}
       onPress={() => {
+<<<<<<< HEAD
         console.log('[Navegar a Filiation screen]');
 
+=======
+>>>>>>> 2369f54abc28e3c8c02804ec0477c6493a92ec34
         onSelect();
       }}
     >

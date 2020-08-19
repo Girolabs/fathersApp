@@ -14,42 +14,41 @@ import {
 import i18n from 'i18n-js';
 import { FlatList } from 'react-native-gesture-handler';
 import { Flag } from 'react-native-svg-flagkit';
-import Constants from 'expo-constants';
 import Colors from '../constants/Colors';
 import moment from 'moment';
 import 'moment/min/locales';
 import { I18nContext } from '../context/I18nProvider';
-import axios from '../../axios-instance';
 import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import HeaderButton from '../components/HeaderButton';
+import { getTerritory } from '../api';
 
 class DelegationDetailScreen extends Component {
   state = {
     territory: null,
   };
 
+  loadTerritory = (territoryId, fields) => {
+    getTerritory(territoryId, fields)
+      .then((res) => {
+        const fetchedDelegation = {
+          ...res.data.result,
+          homeTerritoryMembers: res.data.result.homeTerritoryMembers.filter(
+            (member) => member.isActive == true && member.isMember == true,
+          ),
+        };
+        this.setState({ territory: fetchedDelegation });
+      })
+      .catch((err) => {
+        this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
+      });
+  };
+
   async componentDidMount() {
     const { navigation } = this.props;
     const territoryId = navigation.getParam('delegationId');
-    console.log('territoryID', territoryId);
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
-      axios
-        .get(`${i18n.locale}/api/v1/territories/${territoryId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
-        .then((res) => {
-          const fetchedDelegation = {
-            ...res.data.result,
-            homeTerritoryMembers: res.data.result.homeTerritoryMembers.filter(
-              (member) => member.isActive == true && member.isMember == true,
-            ),
-          };
-          this.setState({ territory: fetchedDelegation });
-        })
-        .catch((err) => {
-          this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
-        });
+      this.loadTerritory(territoryId, false);
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
@@ -208,19 +207,8 @@ class DelegationDetailScreen extends Component {
   }
 }
 
-DelegationDetailScreen.navigationOptions = (navigationData) => ({
+DelegationDetailScreen.navigationOptions = () => ({
   headerTitle: '',
-  headerRight: (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
 });
 
 const styles = StyleSheet.create({

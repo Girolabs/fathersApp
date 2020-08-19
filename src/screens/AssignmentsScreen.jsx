@@ -23,6 +23,7 @@ import { I18nContext } from '../context/I18nProvider';
 import { Flag } from 'react-native-svg-flagkit';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { getTerritories, getFiliations, getGenerations, getCourses, getPersons } from '../api';
 
 class AssignmentsScreen extends Component {
   state = {
@@ -33,44 +34,21 @@ class AssignmentsScreen extends Component {
     courses: [],
   };
   componentDidMount() {
-    axios
-      .get(`${i18n.locale}/api/v1/territories?fields=all&key=${Constants.manifest.extra.secretKey}`)
-      .then((resTerritory) => {
-        let territories = resTerritory.data.result;
-
-        axios
-          .get(`${i18n.locale}/api/v1/filiations?fields=all&key=${Constants.manifest.extra.secretKey}`)
-          .then((resFiliations) => {
-            let filiations = resFiliations.data.result;
-            territories = territories.map((territory) => {
-              let resfiliations = [];
-              if (territory.filiations) {
-                resfiliations = territory.filiations.map((tFiliation) => {
-                  let returnFiliation = null;
-                  filiations.forEach((filiation) => {
-                    if (tFiliation.filiationId == filiation.filiationId) {
-                      returnFiliation = {
-                        ...tFiliation,
-                        data: filiation.assignments,
-                      };
-                    }
-                  });
-                  if (returnFiliation != null) {
-                    return returnFiliation;
-                  } else {
-                    return tFiliation;
-                  }
-                });
-                return {
-                  ...territory,
-                  filiations: resfiliations,
-                };
-              }
-            });
-            territories = territories.map((territory) => {
-              let filiations = territory.filiations.map((filiation) => {
-                if (filiation.isActive == true) {
-                  return filiation;
+    getTerritories('all').then((resTerritory) => {
+      let territories = resTerritory.data.result;
+      getFiliations('all').then((resFiliations) => {
+        let filiations = resFiliations.data.result;
+        territories = territories.map((territory) => {
+          let resfiliations = [];
+          if (territory.filiations) {
+            resfiliations = territory.filiations.map((tFiliation) => {
+              let returnFiliation = null;
+              filiations.forEach((filiation) => {
+                if (tFiliation.filiationId == filiation.filiationId) {
+                  returnFiliation = {
+                    ...tFiliation,
+                    data: filiation.assignments,
+                  };
                 }
               });
               filiations = filiations.filter((filiation) => filiation != undefined);
@@ -89,41 +67,33 @@ class AssignmentsScreen extends Component {
               };
             });
 
-            axios
-              .get(`${i18n.locale}/api/v1/generations?fields=all&key=${Constants.manifest.extra.secretKey}`)
-              .then((resGenerations) => {
-                let generations = resGenerations.data.result;
-                axios
-                  .get(`${i18n.locale}/api/v1/courses?fields=all&key=${Constants.manifest.extra.secretKey}`)
-                  .then((resCourses) => {
-                    let courses = resCourses.data.result;
-                    axios
-                      .get(`${i18n.locale}/api/v1/persons?fields=all&key=${Constants.manifest.extra.secretKey}`)
-                      .then((resPersons) => {
-                        let persons = resPersons.data.result;
-
-                        generations = generations.map((generation) => {
-                          if (generation.mainAssignment) {
-                            let person = null;
-
-                            persons.map((el) => {
-                              if (el.personId == generation.mainAssignment.personId) {
-                                person = el;
-                              }
-                            });
-                            return {
-                              ...generation,
-                              mainAssignment: {
-                                ...generation.mainAssignment,
-                                person: person,
-                              },
-                            };
-                          } else {
-                            return {
-                              ...generation,
-                            };
-                          }
-                        });
+        getGenerations('all').then((resGenerations) => {
+          let generations = resGenerations.data.result;
+          getCourses('all').then((resCourses) => {
+            let courses = resCourses.data.result;
+            getPersons(false).then((resPersons) => {
+              let persons = resPersons.data.result;
+              generations = generations.map((generation) => {
+                if (generation.mainAssignment) {
+                  let person = null;
+                  persons.map((el) => {
+                    if (el.personId == generation.mainAssignment.personId) {
+                      person = el;
+                    }
+                  });
+                  return {
+                    ...generation,
+                    mainAssignment: {
+                      ...generation.mainAssignment,
+                      person: person,
+                    },
+                  };
+                } else {
+                  return {
+                    ...generation,
+                  };
+                }
+              });
 
                         //console.log('g', generations);
 

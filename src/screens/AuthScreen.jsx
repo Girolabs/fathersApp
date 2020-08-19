@@ -10,11 +10,8 @@ import Button from '../components/Button';
 import Select from '../components/Select';
 import axios from '../../axios-instance';
 import { Snackbar } from 'react-native-paper';
-
-import moment from 'moment';
 import 'moment/min/locales';
 import i18n from 'i18n-js';
-import Constants from 'expo-constants';
 import { AsyncStorage } from 'react-native';
 import * as Network from 'expo-network';
 
@@ -47,7 +44,7 @@ class AuthScreen extends Component {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected == true) {
       axios
-        .get(`${i18n.locale}/api/v1/users/request-verification-token?identity=${encodeURIComponent(identity)}`, {
+        .get(`/api/v1/users/request-verification-token?identity=${encodeURIComponent(identity)}`, {
           data: null,
         })
         .then((res) => {
@@ -72,7 +69,7 @@ class AuthScreen extends Component {
     if (status.isConnected == true) {
       axios
         .get(
-          `${i18n.locale}/api/v1/users/login-with-verification-token?identity=${encodeURIComponent(
+          `/api/v1/users/login-with-verification-token?identity=${encodeURIComponent(
             identity,
           )}&token=${token}`,
           { data: null },

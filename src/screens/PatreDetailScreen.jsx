@@ -15,18 +15,19 @@ import { Flag } from 'react-native-svg-flagkit';
 import moment from 'moment';
 import i18n from 'i18n-js';
 import 'moment/min/locales';
-import Constants from 'expo-constants';
 import countries from 'i18n-iso-countries';
 import * as Contacts from 'expo-contacts';
 import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
 import { Ionicons } from 'expo-vector-icons';
-import axios from '../../axios-instance';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { I18nContext } from '../context/I18nProvider';
 import Colors from '../constants/Colors';
 import SocialIcons from '../components/SocialIcons';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
+
+import { getInterfaceData, getPerson } from '../api';
+
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/de.json'));
@@ -43,8 +44,10 @@ const styles = StyleSheet.create({
     color: Colors.onSurfaceColorPrimary,
     fontSize: 11,
     padding: 15,
+    textAlign: 'left',
     letterSpacing: 2.5,
     textTransform: 'uppercase',
+
   },
   listItem: {
     backgroundColor: Colors.surfaceColorPrimary,
@@ -158,24 +161,15 @@ const PatreDetailScreen = ({ navigation }) => {
   const loadInterfaceData = async (tempFather) => {
     const status = await Network.getNetworkStateAsync();
 
-    if (status.isConnected == true) {
-      axios.get(`${i18n.locale}/api/v1/interface-data`).then((response) => {
+    if (status.isConnected) {
+      getInterfaceData().then((res) => {
         const viewPermRole = tempFather.viewPermissionForCurrentUser;
-        const { personFieldsByViewPermission } = response.data.result;
-
+        const { personFieldsByViewPermission } = res.data.result;
         const viewRoles = Object.keys(personFieldsByViewPermission);
-
         const arrayOfRoles = viewRoles.map((rol) => {
           return personFieldsByViewPermission[rol];
         });
-
-        const accumulatedFieldsPerRol = arrayOfRoles.map((rol, index) => {
-          /* let accu = [];
-          arrayOfRoles.forEach((el,i) => {
-            if(i <= index) {
-              accu = accu.concat(el);
-            }
-          }) */
+        const accumulatedFieldsPerRol = arrayOfRoles.map((rol) => {
           return rol;
         });
 
@@ -189,29 +183,17 @@ const PatreDetailScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    /* (async () => {
-      const { status } = await Contacts.requestPermissionsAsync();
-      if (status === 'granted') {
-        setShowSaveContact(true);
-      }
-    })(); */
     const loadPerson = async () => {
       const status = await Network.getNetworkStateAsync();
       if (status.isConnected === true) {
         const fatherId = navigation.getParam('fatherId');
-        axios
-          .get(
-            `${i18n.locale}/api/v1/persons/${fatherId}?fields=all&authorized=true&key=${Constants.manifest.extra.secretKey}`,
-          )
+        getPerson(fatherId, false)
           .then((response) => {
-            console.log('[PatreDetail]', response.data.result);
             const resFather = response.data.result;
             setFather(resFather);
             loadInterfaceData(resFather);
-
-            console.log('father', father);
           })
-          .catch((err) => {
+          .catch(() => {
             setLoading(false);
             setVisible(true);
             setSnackMsg(i18n.t('GENERAL.ERROR'));
@@ -267,7 +249,7 @@ const PatreDetailScreen = ({ navigation }) => {
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    paddingHorizontal: 20,
+                    paddingRight: 15,
                   }}
                 >
                   <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CONTACT_INFO')}</Text>
@@ -562,7 +544,9 @@ PatreDetailScreen.navigationOptions = (navigationData) => ({
   ),
 });
 
-const DefaultItem = ({ title, body, selected, img, country_code, lang, date, id, show, icon }) => {
+const DefaultItem = ({
+  title, body, selected, img, country_code, lang, date, id, show, icon,
+}) => {
   let TouchableComp = TouchableOpacity;
   let formatedDate;
   if (Platform.OS === 'android' && Platform.Version >= 21) {

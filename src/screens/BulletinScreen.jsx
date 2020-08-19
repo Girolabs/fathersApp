@@ -13,10 +13,12 @@ import * as Network from 'expo-network';
 import i18n from 'i18n-js';
 import { Ionicons } from 'expo-vector-icons';
 import * as Linking from 'expo-linking';
-import axios from '../../axios-instance';
-import Colors from '../constants/Colors';
+import { Snackbar } from 'react-native-paper';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
+import { getBoard } from '../api';
+
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -50,12 +52,13 @@ const styles = StyleSheet.create({
 const BulletinScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const [snackMsg, setSnackMsg] = useState('');
 
   const loadPosts = async () => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      axios
-        .get(`${i18n.locale}/api/v1/bulletin-board`)
+      getBoard()
         .then((res) => {
           const fetchedPosts = res.data.result;
           setPosts(fetchedPosts);
@@ -63,7 +66,12 @@ const BulletinScreen = ({ navigation }) => {
         })
         .catch(() => {
           setLoading(false);
+          setVisible(true);
+          setSnackMsg(i18n.t('GENERAL.ERROR'));
         });
+    } else {
+      setVisible(true);
+      setSnackMsg(i18n.t('GENERAL.NO_INTERNET'));
     }
   };
 
@@ -113,6 +121,9 @@ const BulletinScreen = ({ navigation }) => {
       ) : (
         <ActivityIndicator size="large" color={Colors.primaryColor} />
       )}
+      <Snackbar visible={visible} onDismiss={() => setVisible(false)} style={styles.snackError}>
+        {snackMsg}
+      </Snackbar>
     </View>
   );
 };

@@ -11,8 +11,6 @@ import {
   TouchableNativeFeedback,
   TouchableOpacity,
 } from 'react-native';
-import axios from '../../axios-instance';
-import Constants from 'expo-constants';
 import Colors from '../constants/Colors';
 import { I18nContext } from '../context/I18nProvider';
 import i18n from 'i18n-js';
@@ -24,29 +22,33 @@ import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
+import { getFiliation } from '../api';
 
 class FiliationDetailScreen extends Component {
   state = {
     filiation: null,
   };
 
+  loadFiliation = (filiationId, fields) => {
+    getFiliation(filiationId, fields)
+      .then((res) => {
+        const fetchedFiliation = {
+          ...res.data.result,
+          persons: res.data.result.persons.filter((person) => person.isActive == true && person.isMember == true),
+        };
+        this.setState({ filiation: fetchedFiliation });
+      })
+      .catch((err) => {
+        this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
+      });
+  };
+
   async componentDidMount() {
     const { navigation } = this.props;
     const filiationId = navigation.getParam('filiationId');
     const status = await Network.getNetworkStateAsync();
-    if (status.isConnected === true) {
-      axios
-        .get(`${i18n.locale}/api/v1/filiations/${filiationId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
-        .then((res) => {
-          const fetchedFiliation = {
-            ...res.data.result,
-            persons: res.data.result.persons.filter((person) => person.isActive == true && person.isMember == true),
-          };
-          this.setState({ filiation: fetchedFiliation });
-        })
-        .catch((err) => {
-          this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
-        });
+    if (status.isConnected) {
+      this.loadFiliation(filiationId, false);
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
