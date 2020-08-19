@@ -49,21 +49,39 @@ class AssignmentsScreen extends Component {
                   };
                 }
               });
-              filiations = filiations.filter((filiation) => filiation != undefined);
-              return {
-                ...territory,
-                filiations,
-              };
+              if (returnFiliation != null) {
+                return returnFiliation;
+              } else {
+                return tFiliation;
+              }
             });
+            return {
+              ...territory,
+              filiations: resfiliations,
+            };
           }
-            console.log('t', territories);
+        });
+        territories = territories.map((territory) => {
+          let filiations = territory.filiations.map((filiation) => {
+            if (filiation.isActive == true) {
+              return filiation;
+            }
+          });
+          filiations = filiations.filter((filiation) => filiation != undefined);
+          return {
+            ...territory,
+            filiations,
+          };
+        });
 
-            territories = territories.map((territory) => {
-              return {
-                ...territory,
-                data: territory.assignments,
-              };
-            });
+        console.log('t', territories);
+
+        territories = territories.map((territory) => {
+          return {
+            ...territory,
+            data: territory.assignments,
+          };
+        });
 
         getGenerations('all').then((resGenerations) => {
           let generations = resGenerations.data.result;
@@ -93,43 +111,40 @@ class AssignmentsScreen extends Component {
                 }
               });
 
-                        //console.log('g', generations);
+              //console.log('g', generations);
 
-                        this.setState({ generations });
+              this.setState({ generations });
 
-                        courses = courses.map((course) => {
-                          if (course.leaderAssignment) {
-                            let person = null;
+              courses = courses.map((course) => {
+                if (course.leaderAssignment) {
+                  let person = null;
 
-                            persons.map((el) => {
-                              if (el.personId == course.leaderAssignment.personId) {
-                                person = el;
-                              }
-                            });
-                            return {
-                              ...course,
-                              leaderAssignment: {
-                                ...course.leaderAssignment,
-                                person: person,
-                              },
-                            };
-                          } else {
-                            return {
-                              ...course,
-                            };
-                          }
-                        });
-                        this.setState({ courses });
-                      });
-               
-            this.setState({ territories, loading: false });
+                  persons.map((el) => {
+                    if (el.personId == course.leaderAssignment.personId) {
+                      person = el;
+                    }
+                  });
+                  return {
+                    ...course,
+                    leaderAssignment: {
+                      ...course.leaderAssignment,
+                      person: person,
+                    },
+                  };
+                } else {
+                  return {
+                    ...course,
+                  };
+                }
+              });
+              this.setState({ courses });
+            });
           });
+        });
+        this.setState({ territories, loading: false });
       });
     });
-  });
-});
-}
-
+  }
   render() {
     const { territories, selectedtTab } = this.state;
     let TouchableComp = TouchableOpacity;
