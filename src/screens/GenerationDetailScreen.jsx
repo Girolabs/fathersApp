@@ -10,8 +10,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import axios from '../../axios-instance';
-import Constants from 'expo-constants';
 import { I18nContext } from '../context/I18nProvider';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
@@ -19,26 +17,30 @@ import moment from 'moment';
 import 'moment/min/locales';
 import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
+import { getGeneration } from '../api';
 
 class GenerationDetailScreen extends Component {
   state = {
     generation: {},
     loading: true,
   };
+
+  loadGeneration = (generationId, fields) => {
+    getGeneration(generationId, fields)
+      .then((res) => {
+        const generation = res.data.result;
+        this.setState({ generation: generation, loading: false });
+      })
+      .catch(() => {
+        this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
+      });
+  };
   async componentDidMount() {
     const { navigation } = this.props;
     const generationId = navigation.getParam('generationId');
     const status = await Network.getNetworkStateAsync();
-    if (status.isConnected == true) {
-      axios
-        .get(`${i18n.locale}/api/v1/generations/${generationId}?fields=all&key=${Constants.manifest.extra.secretKey}`)
-        .then((res) => {
-          const generation = res.data.result;
-          this.setState({ generation: generation, loading: false });
-        })
-        .catch((e) => {
-          this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
-        });
+    if (status.isConnected) {
+      this.loadGeneration(generationId, false);
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }

@@ -25,7 +25,7 @@ import Constants from 'expo-constants';
 import * as _ from 'lodash';
 import * as Yup from 'yup';
 import { Snackbar } from 'react-native-paper';
-import { set } from 'lodash';
+import { getFiliations, getTerritories, getHouses, getInterfaceData, saveLivingSituation, updateLivingSituation } from '../api';
 
 const styles = StyleSheet.create({
   title: {
@@ -135,6 +135,9 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   useEffect(() => {
     const livingSituation = navigation.getParam('livingSituation');
     const paramPersonId = navigation.getParam('personId');
+    if (!paramPersonId) {
+      navigation.goBack();
+    }
     console.log('living', livingSituation);
 
     if (!livingSituation || livingSituation.endDate) {
@@ -142,7 +145,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
 
       loadFiliations();
       loadHouses();
-    }else {
+    } else {
       const transFormedLiving = {
         ...livingSituation,
         startDate: livingSituation && livingSituation.startDate ? livingSituation.startDate.split('T')[0] : null,
@@ -151,15 +154,14 @@ const LivingSituationsFormScreen = ({ navigation }) => {
       setLivingSituation(transFormedLiving);
     }
     loadTerritory();
-    setPersonId(paramPersonId); 
+    setPersonId(paramPersonId);
   }, []);
 
   const loadHouses = async () => {
     const status = await Network.getNetworkStateAsync();
 
     if (status.isConnected == true) {
-      axios.get(`${i18n.locale}/api/v1/houses?fields=all&ey=${Constants.manifest.extra.secretKey}`).then((response) => {
-        console.log('houses', response);
+      getHouses(false).then((response) => {
         const fetchedHouses = response.data.result.map((house) => {
           if (house.isActive == true) {
             return {
@@ -176,9 +178,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   const loadStatusCondition = async () => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected == true) {
-      axios.get(`${i18n.locale}/api/v1/interface-data`).then((response) => {
+      getInterfaceData().then((response) => {
         let livingConditionStatusLabels = response.data.result.livingConditionStatusLabels;
-
         let statusLabels = [];
         console.log(Object.keys(livingConditionStatusLabels));
         Object.keys(livingConditionStatusLabels).forEach((key) => {
@@ -200,10 +201,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     const status = await Network.getNetworkStateAsync();
 
     if (status.isConnected == true) {
-      axios
-        .get(`${i18n.locale}/api/v1/filiations?fields=all&ey=${Constants.manifest.extra.secretKey}`)
+      getFiliations(false)
         .then((response) => {
-          console.log('filiations', response);
           const fetchedFiliations = response.data.result
             .map((filiation) => {
               if (filiation.isActive == true) {
@@ -222,7 +221,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   const loadTerritory = async () => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
-      axios.get(`${i18n.locale}/api/v1/territories?fields=all&ey=${Constants.manifest.extra.secretKey}`).then((res) => {
+      getTerritories(false).then((res) => {
         loadStatusCondition();
         if (res.data.status === 'OK') {
           const fetchedDelegations = res.data.result
@@ -254,14 +253,14 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     return dateString;
   };
 
-  const editLivingSituation = (values) => {
-    axios.put(`${i18n.locale}/api/v1/living-situations/${livingSituation.livingSituationId}`, values).then(
-      (response) => {
+  const editLivingSituation = (livingSituationId, values) => {
+    updateLivingSituation(livingSituationId, values).then(
+      () => {
         setSnackMsg(i18n.t('GENERAL.EDIT_SUCCESS'));
         setVisible(true);
         navigation.goBack();
       },
-      (err) => {
+      () => {
         setSnackMsg(i18n.t('GENERAL.ERROR'));
         setVisible(true);
       },
@@ -269,13 +268,13 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   };
 
   const createLivingSituation = (values) => {
-    axios.post(`${i18n.locale}/api/v1/living-situations`, values).then(
-      (response) => {
+    saveLivingSituation(values).then(
+      () => {
         setSnackMsg(i18n.t('GENERAL.CREATE_SUCCESS'));
         setVisible(true);
         navigation.goBack();
       },
-      (err) => {
+      () => {
         setSnackMsg(i18n.t('GENERAL.ERROR'));
         setVisible(true);
       },
@@ -296,8 +295,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
               {isCreate ? (
                 <Text style={styles.title}>{i18n.t('LIVING_SITUATION.CREATE_TITLE')}</Text>
               ) : (
-                <Text style={styles.title}>{i18n.t('LIVING_SITUATION.EDIT_TITLE')}</Text>
-              )}
+                  <Text style={styles.title}>{i18n.t('LIVING_SITUATION.EDIT_TITLE')}</Text>
+                )}
 
               <Formik
                 enableReinitialize
@@ -326,7 +325,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                   if (isCreate) {
                     createLivingSituation(transformValues);
                   } else {
-                    editLivingSituation(transformValues);
+                    editLivingSituation(livingSituation.livingSituationId, transformValues);
                   }
 
                   console.log('values', values);
@@ -514,11 +513,11 @@ const LivingSituationsFormScreen = ({ navigation }) => {
               </Formik>
             </ScrollView>
           ) : (
-            <ActivityIndicator size="large" color={Colors.primaryColor} />
-          )}
+              <ActivityIndicator size="large" color={Colors.primaryColor} />
+            )}
           <Snackbar visible={visible} onDismiss={() => setVisible(false)} style={styles.snackError}>
             {snackMsg}
-      </Snackbar>
+          </Snackbar>
         </SafeAreaView>
       </KeyboardAvoidingView>
     </>
