@@ -66,7 +66,7 @@ exports.ES = {
     TERRITORY_INFO: 'Información del territorio',
     TERRITORY_CHARGE: 'Territorio a cargo',
     CELEBRATION_DATE: 'Fecha de celebración',
-    SUPERIOR: 'Superior',
+    SUPERIOR: 'Cargos',
     TERRITORY_FILIATION: 'Filiales del territorio',
     RECTOR: 'Rector',
     MAIN_HOUSE: 'Casa principal',

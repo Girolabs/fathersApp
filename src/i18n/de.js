@@ -66,7 +66,7 @@ exports.DE = {
     TERRITORY_INFO: 'Information zum Gebiet',
     TERRITORY_CHARGE: 'Verantwortliches Gebiet',
     CELEBRATION_DATE: 'Hauptfest des Gebiets',
-    SUPERIOR: 'Oberer',
+    SUPERIOR: 'Ämter',
     TERRITORY_FILIATION: 'Filialen des Gebiets',
     RECTOR: 'Rektor',
     MAIN_HOUSE: 'Haupthaus',

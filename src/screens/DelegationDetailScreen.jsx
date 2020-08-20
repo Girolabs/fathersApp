@@ -21,10 +21,14 @@ import { I18nContext } from '../context/I18nProvider';
 import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
 import { getTerritory } from '../api';
-
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import HeaderButton from '../components/HeaderButton';
+import { FontAwesome5 } from '@expo/vector-icons';
 class DelegationDetailScreen extends Component {
   state = {
     territory: null,
+    showHistorical: false,
+    assignments: [],
   };
 
   loadTerritory = (territoryId, fields) => {
@@ -36,7 +40,9 @@ class DelegationDetailScreen extends Component {
             (member) => member.isActive == true && member.isMember == true,
           ),
         };
-        this.setState({ territory: fetchedDelegation });
+        const fetchedAssignments =
+          fetchedDelegation.assignments && fetchedDelegation.assignments.filter((asg) => asg.isActive == true);
+        this.setState({ territory: fetchedDelegation, assignments: fetchedAssignments });
       })
       .catch((err) => {
         this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
@@ -54,13 +60,26 @@ class DelegationDetailScreen extends Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.showHistorical != this.state.showHistorical) {
+      if (this.state.territory) {
+        if (!this.state.showHistorical) {
+          const activeAsg = this.state.territory.assignments.filter((asg) => asg.isActive == true);
+          this.setState({ assignments: activeAsg });
+        } else {
+          this.setState({ assignments: this.state.territory.assignments });
+        }
+      }
+    }
+  }
+
   render() {
     let TouchableComp = TouchableOpacity;
     if (Platform.OS === 'android' && Platform.Version >= 21) {
       TouchableComp = TouchableNativeFeedback;
     }
     const { navigation } = this.props;
-    const { territory } = this.state;
+    const { territory, showHistorical, assignments } = this.state;
     return (
       <I18nContext.Consumer>
         {(value) => {
@@ -96,8 +115,21 @@ class DelegationDetailScreen extends Component {
                       </View>
                     )}
                     <View style={[styles.listItem]}>
-                      <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.SUPERIOR')}</Text>
-                      {territory.assignments.map((asg) => {
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.SUPERIOR')}</Text>
+                        <TouchableComp
+                          onPress={() => {
+                            this.setState({ showHistorical: !showHistorical });
+                          }}
+                        >
+                          <FontAwesome5
+                            name="history"
+                            size={24}
+                            color={showHistorical ? Colors.primaryColor : Colors.onSurfaceColorPrimary}
+                          />
+                        </TouchableComp>
+                      </View>
+                      {assignments.map((asg) => {
                         return (
                           <TouchableComp
                             onPress={() => {
@@ -207,8 +239,19 @@ class DelegationDetailScreen extends Component {
   }
 }
 
-DelegationDetailScreen.navigationOptions = () => ({
+DelegationDetailScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
+  headerRight: (
+    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title="Menu"
+        iconName="md-menu"
+        onPress={() => {
+          navigationData.navigation.toggleDrawer();
+        }}
+      />
+    </HeaderButtons>
+  ),
 });
 
 const styles = StyleSheet.create({
