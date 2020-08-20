@@ -50,11 +50,17 @@ class AuthScreen extends Component {
         .then((res) => {
           const status = res.data.status;
           if (status == 'OK') {
-            this.setState({ hasToken: true, snackMsg: i18n.t('AUTH_SCREEN.SEND_EMAIL'), visible: true, loading: false });
+            this.setState({
+              hasToken: true,
+              snackMsg: i18n.t('AUTH_SCREEN.SEND_EMAIL'),
+              visible: true,
+              loading: false,
+            });
           }
         })
         .catch((e) => {
-          this.setState({ snackMsg: i18n.t('AUTH_SCREEN.ERROR'), visible: true, loading: false });
+          const error = e.response.data.result.message && e.response.data.result.message;
+          this.setState({ snackMsg: error, visible: true, loading: false });
         });
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
@@ -68,12 +74,9 @@ class AuthScreen extends Component {
     console.log(status);
     if (status.isConnected == true) {
       axios
-        .get(
-          `/api/v1/users/login-with-verification-token?identity=${encodeURIComponent(
-            identity,
-          )}&token=${token}`,
-          { data: null },
-        )
+        .get(`/api/v1/users/login-with-verification-token?identity=${encodeURIComponent(identity)}&token=${token}`, {
+          data: null,
+        })
         .then(async (res) => {
           console.log(res);
           const data = JSON.stringify(res.data.result);
@@ -90,7 +93,8 @@ class AuthScreen extends Component {
           this.props.navigation.navigate('Drawer');
         })
         .catch((e) => {
-          this.setState({ snackMsg: i18n.t('AUTH_SCREEN.ERROR'), visible: true, loading: false });
+          const error = e.response.data.result.message && e.response.data.result.message;
+          this.setState({ snackMsg: error, visible: true, loading: false });
         });
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
