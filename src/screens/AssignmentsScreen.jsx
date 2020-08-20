@@ -87,58 +87,7 @@ class AssignmentsScreen extends Component {
           let generations = resGenerations.data.result;
           getCourses('all').then((resCourses) => {
             let courses = resCourses.data.result;
-            getPersons(false).then((resPersons) => {
-              let persons = resPersons.data.result;
-              generations = generations.map((generation) => {
-                if (generation.mainAssignment) {
-                  let person = null;
-                  persons.map((el) => {
-                    if (el.personId == generation.mainAssignment.personId) {
-                      person = el;
-                    }
-                  });
-                  return {
-                    ...generation,
-                    mainAssignment: {
-                      ...generation.mainAssignment,
-                      person: person,
-                    },
-                  };
-                } else {
-                  return {
-                    ...generation,
-                  };
-                }
-              });
-
-              //console.log('g', generations);
-
-              this.setState({ generations });
-
-              courses = courses.map((course) => {
-                if (course.leaderAssignment) {
-                  let person = null;
-
-                  persons.map((el) => {
-                    if (el.personId == course.leaderAssignment.personId) {
-                      person = el;
-                    }
-                  });
-                  return {
-                    ...course,
-                    leaderAssignment: {
-                      ...course.leaderAssignment,
-                      person: person,
-                    },
-                  };
-                } else {
-                  return {
-                    ...course,
-                  };
-                }
-              });
-              this.setState({ courses });
-            });
+            this.setState({ generations, courses });
           });
         });
         this.setState({ territories, loading: false });
