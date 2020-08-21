@@ -66,7 +66,7 @@ exports.PT = {
     TERRITORY_INFO: 'Informação sobre o território',
     TERRITORY_CHARGE: 'Território responsável',
     CELEBRATION_DATE: 'Data de comemoração',
-    SUPERIOR: 'Cargos',
+    ASSIGNMENTS: 'Cargos',
     TERRITORY_FILIATION: 'Filiais do território',
     RECTOR: 'Reitor',
     MAIN_HOUSE: 'Casa principal',

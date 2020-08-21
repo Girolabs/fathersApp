@@ -66,7 +66,7 @@ exports.EN = {
     TERRITORY_INFO: 'Territory information',
     TERRITORY_CHARGE: 'Territory in charge',
     CELEBRATION_DATE: 'Celebration date',
-    SUPERIOR: 'Assignments',
+    ASSIGNMENTS: 'Assignments',
     TERRITORY_FILIATION: 'Filiations of this territory',
     RECTOR: 'Rector',
     MAIN_HOUSE: 'Main house',

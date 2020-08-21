@@ -116,7 +116,7 @@ class DelegationDetailScreen extends Component {
                     )}
                     <View style={[styles.listItem]}>
                       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.SUPERIOR')}</Text>
+                        <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.ASSIGNMENTS')}</Text>
                         <TouchableComp
                           onPress={() => {
                             this.setState({ showHistorical: !showHistorical });
