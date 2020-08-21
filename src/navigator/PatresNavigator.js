@@ -32,19 +32,7 @@ import LivingSituationsFormScreen from '../screens/LivingSituations';
 import BulletinScreen from '../screens/BulletinScreen';
 import BulletinDetailScreen from '../screens/BulletinDetailScreen';
 
-const defaultStackNavOptionsForIos={
-    headerStyle: {
-      backgroundColor: Colors.surfaceColorPrimary,
-    },
-    headerTitleStyle: {
-      fontFamily: 'work-sans-semibold',
-    },
-    headerBackTitleStyle: {
-      fontFamily: 'work-sans',
-    },
-    headerTintColor: Colors.onSurfaceColorPrimary,
-  };
-const defaultNavigationOptionsForAndroid=
+const defaultStackNavOptions=
 {
     headerStyle: {
       backgroundColor: Colors.surfaceColorPrimary,
@@ -52,12 +40,10 @@ const defaultNavigationOptionsForAndroid=
     headerTitleStyle: {
       fontFamily: 'work-sans-semibold',
     },
-    headerBackTitle: {
-      fontFamily: 'work-sans',
-    },
+
     headerTintColor: Colors.onSurfaceColorPrimary,
   };
-const defaultStackNavOptions = Platform.OS === 'android'?defaultNavigationOptionsForAndroid:defaultStackNavOptionsForIos
+
 
 /* const BulletinNavigator = createStackNavigator({
   screen: BulletinScreen,
