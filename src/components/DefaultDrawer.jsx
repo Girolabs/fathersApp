@@ -21,8 +21,12 @@ const DefaultDrawer = (props) => {
   }
   const routes = [
     {
-      path: 'HomeSearch',
+      path: 'Home',
       label: i18n.t('GENERAL.HOME'),
+    },
+    {
+      path: 'Search',
+      label: i18n.t('GENERAL.SEARCH'),
     },
     {
       path: 'Bulletin',
@@ -67,10 +71,7 @@ const DefaultDrawer = (props) => {
         >
           <View style={styles(props).banner}>
             <Image source={require('../../assets/img/fatherIcon.png')} style={styles(props).image} />
-            <Text
-              numberOfLines={2}
-              style={styles(props).title}
-            >
+            <Text numberOfLines={2} style={styles(props).title}>
               {i18n.t('GENERAL.FATHERS')}
             </Text>
           </View>
@@ -100,22 +101,22 @@ const DefaultDrawer = (props) => {
 
 const styles = (props) =>
   StyleSheet.create({
-    banner:{
+    banner: {
       flexDirection: 'row',
       alignItems: 'center',
-      marginVertical: 15
+      marginVertical: 15,
     },
-    title:{
+    title: {
       width: '70%',
       fontSize: 18,
       fontFamily: 'work-sans-semibold',
       color: 'white',
       paddingHorizontal: 15,
     },
-    image:{
+    image: {
       marginLeft: 10,
-      width: 88, 
-      height: 88
+      width: 88,
+      height: 88,
     },
     listItemContainer: {
       marginLeft: 15,

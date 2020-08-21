@@ -89,7 +89,7 @@ const SettingsScreen = (props) => {
 
 SettingsScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerLeft: (
+  headerRight: (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

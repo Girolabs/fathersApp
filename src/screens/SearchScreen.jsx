@@ -2,12 +2,13 @@ import React, { Component, Fragment } from 'react';
 import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Colors from '../constants/Colors';
 import { Ionicons } from 'expo-vector-icons';
-import Constants from 'expo-constants';
-import axios from '../../axios-instance';
 import { Checkbox } from 'react-native-paper';
 import i18n from 'i18n-js';
 import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import HeaderButton from '../components/HeaderButton';
+import { getPersons } from '../api';
 
 class SearchScreen extends Component {
   state = {
@@ -19,19 +20,18 @@ class SearchScreen extends Component {
     searchText: '',
   };
 
+  loadPersons = (fields) => {
+    getPersons(fields).then((res) => {
+      this.setState({ results: res.data.result, loading: false });
+    }).catch(() => {
+      this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
+    });
+  }
+
   async componentDidMount() {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      axios
-        .get(`${i18n.locale}/api/v1/persons?fields=all`)
-        .then((res) => {
-          if (res.status == 200) {
-            this.setState({ results: res.data.result, loading: false });
-          }
-        })
-        .catch((err) => {
-          this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
-        });
+     this.loadPersons('all');
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
@@ -58,14 +58,13 @@ class SearchScreen extends Component {
     filterResults = filterResults.filter((persona) => {
       if (
         (persona.firstNameWithoutAccents &&
-        persona.lastNameWithoutAccents &&
-        (persona.firstNameWithoutAccents + ' ' + persona.lastNameWithoutAccents).trim().startsWith(texto)) 
-        || (persona.firstNameWithoutAccents && persona.firstNameWithoutAccents.trim().startsWith(texto)) 
-        || (persona.lastNameWithoutAccents && persona.lastNameWithoutAccents.trim().startsWith(texto))
+          persona.lastNameWithoutAccents &&
+          (persona.firstNameWithoutAccents + ' ' + persona.lastNameWithoutAccents).trim().startsWith(texto)) ||
+        (persona.firstNameWithoutAccents && persona.firstNameWithoutAccents.trim().startsWith(texto)) ||
+        (persona.lastNameWithoutAccents && persona.lastNameWithoutAccents.trim().startsWith(texto))
       ) {
         return persona;
       }
-      
     });
     this.setState({ filterResults: filterResults, loading: false });
   };
@@ -100,7 +99,7 @@ class SearchScreen extends Component {
             <View style={styles.filtersContainer}>
               <View style={styles.optionContainer}>
                 <Checkbox
-                  color = {Colors.primaryColor}
+                  color={Colors.primaryColor}
                   status={this.state.showDeceased ? 'checked' : 'unchecked'}
                   onPress={() => this.setState({ showDeceased: !this.state.showDeceased })}
                 />
@@ -109,7 +108,7 @@ class SearchScreen extends Component {
 
               <View style={styles.optionContainer}>
                 <Checkbox
-                  color = {Colors.primaryColor}
+                  color={Colors.primaryColor}
                   status={this.state.showExMember ? 'checked' : 'unchecked'}
                   onPress={() => this.setState({ showExMember: !this.state.showExMember })}
                 />
@@ -152,8 +151,19 @@ class SearchScreen extends Component {
   }
 }
 
-SearchScreen.navigationOptions = () => ({
+SearchScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
+  headerRight: (
+    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title="Menu"
+        iconName="md-menu"
+        onPress={() => {
+          navigationData.navigation.toggleDrawer();
+        }}
+      />
+    </HeaderButtons>
+  ),
 });
 
 const styles = StyleSheet.create({
@@ -181,7 +191,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderRadius: 15,
-    marginTop:5
+    marginTop: 5,
   },
   filtersContainer: {
     flexDirection: 'row',

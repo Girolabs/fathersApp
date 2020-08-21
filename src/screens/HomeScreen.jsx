@@ -12,18 +12,18 @@ import {
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { Ionicons } from 'expo-vector-icons';
-import Constants from 'expo-constants';
 import i18n from 'i18n-js';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import { Flag } from 'react-native-svg-flagkit';
 import * as Network from 'expo-network';
-import axios from '../../axios-instance';
 import 'moment/min/locales';
+import { Snackbar } from 'react-native-paper';
+import { NavigationEvents } from 'react-navigation';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { I18nContext } from '../context/I18nProvider';
-import { Snackbar } from 'react-native-paper';
+import { getReminders } from '../api';
 
 const styles = StyleSheet.create({
   screen: {
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   title: {
     color: Colors.primaryColor,
     fontFamily: 'work-sans-semibold',
-    fontSize: 22,
+    fontSize: 28,
     marginTop: 5,
     padding: 20,
   },
@@ -106,60 +106,55 @@ const HomeScreen = ({ navigation }) => {
   const [visible, setVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
 
+  const loadReminders = async () => {
+    const status = await Network.getNetworkStateAsync();
+    if (status.isConnected) {
+      setLoading(true);
+      getReminders()
+        .then((res) => {
+          const fetchedReminders = res.data.result;
+          setReminders(fetchedReminders);
+        })
+        .catch(() => {
+          setVisible(true);
+          setSnackMsg(i18n.t('GENERAL.ERROR'));
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setVisible(true);
+      setSnackMsg(i18n.t('GENERAL.NO_INTERNET'));
+    }
+  };
+
+  useEffect(() => {
+    loadReminders();
+  }, []);
+
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableComp = TouchableNativeFeedback;
   }
 
-  useEffect(() => {
-    const loadDates = async () => {
-      const status = await Network.getNetworkStateAsync();
-      if (status.isConnected === true) {
-        axios
-          .get(`${i18n.locale}/api/v1/date-tiles?daysInAdvance=8&key=${Constants.manifest.extra.secretKey}`)
-          .then((res) => {
-            console.log(res.data.result);
-            const fetchedReminders = res.data.result;
-            setReminders(fetchedReminders);
-            setLoading(false);
-          })
-          .catch((err) => {
-            setVisible(true);
-            setSnackMsg(i18n.t('GENERAL.ERROR'));
-          });
-      } else {
-        setVisible(true);
-        setSnackMsg(i18n.t('GENERAL.NO_INTERNET'));
-      }
-    };
-    loadDates();
-  }, []);
-  console.log('render: HomeScreen');
   return (
     <I18nContext.Consumer>
       {(value) => (
         <View style={styles.screen}>
+          <NavigationEvents
+            onDidFocus={() => {
+              loadReminders();
+            }}
+          />
           {!loading ? (
             <>
-              <TouchableComp
-                onPress={() => {
-                  navigation.navigate('Bulletin');
-                }}
-              >
-                <View style={styles.prayerCard}>
-                  <Text style={styles.prayerCardTitle}>
-                    {i18n.t('GENERAL.BULLETIN')}
-                  </Text>
-                  <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
-                </View>
-              </TouchableComp>
               <Text style={styles.title}>{i18n.t('HOME_SCREEN.REMINDERS')}</Text>
               <FlatList
-                data={reminders.slice(0, 4)}
+                data={reminders.slice(0, 6)}
+                keyExtractor={(item) => item.entityId}
                 renderItem={({ item, index }) => {
                   moment.locale(value.lang);
                   const date = moment.utc(item[0].date).format('dddd,  Do MMMM YYYY');
-
                   return (
                     <View>
                       {item[0].isImportant ? (
@@ -287,7 +282,7 @@ const HomeScreen = ({ navigation }) => {
 
 HomeScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerLeft: (
+  headerRight: (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"
