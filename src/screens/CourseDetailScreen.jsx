@@ -307,7 +307,7 @@ class CourseDetailScreen extends Component {
                                 )}
 
                                 <Text style={styles.listItemBody}>
-                                  {course.firstTertianshipMaster.fullName ? course.firstTertianshipMaster.fullName : ''}
+                                  {course.firstTertianshipMaster && course.firstTertianshipMaster ? course.firstTertianshipMaster.fullName : ''}
                                 </Text>
                               </View>
                             </View>
@@ -372,7 +372,7 @@ class CourseDetailScreen extends Component {
                                 )}
 
                                 <Text style={styles.listItemBody}>
-                                  {course.secondTertianshipMaster.fullName
+                                  {course.secondTertianshipMaster && course.secondTertianshipMaster.fullName
                                     ? course.secondTertianshipMaster.fullName
                                     : ''}
                                 </Text>
@@ -440,7 +440,7 @@ class CourseDetailScreen extends Component {
                                 )}
 
                                 <Text style={styles.listItemBody}>
-                                  {course.sionzeitCoordinator.fullName ? course.sionzeitCoordinator.fullName : ''}
+                                  {course.sionzeitCoordinator && course.sionzeitCoordinator.fullName ? course.sionzeitCoordinator.fullName : ''}
                                 </Text>
                               </View>
                             </View>

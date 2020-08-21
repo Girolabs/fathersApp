@@ -10,6 +10,7 @@
     "version": "0.5",
     "orientation": "portrait",
     "icon": "./assets/img/icon_app.png",
+    "primaryColor": "#fffff",
     "splash": {
       "backgroundColor": "#000258"
     },

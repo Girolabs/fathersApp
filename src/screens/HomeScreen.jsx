@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   title: {
     color: Colors.primaryColor,
     fontFamily: 'work-sans-semibold',
-    fontSize: 22,
+    fontSize: 28,
     marginTop: 5,
     padding: 20,
   },
@@ -148,24 +148,13 @@ const HomeScreen = ({ navigation }) => {
           />
           {!loading ? (
             <>
-              {/* <TouchableComp
-                onPress={() => {
-                  navigation.navigate('Bulletin');
-                }}
-              >
-                <View style={styles.prayerCard}>
-                  <Text style={styles.prayerCardTitle}>{i18n.t('GENERAL.BULLETIN')}</Text>
-                  <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
-                </View>
-              </TouchableComp> */}
               <Text style={styles.title}>{i18n.t('HOME_SCREEN.REMINDERS')}</Text>
               <FlatList
-                data={reminders.slice(0, 4)}
+                data={reminders.slice(0, 6)}
                 keyExtractor={(item) => item.entityId}
                 renderItem={({ item, index }) => {
                   moment.locale(value.lang);
                   const date = moment.utc(item[0].date).format('dddd,  Do MMMM YYYY');
-
                   return (
                     <View>
                       {item[0].isImportant ? (
@@ -257,9 +246,9 @@ const HomeScreen = ({ navigation }) => {
                                 </View>
                               </View>
 
-                              {item.entityObject.phones !== undefined &&
-                                item.entityObject.phones.length > 0 &&
-                                item.entityObject.phones[0].whatsApp && (
+                              {item.entityObject.phones !== undefined
+                                && item.entityObject.phones.length > 0
+                                && item.entityObject.phones[0].whatsApp && (
                                   <TouchableComp
                                     onPress={() => {
                                       Linking.openURL(
@@ -269,7 +258,7 @@ const HomeScreen = ({ navigation }) => {
                                   >
                                     <Ionicons name="logo-whatsapp" size={23} color={Colors.onSurfaceColorSecondary} />
                                   </TouchableComp>
-                                )}
+                              )}
                             </View>
                           )}
                         />
