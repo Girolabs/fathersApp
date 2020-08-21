@@ -32,15 +32,16 @@ import LivingSituationsFormScreen from '../screens/LivingSituations';
 import BulletinScreen from '../screens/BulletinScreen';
 import BulletinDetailScreen from '../screens/BulletinDetailScreen';
 
-const defaultStackNavOptions=
-{
+const defaultStackNavOptions={
     headerStyle: {
       backgroundColor: Colors.surfaceColorPrimary,
     },
     headerTitleStyle: {
       fontFamily: 'work-sans-semibold',
     },
-
+    headerBackTitleStyle: {
+      fontFamily: 'work-sans',
+    },
     headerTintColor: Colors.onSurfaceColorPrimary,
   };
 
