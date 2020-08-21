@@ -41,7 +41,7 @@ class DelegationDetailScreen extends Component {
           ),
         };
         const fetchedAssignments =
-          fetchedDelegation.assignments && fetchedDelegation.assignments.filter((asg) => asg.isActive == true);
+          fetchedDelegation.assignments && fetchedDelegation.assignments.filter((asg) => asg.isActive);
         this.setState({ territory: fetchedDelegation, assignments: fetchedAssignments });
       })
       .catch((err) => {
@@ -64,7 +64,7 @@ class DelegationDetailScreen extends Component {
     if (prevState.showHistorical != this.state.showHistorical) {
       if (this.state.territory) {
         if (!this.state.showHistorical) {
-          const activeAsg = this.state.territory.assignments.filter((asg) => asg.isActive == true);
+          const activeAsg = this.state.territory.assignments.filter((asg) => asg.isActive);
           this.setState({ assignments: activeAsg });
         } else {
           this.setState({ assignments: this.state.territory.assignments });
