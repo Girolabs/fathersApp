@@ -118,7 +118,7 @@ exports.DE = {
     MASTER: 'Terziatsmeister',
     SECOND_TERTIANSHIP: 'Zweites Terziat',
     SION_TIME: 'Sionszeit',
-    SION_TIME_MASTER: 'Sionzeitsmeister',
+    SION_TIME_MASTER: 'Koordinator der Sionszeit',
     STATEMENT: 'Kursideal',
     MEMBERS: 'Mitglieder des Kurses',
     START_DATE: 'Anfangsdatum',
