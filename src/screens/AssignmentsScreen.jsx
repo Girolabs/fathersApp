@@ -514,18 +514,21 @@ const styles = StyleSheet.create({
   tabsGroup: {
     flexDirection: 'row',
     marginTop: 10,
+    justifyContent:'space-between'
   },
   tabButtonSelected: {
-    flex: 0.25,
+    flexGrow: 0.25,
     borderColor: Colors.primaryColor,
     borderWidth: 2,
     borderRadius: 5,
     paddingVertical: 5,
     marginHorizontal: 5,
     backgroundColor: Colors.primaryColor,
+    padding:10
   },
   tabButton: {
-    flex: 0.25,
+    padding:10,
+    flexGrow: 0.25,
     borderColor: Colors.primaryColor,
     borderWidth: 2,
     borderRadius: 5,
