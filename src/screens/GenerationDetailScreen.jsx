@@ -60,7 +60,7 @@ class GenerationDetailScreen extends Component {
             <SafeAreaView>
               <ScrollView>
                 {!this.state.loading ? (
-                  <Fragment>
+                  <View style={styles.screen}>
                     <View style={styles.titleContainer}>
                       <Text style={styles.title}>{this.state.generation.name}</Text>
                     </View>
@@ -114,7 +114,7 @@ class GenerationDetailScreen extends Component {
                         </View>
                       )}
                     </View>
-                  </Fragment>
+                  </View>
                 ) : (
                   <ActivityIndicator size="large" color={Colors.primaryColor} />
                 )}
@@ -150,7 +150,9 @@ GenerationDetailScreen.navigationOptions = (navigationData) => ({
 });
 
 const styles = StyleSheet.create({
-  screen: {},
+  screen: {
+    backgroundColor:Colors.surfaceColorPrimary
+  },
   titleContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
