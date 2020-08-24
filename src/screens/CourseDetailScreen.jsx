@@ -466,7 +466,7 @@ class CourseDetailScreen extends Component {
                         return (
                           <TouchableComp
                             key={person.personId}
-                            onPress={() => navigation.push('PatreDetail', { fatherId: person.personId })}
+                            onPress={() => navigation.navigate('PatreDetail', { fatherId: person.personId })}
                           >
                             <View style={styles.memberItem}>
                               <Image
