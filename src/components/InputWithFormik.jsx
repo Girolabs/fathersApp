@@ -16,16 +16,16 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 15,
-    
+
   }
 });
 
 const InputWithFormik = ({
-  name, label, formik, hasPerm, placeholder, mode, underlineColor, ...props
+  name, label, formik, hasPerm, placeholder, mode, underlineColor,onFocus,onBlur, ...props
 }) => {
   const value = _.get(formik.values, name) || '';
   const error = pathHasError(name, formik.errors);
-  
+
   console.log('error',error)
   const onChangeText = formik.handleChange(name);
   const id = name;
@@ -46,7 +46,7 @@ const InputWithFormik = ({
         ? (
           <View style={styles.container}>
             <Text style={styles.label}>{label}</Text>
-            <TextInput {...textFieldProps} error ={error} />
+            <TextInput onFocus={onFocus} onBlur={onBlur} { ...textFieldProps} error ={error} />
           </View>
         )
         : null}
