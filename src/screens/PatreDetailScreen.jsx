@@ -321,7 +321,7 @@ const PatreDetailScreen = ({ navigation }) => {
                         borderRadius: 5,
                         borderWidth: 2,
                         paddingHorizontal: 10,
-                        width: '45%',
+                        // width: '45%'
                         height: 50,
                         marginHorizontal: 15,
                         justifyContent: 'center',
