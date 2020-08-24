@@ -82,7 +82,7 @@ class HouseDetailScreen extends Component {
             <SafeAreaView>
               <ScrollView>
                 {house ? (
-                  <View>
+                  <View style={styles.screen}>
                     <View style={styles.titleContainer}>
                       <View style={{ flexDirection: 'column', alignItems: 'flex-start', maxWidth: '80%' }}>
                         <Text style={styles.title}>{house.name}</Text>
@@ -210,7 +210,9 @@ HouseDetailScreen.navigationOptions = (navigationData) => ({
 });
 
 const styles = StyleSheet.create({
-  screen: {},
+  screen: {
+    backgroundColor: Colors.surfaceColorPrimary,
+  },
   titleContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

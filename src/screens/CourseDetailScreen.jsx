@@ -86,7 +86,7 @@ class CourseDetailScreen extends Component {
             <SafeAreaView>
               <ScrollView>
                 {course ? (
-                  <Fragment>
+                  <View style={styles.screen}>
                     <View style={styles.titleContainer}>
                       <Text style={styles.title}>{course.name}</Text>
                     </View>
@@ -484,7 +484,7 @@ class CourseDetailScreen extends Component {
                         );
                       })}
                     </View>
-                  </Fragment>
+                  </View>
                 ) : (
                   <ActivityIndicator size="large" color={Colors.primaryColor} />
                 )}
@@ -520,7 +520,9 @@ CourseDetailScreen.navigationOptions = (navigationData) => ({
 });
 
 const styles = StyleSheet.create({
-  screen: {},
+  screen: {
+    backgroundColor: Colors.surfaceColorPrimary
+  },
   titleContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

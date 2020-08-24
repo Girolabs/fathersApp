@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     padding: 15,
+    backgroundColor: Colors.surfaceColorPrimary,
   },
   prayerCard: {
     flexDirection: 'row',
