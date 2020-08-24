@@ -102,7 +102,7 @@ class FiliationDetailScreen extends Component {
                               />
 
                               <View>
-                                <Text style={styles.listItemBody}> {filiation.mainAssignment.roleTitle}</Text>
+                                <Text style={styles.listItemBody}>{filiation.mainAssignment.roleTitle}</Text>
                                 <Text style={styles.listItemBody}>{filiation.mainAssignment.person.fullName}</Text>
                                 <Text style={styles.listItemBody}>
                                   {`${
