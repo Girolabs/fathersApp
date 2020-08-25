@@ -26,6 +26,7 @@ import Colors from '../constants/Colors';
 import { NavigationEvents } from 'react-navigation';
 import { getPerson, getPersonByUser, getInterfaceData, updateFatherForm } from '../api';
 
+const widthBtn=Platform.OS=='android'?'45%':'100%'
 const styles = StyleSheet.create({
   snackError: {
     backgroundColor: Colors.secondaryColor,
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 2,
     paddingHorizontal: 10,
-    width: '45%',
+    width: widthBtn,
     height: 50,
     marginHorizontal: 15,
     justifyContent: 'center',
@@ -64,7 +65,7 @@ class FatherFormScreen extends Component {
     father: {},
     loading: true,
     updateFields: [],
-    enableKeyboardAvoidingView:true
+    keyboardAV:''
   };
   async componentDidMount() {
     this.setState({ loading: true });
@@ -189,9 +190,8 @@ class FatherFormScreen extends Component {
         />
         {!loading ? (
           <>
-           <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS == "ios" ? "position" : "height"}enabled={this.state.enableKeyboardAvoidingView}  >
-
-            <SafeAreaView >
+            <SafeAreaView style={styles.screen}>
+            <KeyboardAvoidingView behavior={Platform.OS == "ios" ? this.state.keyboardAV : "height"} >
 
               <ScrollView>
                 <View style={{ paddingHorizontal: 15, marginVertical: 30, width: '80%' }}>
@@ -257,12 +257,6 @@ class FatherFormScreen extends Component {
                         name="instagramUser"
                         mode="outlined"
                         selectionColor={Colors.primaryColor}
-                        onFocus={()=>{
-                            this.setState({enableKeyboardAvoidingView:false})
-                        }}
-                        onBlur={()=>{
-                            this.setState({enableKeyboardAvoidingView:true})
-                        }}
                       />
                       <InputWithFormik
                         hasPerm={updateFields.indexOf('slackUser') != -1}
@@ -270,12 +264,6 @@ class FatherFormScreen extends Component {
                         name="slackUser"
                         mode="outlined"
                         selectionColor={Colors.primaryColor}
-                        onFocus={()=>{
-                            this.setState({enableKeyboardAvoidingView:false})
-                        }}
-                        onBlur={()=>{
-                            this.setState({enableKeyboardAvoidingView:true})
-                        }}
                       />
                       <InputWithFormik
                         hasPerm={updateFields.indexOf('twitterUSer') != -1}
@@ -298,7 +286,7 @@ class FatherFormScreen extends Component {
                         name="skypeUser"
                         mode="outlined"
                         selectionColor={Colors.primaryColor}
-
+                        onPress
                       />
                       <InputWithFormik
                         hasPerm={updateFields.indexOf('phone1') != -1}
@@ -352,10 +340,9 @@ class FatherFormScreen extends Component {
                   {this.state.snackMsg}
                 </Snackbar>
               </ScrollView>
+                </KeyboardAvoidingView>
 
             </SafeAreaView>
-            </KeyboardAvoidingView>
-
           </>
         ) : (
           <ActivityIndicator size="large" color={Colors.primaryColor} />
