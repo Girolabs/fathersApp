@@ -115,7 +115,8 @@ class CourseDetailScreen extends Component {
                       <IdealStatement
                         languages={course.idealLanguages ? course.idealLanguages : []} 
                         recommendedLang={course.recommendedIdealField}
-                        course={course} />
+                        navigation={navigation}
+                        entity={course} />
                       <View style={styles.listItem}>
                         <Text style={styles.listItemTitle}>{i18n.t('COURSE.CONSECRATION_DATE')}</Text>
                         <Text style={styles.listItemBody}>
