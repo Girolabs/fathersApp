@@ -4,9 +4,6 @@ import {
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity,
-  Platform,
-  TouchableNativeFeedback,
   ScrollView,
   ActivityIndicator,
   Clipboard,
@@ -26,6 +23,7 @@ import Colors from '../constants/Colors';
 import SocialIcons from '../components/SocialIcons';
 import HeaderButton from '../components/HeaderButton';
 import DefaultItem from '../components/FatherDetailItem';
+import Button from '../components/Button';
 
 import { getInterfaceData, getPerson } from '../api';
 
@@ -77,11 +75,6 @@ const PatreDetailScreen = ({ navigation }) => {
   const [viewFatherFields, setViewFatherFields] = useState([]);
   const [statusLabels, setStatusLabels] = useState({});
 
-  let TouchableComp = TouchableOpacity;
-  if (Platform.OS === 'android' && Platform.Version >= 21) {
-    TouchableComp = TouchableNativeFeedback;
-  }
-
   const handleSaveContact = async (father) => {
     const { status } = await Contacts.requestPermissionsAsync();
     if (status === 'granted') {
@@ -101,8 +94,6 @@ const PatreDetailScreen = ({ navigation }) => {
             },
           ],
         };
-        console.log('contact', contact);
-        console.log('spanshot', contact);
         const contactId = await Contacts.addContactAsync(contact);
         setVisible(true);
         setSnackMsg(i18n.t('FATHER_DETAIL.SAVED_CONTACT'));
@@ -154,8 +145,6 @@ const PatreDetailScreen = ({ navigation }) => {
 
       /*  const contactId = await Contacts.addContactAsync(contact);
       console.log(contactId); */
-    } else {
-      console.log('no tengo');
     }
   };
 
@@ -176,12 +165,9 @@ const PatreDetailScreen = ({ navigation }) => {
         });
 
         const index = viewRoles.indexOf(viewPermRole);
-
         const viewFields = accumulatedFieldsPerRol[index];
 
-        console.log('status', livingConditionStatusLabels);
         setStatusLabels(livingConditionStatusLabels);
-
         setViewFatherFields(viewFields);
       });
     }
@@ -212,7 +198,6 @@ const PatreDetailScreen = ({ navigation }) => {
     loadPerson();
   }, []);
 
-  console.log('[PatreDetail]', viewFatherFields);
   return (
     <I18nContext.Consumer>
       {(value) => {
@@ -259,16 +244,15 @@ const PatreDetailScreen = ({ navigation }) => {
                 >
                   <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CONTACT_INFO')}</Text>
                   {father.personId && (
-                    <TouchableComp
+                    <Button
                       onPress={() => {
-                        console.log('go to fatherform');
                         navigation.navigate('FatherForm', {
                           fatherId: father.personId,
                         });
                       }}
                     >
                       <Ionicons name="md-create" size={23} color={Colors.primaryColor} />
-                    </TouchableComp>
+                    </Button>
                   )}
                 </View>
 
@@ -314,7 +298,7 @@ const PatreDetailScreen = ({ navigation }) => {
                 )}
 
                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 10 }}>
-                  <TouchableComp
+                  <Button
                     onPress={() => {
                       handleSaveContact(father);
                     }}
@@ -344,7 +328,7 @@ const PatreDetailScreen = ({ navigation }) => {
                         {i18n.t('FATHER_DETAIL.SAVE_CONTACT')}
                       </Text>
                     </View>
-                  </TouchableComp>
+                  </Button>
 
                   <SocialIcons
                     wa={
