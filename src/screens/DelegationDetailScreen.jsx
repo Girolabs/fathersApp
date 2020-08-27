@@ -24,6 +24,7 @@ import { getTerritory } from '../api';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { FontAwesome5 } from '@expo/vector-icons';
+import IdealStatement from '../components/IdealStatement';
 class DelegationDetailScreen extends Component {
   state = {
     territory: null,
@@ -54,7 +55,7 @@ class DelegationDetailScreen extends Component {
     const territoryId = navigation.getParam('delegationId');
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
-      this.loadTerritory(territoryId, false);
+      this.loadTerritory(territoryId, 'all');
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
@@ -157,6 +158,12 @@ class DelegationDetailScreen extends Component {
                             </TouchableComp>
                           );
                         })}
+                        <IdealStatement
+                          languages={territory.idealLanguages ? territory.idealLanguages : []}
+                          recommendedLang={territory.recommendedIdealField}
+                          navigation={navigation}
+                          entity={territory}
+                        />
                       </View>
                     </View>
                     <View styles={{ marginTop: 10, marginBottom: 5, backgroundColor: Colors.surfaceColorSecondary }}>

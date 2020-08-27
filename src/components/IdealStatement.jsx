@@ -24,11 +24,7 @@ const styles = StyleSheet.create({
 });
 
 const IdealStatement = ({
-  languages,
-  recommendedLang,
-  entity,
-  navigation,
-
+  languages, recommendedLang, entity, navigation,
 }) => {
   const [selectedlang, setSelectedLang] = useState(recommendedLang);
 
@@ -48,23 +44,28 @@ const IdealStatement = ({
   }, [recommendedLang]);
 
   return (
-    <View style={styles.container}>
-      <View>
-        <View>
-          <Text style={styles.title}>{i18n.t('GENERAL.IDEAL')}</Text>
-          <Select elements={langs} value={selectedlang} valueChange={(value) => setSelectedLang(value)} />
+    <>
+      {recommendedLang ? (
+        <View style={styles.container}>
+          <View>
+            <View>
+              <Text style={styles.title}>{i18n.t('GENERAL.IDEAL')}</Text>
+              <Select elements={langs} value={selectedlang} valueChange={(value) => setSelectedLang(value)} />
+            </View>
+          </View>
+          <View>
+            <Button
+              onPress={() => {
+                navigation.navigate('IdealStatementDetail', { content: entity[selectedlang] });
+                console.log(entity[selectedlang]);
+              }}
+            >
+              <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
+            </Button>
+          </View>
         </View>
-      </View>
-      <View>
-        <Button onPress={() => {
-          navigation.navigate('IdealStatementDetail', { content: entity[selectedlang] });
-          console.log(entity[selectedlang]);
-        }}
-        >
-          <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
-        </Button>
-      </View>
-    </View>
+      ) : null}
+    </>
   );
 };
 
