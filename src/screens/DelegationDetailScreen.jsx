@@ -29,6 +29,7 @@ class DelegationDetailScreen extends Component {
     territory: null,
     showHistorical: false,
     assignments: [],
+    filiations:[]
   };
 
   loadTerritory = (territoryId, fields) => {
@@ -42,7 +43,9 @@ class DelegationDetailScreen extends Component {
         };
         const fetchedAssignments =
           fetchedDelegation.assignments && fetchedDelegation.assignments.filter((asg) => asg.isActive);
-        this.setState({ territory: fetchedDelegation, assignments: fetchedAssignments });
+
+        const fetchedActiveFiliations = fetchedDelegation.filiations.filter(filiation => filiation.isActive);
+        this.setState({ territory: fetchedDelegation, assignments: fetchedAssignments, filiations: fetchedActiveFiliations });
       })
       .catch((err) => {
         this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
@@ -79,7 +82,7 @@ class DelegationDetailScreen extends Component {
       TouchableComp = TouchableNativeFeedback;
     }
     const { navigation } = this.props;
-    const { territory, showHistorical, assignments } = this.state;
+    const { territory, showHistorical, assignments, filiations } = this.state;
     return (
       <I18nContext.Consumer>
         {(value) => {
@@ -162,7 +165,7 @@ class DelegationDetailScreen extends Component {
                     <View styles={{ marginTop: 10, marginBottom: 5, backgroundColor: Colors.surfaceColorSecondary }}>
                       <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_DETAIL.TERRITORY_FILIATION')}</Text>
                       <View>
-                        {territory.filiations.map((filiation) => {
+                        {filiations.map((filiation) => {
                           return (
                             <TouchableComp
                               key={filiation.filiationId}
