@@ -14,6 +14,7 @@ exports.EN = {
     EDIT_SUCCESS: 'Edit was successful',
     CREATE_SUCCESS: 'Create was successful',
     COPY_CLIPBOARD: 'Copied to clipboard',
+    IDEAL: 'Ideal statement',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'Email or username',

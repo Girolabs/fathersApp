@@ -33,6 +33,7 @@ import FatherFormScreen from '../screens/FatherFormScreen';
 import LivingSituationsFormScreen from '../screens/LivingSituations';
 import BulletinScreen from '../screens/BulletinScreen';
 import BulletinDetailScreen from '../screens/BulletinDetailScreen';
+import IdealStatementDetail from '../components/IdealStatementDetail';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -101,6 +102,9 @@ const HomeNavigator = createStackNavigator(
     LivingSituationForm: {
       screen: LivingSituationsFormScreen,
     },
+    IdealStatementDetail: {
+      screen: IdealStatementDetail,
+    },
   },
   {
     defaultNavigationOptions: defaultStackNavOptions,
@@ -135,6 +139,9 @@ const SearchNavigator = createStackNavigator(
     },
     LivingSituationForm: {
       screen: LivingSituationsFormScreen,
+    },
+    IdealStatementDetail: {
+      screen: IdealStatementDetail,
     },
   },
   {
@@ -239,6 +246,9 @@ const FreeCommunityNavigator = createStackNavigator({
   },
   LivingSituationForm: {
     screen: LivingSituationsFormScreen,
+  },
+  IdealStatementDetail: {
+    screen: IdealStatementDetail,
   },
 });
 
