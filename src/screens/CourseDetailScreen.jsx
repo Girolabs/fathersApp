@@ -152,7 +152,7 @@ class CourseDetailScreen extends Component {
                                     justifyContent: 'center',
                                   }}
                                 >
-                                  <Text style={styles.listItemBody}>{course.leaderAssignment.person.fullName}</Text>
+                                  <Text style={styles.listItemBody}>{course.leaderAssignment.person.fullFriendlyName}</Text>
                                   <Text style={styles.listItemBody}>
                                     {`${
                                       course.leaderAssignment.startDate
@@ -218,7 +218,7 @@ class CourseDetailScreen extends Component {
                               )}
 
                               <Text style={styles.listItemBody}>
-                                {course.noviceMaster ? course.noviceMaster.fullName : ''}
+                                {course.noviceMaster ? course.noviceMaster.fullFriendlyName : ''}
                               </Text>
                             </View>
                           </View>
@@ -264,7 +264,7 @@ class CourseDetailScreen extends Component {
                                     />
                                   )}
 
-                                  <Text style={styles.listItemBody}>{rector ? rector.fullName : ''}</Text>
+                                  <Text style={styles.listItemBody}>{rector ? rector.fullFriendlyName : ''}</Text>
                                 </View>
                               </View>
                             </TouchableComp>
@@ -313,7 +313,7 @@ class CourseDetailScreen extends Component {
                                 )}
 
                                 <Text style={styles.listItemBody}>
-                                  {course.firstTertianshipMaster && course.firstTertianshipMaster ? course.firstTertianshipMaster.fullName : ''}
+                                  {course.firstTertianshipMaster && course.firstTertianshipMaster.fullFriendlyName ? course.firstTertianshipMaster.fullFriendlyName : ''}
                                 </Text>
                               </View>
                             </View>
@@ -378,8 +378,8 @@ class CourseDetailScreen extends Component {
                                 )}
 
                                 <Text style={styles.listItemBody}>
-                                  {course.secondTertianshipMaster && course.secondTertianshipMaster.fullName
-                                    ? course.secondTertianshipMaster.fullName
+                                  {course.secondTertianshipMaster && course.secondTertianshipMaster.fullFriendlyName
+                                    ? course.secondTertianshipMaster.fullFriendlyName
                                     : ''}
                                 </Text>
                               </View>
@@ -434,7 +434,7 @@ class CourseDetailScreen extends Component {
                             }}
                           >
                             <View style={styles.listItem}>
-                              <Text style={styles.listItemTitle}>{i18n.t('COURSE.MASTER')}</Text>
+                              <Text style={styles.listItemTitle}>{i18n.t('COURSE.SION_TIME_MASTER')}</Text>
                               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 {course.sionzeitCoordinator && (
                                   <Image
@@ -446,7 +446,7 @@ class CourseDetailScreen extends Component {
                                 )}
 
                                 <Text style={styles.listItemBody}>
-                                  {course.sionzeitCoordinator && course.sionzeitCoordinator.fullName ? course.sionzeitCoordinator.fullName : ''}
+                                  {course.sionzeitCoordinator && course.sionzeitCoordinator.fullFriendlyName ? course.sionzeitCoordinator.fullFriendlyName : ''}
                                 </Text>
                               </View>
                             </View>
@@ -483,7 +483,7 @@ class CourseDetailScreen extends Component {
                               <Text
                                 style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}
                               >
-                                {person.fullName}
+                                {person.fullFriendlyName}
                               </Text>
                             </View>
                           </TouchableComp>
