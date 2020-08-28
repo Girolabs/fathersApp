@@ -33,7 +33,7 @@ exports.ES = {
     MISC: 'Otros',
   },
   FATHER_DETAIL: {
-    LAST_UPDATE: 'Ultima actualización',
+    LAST_UPDATE: 'Ultima actualización:',
     CONTACT_INFO: 'Información de contacto',
     SAVE_CONTACT: 'Guardar contacto',
     SAVED_CONTACT: 'El contacto se ha guardado',
@@ -44,7 +44,7 @@ exports.ES = {
     PAST_HOMES: 'Situaciones de vivienda',
     FILIATION: 'Filial',
     HOME: 'Casa',
-    RESPONSIBLE_TERRITORY: 'Territorio responsable /  Donde trabaja: ',
+    RESPONSIBLE_TERRITORY: 'Territorio responsable /  Donde trabaja:',
     HOME_COUNTRY: 'País de origen',
     HOME_TERRITORY: 'Territorio de origen',
     COURSE: 'Curso',
