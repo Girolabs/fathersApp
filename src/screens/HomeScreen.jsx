@@ -20,6 +20,7 @@ import * as Network from 'expo-network';
 import 'moment/min/locales';
 import { Snackbar } from 'react-native-paper';
 import { NavigationEvents } from 'react-navigation';
+import * as ScreenOrientation from 'expo-screen-orientation';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { I18nContext } from '../context/I18nProvider';
@@ -130,6 +131,7 @@ const HomeScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
+    ScreenOrientation.unlockAsync();
     loadReminders();
   }, []);
 
