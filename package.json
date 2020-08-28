@@ -47,7 +47,8 @@
     "react-navigation-tabs": "^2.8.11",
     "yup": "^0.29.1",
     "@react-native-community/datetimepicker": "2.4.0",
-    "react-native-webview": "9.4.0"
+    "react-native-webview": "9.4.0",
+    "expo-screen-orientation": "~1.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

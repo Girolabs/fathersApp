@@ -368,7 +368,7 @@ class AssignmentsScreen extends Component {
           return (
             <SafeAreaView>
               {!this.state.loading ? (
-                <Fragment>
+                <View style={styles.screen}>
                   <View style={styles.tabsGroup}>
                     {tabs.map((tab, index) => {
                       return (
@@ -394,7 +394,7 @@ class AssignmentsScreen extends Component {
                     })}
                   </View>
                   <View style={styles.scrollContainer}>{filtered && <Fragment>{list}</Fragment>}</View>
-                </Fragment>
+                </View>
               ) : (
                 <ActivityIndicator size="large" color={Colors.primaryColor} />
               )}
@@ -508,22 +508,27 @@ const ListItemGC = (props) => {
 };
 
 const styles = StyleSheet.create({
-  screen: {},
+  screen: {
+    backgroundColor: Colors.surfaceColorPrimary,
+  },
   tabsGroup: {
     flexDirection: 'row',
     marginTop: 10,
+    justifyContent:'space-between'
   },
   tabButtonSelected: {
-    flex: 0.25,
+    flexGrow: 0.25,
     borderColor: Colors.primaryColor,
     borderWidth: 2,
     borderRadius: 5,
     paddingVertical: 5,
     marginHorizontal: 5,
     backgroundColor: Colors.primaryColor,
+    padding:10
   },
   tabButton: {
-    flex: 0.25,
+    padding:10,
+    flexGrow: 0.25,
     borderColor: Colors.primaryColor,
     borderWidth: 2,
     borderRadius: 5,

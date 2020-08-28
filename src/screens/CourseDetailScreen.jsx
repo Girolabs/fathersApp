@@ -18,12 +18,13 @@ import Colors from '../constants/Colors';
 import moment from 'moment';
 import 'moment/min/locales';
 import { Flag } from 'react-native-svg-flagkit';
-import axios from '../../axios-instance';
+
 import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { getCourse, getPerson } from '../api';
+import IdealStatement from '../components/IdealStatement';
 
 class CourseDetailScreen extends Component {
   state = {
@@ -86,7 +87,7 @@ class CourseDetailScreen extends Component {
             <SafeAreaView>
               <ScrollView>
                 {course ? (
-                  <Fragment>
+                  <View style={styles.screen}>
                     <View style={styles.titleContainer}>
                       <Text style={styles.title}>{course.name}</Text>
                     </View>
@@ -111,6 +112,11 @@ class CourseDetailScreen extends Component {
                           {course.celebrationDate ? moment.utc(course.celebrationDate).format('D MMMM YYYY') : ''}
                         </Text>
                       </View>
+                      <IdealStatement
+                        languages={course.idealLanguages ? course.idealLanguages : []} 
+                        recommendedLang={course.recommendedIdealField}
+                        navigation={navigation}
+                        entity={course} />
                       <View style={styles.listItem}>
                         <Text style={styles.listItemTitle}>{i18n.t('COURSE.CONSECRATION_DATE')}</Text>
                         <Text style={styles.listItemBody}>
@@ -466,7 +472,7 @@ class CourseDetailScreen extends Component {
                         return (
                           <TouchableComp
                             key={person.personId}
-                            onPress={() => navigation.push('PatreDetail', { fatherId: person.personId })}
+                            onPress={() => navigation.navigate('PatreDetail', { fatherId: person.personId })}
                           >
                             <View style={styles.memberItem}>
                               <Image
@@ -484,7 +490,7 @@ class CourseDetailScreen extends Component {
                         );
                       })}
                     </View>
-                  </Fragment>
+                  </View>
                 ) : (
                   <ActivityIndicator size="large" color={Colors.primaryColor} />
                 )}
@@ -520,7 +526,9 @@ CourseDetailScreen.navigationOptions = (navigationData) => ({
 });
 
 const styles = StyleSheet.create({
-  screen: {},
+  screen: {
+    backgroundColor: Colors.surfaceColorPrimary
+  },
   titleContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

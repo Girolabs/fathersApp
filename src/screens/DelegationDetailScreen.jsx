@@ -24,11 +24,13 @@ import { getTerritory } from '../api';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { FontAwesome5 } from '@expo/vector-icons';
+import IdealStatement from '../components/IdealStatement';
 class DelegationDetailScreen extends Component {
   state = {
     territory: null,
     showHistorical: false,
     assignments: [],
+    filiations:[]
   };
 
   loadTerritory = (territoryId, fields) => {
@@ -42,7 +44,9 @@ class DelegationDetailScreen extends Component {
         };
         const fetchedAssignments =
           fetchedDelegation.assignments && fetchedDelegation.assignments.filter((asg) => asg.isActive);
-        this.setState({ territory: fetchedDelegation, assignments: fetchedAssignments });
+
+        const fetchedActiveFiliations = fetchedDelegation.filiations.filter(filiation => filiation.isActive);
+        this.setState({ territory: fetchedDelegation, assignments: fetchedAssignments, filiations: fetchedActiveFiliations });
       })
       .catch((err) => {
         this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
@@ -54,7 +58,7 @@ class DelegationDetailScreen extends Component {
     const territoryId = navigation.getParam('delegationId');
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
-      this.loadTerritory(territoryId, false);
+      this.loadTerritory(territoryId, 'all');
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
@@ -79,7 +83,7 @@ class DelegationDetailScreen extends Component {
       TouchableComp = TouchableNativeFeedback;
     }
     const { navigation } = this.props;
-    const { territory, showHistorical, assignments } = this.state;
+    const { territory, showHistorical, assignments, filiations } = this.state;
     return (
       <I18nContext.Consumer>
         {(value) => {
@@ -88,137 +92,150 @@ class DelegationDetailScreen extends Component {
             <SafeAreaView>
               {territory ? (
                 <ScrollView>
-                  <View style={styles.titleContainer}>
-                    <Text style={styles.title}>{territory.name}</Text>
-                  </View>
-                  <View>
-                    <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_DETAIL.TERRITORY_INFO')}</Text>
-                    {territory.parentTerritory && (
-                      <TouchableComp
-                        onPress={() => {
-                          console.log('apreto', territory.parentTerritory.territoryId);
-                          navigation.push('DelegationDetail', { delegationId: territory.parentTerritory.territoryId });
-                        }}
-                      >
-                        <View style={styles.listItem}>
-                          <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.TERRITORY_CHARGE')}</Text>
-                          <Text style={styles.listItemBody}>{territory.parentTerritory.name}</Text>
-                        </View>
-                      </TouchableComp>
-                    )}
-                    {territory.celebrationDate && (
-                      <View style={styles.listItem}>
-                        <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.CELEBRATION_DATE')}</Text>
-                        <Text style={styles.listItemBody}>
-                          {moment.utc(territory.celebrationDate).format('Do MMMM YYYY')}
-                        </Text>
-                      </View>
-                    )}
-                    <View style={[styles.listItem]}>
-                      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.ASSIGNMENTS')}</Text>
+                  <View style={styles.screen}>
+                    <View style={styles.titleContainer}>
+                      <Text style={styles.title}>{territory.name}</Text>
+                    </View>
+                    <View>
+                      <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_DETAIL.TERRITORY_INFO')}</Text>
+                      {territory.parentTerritory && (
                         <TouchableComp
                           onPress={() => {
-                            this.setState({ showHistorical: !showHistorical });
+                            console.log('apreto', territory.parentTerritory.territoryId);
+                            navigation.push('DelegationDetail', {
+                              delegationId: territory.parentTerritory.territoryId,
+                            });
                           }}
                         >
-                          <FontAwesome5
-                            name="history"
-                            size={24}
-                            color={showHistorical ? Colors.primaryColor : Colors.onSurfaceColorPrimary}
-                          />
-                        </TouchableComp>
-                      </View>
-                      {assignments.map((asg) => {
-                        return (
-                          <TouchableComp
-                            onPress={() => {
-                              navigation.navigate('PatreDetail', { fatherId: asg.person.personId });
-                            }}
-                          >
-                            <View style={styles.fatherItem}>
-                              <Image
-                                source={{ uri: `https://schoenstatt-fathers.link${asg.person.photo}` }}
-                                style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }}
-                              />
-                              <View style={{ flexDirection: 'column' }}>
-                                <Text style={styles.listItemBody}>{asg.roleTitle}</Text>
-                                <Text style={styles.listItemBody}>{asg.person.fullName}</Text>
-                                <Text style={styles.listItemBody}>
-                                  {`${moment.utc(asg.startDate).format('Do MMMM YYYY')} ${moment
-                                    .utc(asg.endDate)
-                                    .format('Do MMMM YYYY')}`}
-                                </Text>
-                              </View>
-                            </View>
-                          </TouchableComp>
-                        );
-                      })}
-                    </View>
-                  </View>
-                  <View styles={{ marginTop: 10, marginBottom: 5, backgroundColor: Colors.surfaceColorSecondary }}>
-                    <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_DETAIL.TERRITORY_FILIATION')}</Text>
-                    <View>
-                      {territory.filiations.map((filiation) => {
-                        return (
-                          <TouchableComp
-                            key={filiation.filiationId}
-                            onPress={() => {
-                              navigation.navigate('FiliationDetail', { filiationId: filiation.filiationId });
-                            }}
-                          >
-                            <View style={styles.card}>
-                              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Flag id={filiation.country} size={0.1} />
-                                <Text style={styles.cardTitle}>{filiation.name}</Text>
-                              </View>
-
-                              <View style={styles.cardBody}>
-                                <Text style={styles.cardBodyText}>{i18n.t('TERRITORY_DETAIL.RECTOR')}</Text>
-                                <Text style={styles.cardBodyTextBold}>
-                                  {filiation.mainAssignment ? filiation.mainAssignment.person.fullName : null}
-                                </Text>
-                              </View>
-                            </View>
-                          </TouchableComp>
-                        );
-                      })}
-                    </View>
-                  </View>
-                  <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_DETAIL.MEMBERS_OF_TERRITORY')}</Text>
-                  <FlatList
-                    data={this.state.territory.homeTerritoryMembers}
-                    renderItem={({ item }) => {
-                      return (
-                        <TouchableComp onPress={() => navigation.navigate('PatreDetail', { fatherId: item.personId })}>
-                          <View style={styles.memberItem}>
-                            <Image
-                              source={{ uri: `https://schoenstatt-fathers.link${item.photo}` }}
-                              style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
-                            />
-                            <Text
-                              style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}
-                            >
-                              {item.fullName}
-                            </Text>
+                          <View style={styles.listItem}>
+                            <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.TERRITORY_CHARGE')}</Text>
+                            <Text style={styles.listItemBody}>{territory.parentTerritory.name}</Text>
                           </View>
                         </TouchableComp>
-                      );
-                    }}
-                  />
-                  <Text style={styles.statsText}> Total: {territory.statistics.total} </Text>
-                  <Text style={styles.statsText}>
-                    {' '}
-                    {`${i18n.t('TERRITORY_DETAIL.PRIESTS')}: ${territory.statistics.livingPerpetual}`}{' '}
-                  </Text>
-                  <Text style={styles.statsText}>
-                    {' '}
-                    {`${i18n.t('TERRITORY_DETAIL.STUDENTS')}: ${territory.statistics.students}`}{' '}
-                  </Text>
-                  <Text style={styles.statsText}>
-                    {' '}
-                    {`${i18n.t('TERRITORY_DETAIL.DECEASED')}: ${territory.statistics.deceased}`}{' '}
-                  </Text>
+                      )}
+                      {territory.celebrationDate && (
+                        <View style={styles.listItem}>
+                          <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.CELEBRATION_DATE')}</Text>
+                          <Text style={styles.listItemBody}>
+                            {moment.utc(territory.celebrationDate).format('Do MMMM YYYY')}
+                          </Text>
+                        </View>
+                      )}
+                        <IdealStatement
+                          languages={territory.idealLanguages ? territory.idealLanguages : []}
+                          recommendedLang={territory.recommendedIdealField}
+                          navigation={navigation}
+                          entity={territory}
+                        />
+                      <View style={[styles.listItem]}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                          <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.ASSIGNMENTS')}</Text>
+                          <TouchableComp
+                            onPress={() => {
+                              this.setState({ showHistorical: !showHistorical });
+                            }}
+                          >
+                            <FontAwesome5
+                              name="history"
+                              size={24}
+                              color={showHistorical ? Colors.primaryColor : Colors.onSurfaceColorPrimary}
+                            />
+                          </TouchableComp>
+                        </View>
+                        {assignments.map((asg) => {
+                          return (
+                            <TouchableComp
+                              onPress={() => {
+                                navigation.navigate('PatreDetail', { fatherId: asg.person.personId });
+                              }}
+                            >
+                              <View style={styles.fatherItem}>
+                                <Image
+                                  source={{ uri: `https://schoenstatt-fathers.link${asg.person.photo}` }}
+                                  style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }}
+                                />
+                                <View style={{ flexDirection: 'column' }}>
+                                  <Text style={styles.listItemBody}>{asg.roleTitle}</Text>
+                                  <Text style={styles.listItemBody}>{asg.person.fullName}</Text>
+                                  <Text style={styles.listItemBody}>
+                                    {`${moment.utc(asg.startDate).format('Do MMMM YYYY')} ${moment
+                                      .utc(asg.endDate)
+                                      .format('Do MMMM YYYY')}`}
+                                  </Text>
+                                </View>
+                              </View>
+                            </TouchableComp>
+                          );
+                        })}
+                      
+                      </View>
+                    </View>
+                    <View styles={{ marginTop: 10, marginBottom: 5, backgroundColor: Colors.surfaceColorSecondary }}>
+                      <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_DETAIL.TERRITORY_FILIATION')}</Text>
+                      <View>
+                        {filiations.map((filiation) => {
+                          return (
+                            <TouchableComp
+                              key={filiation.filiationId}
+                              onPress={() => {
+                                navigation.navigate('FiliationDetail', { filiationId: filiation.filiationId });
+                              }}
+                            >
+                              <View style={styles.card}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                  <Flag id={filiation.country} size={0.1} />
+                                  <Text style={styles.cardTitle}>{filiation.name}</Text>
+                                </View>
+
+                                <View style={styles.cardBody}>
+                                  <Text style={styles.cardBodyText}>{i18n.t('TERRITORY_DETAIL.RECTOR')}</Text>
+                                  <Text style={styles.cardBodyTextBold}>
+                                    {filiation.mainAssignment ? filiation.mainAssignment.person.fullName : null}
+                                  </Text>
+                                </View>
+                              </View>
+                            </TouchableComp>
+                          );
+                        })}
+                      </View>
+                    </View>
+                    <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_DETAIL.MEMBERS_OF_TERRITORY')}</Text>
+                    <FlatList
+                      data={this.state.territory.homeTerritoryMembers}
+                      renderItem={({ item }) => {
+                        return (
+                          <TouchableComp
+                            onPress={() => navigation.navigate('PatreDetail', { fatherId: item.personId })}
+                          >
+                            <View style={styles.memberItem}>
+                              <Image
+                                source={{ uri: `https://schoenstatt-fathers.link${item.photo}` }}
+                                style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
+                              />
+                              <Text
+                                style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}
+                              >
+                                {item.fullName}
+                              </Text>
+                            </View>
+                          </TouchableComp>
+                        );
+                      }}
+                    />
+                    <Text style={styles.statsText}> Total: {territory.statistics.total} </Text>
+                    <Text style={styles.statsText}>
+                      {' '}
+                      {`${i18n.t('TERRITORY_DETAIL.PRIESTS')}: ${territory.statistics.livingPerpetual}`}{' '}
+                    </Text>
+                    <Text style={styles.statsText}>
+                      {' '}
+                      {`${i18n.t('TERRITORY_DETAIL.STUDENTS')}: ${territory.statistics.students}`}{' '}
+                    </Text>
+                    <Text style={styles.statsText}>
+                      {' '}
+                      {`${i18n.t('TERRITORY_DETAIL.DECEASED')}: ${territory.statistics.deceased}`}{' '}
+                    </Text>
+                  </View>
                 </ScrollView>
               ) : (
                 <ActivityIndicator size="large" color={Colors.primaryColor} />

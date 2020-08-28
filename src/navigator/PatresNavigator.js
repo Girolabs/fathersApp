@@ -5,7 +5,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
 
-import { SafeAreaView, Image, View, Text } from 'react-native';
+import {
+  SafeAreaView, Image, View, Text,
+} from 'react-native';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
@@ -31,6 +33,7 @@ import FatherFormScreen from '../screens/FatherFormScreen';
 import LivingSituationsFormScreen from '../screens/LivingSituations';
 import BulletinScreen from '../screens/BulletinScreen';
 import BulletinDetailScreen from '../screens/BulletinDetailScreen';
+import IdealStatementDetail from '../components/IdealStatementDetail';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -39,7 +42,7 @@ const defaultStackNavOptions = {
   headerTitleStyle: {
     fontFamily: 'work-sans-semibold',
   },
-  headerBackTitle: {
+  headerBackTitleStyle: {
     fontFamily: 'work-sans',
   },
   headerTintColor: Colors.onSurfaceColorPrimary,
@@ -96,6 +99,12 @@ const HomeNavigator = createStackNavigator(
     BulletinDetail: {
       screen: BulletinDetailScreen,
     },
+    LivingSituationForm: {
+      screen: LivingSituationsFormScreen,
+    },
+    IdealStatementDetail: {
+      screen: IdealStatementDetail,
+    },
   },
   {
     defaultNavigationOptions: defaultStackNavOptions,
@@ -127,6 +136,12 @@ const SearchNavigator = createStackNavigator(
     },
     CourseDetail: {
       screen: CourseDetailScreen,
+    },
+    LivingSituationForm: {
+      screen: LivingSituationsFormScreen,
+    },
+    IdealStatementDetail: {
+      screen: IdealStatementDetail,
     },
   },
   {
@@ -201,6 +216,9 @@ const CommunityNavigator = createStackNavigator(
     CourseDetail: {
       screen: CourseDetailScreen,
     },
+    LivingSituationForm: {
+      screen: LivingSituationsFormScreen,
+    },
   },
   {
     defaultNavigationOptions: defaultStackNavOptions,
@@ -219,6 +237,18 @@ const FreeCommunityNavigator = createStackNavigator({
   },
   CourseDetail: {
     screen: CourseDetailScreen,
+  },
+  PatreDetail: {
+    screen: PatreDetailScreen,
+  },
+  FatherForm: {
+    screen: FatherFormScreen,
+  },
+  LivingSituationForm: {
+    screen: LivingSituationsFormScreen,
+  },
+  IdealStatementDetail: {
+    screen: IdealStatementDetail,
   },
 });
 

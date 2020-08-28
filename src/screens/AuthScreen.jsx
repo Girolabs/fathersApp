@@ -119,7 +119,7 @@ class AuthScreen extends Component {
               {(authValue) => {
                 /* 	moment.locale(value.lang); */
                 return (
-                  <KeyboardAvoidingView style={styles.screen}>
+                  <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : ""}  style={styles.screen}>
                     <View style={styles.container}>
                       <View style={styles.titleContainer}>
                         <Image source={logo} style={{ width: 80, height: 80 }} />

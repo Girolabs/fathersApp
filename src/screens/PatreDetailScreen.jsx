@@ -4,14 +4,11 @@ import {
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity,
-  Platform,
-  TouchableNativeFeedback,
   ScrollView,
   ActivityIndicator,
   Clipboard,
 } from 'react-native';
-import { Flag } from 'react-native-svg-flagkit';
+
 import moment from 'moment';
 import i18n from 'i18n-js';
 import 'moment/min/locales';
@@ -25,6 +22,8 @@ import { I18nContext } from '../context/I18nProvider';
 import Colors from '../constants/Colors';
 import SocialIcons from '../components/SocialIcons';
 import HeaderButton from '../components/HeaderButton';
+import DefaultItem from '../components/FatherDetailItem';
+import Button from '../components/Button';
 
 import { getInterfaceData, getPerson } from '../api';
 
@@ -47,7 +46,6 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     letterSpacing: 2.5,
     textTransform: 'uppercase',
-
   },
   listItem: {
     backgroundColor: Colors.surfaceColorPrimary,
@@ -75,11 +73,7 @@ const PatreDetailScreen = ({ navigation }) => {
   const [visible, setVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
   const [viewFatherFields, setViewFatherFields] = useState([]);
-
-  let TouchableComp = TouchableOpacity;
-  if (Platform.OS === 'android' && Platform.Version >= 21) {
-    TouchableComp = TouchableNativeFeedback;
-  }
+  const [statusLabels, setStatusLabels] = useState({});
 
   const handleSaveContact = async (father) => {
     const { status } = await Contacts.requestPermissionsAsync();
@@ -100,8 +94,6 @@ const PatreDetailScreen = ({ navigation }) => {
             },
           ],
         };
-        console.log('contact', contact);
-        console.log('spanshot', contact);
         const contactId = await Contacts.addContactAsync(contact);
         setVisible(true);
         setSnackMsg(i18n.t('FATHER_DETAIL.SAVED_CONTACT'));
@@ -153,8 +145,6 @@ const PatreDetailScreen = ({ navigation }) => {
 
       /*  const contactId = await Contacts.addContactAsync(contact);
       console.log(contactId); */
-    } else {
-      console.log('no tengo');
     }
   };
 
@@ -163,6 +153,7 @@ const PatreDetailScreen = ({ navigation }) => {
 
     if (status.isConnected) {
       getInterfaceData().then((res) => {
+        const { livingConditionStatusLabels } = res.data.result;
         const viewPermRole = tempFather.viewPermissionForCurrentUser;
         const { personFieldsByViewPermission } = res.data.result;
         const viewRoles = Object.keys(personFieldsByViewPermission);
@@ -174,9 +165,9 @@ const PatreDetailScreen = ({ navigation }) => {
         });
 
         const index = viewRoles.indexOf(viewPermRole);
-
         const viewFields = accumulatedFieldsPerRol[index];
 
+        setStatusLabels(livingConditionStatusLabels);
         setViewFatherFields(viewFields);
       });
     }
@@ -207,7 +198,6 @@ const PatreDetailScreen = ({ navigation }) => {
     loadPerson();
   }, []);
 
-  console.log('[PatreDetail]', viewFatherFields);
   return (
     <I18nContext.Consumer>
       {(value) => {
@@ -254,16 +244,15 @@ const PatreDetailScreen = ({ navigation }) => {
                 >
                   <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CONTACT_INFO')}</Text>
                   {father.personId && (
-                    <TouchableComp
+                    <Button
                       onPress={() => {
-                        console.log('go to fatherform');
                         navigation.navigate('FatherForm', {
                           fatherId: father.personId,
                         });
                       }}
                     >
                       <Ionicons name="md-create" size={23} color={Colors.primaryColor} />
-                    </TouchableComp>
+                    </Button>
                   )}
                 </View>
 
@@ -309,7 +298,7 @@ const PatreDetailScreen = ({ navigation }) => {
                 )}
 
                 <View style={{ flexDirection: 'row', width: '100%', marginVertical: 10 }}>
-                  <TouchableComp
+                  <Button
                     onPress={() => {
                       handleSaveContact(father);
                     }}
@@ -321,7 +310,7 @@ const PatreDetailScreen = ({ navigation }) => {
                         borderRadius: 5,
                         borderWidth: 2,
                         paddingHorizontal: 10,
-                        width: '45%',
+                        // width: '45%'
                         height: 50,
                         marginHorizontal: 15,
                         justifyContent: 'center',
@@ -339,7 +328,7 @@ const PatreDetailScreen = ({ navigation }) => {
                         {i18n.t('FATHER_DETAIL.SAVE_CONTACT')}
                       </Text>
                     </View>
-                  </TouchableComp>
+                  </Button>
 
                   <SocialIcons
                     wa={
@@ -362,6 +351,11 @@ const PatreDetailScreen = ({ navigation }) => {
                       title="FATHER_DETAIL.FILIATION"
                       body={father.activeLivingSituation.filiationName}
                       img={father.activeLivingSituation.filiationCountry}
+                      badge={
+                        father.activeLivingSituation.status !== 'intern' && statusLabels
+                          ? statusLabels[father.activeLivingSituation.status]
+                          : null
+                      }
                       selected={() => {
                         navigation.navigate('FiliationDetail', {
                           filiationId: father.activeLivingSituation.filiationId,
@@ -484,32 +478,49 @@ const PatreDetailScreen = ({ navigation }) => {
                 {father.livingSituations && (
                   <>
                     <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PAST_HOMES')}</Text>
-                    {father.livingSituations.map((pastHomes) => (
+                    {father.livingSituations.map((pastHome) => (
                       <View>
                         <DefaultItem
                           show={viewFatherFields.indexOf('livingSituations') !== -1}
                           title="FATHER_DETAIL.FILIATION"
-                          body={pastHomes.filiationName}
-                          img={pastHomes.filiationCountry}
+                          body={pastHome.filiationName}
+                          img={pastHome.filiationCountry}
+                          badge={pastHome.status !== 'intern' && statusLabels ? statusLabels[pastHome.status] : null}
+                          selected={() => {
+                            navigation.navigate('FiliationDetail', { filiationId: pastHome.filiationId });
+                          }}
                         />
                         <DefaultItem
                           show={viewFatherFields.indexOf('livingSituations') !== -1}
                           title="FATHER_DETAIL.HOME"
-                          body={pastHomes.houseName}
-                          img={pastHomes.houseCountry}
+                          body={pastHome.houseName}
+                          img={pastHome.houseCountry}
+                          selected={() => {
+                            navigation.navigate('HouseDetail', { houseId: pastHome.houseId });
+                          }}
                         />
                         <DefaultItem
                           show={viewFatherFields.indexOf('livingSituations') !== -1}
                           title="FATHER_DETAIL.RESPONSIBLE_TERRITORY"
-                          body={pastHomes.responsibleTerritoryName}
+                          body={pastHome.responsibleTerritoryName}
+                          selected={() => {
+                            navigation.push('DelegationDetail', {
+                              delegationId: pastHome.responsibleTerritoryId,
+                            });
+                          }}
                         />
                         <DefaultItem
                           show={viewFatherFields.indexOf('livingSituations') !== -1}
                           title="FATHER_DETAIL.START_DATE"
-                          date={pastHomes.startDate}
+                          date={pastHome.startDate}
                           lang={value.lang}
                         />
-                        <DefaultItem title="FATHER_DETAIL.END_DATE" date={pastHomes.endDate} lang={value.lang} />
+                        <DefaultItem
+                          title="FATHER_DETAIL.END_DATE"
+                          show={viewFatherFields.indexOf('livingSituations') !== -1}
+                          date={pastHome.endDate}
+                          lang={value.lang}
+                        />
                         <Text style={styles.sectionHeader} />
                       </View>
                     ))}
@@ -543,62 +554,5 @@ PatreDetailScreen.navigationOptions = (navigationData) => ({
     </HeaderButtons>
   ),
 });
-
-const DefaultItem = ({
-  title, body, selected, img, country_code, lang, date, id, show, icon,
-}) => {
-  let TouchableComp = TouchableOpacity;
-  let formatedDate;
-  if (Platform.OS === 'android' && Platform.Version >= 21) {
-    TouchableComp = TouchableNativeFeedback;
-  }
-
-  if (date) {
-    moment.locale(lang);
-    formatedDate = moment.utc(date).format('dddd,  Do MMMM YYYY');
-  }
-
-  return (
-    <>
-      {show && (
-        <>
-          {(body || date) && (
-            <TouchableComp
-              onPress={() => {
-                console.log('Apretado');
-                selected ? selected() : null;
-              }}
-            >
-              <View
-                style={{
-                  padding: 15,
-                  backgroundColor: Colors.surfaceColorSecondary,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <View>
-                  {title && <Text style={styles.listItemTitle}>{i18n.t(title)}</Text>}
-
-                  {country_code && <Text style={styles.listItemBody}>{countries.getName(country_code, lang)}</Text>}
-                  {date && <Text style={styles.listItemBody}>{formatedDate}</Text>}
-
-                  {body && <Text style={styles.listItemBody}>{body}</Text>}
-                </View>
-                {img && (
-                  <View>
-                    <Flag id={img} size={0.2} />
-                  </View>
-                )}
-                {icon && icon}
-              </View>
-            </TouchableComp>
-          )}
-        </>
-      )}
-    </>
-  );
-};
 
 export default PatreDetailScreen;

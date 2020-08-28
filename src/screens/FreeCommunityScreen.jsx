@@ -25,21 +25,26 @@ class FreeCommunityScreen extends Component {
   };
 
   loadCourses = (fields) => {
-    getCourses(fields).then((res) => {
-      let data = [];
-      res.data.result.forEach((a) => {
-        let i = a.generationId == null ? 0 : a.generationId;
-        data[i] = data[i] || { data: [], name: '', generationId: '' };
-        data[i].name = a.generationName || i18n.t('GENERATION.WITHOUT_GENERATIONS');
-        data[i].generationId = i;
-        data[i].data.push(a);
+    getCourses(fields)
+      .then((res) => {
+        let data = [];
+        res.data.result.forEach((a) => {
+          let i = a.generationId == null ? 0 : a.generationId;
+          data[i] = data[i] || { data: [], name: '', generationId: '' };
+          data[i].name = a.generationName || i18n.t('GENERATION.WITHOUT_GENERATIONS');
+          data[i].generationId = i;
+          data[i].data.push(a);
+        });
+        let temp = data[0];
+        data.shift();
+        data.push(temp);
+
+        this.setState({ generations: data });
+      })
+      .catch(() => {
+        this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
       });
-      this.setState({ generations: data.reverse() });
-    })
-    .catch(() => {
-      this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
-    });
-  }
+  };
 
   async componentDidMount() {
     const status = await Network.getNetworkStateAsync();

@@ -20,6 +20,7 @@ import { Snackbar } from 'react-native-paper';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { getGeneration } from '../api';
+import IdealStatement from '../components/IdealStatement';
 
 class GenerationDetailScreen extends Component {
   state = {
@@ -48,10 +49,15 @@ class GenerationDetailScreen extends Component {
     }
   }
   render() {
+
+    const { generation } = this.state;
+    const { navigation } = this.props; 
     let TouchableComp = TouchableOpacity;
     if (Platform.OS === 'android' && Platform.Version >= 21) {
       TouchableComp = TouchableNativeFeedback;
     }
+
+
     return (
       <I18nContext.Consumer>
         {(value) => {
@@ -60,18 +66,18 @@ class GenerationDetailScreen extends Component {
             <SafeAreaView>
               <ScrollView>
                 {!this.state.loading ? (
-                  <Fragment>
+                  <View style={styles.screen}>
                     <View style={styles.titleContainer}>
-                      <Text style={styles.title}>{this.state.generation.name}</Text>
+                      <Text style={styles.title}>{generation.name}</Text>
                     </View>
                     <View>
                       <Text style={styles.sectionHeader}> {i18n.t('GENERATION.GENERATION_INFO')} </Text>
-                      {this.state.generation.celebrationDate && (
+                      {generation.celebrationDate && (
                         <View style={styles.listItem}>
                           <Text style={styles.listItemTitle}> {i18n.t('GENERATION.CELEBRATION_DATE')} </Text>
                           <Text style={styles.listItemBody}>
                             {this.state.generation.celebrationDate
-                              ? moment.utc(this.state.generation.celebrationDate).format('Do MMMM YYYY')
+                              ? moment.utc(generation.celebrationDate).format('Do MMMM YYYY')
                               : ''}
                           </Text>
                         </View>
@@ -80,15 +86,21 @@ class GenerationDetailScreen extends Component {
                       <View style={styles.listItem}>
                         <Text style={styles.listItemTitle}>{i18n.t('GENERATION.FOUNDATION_DATE')}</Text>
                         <Text style={styles.listItemBody}>
-                          {this.state.generation.foundingDate
-                            ? moment.utc(this.state.generation.foundingDate).format('Do MMMM YYYY')
+                          {generation.foundingDate
+                            ? moment.utc(generation.foundingDate).format('Do MMMM YYYY')
                             : ''}
                         </Text>
                       </View>
+                      <IdealStatement
+                        languages={generation ? generation.idealLanguages : []}
+                        recommendedLang={generation.recommendedIdealField}
+                        navigation={navigation}
+                        entity={generation}
+                      />
                       <Text style={styles.sectionHeader}> {i18n.t('GENERATION.COURSES')} </Text>
-                      {this.state.generation.courses && (
+                      {generation.courses && (
                         <View>
-                          {this.state.generation.courses.map((course) => {
+                          {generation.courses.map((course) => {
                             return (
                               <TouchableComp
                                 onPress={() => {
@@ -114,7 +126,7 @@ class GenerationDetailScreen extends Component {
                         </View>
                       )}
                     </View>
-                  </Fragment>
+                  </View>
                 ) : (
                   <ActivityIndicator size="large" color={Colors.primaryColor} />
                 )}
@@ -150,7 +162,9 @@ GenerationDetailScreen.navigationOptions = (navigationData) => ({
 });
 
 const styles = StyleSheet.create({
-  screen: {},
+  screen: {
+    backgroundColor: Colors.surfaceColorPrimary,
+  },
   titleContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

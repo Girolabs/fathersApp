@@ -23,6 +23,8 @@ import Select from '../components/Select';
 const styles = StyleSheet.create({
   screen: {
     alignItems: 'center',
+    backgroundColor: Colors.surfaceColorPrimary,
+    flex: 1,
   },
   select: {
     width: '100%',
