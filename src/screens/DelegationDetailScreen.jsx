@@ -121,6 +121,12 @@ class DelegationDetailScreen extends Component {
                           </Text>
                         </View>
                       )}
+                        <IdealStatement
+                          languages={territory.idealLanguages ? territory.idealLanguages : []}
+                          recommendedLang={territory.recommendedIdealField}
+                          navigation={navigation}
+                          entity={territory}
+                        />
                       <View style={[styles.listItem]}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                           <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.ASSIGNMENTS')}</Text>
@@ -161,12 +167,7 @@ class DelegationDetailScreen extends Component {
                             </TouchableComp>
                           );
                         })}
-                        <IdealStatement
-                          languages={territory.idealLanguages ? territory.idealLanguages : []}
-                          recommendedLang={territory.recommendedIdealField}
-                          navigation={navigation}
-                          entity={territory}
-                        />
+                      
                       </View>
                     </View>
                     <View styles={{ marginTop: 10, marginBottom: 5, backgroundColor: Colors.surfaceColorSecondary }}>

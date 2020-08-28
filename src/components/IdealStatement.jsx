@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import i18n from 'i18n-js';
 import { Ionicons } from 'expo-vector-icons';
-import { setNestedObjectValues } from 'formik';
 import Select from './Select';
 import Colors from '../constants/Colors';
 import Button from './Button';
