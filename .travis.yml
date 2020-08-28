@@ -11,26 +11,19 @@ before_script:
 script:
   - npm ci
 
-stages:
-    - build
-    - deploy
 
-
-deploy_expo:
-    stage: deploy
-    node_js: lts/*
-    script:
-      - npm ci
-      - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
-      - npx expo publish --non-interactive
-    only:
-      - dev
-
-build_prod:
-    stage : build
-    script:
-      - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
-      - expo build:android -t app-bundle
-    only:
-      - master
+jobs:
+  include:
+    - stage: deploy
+      if: branch = dev
+      node_js: lts/*
+      script:
+        - npm ci
+        - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+        - npx expo publish --non-interactive
+    - stage : build
+      if: branch = master
+      script:
+        - expo build:android -t app-bundle
+      
 
