@@ -11,9 +11,6 @@ before_script:
 script:
   - npm ci
 
-branches:
-  only:
-    - dev
 jobs:
   include:
     - stage: deploy
@@ -22,3 +19,13 @@ jobs:
         - npm ci
         - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
         - npx expo publish --non-interactive
+      only:
+        - dev
+
+    - stage : build
+      script:
+        - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+        - expo build:android -t app-bundle
+      only:
+        - master
+
