@@ -19,5 +19,5 @@ jobs:
       node_js: lts/*
       script:
         - npm ci
-        - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
-        - npx expo publish --non-interactive
+        - expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+        - expo publish --non-interactive
