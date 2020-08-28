@@ -24,6 +24,7 @@ jobs:
     - stage : build
       if: branch = master
       script:
+        - npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
         - expo build:android -t app-bundle
       
 
