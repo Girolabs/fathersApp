@@ -14,6 +14,7 @@ exports.PT = {
     EDIT_SUCCESS: 'Edição bem sucedida',
     CREATE_SUCCESS: 'Criação bem sucedida',
     COPY_CLIPBOARD: 'Copiado para a área de transferência',
+    IDEAL: 'Explicação do ideal',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'Email ou nome de usuário',
@@ -119,7 +120,7 @@ exports.PT = {
     SECOND_TERTIANSHIP: 'Segundo terciado',
     SION_TIME: 'Tempo de Sião',
     SION_TIME_MASTER: 'Coordenador do Tempo de Sião',
-    STATEMENT: 'Descrição do Ideal',
+    STATEMENT: 'Explicação do ideal de curso',
     MEMBERS: 'Membros do curso',
     START_DATE: 'Data de início',
     END_DATE: 'Data final',
