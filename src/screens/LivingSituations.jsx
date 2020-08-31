@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import {
   View,
   Text,
@@ -6,9 +6,7 @@ import {
   SafeAreaView,
   TextInput,
   KeyboardAvoidingView,
-  Platform,
   ScrollView,
-  TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
@@ -22,13 +20,18 @@ import * as Network from 'expo-network';
 import * as _ from 'lodash';
 import * as Yup from 'yup';
 import { Snackbar } from 'react-native-paper';
-import { set } from 'lodash';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import {
-  getFiliations, getTerritories, getHouses, getInterfaceData, saveLivingSituation, updateLivingSituation,
+  getFiliations,
+  getTerritories,
+  getHouses,
+  getInterfaceData,
+  saveLivingSituation,
+  updateLivingSituation,
 } from '../api';
+import Button from '../components/Button';
 
 const styles = StyleSheet.create({
   title: {
@@ -204,20 +207,19 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     const status = await Network.getNetworkStateAsync();
 
     if (status.isConnected == true) {
-      getFiliations(false)
-        .then((response) => {
-          const fetchedFiliations = response.data.result
-            .map((filiation) => {
-              if (filiation.isActive == true) {
-                return {
-                  label: filiation.name,
-                  value: filiation.filiationId,
-                };
-              }
-            })
-            .filter((el) => el != undefined);
-          setFiliations(fetchedFiliations);
-        });
+      getFiliations(false).then((response) => {
+        const fetchedFiliations = response.data.result
+          .map((filiation) => {
+            if (filiation.isActive == true) {
+              return {
+                label: filiation.name,
+                value: filiation.filiationId,
+              };
+            }
+          })
+          .filter((el) => el != undefined);
+        setFiliations(fetchedFiliations);
+      });
     }
   };
 
@@ -336,7 +338,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                 }}
               >
                 {({
-                  handleChange, values, handleSubmit, errors, setFieldValue, touched,
+                  handleChange, values, handleSubmit, errors, setFieldValue,
                 }) => (
                   <>
                     <View>
@@ -454,17 +456,16 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                     </View>
                     <View>
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.START_DATE')}</Text>
-                      <TouchableOpacity onPress={() => setOpenStartDate(true)}>
+                      <Button onPress={() => setOpenStartDate(true)}>
                         <View style={styles.inputContainer}>
                           <Text style={styles.inputDatePicker}>{_.get(values, 'startDate') || ''}</Text>
                           <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
                         </View>
-                      </TouchableOpacity>
+                      </Button>
                     </View>
                     <View>
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.END_DATE')}</Text>
-                      <TouchableOpacity onPress={() => setOpenEndDate(true)}>
-                        {console.log(errors)}
+                      <Button onPress={() => setOpenEndDate(true)}>
                         <>
                           <View style={styles.inputContainer}>
                             <Text style={styles.inputDatePicker}>{_.get(values, 'endDate') || ''}</Text>
@@ -474,7 +475,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                           <Text style={styles.errorText}>{i18n.t('LIVING_SITUATION.ERROR_END_DATE')}</Text>
                           )}
                         </>
-                      </TouchableOpacity>
+                      </Button>
                     </View>
 
                     <View>
@@ -496,12 +497,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                     </View>
 
                     <View style={styles.buttonsContainer}>
-                      {/* <TouchableOpacity style={{ flex: 1 }}>
-                        <View style={styles.btnContainerSecondary}>
-                          <Text style={styles.btnTextSecondary}>{i18n.t('LIVING_SITUATION.ADD')}</Text>
-                        </View>
-                      </TouchableOpacity> */}
-                      <TouchableOpacity
+                      <Button
                         onPress={() => {
                           handleSubmit();
                         }}
@@ -510,7 +506,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                         <View style={styles.btnContainerPrimary}>
                           <Text style={styles.btnTextPrimary}>{i18n.t('LIVING_SITUATION.SAVE')}</Text>
                         </View>
-                      </TouchableOpacity>
+                      </Button>
                     </View>
                   </>
                 )}

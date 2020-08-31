@@ -15,6 +15,69 @@ import i18n from 'i18n-js';
 import { AsyncStorage } from 'react-native';
 import * as Network from 'expo-network';
 
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    backgroundColor: Colors.primaryColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '80%',
+    padding: 40,
+    marginBottom: 20,
+  },
+  title: {
+    color: 'white',
+    fontFamily: 'work-sans-bold',
+    fontSize: 27,
+    marginLeft: 10,
+  },
+  authContainer: {
+    width: '80%',
+    padding: 20,
+    backgroundColor: Colors.surfaceColorPrimary,
+    marginVertical: 16,
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  btnPrimary: {
+    backgroundColor: Colors.primaryColor,
+    width: '100%',
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginVertical: 5,
+  },
+  btnSecondary: {
+    backgroundColor: Colors.secondaryColor,
+    width: '100%',
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginVertical: 5,
+  },
+  btnText: {
+    color: 'white',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    fontFamily: 'work-sans-bold',
+  },
+  snackSuccess: {
+    backgroundColor: Colors.secondaryColor,
+  },
+  snackError: {
+    backgroundColor: Colors.secondaryColor,
+  },
+});
+
 class AuthScreen extends Component {
   state = {
     hasToken: false,
@@ -119,7 +182,7 @@ class AuthScreen extends Component {
               {(authValue) => {
                 /* 	moment.locale(value.lang); */
                 return (
-                  <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : ""}  style={styles.screen}>
+                  <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : ''} style={styles.screen}>
                     <View style={styles.container}>
                       <View style={styles.titleContainer}>
                         <Image source={logo} style={{ width: 80, height: 80 }} />
@@ -144,7 +207,7 @@ class AuthScreen extends Component {
                                 label="Token"
                                 required
                                 autoCapitalize="none"
-                                keyboardType="email-addres"
+                                keyboardType="email-address"
                                 placeholder={i18n.t('AUTH_SCREEN.TOKEN_PLACEHOLDER')}
                                 value={this.state.token}
                                 onChange={this.handleToken}
@@ -243,68 +306,5 @@ class AuthScreen extends Component {
 AuthScreen.navigationOptions = {
   headerShown: false,
 };
-
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: Colors.primaryColor,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '80%',
-    padding: 40,
-    marginBottom: 20,
-  },
-  title: {
-    color: 'white',
-    fontFamily: 'work-sans-bold',
-    fontSize: 27,
-    marginLeft: 10,
-  },
-  authContainer: {
-    width: '80%',
-    padding: 20,
-    backgroundColor: Colors.surfaceColorPrimary,
-    marginVertical: 16,
-  },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-  },
-  btnPrimary: {
-    backgroundColor: Colors.primaryColor,
-    width: '100%',
-    paddingHorizontal: 5,
-    paddingVertical: 10,
-    borderRadius: 5,
-    marginVertical: 5,
-  },
-  btnSecondary: {
-    backgroundColor: Colors.secondaryColor,
-    width: '100%',
-    paddingHorizontal: 5,
-    paddingVertical: 10,
-    borderRadius: 5,
-    marginVertical: 5,
-  },
-  btnText: {
-    color: 'white',
-    textAlign: 'center',
-    textTransform: 'uppercase',
-    fontFamily: 'work-sans-bold',
-  },
-  snackSuccess: {
-    backgroundColor: Colors.secondaryColor,
-  },
-  snackError: {
-    backgroundColor: Colors.secondaryColor,
-  },
-});
 
 export default AuthScreen;
