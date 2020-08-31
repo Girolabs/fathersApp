@@ -20,7 +20,7 @@ exports.PT = {
     IDENTITY_PLACEHOLDER: 'Email ou nome de usuário',
     NEXT: 'Seguinte',
     CODE: 'Código',
-    SEND: 'Enviar',
+    SEND: 'Entrar',
     GO_BACK: 'Regressar',
     TOKEN_PLACEHOLDER: 'Código enviado por email',
     EMPTY_IDENTITY: 'Identidade vazia',

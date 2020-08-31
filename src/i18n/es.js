@@ -20,7 +20,7 @@ exports.ES = {
     IDENTITY_PLACEHOLDER: 'Correo o usuario',
     NEXT: 'Siguiente',
     CODE: 'Ya tengo un código',
-    SEND: 'Enviar código',
+    SEND: 'Ingresar',
     GO_BACK: 'Volver',
     TOKEN_PLACEHOLDER: 'Código enviado por email',
     EMPTY_IDENTITY: 'Agrega un correo o usuario',
