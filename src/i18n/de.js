@@ -14,6 +14,7 @@ exports.DE = {
     EDIT_SUCCESS: 'Bearbeitung erfolgreich',
     CREATE_SUCCESS: 'Erfolgreich erstellt',
     COPY_CLIPBOARD: 'In die Zwischenablage kopiert',
+    IDEAL: 'Beschreibung des Ideals',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'E-Mail Adresse oder Benutzername',
@@ -119,7 +120,7 @@ exports.DE = {
     SECOND_TERTIANSHIP: 'Zweites Terziat',
     SION_TIME: 'Sionszeit',
     SION_TIME_MASTER: 'Koordinator der Sionszeit',
-    STATEMENT: 'Kursideal',
+    STATEMENT: 'Beschreibung des Kursideals',
     MEMBERS: 'Mitglieder des Kurses',
     START_DATE: 'Anfangsdatum',
     END_DATE: 'Enddatum',

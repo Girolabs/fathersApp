@@ -14,6 +14,7 @@ exports.ES = {
     EDIT_SUCCESS: 'La edición fue exitosa',
     CREATE_SUCCESS: 'La creación fue exitosa',
     COPY_CLIPBOARD: 'Copiado al portapapeles',
+    IDEAL: 'Explicación del ideal de curso',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'Correo o usuario',
@@ -119,7 +120,7 @@ exports.ES = {
     SECOND_TERTIANSHIP: 'Segundo terciado',
     SION_TIME: 'Tiempo de Sión',
     SION_TIME_MASTER: 'Coordinador de Tiempo de Sión',
-    STATEMENT: 'Explicación del Ideal',
+    STATEMENT: 'Explicación del ideal',
     MEMBERS: 'Miembros del curso',
     START_DATE: 'Fecha de inicio',
     END_DATE: 'Fecha de término',
