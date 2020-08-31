@@ -13,6 +13,7 @@ import {
 import i18n from 'i18n-js';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
+import logo from '../../assets/img/fatherIcon.png';
 
 const styles = (props) => StyleSheet.create({
   container: {
@@ -97,7 +98,7 @@ const DefaultDrawer = (props) => {
         <View style={styles(props).iconContainer}>
           <TouchableOpacity
             onPress={() => {
-              props.navigation.toggleDrawer();
+              navigation.toggleDrawer();
             }}
           >
             <Ionicons name="md-close" size={36} color={Colors.surfaceColorPrimary} />
@@ -106,7 +107,7 @@ const DefaultDrawer = (props) => {
 
         <ScrollView contentContainerStyle={styles(props).scrollContainer}>
           <View style={styles(props).banner}>
-            <Image source={require('../../assets/img/fatherIcon.png')} style={styles(props).image} />
+            <Image source={logo} style={styles(props).image} />
             <Text numberOfLines={2} style={styles(props).title}>
               {i18n.t('GENERAL.FATHERS')}
             </Text>
