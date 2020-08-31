@@ -19,7 +19,9 @@ const styles = (props) => StyleSheet.create({
     flex: 1,
   },
   iconContainer: {
-
+    alignItems: 'flex-end',
+    paddingTop: 20,
+    paddingRight: 20,
   },
   banner: {
     flexDirection: 'row',
@@ -44,6 +46,12 @@ const styles = (props) => StyleSheet.create({
   },
   listItem: {
     ...props.labelStyle,
+  },
+  scrollContainer: {
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    height: '100%',
+    paddingHorizontal: 15,
   },
 });
 
@@ -84,11 +92,10 @@ const DefaultDrawer = (props) => {
   ];
   const { navigation } = props;
   return (
-    <SafeAreaView style={styles.screen}>
+    <SafeAreaView style={styles(props).screen}>
       <ScrollView>
-        <View style={{ alignItems: 'flex-end', paddingTop: 20, paddingRight: 20 }}>
+        <View style={styles(props).iconContainer}>
           <TouchableOpacity
-            style={{ }}
             onPress={() => {
               props.navigation.toggleDrawer();
             }}
@@ -97,14 +104,7 @@ const DefaultDrawer = (props) => {
           </TouchableOpacity>
         </View>
 
-        <ScrollView
-          contentContainerStyle={{
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start',
-            height: '100%',
-            paddingHorizontal: 15,
-          }}
-        >
+        <ScrollView contentContainerStyle={styles(props).scrollContainer}>
           <View style={styles(props).banner}>
             <Image source={require('../../assets/img/fatherIcon.png')} style={styles(props).image} />
             <Text numberOfLines={2} style={styles(props).title}>
