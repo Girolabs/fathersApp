@@ -67,21 +67,23 @@ const SettingsScreen = (props) => {
         return (
           <SafeAreaView style={styles.screen}>
             <Select style={styles.select} elements={lng} value={value.lang} valueChange={value.changeLang} />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>{i18n.t('SETTINGS.LOGOUT')}</Text>
-              <TouchableComp
-                onPress={async () => {
-                  try {
-                    await AsyncStorage.removeItem('token');
-                    props.navigation.navigate('Auth');
-                  } catch (e) {
-                    console.log(e);
-                  }
-                }}
-              >
+            <TouchableComp
+              onPress={async () => {
+                try {
+                  await AsyncStorage.removeItem('token');
+                  props.navigation.navigate('Auth');
+                } catch (e) {
+                  console.log(e);
+                }
+              }}
+            >
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>{i18n.t('SETTINGS.LOGOUT')}</Text>
+
                 <Ionicons name="md-close-circle" size={23} color={Colors.primaryColor} />
-              </TouchableComp>
-            </View>
+
+              </View>
+            </TouchableComp>
           </SafeAreaView>
         );
       }}

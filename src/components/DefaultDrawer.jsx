@@ -14,6 +14,39 @@ import i18n from 'i18n-js';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
+const styles = (props) => StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  iconContainer: {
+
+  },
+  banner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 15,
+  },
+  title: {
+    width: '70%',
+    fontSize: 18,
+    fontFamily: 'work-sans-semibold',
+    color: 'white',
+    paddingHorizontal: 15,
+  },
+  image: {
+    marginLeft: 10,
+    width: 88,
+    height: 88,
+  },
+  listItemContainer: {
+    marginLeft: 15,
+    marginVertical: 10,
+  },
+  listItem: {
+    ...props.labelStyle,
+  },
+});
+
 const DefaultDrawer = (props) => {
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -51,22 +84,25 @@ const DefaultDrawer = (props) => {
   ];
   const { navigation } = props;
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={styles.screen}>
       <ScrollView>
-        <TouchableOpacity
-          style={{ margin: 15, padding: 15 }}
-          onPress={() => {
-            props.navigation.toggleDrawer();
-          }}
-        >
-          <Ionicons name="md-close" size={36} color={Colors.surfaceColorPrimary} />
-        </TouchableOpacity>
+        <View style={{ alignItems: 'flex-end', paddingTop: 20, paddingRight: 20 }}>
+          <TouchableOpacity
+            style={{ }}
+            onPress={() => {
+              props.navigation.toggleDrawer();
+            }}
+          >
+            <Ionicons name="md-close" size={36} color={Colors.surfaceColorPrimary} />
+          </TouchableOpacity>
+        </View>
+
         <ScrollView
           contentContainerStyle={{
             justifyContent: 'flex-start',
             alignItems: 'flex-start',
             height: '100%',
-            padding: 15,
+            paddingHorizontal: 15,
           }}
         >
           <View style={styles(props).banner}>
@@ -98,33 +134,5 @@ const DefaultDrawer = (props) => {
     </SafeAreaView>
   );
 };
-
-const styles = (props) =>
-  StyleSheet.create({
-    banner: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginVertical: 15,
-    },
-    title: {
-      width: '70%',
-      fontSize: 18,
-      fontFamily: 'work-sans-semibold',
-      color: 'white',
-      paddingHorizontal: 15,
-    },
-    image: {
-      marginLeft: 10,
-      width: 88,
-      height: 88,
-    },
-    listItemContainer: {
-      marginLeft: 15,
-      marginVertical: 10,
-    },
-    listItem: {
-      ...props.labelStyle,
-    },
-  });
 
 export default DefaultDrawer;

@@ -20,7 +20,7 @@ exports.DE = {
     IDENTITY_PLACEHOLDER: 'E-Mail Adresse oder Benutzername',
     NEXT: 'Weiter',
     CODE: 'Habe bereits einen Code',
-    SEND: 'Code senden',
+    SEND: 'Eingeben',
     GO_BACK: 'Zurück',
     TOKEN_PLACEHOLDER: 'Code aus der E-Mail',
     EMPTY_IDENTITY: 'Identität ist leer',
