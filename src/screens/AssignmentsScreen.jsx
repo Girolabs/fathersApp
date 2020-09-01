@@ -11,6 +11,7 @@ import {
   SectionList,
   Image,
   ScrollView,
+  AsyncStorage,
 } from 'react-native';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
@@ -22,6 +23,7 @@ import { Flag } from 'react-native-svg-flagkit';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { getTerritories, getFiliations, getGenerations, getCourses, getPersons } from '../api';
+import { NavigationEvents } from 'react-navigation';
 
 class AssignmentsScreen extends Component {
   state = {
@@ -30,8 +32,14 @@ class AssignmentsScreen extends Component {
     loading: true,
     generations: [],
     courses: [],
+    language: []
   };
-  componentDidMount() {
+
+  updateLang = async () => {
+    const lang = await AsyncStorage.getItem('lang');
+    this.setState({language: lang})
+  }
+  loadAllData = async() => {
     getTerritories('all').then((resTerritory) => {
       let territories = resTerritory.data.result;
       getFiliations('all').then((resFiliations) => {
@@ -88,11 +96,27 @@ class AssignmentsScreen extends Component {
           getCourses('all').then((resCourses) => {
             let courses = resCourses.data.result;
             this.setState({ generations, courses });
+
           });
         });
+        this.updateLang();
         this.setState({ territories, loading: false });
       });
     });
+  }
+  componentDidMount() {
+    this.loadAllData();
+  }
+  updateAssignments = async () => {
+    const lang = await AsyncStorage.getItem('lang');
+    if(this.state.language != lang){
+      this.setState({language: lang, loading:true })
+      this.loadAllData();
+    }
+  }
+
+  componentDidUpdate() {
+    console.log('[Assingnments]: ComponentDidUpdate')
   }
   render() {
     const { territories, selectedtTab } = this.state;
@@ -364,9 +388,15 @@ class AssignmentsScreen extends Component {
     return (
       <I18nContext.Consumer>
         {(value) => {
+          console.log(value)
           moment.locale(value.lang);
           return (
             <SafeAreaView>
+               <NavigationEvents onDidFocus={() => {
+                 if(this.state.territories) {
+                  this.updateAssignments();
+                 }
+               } } />
               {!this.state.loading ? (
                 <View style={styles.screen}>
                   <View style={styles.tabsGroup}>
