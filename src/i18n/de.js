@@ -101,7 +101,10 @@ exports.DE = {
     CELEBRATION_DATE: 'Hauptfest des Kurses',
     FOUNDATION_DATE: 'Gründungsdatum',
     COURSES: 'Kurse',
+    COURSE_LEADER: 'Kursführer',
     WITHOUT_GENERATIONS: 'Ohne Generation',
+    NO_COURSE_LEADER: 'Kein Kursleiter',
+    NO_COURSES: 'Keine Kurse',
   },
   COURSE: {
     INFORMATION: 'Information zum Kurs',
@@ -137,6 +140,7 @@ exports.DE = {
   },
   SETTINGS: {
     LOGOUT: 'Ausloggen',
+    VERSION: 'Ausführung',
   },
   SEARCH: {
     DECEASED: 'Verstorbene anzeigen',

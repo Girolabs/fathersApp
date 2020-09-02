@@ -21,6 +21,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { getGeneration } from '../api';
 import IdealStatement from '../components/IdealStatement';
+import GenerationCourses from '../components/GenerationCourses';
 
 class GenerationDetailScreen extends Component {
   state = {
@@ -97,34 +98,7 @@ class GenerationDetailScreen extends Component {
                         navigation={navigation}
                         entity={generation}
                       />
-                      <Text style={styles.sectionHeader}> {i18n.t('GENERATION.COURSES')} </Text>
-                      {generation.courses && (
-                        <View>
-                          {generation.courses.map((course) => {
-                            return (
-                              <TouchableComp
-                                onPress={() => {
-                                  this.props.navigation.navigate('CourseDetail', {
-                                    courseId: course.courseId,
-                                  });
-                                }}
-                              >
-                                <View style={styles.card}>
-                                  <Text style={styles.cardTitle}>{course.name}</Text>
-                                  <View style={styles.cardBody}>
-                                    <Text style={styles.cardBodyText}>{i18n.t('GENERATION.CELEBRATION_DATE')}</Text>
-                                    <Text style={styles.cardBodyTextBold}>
-                                      {course.celebrationDate
-                                        ? moment.utc(course.celebrationDate).format('Do MMMM YYYY')
-                                        : ''}
-                                    </Text>
-                                  </View>
-                                </View>
-                              </TouchableComp>
-                            );
-                          })}
-                        </View>
-                      )}
+                      <GenerationCourses courses={generation.courses} />
                     </View>
                   </View>
                 ) : (

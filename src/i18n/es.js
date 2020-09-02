@@ -101,7 +101,10 @@ exports.ES = {
     CELEBRATION_DATE: 'Fecha de celebración',
     FOUNDATION_DATE: 'Fecha de fundación',
     COURSES: 'Cursos',
+    COURSE_LEADER: 'Jefe de curso',
     WITHOUT_GENERATIONS: 'Sin generación',
+    NO_COURSE_LEADER: 'Sin jefe de curso',
+    NO_COURSES: 'Sin cursos',
   },
   COURSE: {
     INFORMATION: 'Información del curso',
@@ -137,6 +140,7 @@ exports.ES = {
   },
   SETTINGS: {
     LOGOUT: 'Cerrar sesión',
+    VERSION: 'Versión',
   },
   SEARCH: {
     DECEASED: 'Mostrar fallecidos',

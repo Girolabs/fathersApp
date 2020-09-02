@@ -101,7 +101,10 @@ exports.EN = {
     CELEBRATION_DATE: 'Celebration date',
     FOUNDATION_DATE: 'Foundation date',
     COURSES: 'Courses',
+    COURSE_LEADER: 'Course leader',
     WITHOUT_GENERATIONS: 'No generation',
+    NO_COURSE_LEADER: 'No course leader',
+    NO_COURSES: 'No courses',
   },
   COURSE: {
     INFORMATION: 'Course information',
@@ -137,6 +140,7 @@ exports.EN = {
   },
   SETTINGS: {
     LOGOUT: 'Logout',
+    VERSION: 'Version',
   },
   SEARCH: {
     DECEASED: 'Show deceased',
