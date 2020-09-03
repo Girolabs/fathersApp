@@ -40,3 +40,22 @@ npm install
 npm install -g expo-cli
 expo start
 ```
+
+
+### Contributing
+ 1. Create your feature branch: git checkout -b username-issueNumber-short-feature-explanation
+ 2. Commit your changes: git commit -m 'feat: some feature'
+ 3. Push to the branch: git push origin username-issueNumber-short-feature-explanation
+ 4. Submit a pull request to dev branch
+ 
+##### Coding style
+This project uses various tools to maintain a common coding style and help with development.
+###### Linters:
+* ESLint with the Airbnb Javascript Code Style
+* Prettier
+
+##### Git commit messages
+To speed up the review process and to keep the logs tidy, we recommend the following simple rules on how to write good commit messages:
+* [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/): A specification for adding human and machine readable meaning to commit messages
+
+Branch

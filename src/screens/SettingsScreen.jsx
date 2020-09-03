@@ -9,14 +9,15 @@ import {
   TouchableNativeFeedback,
   TouchableOpacity,
 } from 'react-native';
-import { I18nContext } from '../context/I18nProvider';
 import moment from 'moment';
 import 'moment/min/locales';
 import i18n from 'i18n-js';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { Ionicons } from 'expo-vector-icons';
+import Constants from 'expo-constants';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
+import { I18nContext } from '../context/I18nProvider';
 
 import Select from '../components/Select';
 
@@ -66,6 +67,11 @@ const SettingsScreen = (props) => {
         moment.locale(value.lang);
         return (
           <SafeAreaView style={styles.screen}>
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>{i18n.t('SETTINGS.VERSION')}</Text>
+
+              <Text style={styles.text}>{Constants.manifest.version }</Text>
+            </View>
             <Select style={styles.select} elements={lng} value={value.lang} valueChange={value.changeLang} />
             <TouchableComp
               onPress={async () => {
@@ -81,7 +87,6 @@ const SettingsScreen = (props) => {
                 <Text style={styles.text}>{i18n.t('SETTINGS.LOGOUT')}</Text>
 
                 <Ionicons name="md-close-circle" size={23} color={Colors.primaryColor} />
-
               </View>
             </TouchableComp>
           </SafeAreaView>
