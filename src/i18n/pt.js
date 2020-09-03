@@ -95,6 +95,9 @@ exports.PT = {
     MAIN_HOUSE: 'Casa principal',
     MEMBERS: 'Membros da casa',
     FILIAL: 'Filial',
+    WIFI: 'Senha do wifi',
+    PUBLIC_NOTES: 'Notas públicas',
+    ADMIN_NOTES: 'Notas do administrador',
   },
   GENERATION: {
     GENERATION_INFO: 'Informação sobre a geração',

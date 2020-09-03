@@ -95,6 +95,9 @@ exports.ES = {
     MAIN_HOUSE: 'Casa principal',
     MEMBERS: 'Miembros de la casa',
     FILIAL: 'Filial',
+    WIFI: 'Contraseña wifi',
+    PUBLIC_NOTES: 'Notas públicas',
+    ADMIN_NOTES: 'Notas de administrador',
   },
   GENERATION: {
     GENERATION_INFO: 'Información de la generación',

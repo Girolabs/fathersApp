@@ -95,6 +95,9 @@ exports.EN = {
     MAIN_HOUSE: 'Main house',
     MEMBERS: 'House members',
     FILIAL: 'Filiation',
+    WIFI: 'Wifi password',
+    PUBLIC_NOTES: 'Public notes',
+    ADMIN_NOTES: 'Admin notes',
   },
   GENERATION: {
     GENERATION_INFO: 'Generation information',
