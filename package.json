@@ -60,6 +60,7 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.1",
     "husky": "^4.2.5",
+    "lint-staged": "^10.3.0",
     "prettier": "^2.1.1",
     "prettier-eslint": "^11.0.0"
   },
@@ -73,6 +74,7 @@
     "*.{js,jsx,json,css,md}": [
       "prettier --write",
       "git add"
-    ]
+    ],
+    "*.{js,jsx,css,md}": "prettier --write"
   }
 }
