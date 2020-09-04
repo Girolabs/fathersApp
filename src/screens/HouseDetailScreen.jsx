@@ -42,6 +42,11 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     paddingHorizontal: 16,
   },
+  titleContainerText: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    maxWidth: '80%',
+  },
   title: {
     fontFamily: 'work-sans-semibold',
     fontSize: 27,
@@ -56,6 +61,12 @@ const styles = StyleSheet.create({
     letterSpacing: 2.5,
     textTransform: 'uppercase',
     backgroundColor: Colors.surfaceColorPecondary,
+  },
+  badge: {
+    backgroundColor: Colors.primaryColor,
+    color: Colors.surfaceColorSecondary,
+    borderRadius: 20,
+    padding: 10,
   },
   listItem: {
     backgroundColor: Colors.surfaceColorSecondary,
@@ -139,19 +150,10 @@ class HouseDetailScreen extends Component {
                 {house ? (
                   <View style={styles.screen}>
                     <View style={styles.titleContainer}>
-                      <View style={{ flexDirection: 'column', alignItems: 'flex-start', maxWidth: '80%' }}>
+                      <View style={styles.titleContainerText}>
                         <Text style={styles.title}>{house.name}</Text>
                         {house.isMainFiliationHouse && (
-                          <Text
-                            style={{
-                              backgroundColor: Colors.primaryColor,
-                              color: Colors.surfaceColorSecondary,
-                              borderRadius: 20,
-                              padding: 10,
-                            }}
-                          >
-                            {i18n.t('HOUSE_DETAIL.MAIN_HOUSE')}
-                          </Text>
+                          <Text style={styles.badge}>{i18n.t('HOUSE_DETAIL.MAIN_HOUSE')}</Text>
                         )}
                       </View>
 
