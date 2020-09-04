@@ -95,6 +95,9 @@ exports.DE = {
     MAIN_HOUSE: 'Haupthaus',
     MEMBERS: 'Mitglieder des Hauses',
     FILIAL: 'Filiale',
+    WIFI: 'WLAN Passwort',
+    PUBLIC_NOTES: 'Öffentliche Notizen',
+    ADMIN_NOTES: 'Admin Notizen',
   },
   GENERATION: {
     GENERATION_INFO: 'Information zur Generation',

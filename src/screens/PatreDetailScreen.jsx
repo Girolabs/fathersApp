@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  ScrollView,
-  ActivityIndicator,
-  Clipboard,
-} from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator, Clipboard } from 'react-native';
 
 import moment from 'moment';
 import i18n from 'i18n-js';
@@ -37,6 +29,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 0,
     backgroundColor: Colors.surfaceColorPrimary,
+    justifyContent: 'center',
   },
   sectionHeader: {
     fontFamily: 'work-sans-medium',

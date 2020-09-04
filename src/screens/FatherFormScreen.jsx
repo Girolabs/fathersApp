@@ -56,6 +56,8 @@ const styles = StyleSheet.create({
   },
   screen: {
     backgroundColor: Colors.surfaceColorPrimary,
+    flex: 1,
+    justifyContent: 'center',
   },
 });
 
@@ -136,13 +138,13 @@ class FatherFormScreen extends Component {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
       let fatherId = this.props.navigation.getParam('fatherId');
-      if(!fatherId) {
-        fatherId =  await AsyncStorage.getItem('fatherId');
+      if (!fatherId) {
+        fatherId = await AsyncStorage.getItem('fatherId');
         fatherId = JSON.parse(fatherId);
-      }else {
-        AsyncStorage.setItem('fatherId',JSON.stringify(fatherId));
+      } else {
+        AsyncStorage.setItem('fatherId', JSON.stringify(fatherId));
       }
-      
+
       if (fatherId) {
         getPerson(fatherId, 'all').then((response) => {
           const father = response.data.result;
@@ -167,16 +169,24 @@ class FatherFormScreen extends Component {
     let validationSchema;
     if (regex) {
       validationSchema = Yup.object().shape({
-        ...(updateFields.indexOf('slackUser') != -1 ? { slackUser: Yup.string().matches(regex.slackUserRegex).nullable() } : null),
+        ...(updateFields.indexOf('slackUser') != -1
+          ? { slackUser: Yup.string().matches(regex.slackUserRegex).nullable() }
+          : null),
         ...(updateFields.indexOf('instagramUser') != -1
           ? { instagramUser: Yup.string().matches(regex.instagramUserRegex).nullable() }
           : null),
         ...(updateFields.indexOf('twitterUser') != -1
           ? { twitterUser: Yup.string().matches(regex.twitterUserRegex).nullable() }
           : null),
-        ...(updateFields.indexOf('skypeUser') != -1 ? { skypeUser: Yup.string().matches(regex.skypeUserRegex).nullable() } : null),
-        ...(updateFields.indexOf('phone1') != -1 ? { phone1: Yup.string().matches(regex.phoneNumberRegex).nullable() } : null),
-        ...(updateFields.indexOf('phone2') != -1 ? { phone2: Yup.string().matches(regex.phoneNumberRegex).nullable() } : null),
+        ...(updateFields.indexOf('skypeUser') != -1
+          ? { skypeUser: Yup.string().matches(regex.skypeUserRegex).nullable() }
+          : null),
+        ...(updateFields.indexOf('phone1') != -1
+          ? { phone1: Yup.string().matches(regex.phoneNumberRegex).nullable() }
+          : null),
+        ...(updateFields.indexOf('phone2') != -1
+          ? { phone2: Yup.string().matches(regex.phoneNumberRegex).nullable() }
+          : null),
         ...(updateFields.indexOf('facebookUrl') != -1
           ? { facebookUrl: Yup.string().matches(regex.facebookUrlRegex).nullable() }
           : null),
@@ -191,9 +201,9 @@ class FatherFormScreen extends Component {
             await this.loadPerson();
           }}
         />
-        {!loading ? (
-          <>
-            <SafeAreaView style={styles.screen}>
+        <SafeAreaView style={styles.screen}>
+          {!loading ? (
+            <>
               <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? this.state.keyboardAV : 'height'}>
                 <ScrollView>
                   <View style={{ paddingHorizontal: 15, marginVertical: 30, width: '80%' }}>
@@ -326,7 +336,7 @@ class FatherFormScreen extends Component {
                           )}
 
                           <Button onPress={handleSubmit}>
-                          <View style={styles.btnContainer}>
+                            <View style={styles.btnContainer}>
                               <Text style={styles.btnText}>{i18n.t('FATHER_EDIT.SAVE')}</Text>
                             </View>
                           </Button>
@@ -343,11 +353,11 @@ class FatherFormScreen extends Component {
                   </Snackbar>
                 </ScrollView>
               </KeyboardAvoidingView>
-            </SafeAreaView>
-          </>
-        ) : (
-          <ActivityIndicator size="large" color={Colors.primaryColor} />
-        )}
+            </>
+          ) : (
+            <ActivityIndicator size="large" color={Colors.primaryColor} />
+          )}
+        </SafeAreaView>
       </>
     );
   }

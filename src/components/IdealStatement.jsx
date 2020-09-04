@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import i18n from 'i18n-js';
 import { Ionicons } from 'expo-vector-icons';
-import { setNestedObjectValues } from 'formik';
 import Select from './Select';
 import Colors from '../constants/Colors';
 import Button from './Button';
@@ -23,9 +22,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const IdealStatement = ({
-  languages, recommendedLang, entity, navigation,
-}) => {
+const IdealStatement = ({ languages, recommendedLang, entity, navigation }) => {
   const [selectedlang, setSelectedLang] = useState(recommendedLang);
 
   Object.keys(languages);
@@ -53,17 +50,20 @@ const IdealStatement = ({
               <Select elements={langs} value={selectedlang} valueChange={(value) => setSelectedLang(value)} />
             </View>
           </View>
-          <View style={{ width: '20%', alignItems: 'flex-end', marginRight: 0 }}>
+          <View style={{ width: '18%' }}>
             <Button
               onPress={() => {
                 navigation.navigate('IdealStatementDetail', { content: entity[selectedlang] });
                 console.log(entity[selectedlang]);
               }}
-
             >
-              <View style={{
-                flex: 1, justifyContent: 'center', width: '100%', alignItems: 'center',
-              }}
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  width: '100%',
+                  alignItems: 'center',
+                }}
               >
                 <Ionicons name="ios-arrow-forward" size={28} color={Colors.primaryColor} />
               </View>

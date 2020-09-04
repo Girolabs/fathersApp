@@ -18,7 +18,6 @@ import Constants from 'expo-constants';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { I18nContext } from '../context/I18nProvider';
-
 import Select from '../components/Select';
 
 const styles = StyleSheet.create({
@@ -70,7 +69,7 @@ const SettingsScreen = (props) => {
             <View style={styles.textContainer}>
               <Text style={styles.text}>{i18n.t('SETTINGS.VERSION')}</Text>
 
-              <Text style={styles.text}>{Constants.manifest.version }</Text>
+              <Text style={styles.text}>{Constants.manifest.version}</Text>
             </View>
             <Select style={styles.select} elements={lng} value={value.lang} valueChange={value.changeLang} />
             <TouchableComp

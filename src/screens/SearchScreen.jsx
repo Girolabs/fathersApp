@@ -10,6 +10,46 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { getPersons } from '../api';
 
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    padding: 15,
+    backgroundColor: Colors.surfaceColorPrimary,
+    justifyContent: 'center',
+  },
+  inputBox: {
+    backgroundColor: Colors.surfaceColorSecondary,
+    width: '100%',
+    height: 50,
+    flexDirection: 'row',
+    borderRadius: 15,
+    padding: 15,
+    justifyContent: 'space-between',
+    marginBottom: 15,
+  },
+  item: {
+    backgroundColor: Colors.surfaceColorSecondary,
+    padding: 15,
+    borderBottomColor: Colors.surfaceColorPrimary,
+    borderBottomWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderRadius: 15,
+    marginTop: 5,
+  },
+  filtersContainer: {
+    flexDirection: 'row',
+  },
+  optionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  snackError: {
+    backgroundColor: Colors.secondaryColor,
+  },
+  option: {},
+});
 class SearchScreen extends Component {
   state = {
     results: [],
@@ -21,17 +61,19 @@ class SearchScreen extends Component {
   };
 
   loadPersons = (fields) => {
-    getPersons(fields).then((res) => {
-      this.setState({ results: res.data.result, loading: false });
-    }).catch(() => {
-      this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
-    });
-  }
+    getPersons(fields)
+      .then((res) => {
+        this.setState({ results: res.data.result, loading: false });
+      })
+      .catch(() => {
+        this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
+      });
+  };
 
   async componentDidMount() {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-     this.loadPersons('all');
+      this.loadPersons('all');
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
@@ -164,46 +206,6 @@ SearchScreen.navigationOptions = (navigationData) => ({
       />
     </HeaderButtons>
   ),
-});
-
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    padding: 15,
-    backgroundColor: Colors.surfaceColorPrimary,
-  },
-  inputBox: {
-    backgroundColor: Colors.surfaceColorSecondary,
-    width: '100%',
-    height: 50,
-    flexDirection: 'row',
-    borderRadius: 15,
-    padding: 15,
-    justifyContent: 'space-between',
-    marginBottom: 15,
-  },
-  item: {
-    backgroundColor: Colors.surfaceColorSecondary,
-    padding: 15,
-    borderBottomColor: Colors.surfaceColorPrimary,
-    borderBottomWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderRadius: 15,
-    marginTop: 5,
-  },
-  filtersContainer: {
-    flexDirection: 'row',
-  },
-  optionContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  snackError: {
-    backgroundColor: Colors.secondaryColor,
-  },
-  option: {},
 });
 
 export default SearchScreen;

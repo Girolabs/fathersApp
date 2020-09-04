@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  View, Text, StyleSheet, Image,
-} from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import i18n from 'i18n-js';
 import moment from 'moment';
@@ -99,7 +97,7 @@ const GenerationCourses = ({ navigation, courses }) => {
                   <View>
                     <Text style={styles.cardBodyText}>{i18n.t('GENERATION.COURSE_LEADER')}</Text>
                     <View style={styles.innerContainer}>
-                      {course.leaderAssignment.person ? (
+                      {course.leaderAssignment && course.leaderAssignment.person ? (
                         <>
                           <Image
                             style={styles.img}

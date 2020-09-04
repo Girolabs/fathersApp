@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     backgroundColor: Colors.surfaceColorPrimary,
+    justifyContent: 'center',
   },
   prayerCard: {
     flexDirection: 'row',
@@ -249,9 +250,9 @@ const HomeScreen = ({ navigation }) => {
                                 </View>
                               </View>
 
-                              {item.entityObject.phones !== undefined
-                                && item.entityObject.phones.length > 0
-                                && item.entityObject.phones[0].whatsApp && (
+                              {item.entityObject.phones !== undefined &&
+                                item.entityObject.phones.length > 0 &&
+                                item.entityObject.phones[0].whatsApp && (
                                   <TouchableComp
                                     onPress={() => {
                                       Linking.openURL(
@@ -261,7 +262,7 @@ const HomeScreen = ({ navigation }) => {
                                   >
                                     <Ionicons name="logo-whatsapp" size={23} color={Colors.onSurfaceColorSecondary} />
                                   </TouchableComp>
-                              )}
+                                )}
                             </View>
                           )}
                         />
