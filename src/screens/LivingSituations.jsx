@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surfaceColorPrimary,
     height: '100%',
     paddingHorizontal: 10,
+    justifyContent: 'center',
   },
   label: {
     fontFamily: 'work-sans-semibold',
@@ -248,7 +249,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     newDate.setTime(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60 * 1000);
     selectedDate = newDate;
     const year = selectedDate.getUTCFullYear();
-    const month = selectedDate.getUTCMonth() + 1 < 10 ? `0${selectedDate.getUTCMonth() + 1}` : selectedDate.getUTCMonth() + 1;
+    const month =
+      selectedDate.getUTCMonth() + 1 < 10 ? `0${selectedDate.getUTCMonth() + 1}` : selectedDate.getUTCMonth() + 1;
     const day = selectedDate.getUTCDate();
     const dateString = `${year}-${month}-${day}`;
 
@@ -337,78 +339,76 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                   console.log(transformValues);
                 }}
               >
-                {({
-                  handleChange, values, handleSubmit, errors, setFieldValue,
-                }) => (
+                {({ handleChange, values, handleSubmit, errors, setFieldValue }) => (
                   <>
                     <View>
                       {openStartDate && (
-                      <DateTimePicker
-                        value={startDate ? new Date(startDate) : new Date()}
-                        mode="date"
-                        display="default"
-                        onChange={(event, selectedDate) => {
-                          setOpenStartDate(false);
-                          const dateFormated = formatDate(selectedDate);
-                          setFieldValue('startDate', dateFormated);
-                        }}
-                      />
+                        <DateTimePicker
+                          value={startDate ? new Date(startDate) : new Date()}
+                          mode="date"
+                          display="default"
+                          onChange={(event, selectedDate) => {
+                            setOpenStartDate(false);
+                            const dateFormated = formatDate(selectedDate);
+                            setFieldValue('startDate', dateFormated);
+                          }}
+                        />
                       )}
                       {openEndDate && (
-                      <DateTimePicker
-                        value={endDate ? new Date(endDate) : new Date()}
-                        mode="date"
-                        display="default"
-                        onChange={(event, selectedDate) => {
-                          setOpenEndDate(false);
-                          const dateFormated = formatDate(selectedDate);
-                          setFieldValue('endDate', dateFormated);
-                        }}
-                      />
+                        <DateTimePicker
+                          value={endDate ? new Date(endDate) : new Date()}
+                          mode="date"
+                          display="default"
+                          onChange={(event, selectedDate) => {
+                            setOpenEndDate(false);
+                            const dateFormated = formatDate(selectedDate);
+                            setFieldValue('endDate', dateFormated);
+                          }}
+                        />
                       )}
                       {isCreate && (
-                      <>
-                        <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>
-                        <RNPickerSelect
-                          name="filiationId"
-                          style={{
-                            inputAndroid: {
-                              backgroundColor: Colors.surfaceColorSecondary,
-                              borderRadius: 10,
-                            },
-                            iconContainer: {
-                              top: 10,
-                              right: 15,
-                            },
-                          }}
-                          onValueChange={(e) => setFieldValue('filiationId', e)}
-                          value={_.get(values, 'filiationId') || ''}
-                          items={filiations}
-                          Icon={() => {
-                            return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
-                          }}
-                        />
-                        <Text style={styles.label}>{i18n.t('LIVING_SITUATION.HOUSE')}</Text>
-                        <RNPickerSelect
-                          name="houseId"
-                          style={{
-                            inputAndroid: {
-                              backgroundColor: Colors.surfaceColorSecondary,
-                              borderRadius: 10,
-                            },
-                            iconContainer: {
-                              top: 10,
-                              right: 15,
-                            },
-                          }}
-                          onValueChange={(e) => setFieldValue('houseId', e)}
-                          value={_.get(values, 'houseId') || ''}
-                          items={houses}
-                          Icon={() => {
-                            return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
-                          }}
-                        />
-                      </>
+                        <>
+                          <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>
+                          <RNPickerSelect
+                            name="filiationId"
+                            style={{
+                              inputAndroid: {
+                                backgroundColor: Colors.surfaceColorSecondary,
+                                borderRadius: 10,
+                              },
+                              iconContainer: {
+                                top: 10,
+                                right: 15,
+                              },
+                            }}
+                            onValueChange={(e) => setFieldValue('filiationId', e)}
+                            value={_.get(values, 'filiationId') || ''}
+                            items={filiations}
+                            Icon={() => {
+                              return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
+                            }}
+                          />
+                          <Text style={styles.label}>{i18n.t('LIVING_SITUATION.HOUSE')}</Text>
+                          <RNPickerSelect
+                            name="houseId"
+                            style={{
+                              inputAndroid: {
+                                backgroundColor: Colors.surfaceColorSecondary,
+                                borderRadius: 10,
+                              },
+                              iconContainer: {
+                                top: 10,
+                                right: 15,
+                              },
+                            }}
+                            onValueChange={(e) => setFieldValue('houseId', e)}
+                            value={_.get(values, 'houseId') || ''}
+                            items={houses}
+                            Icon={() => {
+                              return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
+                            }}
+                          />
+                        </>
                       )}
 
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.RESPONSIBLE_TERRITORY')}</Text>
@@ -472,7 +472,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                             <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
                           </View>
                           {errors && errors.endDate && (
-                          <Text style={styles.errorText}>{i18n.t('LIVING_SITUATION.ERROR_END_DATE')}</Text>
+                            <Text style={styles.errorText}>{i18n.t('LIVING_SITUATION.ERROR_END_DATE')}</Text>
                           )}
                         </>
                       </Button>

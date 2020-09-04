@@ -20,6 +20,44 @@ import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
 import { getTerritories } from '../api';
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 15,
+    justifyContent: 'center',
+  },
+  item: {
+    backgroundColor: Colors.surfaceColorSecondary,
+    padding: 20,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  header: {
+    fontSize: 15,
+    color: Colors.onSurfaceColorPrimary,
+    fontFamily: 'work-sans-medium',
+
+    marginVertical: 10,
+  },
+  sectionHeaderContainer: {
+    flexDirection: 'row',
+    marginVertical: 10,
+    paddingHorizontal: 16,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 18,
+    fontFamily: 'work-sans-semibold',
+    color: Colors.primaryColor,
+    paddingHorizontal: 10,
+  },
+  snackError: {
+    backgroundColor: Colors.secondaryColor,
+  },
+});
+
 class CommunityScreen extends Component {
   state = {
     delegations: [],
@@ -142,42 +180,5 @@ const Filiation = ({ title, flag, onSelect, key }) => {
     </TouchableComp>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 15,
-  },
-  item: {
-    backgroundColor: Colors.surfaceColorSecondary,
-    padding: 20,
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  header: {
-    fontSize: 15,
-    color: Colors.onSurfaceColorPrimary,
-    fontFamily: 'work-sans-medium',
-
-    marginVertical: 10,
-  },
-  sectionHeaderContainer: {
-    flexDirection: 'row',
-    marginVertical: 10,
-    paddingHorizontal: 16,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 18,
-    fontFamily: 'work-sans-semibold',
-    color: Colors.primaryColor,
-    paddingHorizontal: 10,
-  },
-  snackError: {
-    backgroundColor: Colors.secondaryColor,
-  },
-});
 
 export default CommunityScreen;

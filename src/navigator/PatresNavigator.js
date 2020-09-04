@@ -3,19 +3,12 @@ import React from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import { createStackNavigator } from 'react-navigation-stack';
-import { createMaterialBottomTabNavigator } from 'react-navigation-material-bottom-tabs';
-
-import {
-  SafeAreaView, Image, View, Text,
-} from 'react-native';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
 import HomeScreen from '../screens/HomeScreen';
 import PatreDetailScreen from '../screens/PatreDetailScreen';
 import SearchScreen from '../screens/SearchScreen';
-import PrayersScreen from '../screens/PrayersScreen';
-import PrayerScreen from '../screens/PrayerScreen';
 import CommunityScreen from '../screens/CommunityScreen';
 import FiliationDetailScreen from '../screens/FiliationDetailScreen';
 import DelegationDetailScreen from '../screens/DelegationDetailScreen';
@@ -24,7 +17,6 @@ import CourseDetailScreen from '../screens/CourseDetailScreen';
 import GenerationDetailScreen from '../screens/GenerationDetailScreen';
 import FreeCommunityScreen from '../screens/FreeCommunityScreen';
 import AssignmentsScreen from '../screens/AssignmentsScreen';
-import MiscellaneousScreen from '../screens/MiscellaneousScreen';
 import AuthScreen from '../screens/AuthScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import StartupScreen from '../screens/StartupScreen';
@@ -66,12 +58,6 @@ const HomeNavigator = createStackNavigator(
     PatreDetail: {
       screen: PatreDetailScreen,
     },
-    Prayers: {
-      screen: PrayersScreen,
-    },
-    Prayer: {
-      screen: PrayerScreen,
-    },
     FiliationDetail: {
       screen: FiliationDetailScreen,
     },
@@ -86,9 +72,6 @@ const HomeNavigator = createStackNavigator(
     },
     CourseDetail: {
       screen: CourseDetailScreen,
-    },
-    Miscellaneous: {
-      screen: MiscellaneousScreen,
     },
     FatherForm: {
       screen: FatherFormScreen,
@@ -148,30 +131,6 @@ const SearchNavigator = createStackNavigator(
     defaultNavigationOptions: defaultStackNavOptions,
   },
 );
-
-const tabScreenConfig = {
-  Home: {
-    screen: HomeNavigator,
-    navigationOptions: () => {
-      return {
-        tabBarLabel: '',
-        tabBarIcon: (tabInfo) => {
-          console.log(tabInfo);
-          return <Ionicons name="ios-home" size={25} color={tabInfo.tintColor} />;
-        },
-        tabBarColor: Colors.surfaceColorPrimary,
-      };
-    },
-  },
-  Search: {
-    screen: SearchNavigator,
-    navigationOptions: {
-      tabBarLabel: '',
-      tabBarIcon: (tabInfo) => <Ionicons name="ios-search" size={25} color={tabInfo.tintColor} />,
-      tabBarColor: Colors.secondaryColor,
-    },
-  },
-};
 
 const ProfileNavigator = createStackNavigator(
   {
