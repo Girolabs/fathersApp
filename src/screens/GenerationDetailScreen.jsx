@@ -21,149 +21,13 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { getGeneration } from '../api';
 import IdealStatement from '../components/IdealStatement';
-
-class GenerationDetailScreen extends Component {
-  state = {
-    generation: {},
-    loading: true,
-  };
-
-  loadGeneration = (generationId, fields) => {
-    getGeneration(generationId, fields)
-      .then((res) => {
-        const generation = res.data.result;
-        this.setState({ generation: generation, loading: false });
-      })
-      .catch(() => {
-        this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
-      });
-  };
-  async componentDidMount() {
-    const { navigation } = this.props;
-    const generationId = navigation.getParam('generationId');
-    const status = await Network.getNetworkStateAsync();
-    if (status.isConnected) {
-      this.loadGeneration(generationId, false);
-    } else {
-      this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
-    }
-  }
-  render() {
-
-    const { generation } = this.state;
-    const { navigation } = this.props; 
-    let TouchableComp = TouchableOpacity;
-    if (Platform.OS === 'android' && Platform.Version >= 21) {
-      TouchableComp = TouchableNativeFeedback;
-    }
-
-
-    return (
-      <I18nContext.Consumer>
-        {(value) => {
-          moment.locale(value.lang);
-          return (
-            <SafeAreaView>
-              <ScrollView>
-                {!this.state.loading ? (
-                  <View style={styles.screen}>
-                    <View style={styles.titleContainer}>
-                      <Text style={styles.title}>{generation.name}</Text>
-                    </View>
-                    <View>
-                      <Text style={styles.sectionHeader}> {i18n.t('GENERATION.GENERATION_INFO')} </Text>
-                      {generation.celebrationDate && (
-                        <View style={styles.listItem}>
-                          <Text style={styles.listItemTitle}> {i18n.t('GENERATION.CELEBRATION_DATE')} </Text>
-                          <Text style={styles.listItemBody}>
-                            {this.state.generation.celebrationDate
-                              ? moment.utc(generation.celebrationDate).format('Do MMMM YYYY')
-                              : ''}
-                          </Text>
-                        </View>
-                      )}
-
-                      <View style={styles.listItem}>
-                        <Text style={styles.listItemTitle}>{i18n.t('GENERATION.FOUNDATION_DATE')}</Text>
-                        <Text style={styles.listItemBody}>
-                          {generation.foundingDate
-                            ? moment.utc(generation.foundingDate).format('Do MMMM YYYY')
-                            : ''}
-                        </Text>
-                      </View>
-                      <IdealStatement
-                        languages={generation ? generation.idealLanguages : []}
-                        recommendedLang={generation.recommendedIdealField}
-                        navigation={navigation}
-                        entity={generation}
-                      />
-                      <Text style={styles.sectionHeader}> {i18n.t('GENERATION.COURSES')} </Text>
-                      {generation.courses && (
-                        <View>
-                          {generation.courses.map((course) => {
-                            return (
-                              <TouchableComp
-                                onPress={() => {
-                                  this.props.navigation.navigate('CourseDetail', {
-                                    courseId: course.courseId,
-                                  });
-                                }}
-                              >
-                                <View style={styles.card}>
-                                  <Text style={styles.cardTitle}>{course.name}</Text>
-                                  <View style={styles.cardBody}>
-                                    <Text style={styles.cardBodyText}>{i18n.t('GENERATION.CELEBRATION_DATE')}</Text>
-                                    <Text style={styles.cardBodyTextBold}>
-                                      {course.celebrationDate
-                                        ? moment.utc(course.celebrationDate).format('Do MMMM YYYY')
-                                        : ''}
-                                    </Text>
-                                  </View>
-                                </View>
-                              </TouchableComp>
-                            );
-                          })}
-                        </View>
-                      )}
-                    </View>
-                  </View>
-                ) : (
-                  <ActivityIndicator size="large" color={Colors.primaryColor} />
-                )}
-                <Snackbar
-                  visible={this.state.visible}
-                  onDismiss={() => this.setState({ visible: false })}
-                  style={styles.snackError}
-                >
-                  {this.state.snackMsg}
-                </Snackbar>
-              </ScrollView>
-            </SafeAreaView>
-          );
-        }}
-      </I18nContext.Consumer>
-    );
-  }
-}
-
-GenerationDetailScreen.navigationOptions = (navigationData) => ({
-  headerTitle: '',
-  headerRight: (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-});
+import GenerationCourses from '../components/GenerationCourses';
 
 const styles = StyleSheet.create({
   screen: {
     backgroundColor: Colors.surfaceColorPrimary,
+    flex: 1,
+    justifyContent: 'center',
   },
   titleContainer: {
     flexDirection: 'row',
@@ -237,6 +101,114 @@ const styles = StyleSheet.create({
   snackError: {
     backgroundColor: Colors.secondaryColor,
   },
+});
+
+class GenerationDetailScreen extends Component {
+  state = {
+    generation: {},
+    loading: true,
+  };
+
+  loadGeneration = (generationId, fields) => {
+    getGeneration(generationId, fields)
+      .then((res) => {
+        const generation = res.data.result;
+        this.setState({ generation: generation, loading: false });
+      })
+      .catch(() => {
+        this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
+      });
+  };
+  async componentDidMount() {
+    const { navigation } = this.props;
+    const generationId = navigation.getParam('generationId');
+    const status = await Network.getNetworkStateAsync();
+    if (status.isConnected) {
+      this.loadGeneration(generationId, false);
+    } else {
+      this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
+    }
+  }
+  render() {
+    const { generation } = this.state;
+    const { navigation } = this.props;
+    let TouchableComp = TouchableOpacity;
+    if (Platform.OS === 'android' && Platform.Version >= 21) {
+      TouchableComp = TouchableNativeFeedback;
+    }
+
+    return (
+      <I18nContext.Consumer>
+        {(value) => {
+          moment.locale(value.lang);
+          return (
+            <SafeAreaView style={styles.screen}>
+              {!this.state.loading ? (
+                <ScrollView>
+                  <View>
+                    <View style={styles.titleContainer}>
+                      <Text style={styles.title}>{generation.name}</Text>
+                    </View>
+                    <View>
+                      <Text style={styles.sectionHeader}> {i18n.t('GENERATION.GENERATION_INFO')} </Text>
+                      {generation.celebrationDate && (
+                        <View style={styles.listItem}>
+                          <Text style={styles.listItemTitle}> {i18n.t('GENERATION.CELEBRATION_DATE')} </Text>
+                          <Text style={styles.listItemBody}>
+                            {this.state.generation.celebrationDate
+                              ? moment.utc(generation.celebrationDate).format('Do MMMM YYYY')
+                              : ''}
+                          </Text>
+                        </View>
+                      )}
+
+                      <View style={styles.listItem}>
+                        <Text style={styles.listItemTitle}>{i18n.t('GENERATION.FOUNDATION_DATE')}</Text>
+                        <Text style={styles.listItemBody}>
+                          {generation.foundingDate ? moment.utc(generation.foundingDate).format('Do MMMM YYYY') : ''}
+                        </Text>
+                      </View>
+                      <IdealStatement
+                        languages={generation ? generation.idealLanguages : []}
+                        recommendedLang={generation.recommendedIdealField}
+                        navigation={navigation}
+                        entity={generation}
+                      />
+                      <GenerationCourses courses={generation.courses} />
+                    </View>
+                  </View>
+                </ScrollView>
+              ) : (
+                <ActivityIndicator size="large" color={Colors.primaryColor} />
+              )}
+              <Snackbar
+                visible={this.state.visible}
+                onDismiss={() => this.setState({ visible: false })}
+                style={styles.snackError}
+              >
+                {this.state.snackMsg}
+              </Snackbar>
+            </SafeAreaView>
+          );
+        }}
+      </I18nContext.Consumer>
+    );
+  }
+}
+
+GenerationDetailScreen.navigationOptions = (navigationData) => ({
+  headerTitle: '',
+  headerRight: (
+    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title="Menu"
+        iconName="md-menu"
+        onPress={() => {
+          navigationData.navigation.toggleDrawer();
+        }}
+      />
+    </HeaderButtons>
+  ),
 });
 
 export default GenerationDetailScreen;

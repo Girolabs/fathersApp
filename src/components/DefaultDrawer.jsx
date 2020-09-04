@@ -13,6 +13,48 @@ import {
 import i18n from 'i18n-js';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
+import logo from '../../assets/img/fatherIcon.png';
+
+const styles = (props) => StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  iconContainer: {
+    alignItems: 'flex-end',
+    paddingTop: 20,
+    paddingRight: 20,
+  },
+  banner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 15,
+  },
+  title: {
+    width: '70%',
+    fontSize: 18,
+    fontFamily: 'work-sans-semibold',
+    color: 'white',
+    paddingHorizontal: 15,
+  },
+  image: {
+    marginLeft: 10,
+    width: 88,
+    height: 88,
+  },
+  listItemContainer: {
+    marginLeft: 15,
+    marginVertical: 10,
+  },
+  listItem: {
+    ...props.labelStyle,
+  },
+  scrollContainer: {
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    height: '100%',
+    paddingHorizontal: 15,
+  },
+});
 
 const DefaultDrawer = (props) => {
   let TouchableComp = TouchableOpacity;
@@ -51,26 +93,21 @@ const DefaultDrawer = (props) => {
   ];
   const { navigation } = props;
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={styles(props).screen}>
       <ScrollView>
-        <TouchableOpacity
-          style={{ margin: 15, padding: 15 }}
-          onPress={() => {
-            props.navigation.toggleDrawer();
-          }}
-        >
-          <Ionicons name="md-close" size={36} color={Colors.surfaceColorPrimary} />
-        </TouchableOpacity>
-        <ScrollView
-          contentContainerStyle={{
-            justifyContent: 'flex-start',
-            alignItems: 'flex-start',
-            height: '100%',
-            padding: 15,
-          }}
-        >
+        <View style={styles(props).iconContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.toggleDrawer();
+            }}
+          >
+            <Ionicons name="md-close" size={36} color={Colors.surfaceColorPrimary} />
+          </TouchableOpacity>
+        </View>
+
+        <ScrollView contentContainerStyle={styles(props).scrollContainer}>
           <View style={styles(props).banner}>
-            <Image source={require('../../assets/img/fatherIcon.png')} style={styles(props).image} />
+            <Image source={logo} style={styles(props).image} />
             <Text numberOfLines={2} style={styles(props).title}>
               {i18n.t('GENERAL.FATHERS')}
             </Text>
@@ -98,33 +135,5 @@ const DefaultDrawer = (props) => {
     </SafeAreaView>
   );
 };
-
-const styles = (props) =>
-  StyleSheet.create({
-    banner: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginVertical: 15,
-    },
-    title: {
-      width: '70%',
-      fontSize: 18,
-      fontFamily: 'work-sans-semibold',
-      color: 'white',
-      paddingHorizontal: 15,
-    },
-    image: {
-      marginLeft: 10,
-      width: 88,
-      height: 88,
-    },
-    listItemContainer: {
-      marginLeft: 15,
-      marginVertical: 10,
-    },
-    listItem: {
-      ...props.labelStyle,
-    },
-  });
 
 export default DefaultDrawer;

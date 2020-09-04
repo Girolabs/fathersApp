@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import {
   View,
   Text,
@@ -6,9 +6,7 @@ import {
   SafeAreaView,
   TextInput,
   KeyboardAvoidingView,
-  Platform,
   ScrollView,
-  TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
@@ -22,13 +20,18 @@ import * as Network from 'expo-network';
 import * as _ from 'lodash';
 import * as Yup from 'yup';
 import { Snackbar } from 'react-native-paper';
-import { set } from 'lodash';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import {
-  getFiliations, getTerritories, getHouses, getInterfaceData, saveLivingSituation, updateLivingSituation,
+  getFiliations,
+  getTerritories,
+  getHouses,
+  getInterfaceData,
+  saveLivingSituation,
+  updateLivingSituation,
 } from '../api';
+import Button from '../components/Button';
 
 const styles = StyleSheet.create({
   title: {
@@ -41,6 +44,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surfaceColorPrimary,
     height: '100%',
     paddingHorizontal: 10,
+    justifyContent: 'center',
   },
   label: {
     fontFamily: 'work-sans-semibold',
@@ -204,20 +208,19 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     const status = await Network.getNetworkStateAsync();
 
     if (status.isConnected == true) {
-      getFiliations(false)
-        .then((response) => {
-          const fetchedFiliations = response.data.result
-            .map((filiation) => {
-              if (filiation.isActive == true) {
-                return {
-                  label: filiation.name,
-                  value: filiation.filiationId,
-                };
-              }
-            })
-            .filter((el) => el != undefined);
-          setFiliations(fetchedFiliations);
-        });
+      getFiliations(false).then((response) => {
+        const fetchedFiliations = response.data.result
+          .map((filiation) => {
+            if (filiation.isActive == true) {
+              return {
+                label: filiation.name,
+                value: filiation.filiationId,
+              };
+            }
+          })
+          .filter((el) => el != undefined);
+        setFiliations(fetchedFiliations);
+      });
     }
   };
 
@@ -246,7 +249,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     newDate.setTime(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60 * 1000);
     selectedDate = newDate;
     const year = selectedDate.getUTCFullYear();
-    const month = selectedDate.getUTCMonth() + 1 < 10 ? `0${selectedDate.getUTCMonth() + 1}` : selectedDate.getUTCMonth() + 1;
+    const month =
+      selectedDate.getUTCMonth() + 1 < 10 ? `0${selectedDate.getUTCMonth() + 1}` : selectedDate.getUTCMonth() + 1;
     const day = selectedDate.getUTCDate();
     const dateString = `${year}-${month}-${day}`;
 
@@ -335,78 +339,76 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                   console.log(transformValues);
                 }}
               >
-                {({
-                  handleChange, values, handleSubmit, errors, setFieldValue, touched,
-                }) => (
+                {({ handleChange, values, handleSubmit, errors, setFieldValue }) => (
                   <>
                     <View>
                       {openStartDate && (
-                      <DateTimePicker
-                        value={startDate ? new Date(startDate) : new Date()}
-                        mode="date"
-                        display="default"
-                        onChange={(event, selectedDate) => {
-                          setOpenStartDate(false);
-                          const dateFormated = formatDate(selectedDate);
-                          setFieldValue('startDate', dateFormated);
-                        }}
-                      />
+                        <DateTimePicker
+                          value={startDate ? new Date(startDate) : new Date()}
+                          mode="date"
+                          display="default"
+                          onChange={(event, selectedDate) => {
+                            setOpenStartDate(false);
+                            const dateFormated = formatDate(selectedDate);
+                            setFieldValue('startDate', dateFormated);
+                          }}
+                        />
                       )}
                       {openEndDate && (
-                      <DateTimePicker
-                        value={endDate ? new Date(endDate) : new Date()}
-                        mode="date"
-                        display="default"
-                        onChange={(event, selectedDate) => {
-                          setOpenEndDate(false);
-                          const dateFormated = formatDate(selectedDate);
-                          setFieldValue('endDate', dateFormated);
-                        }}
-                      />
+                        <DateTimePicker
+                          value={endDate ? new Date(endDate) : new Date()}
+                          mode="date"
+                          display="default"
+                          onChange={(event, selectedDate) => {
+                            setOpenEndDate(false);
+                            const dateFormated = formatDate(selectedDate);
+                            setFieldValue('endDate', dateFormated);
+                          }}
+                        />
                       )}
                       {isCreate && (
-                      <>
-                        <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>
-                        <RNPickerSelect
-                          name="filiationId"
-                          style={{
-                            inputAndroid: {
-                              backgroundColor: Colors.surfaceColorSecondary,
-                              borderRadius: 10,
-                            },
-                            iconContainer: {
-                              top: 10,
-                              right: 15,
-                            },
-                          }}
-                          onValueChange={(e) => setFieldValue('filiationId', e)}
-                          value={_.get(values, 'filiationId') || ''}
-                          items={filiations}
-                          Icon={() => {
-                            return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
-                          }}
-                        />
-                        <Text style={styles.label}>{i18n.t('LIVING_SITUATION.HOUSE')}</Text>
-                        <RNPickerSelect
-                          name="houseId"
-                          style={{
-                            inputAndroid: {
-                              backgroundColor: Colors.surfaceColorSecondary,
-                              borderRadius: 10,
-                            },
-                            iconContainer: {
-                              top: 10,
-                              right: 15,
-                            },
-                          }}
-                          onValueChange={(e) => setFieldValue('houseId', e)}
-                          value={_.get(values, 'houseId') || ''}
-                          items={houses}
-                          Icon={() => {
-                            return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
-                          }}
-                        />
-                      </>
+                        <>
+                          <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>
+                          <RNPickerSelect
+                            name="filiationId"
+                            style={{
+                              inputAndroid: {
+                                backgroundColor: Colors.surfaceColorSecondary,
+                                borderRadius: 10,
+                              },
+                              iconContainer: {
+                                top: 10,
+                                right: 15,
+                              },
+                            }}
+                            onValueChange={(e) => setFieldValue('filiationId', e)}
+                            value={_.get(values, 'filiationId') || ''}
+                            items={filiations}
+                            Icon={() => {
+                              return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
+                            }}
+                          />
+                          <Text style={styles.label}>{i18n.t('LIVING_SITUATION.HOUSE')}</Text>
+                          <RNPickerSelect
+                            name="houseId"
+                            style={{
+                              inputAndroid: {
+                                backgroundColor: Colors.surfaceColorSecondary,
+                                borderRadius: 10,
+                              },
+                              iconContainer: {
+                                top: 10,
+                                right: 15,
+                              },
+                            }}
+                            onValueChange={(e) => setFieldValue('houseId', e)}
+                            value={_.get(values, 'houseId') || ''}
+                            items={houses}
+                            Icon={() => {
+                              return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
+                            }}
+                          />
+                        </>
                       )}
 
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.RESPONSIBLE_TERRITORY')}</Text>
@@ -454,27 +456,26 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                     </View>
                     <View>
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.START_DATE')}</Text>
-                      <TouchableOpacity onPress={() => setOpenStartDate(true)}>
+                      <Button onPress={() => setOpenStartDate(true)}>
                         <View style={styles.inputContainer}>
                           <Text style={styles.inputDatePicker}>{_.get(values, 'startDate') || ''}</Text>
                           <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
                         </View>
-                      </TouchableOpacity>
+                      </Button>
                     </View>
                     <View>
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.END_DATE')}</Text>
-                      <TouchableOpacity onPress={() => setOpenEndDate(true)}>
-                        {console.log(errors)}
+                      <Button onPress={() => setOpenEndDate(true)}>
                         <>
                           <View style={styles.inputContainer}>
                             <Text style={styles.inputDatePicker}>{_.get(values, 'endDate') || ''}</Text>
                             <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
                           </View>
                           {errors && errors.endDate && (
-                          <Text style={styles.errorText}>{i18n.t('LIVING_SITUATION.ERROR_END_DATE')}</Text>
+                            <Text style={styles.errorText}>{i18n.t('LIVING_SITUATION.ERROR_END_DATE')}</Text>
                           )}
                         </>
-                      </TouchableOpacity>
+                      </Button>
                     </View>
 
                     <View>
@@ -496,12 +497,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                     </View>
 
                     <View style={styles.buttonsContainer}>
-                      {/* <TouchableOpacity style={{ flex: 1 }}>
-                        <View style={styles.btnContainerSecondary}>
-                          <Text style={styles.btnTextSecondary}>{i18n.t('LIVING_SITUATION.ADD')}</Text>
-                        </View>
-                      </TouchableOpacity> */}
-                      <TouchableOpacity
+                      <Button
                         onPress={() => {
                           handleSubmit();
                         }}
@@ -510,7 +506,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                         <View style={styles.btnContainerPrimary}>
                           <Text style={styles.btnTextPrimary}>{i18n.t('LIVING_SITUATION.SAVE')}</Text>
                         </View>
-                      </TouchableOpacity>
+                      </Button>
                     </View>
                   </>
                 )}

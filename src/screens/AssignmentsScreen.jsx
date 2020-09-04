@@ -11,6 +11,7 @@ import {
   SectionList,
   Image,
   ScrollView,
+  AsyncStorage,
 } from 'react-native';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
@@ -22,7 +23,93 @@ import { Flag } from 'react-native-svg-flagkit';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { getTerritories, getFiliations, getGenerations, getCourses, getPersons } from '../api';
+import { NavigationEvents } from 'react-navigation';
 
+const styles = StyleSheet.create({
+  screen: {
+    backgroundColor: Colors.surfaceColorPrimary,
+    flex: 1,
+    justifyContent: 'center',
+  },
+  tabsGroup: {
+    flexDirection: 'row',
+    marginTop: 10,
+    justifyContent: 'space-between',
+  },
+  tabButtonSelected: {
+    flexGrow: 0.25,
+    borderColor: Colors.primaryColor,
+    borderWidth: 2,
+    borderRadius: 5,
+    paddingVertical: 5,
+    marginHorizontal: 5,
+    backgroundColor: Colors.primaryColor,
+    padding: 10,
+  },
+  tabButton: {
+    padding: 10,
+    flexGrow: 0.25,
+    borderColor: Colors.primaryColor,
+    borderWidth: 2,
+    borderRadius: 5,
+    paddingVertical: 5,
+    backgroundColor: 'white',
+    marginHorizontal: 5,
+  },
+  tabButtonTextSelected: {
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 12,
+    fontFamily: 'work-sans-bold',
+    textTransform: 'uppercase',
+  },
+  tabButtonText: {
+    textAlign: 'center',
+    color: Colors.primaryColor,
+    fontSize: 12,
+    fontFamily: 'work-sans-bold',
+    textTransform: 'uppercase',
+  },
+  header: {
+    fontSize: 15,
+    color: Colors.onSurfaceColorPrimary,
+    fontFamily: 'work-sans-medium',
+
+    marginVertical: 10,
+  },
+  sectionHeaderContainer: {
+    flexDirection: 'row',
+    marginVertical: 10,
+    paddingHorizontal: 16,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  itemContainer: {
+    backgroundColor: Colors.surfaceColorSecondary,
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  itemTextContainer: {
+    flexDirection: 'column',
+    maxWidth: '80%',
+  },
+  itemText: {
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+    fontFamily: 'work-sans',
+    color: Colors.onSurfaceColorPrimary,
+  },
+  itemTextTitle: {
+    fontSize: 18,
+    paddingHorizontal: 10,
+    fontFamily: 'work-sans-semibold',
+    color: Colors.primaryColor,
+  },
+  scrollContainer: {
+    paddingBottom: 80,
+  },
+});
 class AssignmentsScreen extends Component {
   state = {
     selectedtTab: 0,
@@ -30,8 +117,14 @@ class AssignmentsScreen extends Component {
     loading: true,
     generations: [],
     courses: [],
+    language: [],
   };
-  componentDidMount() {
+
+  updateLang = async () => {
+    const lang = await AsyncStorage.getItem('lang');
+    this.setState({ language: lang });
+  };
+  loadAllData = async () => {
     getTerritories('all').then((resTerritory) => {
       let territories = resTerritory.data.result;
       getFiliations('all').then((resFiliations) => {
@@ -90,9 +183,24 @@ class AssignmentsScreen extends Component {
             this.setState({ generations, courses });
           });
         });
+        this.updateLang();
         this.setState({ territories, loading: false });
       });
     });
+  };
+  componentDidMount() {
+    this.loadAllData();
+  }
+  updateAssignments = async () => {
+    const lang = await AsyncStorage.getItem('lang');
+    if (this.state.language != lang) {
+      this.setState({ language: lang, loading: true });
+      this.loadAllData();
+    }
+  };
+
+  componentDidUpdate() {
+    console.log('[Assingnments]: ComponentDidUpdate');
   }
   render() {
     const { territories, selectedtTab } = this.state;
@@ -364,11 +472,19 @@ class AssignmentsScreen extends Component {
     return (
       <I18nContext.Consumer>
         {(value) => {
+          console.log(value);
           moment.locale(value.lang);
           return (
-            <SafeAreaView>
+            <SafeAreaView style={styles.screen}>
+              <NavigationEvents
+                onDidFocus={() => {
+                  if (this.state.territories) {
+                    this.updateAssignments();
+                  }
+                }}
+              />
               {!this.state.loading ? (
-                <View style={styles.screen}>
+                <>
                   <View style={styles.tabsGroup}>
                     {tabs.map((tab, index) => {
                       return (
@@ -394,7 +510,7 @@ class AssignmentsScreen extends Component {
                     })}
                   </View>
                   <View style={styles.scrollContainer}>{filtered && <Fragment>{list}</Fragment>}</View>
-                </View>
+                </>
               ) : (
                 <ActivityIndicator size="large" color={Colors.primaryColor} />
               )}
@@ -506,89 +622,5 @@ const ListItemGC = (props) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  screen: {
-    backgroundColor: Colors.surfaceColorPrimary,
-  },
-  tabsGroup: {
-    flexDirection: 'row',
-    marginTop: 10,
-    justifyContent:'space-between'
-  },
-  tabButtonSelected: {
-    flexGrow: 0.25,
-    borderColor: Colors.primaryColor,
-    borderWidth: 2,
-    borderRadius: 5,
-    paddingVertical: 5,
-    marginHorizontal: 5,
-    backgroundColor: Colors.primaryColor,
-    padding:10
-  },
-  tabButton: {
-    padding:10,
-    flexGrow: 0.25,
-    borderColor: Colors.primaryColor,
-    borderWidth: 2,
-    borderRadius: 5,
-    paddingVertical: 5,
-    backgroundColor: 'white',
-    marginHorizontal: 5,
-  },
-  tabButtonTextSelected: {
-    textAlign: 'center',
-    color: 'white',
-    fontSize: 12,
-    fontFamily: 'work-sans-bold',
-    textTransform: 'uppercase',
-  },
-  tabButtonText: {
-    textAlign: 'center',
-    color: Colors.primaryColor,
-    fontSize: 12,
-    fontFamily: 'work-sans-bold',
-    textTransform: 'uppercase',
-  },
-  header: {
-    fontSize: 15,
-    color: Colors.onSurfaceColorPrimary,
-    fontFamily: 'work-sans-medium',
-
-    marginVertical: 10,
-  },
-  sectionHeaderContainer: {
-    flexDirection: 'row',
-    marginVertical: 10,
-    paddingHorizontal: 16,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  itemContainer: {
-    backgroundColor: Colors.surfaceColorSecondary,
-    padding: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  itemTextContainer: {
-    flexDirection: 'column',
-    maxWidth: '80%',
-  },
-  itemText: {
-    justifyContent: 'center',
-    paddingHorizontal: 10,
-    fontFamily: 'work-sans',
-    color: Colors.onSurfaceColorPrimary,
-  },
-  itemTextTitle: {
-    fontSize: 18,
-    paddingHorizontal: 10,
-    fontFamily: 'work-sans-semibold',
-    color: Colors.primaryColor,
-  },
-  scrollContainer: {
-    paddingBottom: 80,
-  },
-});
 
 export default AssignmentsScreen;

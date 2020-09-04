@@ -95,13 +95,19 @@ exports.EN = {
     MAIN_HOUSE: 'Main house',
     MEMBERS: 'House members',
     FILIAL: 'Filiation',
+    WIFI: 'Wifi password',
+    PUBLIC_NOTES: 'Public notes',
+    ADMIN_NOTES: 'Admin notes',
   },
   GENERATION: {
     GENERATION_INFO: 'Generation information',
     CELEBRATION_DATE: 'Celebration date',
     FOUNDATION_DATE: 'Foundation date',
     COURSES: 'Courses',
+    COURSE_LEADER: 'Course leader',
     WITHOUT_GENERATIONS: 'No generation',
+    NO_COURSE_LEADER: 'No course leader',
+    NO_COURSES: 'No courses',
   },
   COURSE: {
     INFORMATION: 'Course information',
@@ -137,6 +143,7 @@ exports.EN = {
   },
   SETTINGS: {
     LOGOUT: 'Logout',
+    VERSION: 'Version',
   },
   SEARCH: {
     DECEASED: 'Show deceased',

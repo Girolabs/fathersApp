@@ -25,9 +25,79 @@ import { Snackbar } from 'react-native-paper';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { getHouse, getFiliation } from '../api';
+import { Ionicons } from 'expo-vector-icons';
+import Button from '../components/Button';
 
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
+
+const styles = StyleSheet.create({
+  screen: {
+    backgroundColor: Colors.surfaceColorPrimary,
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 30,
+    paddingHorizontal: 16,
+  },
+  titleContainerText: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    maxWidth: '80%',
+  },
+  title: {
+    fontFamily: 'work-sans-semibold',
+    fontSize: 27,
+    color: Colors.primaryColor,
+    marginRight: 10,
+  },
+  sectionHeader: {
+    fontFamily: 'work-sans-medium',
+    color: Colors.onSurfaceColorPrimary,
+    fontSize: 11,
+    padding: 15,
+    letterSpacing: 2.5,
+    textTransform: 'uppercase',
+    backgroundColor: Colors.surfaceColorPecondary,
+  },
+  badge: {
+    backgroundColor: Colors.primaryColor,
+    color: Colors.surfaceColorSecondary,
+    borderRadius: 20,
+    padding: 10,
+  },
+  listItem: {
+    backgroundColor: Colors.surfaceColorSecondary,
+    padding: 15,
+  },
+  listItemTitle: {
+    fontFamily: 'work-sans-semibold',
+    fontSize: 18,
+    color: Colors.onSurfaceColorPrimary,
+  },
+  listItemBody: {
+    fontFamily: 'work-sans',
+    fontSize: 12,
+    color: Colors.onSurfaceColorPrimary,
+  },
+  listItemBodyContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  memberItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.surfaceColorSecondary,
+    padding: 15,
+    borderBottomColor: Colors.onSurfaceColorSecondary,
+    borderBottomWidth: 0.5,
+  },
+  snackError: {
+    backgroundColor: Colors.secondaryColor,
+  },
+});
 
 class HouseDetailScreen extends Component {
   state = {
@@ -69,10 +139,6 @@ class HouseDetailScreen extends Component {
   render() {
     const { navigation } = this.props;
     const { house } = this.state;
-    let TouchableComp = TouchableOpacity;
-    if (Platform.OS == 'android' && Platform.Version >= 21) {
-      TouchableComp = TouchableNativeFeedback;
-    }
 
     return (
       <I18nContext.Consumer>
@@ -84,19 +150,10 @@ class HouseDetailScreen extends Component {
                 {house ? (
                   <View style={styles.screen}>
                     <View style={styles.titleContainer}>
-                      <View style={{ flexDirection: 'column', alignItems: 'flex-start', maxWidth: '80%' }}>
+                      <View style={styles.titleContainerText}>
                         <Text style={styles.title}>{house.name}</Text>
                         {house.isMainFiliationHouse && (
-                          <Text
-                            style={{
-                              backgroundColor: Colors.primaryColor,
-                              color: Colors.surfaceColorSecondary,
-                              borderRadius: 20,
-                              padding: 10,
-                            }}
-                          >
-                            {i18n.t('HOUSE_DETAIL.MAIN_HOUSE')}
-                          </Text>
+                          <Text style={styles.badge}>{i18n.t('HOUSE_DETAIL.MAIN_HOUSE')}</Text>
                         )}
                       </View>
 
@@ -104,12 +161,8 @@ class HouseDetailScreen extends Component {
                     </View>
                     <View>
                       <Text style={styles.sectionHeader}>{i18n.t('HOUSE_DETAIL.HOUSE_INFO')}</Text>
-                      {/*  <View style={styles.listItem}>
-                      <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.PHONE')}</Text>
-                      <Text style={styles.listItemBody}>{house.}</Text>
-                    </View> */}
                       <View style={styles.listItem}>
-                        <TouchableComp
+                        <Button
                           onPress={() => {
                             navigation.navigate('FiliationDetail', { filiationId: house.filialId });
                           }}
@@ -118,10 +171,32 @@ class HouseDetailScreen extends Component {
                             <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.FILIAL')}</Text>
                             <Text style={styles.listItemBody}>{house.filiationName}</Text>
                           </View>
-                        </TouchableComp>
+                        </Button>
                       </View>
+                      {house.phones &&
+                        house.phones.map((phone, index) => {
+                          return (
+                            <Button
+                              onPress={() => {
+                                Clipboard.setString(phone.number);
+                                this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
+                              }}
+                            >
+                              <View style={styles.listItem}>
+                                <Text style={styles.listItemTitle}>
+                                  {phone.label ? phone.label : i18n.t('HOUSE_DETAIL.PHONE')}
+                                </Text>
+                                <View style={styles.listItemBodyContainer}>
+                                  <Text style={styles.listItemBody}>{phone.number}</Text>
+                                  <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
+                                </View>
+                              </View>
+                            </Button>
+                          );
+                        })}
+
                       {house.fax && (
-                        <TouchableComp
+                        <Button
                           onPress={() => {
                             Clipboard.setString(house.fax);
                             this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
@@ -129,36 +204,82 @@ class HouseDetailScreen extends Component {
                         >
                           <View style={styles.listItem}>
                             <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.FAX')}</Text>
-                            <Text style={styles.listItemBody}>{house.fax}</Text>
+                            <View style={styles.listItemBodyContainer}>
+                              <Text style={styles.listItemBody}>{house.fax}</Text>
+                              <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
+                            </View>
                           </View>
-                        </TouchableComp>
+                        </Button>
+                      )}
+                      {house.diocese && (
+                        <View style={styles.listItem}>
+                          <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.DIOCESE')}</Text>
+                          <Text style={styles.listItemBody}>{house.diocese}</Text>
+                        </View>
                       )}
 
-                      <View style={styles.listItem}>
-                        <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.DIOCESE')}</Text>
-                        <Text style={styles.listItemBody}>{house.diocese}</Text>
-                      </View>
                       {house.email && (
                         <View style={styles.listItem}>
                           <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.EMAIL')}</Text>
                           <Text style={styles.listItemBody}>{house.email}</Text>
                         </View>
                       )}
+                      {house.wifiPassword && (
+                        <Button
+                          onPress={() => {
+                            Clipboard.setString(house.wifiPassword);
+                            this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
+                          }}
+                        >
+                          <View style={styles.listItem}>
+                            <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.WIFI')}</Text>
+                            <View style={styles.listItemBodyContainer}>
+                              <Text style={styles.listItemBody}>{house.wifiPassword}</Text>
+                              <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
+                            </View>
+                          </View>
+                        </Button>
+                      )}
 
-                      <View style={styles.listItem}>
-                        <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.ADDRESS')}</Text>
-                        <Text style={styles.listItemBody}>{house.street1}</Text>
-                        <Text style={styles.listItemBody}>{house.cityState}</Text>
-                        <Text style={styles.listItemBody}>{countries.getName(house.country, value.lang)}</Text>
-                      </View>
+                      <Button
+                        onPress={() => {
+                          Clipboard.setString(
+                            house.street1 + ' ' + house.cityState + ' ' + countries.getName(house.country, value.lang),
+                          );
+                          this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
+                        }}
+                      >
+                        <View style={styles.listItem}>
+                          <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.ADDRESS')}</Text>
+                          <View style={styles.listItemBodyContainer}>
+                            <View>
+                              <Text style={styles.listItemBody}>{house.street1}</Text>
+                              <Text style={styles.listItemBody}>{house.cityState}</Text>
+                              <Text style={styles.listItemBody}>{countries.getName(house.country, value.lang)}</Text>
+                            </View>
+
+                            <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
+                          </View>
+                        </View>
+                      </Button>
+                      {house.publicNotes && (
+                        <View style={styles.listItem}>
+                          <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.PUBLIC_NOTES')}</Text>
+                          <Text style={styles.listItemBody}>{house.publicNotes}</Text>
+                        </View>
+                      )}
+                      {house.adminNotes && (
+                        <View style={styles.listItem}>
+                          <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.ADMIN_NOTES')}</Text>
+                          <Text style={styles.listItemBody}>{house.adminNotes}</Text>
+                        </View>
+                      )}
                       <Text style={styles.sectionHeader}>{i18n.t('HOUSE_DETAIL.MEMBERS')}</Text>
                       <FlatList
                         data={house.membersHouse}
                         renderItem={({ item }) => {
                           return (
-                            <TouchableComp
-                              onPress={() => navigation.navigate('PatreDetail', { fatherId: item.personId })}
-                            >
+                            <Button onPress={() => navigation.navigate('PatreDetail', { fatherId: item.personId })}>
                               <View style={styles.memberItem}>
                                 <Image
                                   source={{ uri: `https://schoenstatt-fathers.link${item.photo}` }}
@@ -170,7 +291,7 @@ class HouseDetailScreen extends Component {
                                   {item.fullName}
                                 </Text>
                               </View>
-                            </TouchableComp>
+                            </Button>
                           );
                         }}
                       />
@@ -207,59 +328,6 @@ HouseDetailScreen.navigationOptions = (navigationData) => ({
       />
     </HeaderButtons>
   ),
-});
-
-const styles = StyleSheet.create({
-  screen: {
-    backgroundColor: Colors.surfaceColorPrimary,
-  },
-  titleContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 30,
-    paddingHorizontal: 16,
-  },
-  title: {
-    fontFamily: 'work-sans-semibold',
-    fontSize: 27,
-    color: Colors.primaryColor,
-    marginRight: 10,
-  },
-  sectionHeader: {
-    fontFamily: 'work-sans-medium',
-    color: Colors.onSurfaceColorPrimary,
-    fontSize: 11,
-    padding: 15,
-    letterSpacing: 2.5,
-    textTransform: 'uppercase',
-    backgroundColor: Colors.surfaceColorPecondary,
-  },
-  listItem: {
-    backgroundColor: Colors.surfaceColorSecondary,
-    padding: 15,
-  },
-  listItemTitle: {
-    fontFamily: 'work-sans-semibold',
-    fontSize: 18,
-    color: Colors.onSurfaceColorPrimary,
-  },
-  listItemBody: {
-    fontFamily: 'work-sans',
-    fontSize: 12,
-    color: Colors.onSurfaceColorPrimary,
-  },
-  memberItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: Colors.surfaceColorSecondary,
-    padding: 15,
-    borderBottomColor: Colors.onSurfaceColorSecondary,
-    borderBottomWidth: 0.5,
-  },
-  snackError: {
-    backgroundColor: Colors.secondaryColor,
-  },
 });
 
 export default HouseDetailScreen;

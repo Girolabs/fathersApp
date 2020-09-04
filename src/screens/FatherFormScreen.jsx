@@ -18,15 +18,14 @@ import InputWithFormik from '../components/InputWithFormik';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import * as Network from 'expo-network';
-import axios from '../../axios-instance';
 import i18n from 'i18n-js';
-import jwt from 'jwt-decode'; // import dependency
 import { Snackbar } from 'react-native-paper';
 import Colors from '../constants/Colors';
 import { NavigationEvents } from 'react-navigation';
 import { getPerson, getPersonByUser, getInterfaceData, updateFatherForm } from '../api';
+import Button from '../components/Button';
 
-const widthBtn=Platform.OS=='android'?'45%':'100%'
+const widthBtn = Platform.OS == 'android' ? '45%' : '100%';
 const styles = StyleSheet.create({
   snackError: {
     backgroundColor: Colors.secondaryColor,
@@ -57,6 +56,8 @@ const styles = StyleSheet.create({
   },
   screen: {
     backgroundColor: Colors.surfaceColorPrimary,
+    flex: 1,
+    justifyContent: 'center',
   },
 });
 
@@ -65,7 +66,7 @@ class FatherFormScreen extends Component {
     father: {},
     loading: true,
     updateFields: [],
-    keyboardAV:''
+    keyboardAV: '',
   };
   async componentDidMount() {
     this.setState({ loading: true });
@@ -136,7 +137,14 @@ class FatherFormScreen extends Component {
     const { navigation } = this.props;
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
-      const fatherId = this.props.navigation.getParam('fatherId');
+      let fatherId = this.props.navigation.getParam('fatherId');
+      if (!fatherId) {
+        fatherId = await AsyncStorage.getItem('fatherId');
+        fatherId = JSON.parse(fatherId);
+      } else {
+        AsyncStorage.setItem('fatherId', JSON.stringify(fatherId));
+      }
+
       if (fatherId) {
         getPerson(fatherId, 'all').then((response) => {
           const father = response.data.result;
@@ -144,9 +152,6 @@ class FatherFormScreen extends Component {
 
           this.loadInterfaceData(response.data.result);
         });
-      } else {
-        console.log('need to go back')
-        this.props.navigation.navigate('Home')
       }
     } else {
       this.setState({ loading: false, visible: true, snackMsg: i18n.t('GENERAL.NO_INTERNET') });
@@ -164,18 +169,26 @@ class FatherFormScreen extends Component {
     let validationSchema;
     if (regex) {
       validationSchema = Yup.object().shape({
-        ...(updateFields.indexOf('slackUser') != -1 ? { slackUser: Yup.string().matches(regex.slackUserRegex) } : null),
+        ...(updateFields.indexOf('slackUser') != -1
+          ? { slackUser: Yup.string().matches(regex.slackUserRegex).nullable() }
+          : null),
         ...(updateFields.indexOf('instagramUser') != -1
-          ? { instagramUser: Yup.string().matches(regex.instagramUserRegex) }
+          ? { instagramUser: Yup.string().matches(regex.instagramUserRegex).nullable() }
           : null),
         ...(updateFields.indexOf('twitterUser') != -1
-          ? { twitterUser: Yup.string().matches(regex.twitterUserRegex) }
+          ? { twitterUser: Yup.string().matches(regex.twitterUserRegex).nullable() }
           : null),
-        ...(updateFields.indexOf('skypeUser') != -1 ? { skypeUser: Yup.string().matches(regex.skypeUserRegex) } : null),
-        ...(updateFields.indexOf('phone1') != -1 ? { phone1: Yup.string().matches(regex.phoneNumberRegex) } : null),
-        ...(updateFields.indexOf('phone2') != -1 ? { phone2: Yup.string().matches(regex.phoneNumberRegex) } : null),
+        ...(updateFields.indexOf('skypeUser') != -1
+          ? { skypeUser: Yup.string().matches(regex.skypeUserRegex).nullable() }
+          : null),
+        ...(updateFields.indexOf('phone1') != -1
+          ? { phone1: Yup.string().matches(regex.phoneNumberRegex).nullable() }
+          : null),
+        ...(updateFields.indexOf('phone2') != -1
+          ? { phone2: Yup.string().matches(regex.phoneNumberRegex).nullable() }
+          : null),
         ...(updateFields.indexOf('facebookUrl') != -1
-          ? { facebookUrl: Yup.string().matches(regex.facebookUrlRegex) }
+          ? { facebookUrl: Yup.string().matches(regex.facebookUrlRegex).nullable() }
           : null),
       });
     }
@@ -188,165 +201,163 @@ class FatherFormScreen extends Component {
             await this.loadPerson();
           }}
         />
-        {!loading ? (
-          <>
-            <SafeAreaView style={styles.screen}>
-            <KeyboardAvoidingView behavior={Platform.OS == "ios" ? this.state.keyboardAV : "height"} >
-
-              <ScrollView>
-                <View style={{ paddingHorizontal: 15, marginVertical: 30, width: '80%' }}>
-                  <Text
-                    style={{
-                      fontFamily: 'work-sans-semibold',
-                      fontSize: 24,
-                      color: Colors.primaryColor,
+        <SafeAreaView style={styles.screen}>
+          {!loading ? (
+            <>
+              <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? this.state.keyboardAV : 'height'}>
+                <ScrollView>
+                  <View style={{ paddingHorizontal: 15, marginVertical: 30, width: '80%' }}>
+                    <Text
+                      style={{
+                        fontFamily: 'work-sans-semibold',
+                        fontSize: 24,
+                        color: Colors.primaryColor,
+                      }}
+                    >
+                      {i18n.t('FATHER_EDIT.EDIT')}
+                    </Text>
+                  </View>
+                  <Formik
+                    initialValues={{
+                      // email: (!!father.email && father.email) || null,
+                      ...(updateFields.indexOf('slackUser') != -1 && !!father.slackUser
+                        ? { slackUser: father.slackUser }
+                        : { slackUser: null }),
+                      ...(updateFields.indexOf('instagramUser') != -1 && !!father.instagramUser
+                        ? { instagramUser: father.instagramUser }
+                        : { instagramUser: null }),
+                      ...(updateFields.indexOf('twitterUser') != -1 && !!father.twitterUser
+                        ? { twitterUser: father.twitterUser }
+                        : { twitterUser: null }),
+                      ...(updateFields.indexOf('facebookUrl') != -1 && !!father.facebookUrl
+                        ? { facebookUrl: father.facebookUrl }
+                        : { facebookUrl: null }),
+                      ...(updateFields.indexOf('skypeUser') != -1 && !!father.skypeUser
+                        ? { skypeUser: father.skypeUser }
+                        : { skypeUser: null }),
+                      ...(updateFields.indexOf('phone1') != -1 && !!father.phones.length > 0
+                        ? { phone1: father.phones[0].number }
+                        : { phone1: null }),
+                      ...(updateFields.indexOf('phone2') != -1 && !!father.phones.length & !!father.phones[1]
+                        ? { phone2: father.phones[1].number }
+                        : { phone2: null }),
                     }}
+                    onSubmit={(values) => {
+                      this.setState({ loading: true });
+                      console.log(values);
+                      //this.setState({loading:true})
+                      updateFatherForm(this.state.father.personId, values).then(
+                        () => {
+                          this.loadPerson();
+                          this.setState(this.setState({ snackMsg: i18n.t('GENERAL.EDIT_SUCCESS'), visible: true }));
+                        },
+                        () => {
+                          this.setState(
+                            this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false }),
+                          );
+                        },
+                      );
+                    }}
+                    enableReinitialize
+                    validationSchema={validationSchema}
                   >
-                    {i18n.t('FATHER_EDIT.EDIT')}
-                  </Text>
-                </View>
-                <Formik
-                  initialValues={{
-                    // email: (!!father.email && father.email) || null,
-                    ...(updateFields.indexOf('slackUser') != -1 && !!father.slackUser
-                      ? { slackUser: father.slackUser }
-                      : { slackUser: null }),
-                    ...(updateFields.indexOf('instagramUser') != -1 && !!father.instagramUser
-                      ? { instagramUser: father.instagramUser }
-                      : { instagramUser: null }),
-                    ...(updateFields.indexOf('twitterUser') != -1 && !!father.twitterUser
-                      ? { twitterUser: father.twitterUser }
-                      : { twitterUser: null }),
-                    ...(updateFields.indexOf('facebookUrl') != -1 && !!father.facebookUrl
-                      ? { facebookUrl: father.facebookUrl }
-                      : { facebookUrl: null }),
-                    ...(updateFields.indexOf('skypeUser') != -1 && !!father.skypeUser
-                      ? { skypeUser: father.skypeUser }
-                      : { skypeUser: null }),
-                    ...(updateFields.indexOf('phone1') != -1 && !!father.phones.length > 0
-                      ? { phone1: father.phones[0].number }
-                      : { phone1: null }),
-                    ...(updateFields.indexOf('phone2') != -1 && !!father.phones.length & !!father.phones[1]
-                      ? { phone2: father.phones[1].number }
-                      : { phone2: null }),
-                  }}
-                  onSubmit={(values) => {
-                    this.setState({ loading: true });
-                    console.log(values);
-                    //this.setState({loading:true})
-                    updateFatherForm(this.state.father.personId, values).then(
-                      () => {
-                        this.loadPerson();
-                        this.setState(this.setState({ snackMsg: i18n.t('GENERAL.EDIT_SUCCESS'), visible: true }));
-                      },
-                      () => {
-                        this.setState(
-                          this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false }),
-                        );
-                      },
-                    );
-                  }}
-                  enableReinitialize
-                  validationSchema={validationSchema}
-                >
-                  {({ handleChange, handleBlur, handleSubmit, values }) => (
-                    <Fragment>
-                      <InputWithFormik
-                        hasPerm={updateFields.indexOf('instagramUser') != -1}
-                        label={i18n.t('FATHER_EDIT.INSTAGRAM')}
-                        name="instagramUser"
-                        mode="outlined"
-                        selectionColor={Colors.primaryColor}
-                      />
-                      <InputWithFormik
-                        hasPerm={updateFields.indexOf('slackUser') != -1}
-                        label={i18n.t('FATHER_EDIT.SLACK')}
-                        name="slackUser"
-                        mode="outlined"
-                        selectionColor={Colors.primaryColor}
-                      />
-                      <InputWithFormik
-                        hasPerm={updateFields.indexOf('twitterUSer') != -1}
-                        label={i18n.t('FATHER_EDIT.TWITTER')}
-                        name="twitterUser"
-                        mode="outlined"
-                        selectionColor={Colors.primaryColor}
-                      />
-                      <InputWithFormik
-                        hasPerm={updateFields.indexOf('facebookUrl') != -1}
-                        label={i18n.t('FATHER_EDIT.FACEBOOK')}
-                        placeholder={'https://www.facebook.com/my_name'}
-                        name="facebookUrl"
-                        mode="outlined"
-                        selectionColor={Colors.primaryColor}
-                      />
-                      <InputWithFormik
-                        hasPerm={updateFields.indexOf('skypeUser') != -1}
-                        label={i18n.t('FATHER_EDIT.SKYPE')}
-                        name="skypeUser"
-                        mode="outlined"
-                        selectionColor={Colors.primaryColor}
-                        onPress
-                      />
-                      <InputWithFormik
-                        hasPerm={updateFields.indexOf('phone1') != -1}
-                        label={i18n.t('FATHER_EDIT.PHONE1')}
-                        placeholder={'+1 262 473-4782'}
-                        name="phone1"
-                        mode="outlined"
-                        selectionColor={Colors.primaryColor}
-                      />
-                      <InputWithFormik
-                        hasPerm={updateFields.indexOf('phone2') != -1}
-                        label={i18n.t('FATHER_EDIT.PHONE2')}
-                        placeholder={'+1 262 473-4782'}
-                        name="phone2"
-                        mode="outlined"
-                        underlineColor={Colors.primaryColor}
-                      />
-                      {/* //<InputWithFormik hasPerm={updateFields.indexOf('') != -1} label={i18n.t("FATHER_EDIT.FACEBOOK")} placeholder = {'https://www.facebook.com/'} name = "facebookUrl" /> */}
-                      <View style={styles.buttonsContainer}>
-                        {/*   { updateFields.indexOf('living')} */}
+                    {({ handleChange, handleBlur, handleSubmit, values }) => (
+                      <Fragment>
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('instagramUser') != -1}
+                          label={i18n.t('FATHER_EDIT.INSTAGRAM')}
+                          name="instagramUser"
+                          mode="outlined"
+                          selectionColor={Colors.primaryColor}
+                        />
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('slackUser') != -1}
+                          label={i18n.t('FATHER_EDIT.SLACK')}
+                          name="slackUser"
+                          mode="outlined"
+                          selectionColor={Colors.primaryColor}
+                        />
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('twitterUser') != -1}
+                          label={i18n.t('FATHER_EDIT.TWITTER')}
+                          name="twitterUser"
+                          mode="outlined"
+                          selectionColor={Colors.primaryColor}
+                        />
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('facebookUrl') != -1}
+                          label={i18n.t('FATHER_EDIT.FACEBOOK')}
+                          placeholder={'https://www.facebook.com/my_name'}
+                          name="facebookUrl"
+                          mode="outlined"
+                          selectionColor={Colors.primaryColor}
+                        />
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('skypeUser') != -1}
+                          label={i18n.t('FATHER_EDIT.SKYPE')}
+                          name="skypeUser"
+                          mode="outlined"
+                          selectionColor={Colors.primaryColor}
+                          onPress
+                        />
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('phone1') != -1}
+                          label={i18n.t('FATHER_EDIT.PHONE1')}
+                          placeholder={'+1 262 473-4782'}
+                          name="phone1"
+                          mode="outlined"
+                          selectionColor={Colors.primaryColor}
+                        />
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('phone2') != -1}
+                          label={i18n.t('FATHER_EDIT.PHONE2')}
+                          placeholder={'+1 262 473-4782'}
+                          name="phone2"
+                          mode="outlined"
+                          underlineColor={Colors.primaryColor}
+                        />
+                        {/* //<InputWithFormik hasPerm={updateFields.indexOf('') != -1} label={i18n.t("FATHER_EDIT.FACEBOOK")} placeholder = {'https://www.facebook.com/'} name = "facebookUrl" /> */}
+                        <View style={styles.buttonsContainer}>
+                          {/*   { updateFields.indexOf('living')} */}
 
-                        {father && father.allowUpdateLivingSituation && (
-                          <TouchableComp
-                            onPress={() => {
-                              navigation.navigate('LivingSituationForm', {
-                                livingSituation: father.activeLivingSituation ? father.activeLivingSituation : null,
-                                personId: father ? father.personId : null,
-                              });
-                            }}
-                          >
+                          {father && father.allowUpdateLivingSituation && (
+                            <Button
+                              onPress={() => {
+                                navigation.navigate('LivingSituationForm', {
+                                  livingSituation: father.activeLivingSituation ? father.activeLivingSituation : null,
+                                  personId: father ? father.personId : null,
+                                });
+                              }}
+                            >
+                              <View style={styles.btnContainer}>
+                                <Text style={styles.btnText}>{i18n.t('FATHER_EDIT.EDIT_LIVING')}</Text>
+                              </View>
+                            </Button>
+                          )}
+
+                          <Button onPress={handleSubmit}>
                             <View style={styles.btnContainer}>
-                              <Text style={styles.btnText}>{i18n.t('FATHER_EDIT.EDIT_LIVING')}</Text>
+                              <Text style={styles.btnText}>{i18n.t('FATHER_EDIT.SAVE')}</Text>
                             </View>
-                          </TouchableComp>
-                        )}
-
-                        <TouchableComp onPress={handleSubmit}>
-                          <View style={styles.btnContainer}>
-                            <Text style={styles.btnText}>{i18n.t('FATHER_EDIT.SAVE')}</Text>
-                          </View>
-                        </TouchableComp>
-                      </View>
-                    </Fragment>
-                  )}
-                </Formik>
-                <Snackbar
-                  visible={this.state.visible}
-                  onDismiss={() => this.setState({ visible: false })}
-                  style={styles.snackError}
-                >
-                  {this.state.snackMsg}
-                </Snackbar>
-              </ScrollView>
-                </KeyboardAvoidingView>
-
-            </SafeAreaView>
-          </>
-        ) : (
-          <ActivityIndicator size="large" color={Colors.primaryColor} />
-        )}
+                          </Button>
+                        </View>
+                      </Fragment>
+                    )}
+                  </Formik>
+                  <Snackbar
+                    visible={this.state.visible}
+                    onDismiss={() => this.setState({ visible: false })}
+                    style={styles.snackError}
+                  >
+                    {this.state.snackMsg}
+                  </Snackbar>
+                </ScrollView>
+              </KeyboardAvoidingView>
+            </>
+          ) : (
+            <ActivityIndicator size="large" color={Colors.primaryColor} />
+          )}
+        </SafeAreaView>
       </>
     );
   }
