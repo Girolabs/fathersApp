@@ -53,9 +53,34 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
                     <View style={styles.remindersImportantHeader}>
                       <View style={styles.leftReminderContainer}>
                         <Ionicons name="ios-calendar" size={23} color={Colors.surfaceColorPrimary} />
+                        <Text style={styles.reminderHeaderTitle}>
+                          {`${item[0].text} ${item[0].importantText.replace('%s', item[0].yearsAgo)}`}
+                        </Text>
+                      </View>
+                      <View style={styles.rightReminderContainer}>
+                        {selectedHeader === index ? (
+                          <Ionicons name="md-arrow-dropup" size={23} color={Colors.surfaceColorPrimary} />
+                        ) : (
+                          <Ionicons name="md-arrow-dropdown" size={23} color={Colors.surfaceColorPrimary} />
+                        )}
                       </View>
                     </View>
-                  ) : null}
+                  ) : (
+                    <View style={styles.reminderHeader}>
+                      <View style={styles.leftReminderContainer}></View>
+                      <View style={styles.rightReminderContainer}>
+                        {selectedHeader === index ? (
+                          <Ionicons name="md-arrow-dropup" size={23} color={Colors.surfaceColorPrimary} />
+                        ) : (
+                          <Ionicons name="md-arrow-dropdown" size={23} color={Colors.surfaceColorPrimary} />
+                        )}
+                      </View>
+                    </View>
+                  )}
+                  {selectedHeader == index &&
+                    {
+                      /* <Reminders /> */
+                    }}
                 </>
               </Button>
             );

@@ -156,7 +156,7 @@ const HomeScreen = ({ navigation }) => {
             />
             {!loading ? (
               <>
-                <RemindersHeaders reminders={reminders} />
+                {/*  <RemindersHeaders reminders={reminders} /> */}
                 <Text style={styles.title}>{i18n.t('HOME_SCREEN.REMINDERS')}</Text>
                 <FlatList
                   data={reminders}
