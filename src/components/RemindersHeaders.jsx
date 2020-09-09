@@ -6,6 +6,7 @@ import { Ionicons } from 'expo-vector-icons';
 import moment from 'moment';
 import Colors from '../constants/Colors';
 import Button from './Button';
+import Reminders from './Reminders';
 
 const styles = StyleSheet.create({
   title: {
@@ -25,6 +26,26 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  reminderHeader: {
+    backgroundColor: Colors.primaryColor,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginTop: 5,
+    borderRadius: 15,
+  },
+  leftReminderContainer: {
+    flexDirection: 'row',
+  },
+  reminderHeaderTitle: {
+    color: Colors.surfaceColorPrimary,
+    fontSize: 15,
+    fontFamily: 'work-sans-medium',
+    marginLeft: 10,
+  },
+  rightReminderContainer: {},
 });
 
 const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader }) => {
@@ -47,8 +68,8 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
             const date = moment.utc(item[0].date).format('dddd, Do MMMM YYYY');
             const importantReminder = item[0].isImportant;
             return (
-              <Button style={styles.buttonContainer} onPress={() => handleShowReminders(index)}>
-                <>
+              <View>
+                <Button style={styles.buttonContainer} onPress={() => handleShowReminders(index)}>
                   {importantReminder ? (
                     <View style={styles.remindersImportantHeader}>
                       <View style={styles.leftReminderContainer}>
@@ -67,7 +88,10 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
                     </View>
                   ) : (
                     <View style={styles.reminderHeader}>
-                      <View style={styles.leftReminderContainer}></View>
+                      <View style={styles.leftReminderContainer}>
+                        <Ionicons name="ios-calendar" size={23} color={Colors.surfaceColorPrimary} />
+                        <Text style={styles.reminderHeaderTitle}>{date}</Text>
+                      </View>
                       <View style={styles.rightReminderContainer}>
                         {selectedHeader === index ? (
                           <Ionicons name="md-arrow-dropup" size={23} color={Colors.surfaceColorPrimary} />
@@ -77,12 +101,9 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
                       </View>
                     </View>
                   )}
-                  {selectedHeader == index &&
-                    {
-                      /* <Reminders /> */
-                    }}
-                </>
-              </Button>
+                </Button>
+                {selectedHeader == index && <Reminders reminders={item} />}
+              </View>
             );
           }}
         />
