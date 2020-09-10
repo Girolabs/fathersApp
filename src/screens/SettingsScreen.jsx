@@ -19,6 +19,7 @@ import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { I18nContext } from '../context/I18nProvider';
 import Select from '../components/Select';
+import Button from '../components/Button';
 
 const styles = StyleSheet.create({
   screen: {
@@ -60,10 +61,15 @@ const SettingsScreen = (props) => {
     { name: 'DE', value: 'de' },
     { name: 'PT', value: 'pt' },
   ];
-  let TouchableComp = TouchableOpacity;
-  if (Platform.OS === 'android' && Platform.Version >= 21) {
-    TouchableComp = TouchableNativeFeedback;
-  }
+  const onPress = async () => {
+    console.log('enrttre ');
+    try {
+      await AsyncStorage.removeItem('token');
+      props.navigation.navigate('Auth');
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <I18nContext.Consumer>
       {(value) => {
@@ -77,40 +83,20 @@ const SettingsScreen = (props) => {
             </View>
             <Select style={styles.select} elements={lng} value={value.lang} valueChange={value.changeLang} />
             {Platform.OS === 'android' ? (
-              <TouchableComp
-                onPress={async () => {
-                  try {
-                    await AsyncStorage.removeItem('token');
-                    props.navigation.navigate('Auth');
-                  } catch (e) {
-                    console.log(e);
-                  }
-                }}
-              >
+              <Button onPress={onPress}>
                 <View style={styles.textContainer}>
                   <Text style={styles.text}>{i18n.t('SETTINGS.LOGOUT')}</Text>
 
                   <Ionicons name="md-close-circle" size={23} color={Colors.primaryColor} />
                 </View>
-              </TouchableComp>
+              </Button>
             ) : (
-              <TouchableComp
-                onPress={async () => {
-                  try {
-                    await AsyncStorage.removeItem('token');
-                    props.navigation.navigate('Auth');
-                  } catch (e) {
-                    console.log(e);
-                  }
-                }}
-                style={styles.logoutContainer}
-              >
+              <Button onPress={onPress} style={styles.logoutContainer}>
                 <View style={styles.textContainer}>
                   <Text style={styles.text}>{i18n.t('SETTINGS.LOGOUT')}</Text>
-
                   <Ionicons name="md-close-circle" size={23} color={Colors.primaryColor} />
                 </View>
-              </TouchableComp>
+              </Button>
             )}
           </SafeAreaView>
         );
