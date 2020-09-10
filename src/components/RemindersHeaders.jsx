@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import i18n from 'i18n-js';
 
 import { Ionicons } from 'expo-vector-icons';
 import moment from 'moment';
+import PropTypes from 'prop-types';
 import Colors from '../constants/Colors';
 import Button from './Button';
 import Reminders from './Reminders';
@@ -25,6 +26,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: Colors.secondaryColor,
+    borderRadius: 15,
+    marginTop: 5,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   reminderHeader: {
     backgroundColor: Colors.primaryColor,
@@ -44,6 +50,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: 'work-sans-medium',
     marginLeft: 10,
+    width: '90%',
   },
   rightReminderContainer: {},
 });
@@ -67,6 +74,10 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
           renderItem={({ item, index }) => {
             const date = moment.utc(item[0].date).format('dddd, Do MMMM YYYY');
             const importantReminder = item[0].isImportant;
+            const importantTitle =
+              importantReminder && item[0].importantText
+                ? `${item[0].text} ${item[0].importantText.replace('%s', item[0].yearsAgo)}`
+                : null;
             return (
               <View>
                 <Button style={styles.buttonContainer} onPress={() => handleShowReminders(index)}>
@@ -74,9 +85,7 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
                     <View style={styles.remindersImportantHeader}>
                       <View style={styles.leftReminderContainer}>
                         <Ionicons name="ios-calendar" size={23} color={Colors.surfaceColorPrimary} />
-                        <Text style={styles.reminderHeaderTitle}>
-                          {`${item[0].text} ${item[0].importantText.replace('%s', item[0].yearsAgo)}`}
-                        </Text>
+                        <Text style={styles.reminderHeaderTitle}>{importantTitle}</Text>
                       </View>
                       <View style={styles.rightReminderContainer}>
                         {selectedHeader === index ? (
@@ -102,7 +111,7 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
                     </View>
                   )}
                 </Button>
-                {selectedHeader == index && <Reminders reminders={item} />}
+                {selectedHeader === index && <Reminders reminders={item} />}
               </View>
             );
           }}
@@ -110,6 +119,12 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
       ) : null}
     </View>
   );
+};
+
+RemindersHeaders.propTypes = {
+  onChangeSelectedHeader: PropTypes.func.isRequired,
+  selectedHeader: PropTypes.number.isRequired,
+  reminders: PropTypes.arrayOf(PropTypes.array).isRequired,
 };
 
 export default RemindersHeaders;

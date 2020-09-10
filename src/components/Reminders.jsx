@@ -1,7 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, Text } from 'react-native';
+import { View, StyleSheet, FlatList, Text, Linking } from 'react-native';
 import { FontAwesome5, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { Flag } from 'react-native-svg-flagkit';
+import { withNavigation } from 'react-navigation';
+import moment from 'moment';
+import PropTypes from 'prop-types';
 import Colors from '../constants/Colors';
 import Button from './Button';
 
@@ -13,12 +16,33 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
+  iconsTextContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  iconContainer: {
+    minWidth: '8%',
+    alignItems: 'center',
+  },
+  flagContainer: {
+    marginLeft: 5,
+  },
+  textContainer: {
+    marginLeft: 15,
+    maxWidth: '60%',
+  },
 });
 
-const Reminders = ({ reminders }) => {
+const Reminders = ({ navigation, reminders }) => {
   const getIcon = (dateType) => {
     let icon = null;
     switch (dateType) {
@@ -41,35 +65,118 @@ const Reminders = ({ reminders }) => {
     return icon;
   };
 
-  const getPath = (objectKind) => {};
+  const getPath = (objectKind) => {
+    let path = null;
+    switch (objectKind) {
+      case 'person':
+        path = 'PatreDetail';
+        break;
+      case 'territory':
+        path = 'DelegationDetail';
+        break;
+      case 'course':
+        path = 'CourseDetail';
+        break;
+      case 'generation':
+        path = 'GenerationDetail';
+        break;
+      default:
+        path = 'PatreDetail';
+        break;
+    }
+    return path;
+  };
 
-  const getParams = (objectKind, param) => {};
+  const getParams = (objectKind, param) => {
+    let params = null;
+    switch (objectKind) {
+      case 'person':
+        params = { fatherId: param.personId };
+        break;
+      case 'territory':
+        params = { delegationId: param.territoryId };
+        break;
+      case 'course':
+        params = { courseId: param.courseId };
+        break;
+      case 'generation':
+        params = { generationId: param.generationId };
+        break;
+      default:
+        params = { fatherId: param.personId };
+        break;
+    }
+    return params;
+  };
 
   return (
     <FlatList
       data={reminders}
       renderItem={({ item }) => {
         const IconComp = getIcon(item.dateType);
+        const path = getPath(item.kind);
+        const params = getParams(item.kind, item.entityObject);
+        const date = moment.utc(item.date).format('dddd, Do MMMM YYYY');
+        const prefixWa = 'http://api.whatsapp.com/send?phone=';
         return (
           <View>
             <View style={styles.container}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-                <View style={{ minWidth: '8%', alignItems: 'center' }}>{IconComp}</View>
-                <View style={{ marginLeft: 5 }}>
-                  {item.entityCountry != null ? (
-                    <Flag id={item.entityCountry} size={0.15} />
-                  ) : (
-                    <Ionicons name="ios-flag" size={23} color={Colors.primaryColor} />
-                  )}
+              <View style={styles.iconsTextContainer}>
+                <View style={styles.iconsContainer}>
+                  <View style={styles.iconContainer}>{IconComp}</View>
+                  <View style={styles.flagContainer}>
+                    {item.entityCountry != null ? (
+                      <Flag id={item.entityCountry} size={0.15} />
+                    ) : (
+                      <Ionicons name="ios-flag" size={23} color={Colors.primaryColor} />
+                    )}
+                  </View>
+                </View>
+
+                <View style={styles.textContainer}>
+                  <>
+                    {item.isImportant ? (
+                      <Button
+                        onPress={() => {
+                          navigation.navigate(path, params);
+                        }}
+                      >
+                        <View>
+                          <Text style={styles.innerText}>{item.entityName}</Text>
+                          <Text style={styles.innerText}>{date}</Text>
+                        </View>
+                      </Button>
+                    ) : (
+                      <Button
+                        onPress={() => {
+                          navigation.navigate(path, params);
+                        }}
+                      >
+                        <View>
+                          <Text style={styles.innerText}>{item.entityName}</Text>
+                          {item.importantText && (
+                            <Text style={styles.reminderHeader}>
+                              {`${item.importantText.replace('%s', item.yearsAgo)} `}
+                            </Text>
+                          )}
+                        </View>
+                      </Button>
+                    )}
+                  </>
                 </View>
               </View>
-
-              <View style={{ marginLeft: 15, maxWidth: '60%' }}>
-                {item.isImportant ? (
-                  <Text style={styles.innerText}>nada</Text>
-                ) : (
-                  <Text style={styles.innerText}>{item.entityName}</Text>
-                )}
+              <View>
+                {item.entityObject.phones !== undefined &&
+                  item.entityObject.phones.length > 0 &&
+                  item.entityObject.phones[0].whatsApp && (
+                    <Button
+                      onPress={() => {
+                        Linking.openURL(`${prefixWa}${item.entityObject.phones[0].number}`);
+                      }}
+                    >
+                      <Ionicons name="logo-whatsapp" size={23} color={Colors.onSurfaceColorSecondary} />
+                    </Button>
+                  )}
               </View>
             </View>
           </View>
@@ -79,4 +186,15 @@ const Reminders = ({ reminders }) => {
   );
 };
 
-export default Reminders;
+Reminders.defaultProps = {
+  reminders: [],
+};
+
+Reminders.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+  reminders: PropTypes.arrayOf(PropTypes.object),
+};
+
+export default withNavigation(Reminders);
