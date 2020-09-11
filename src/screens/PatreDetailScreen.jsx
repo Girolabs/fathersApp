@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator, Clipboard } from 'react-native';
-
+import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator } from 'react-native';
 import moment from 'moment';
 import i18n from 'i18n-js';
 import 'moment/min/locales';
@@ -8,15 +7,12 @@ import countries from 'i18n-iso-countries';
 import * as Contacts from 'expo-contacts';
 import * as Network from 'expo-network';
 import { Snackbar } from 'react-native-paper';
-import { Ionicons } from 'expo-vector-icons';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { I18nContext } from '../context/I18nProvider';
 import Colors from '../constants/Colors';
-import SocialIcons from '../components/SocialIcons';
 import HeaderButton from '../components/HeaderButton';
 import DefaultItem from '../components/FatherDetailItem';
-import Button from '../components/Button';
-
+import FatherContactInfo from '../components/FatherContactInfo';
 import { getInterfaceData, getPerson } from '../api';
 
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
@@ -90,50 +86,8 @@ const PatreDetailScreen = ({ navigation }) => {
         const contactId = await Contacts.addContactAsync(contact);
         setVisible(true);
         setSnackMsg(i18n.t('FATHER_DETAIL.SAVED_CONTACT'));
-
-        if (contactId) {
-          /*  Alert.alert(
-           "Contact Saved.",
-           "My Alert Msg",
-           [
-             {
-               text: "Cancel",
-               onPress: () => console.log("Cancel Pressed"),
-               style: "cancel"
-             },
-             { text: "OK", onPress: () => console.log("OK Pressed") }
-           ],
-           { cancelable: false }
-         ); */
-        } else {
-          /*   Alert.alert(
-            "Contact not saved.",
-            "My Alert Msg",
-            [
-              {
-                text: "Cancel",
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel"
-              },
-              { text: "OK", onPress: () => console.log("OK Pressed") }
-            ],
-            { cancelable: false }
-          ); */
-        }
       } catch (err) {
-        /*  Alert.alert(
-         "Contact not Saved.problem",
-         "My Alert Msg",
-         [
-           {
-             text: "Cancel",
-             onPress: () => console.log("Cancel Pressed"),
-             style: "cancel"
-           },
-           { text: "OK", onPress: () => console.log("OK Pressed") }
-         ],
-         { cancelable: false }
-       ); */
+        console.log(err);
       }
 
       /*  const contactId = await Contacts.addContactAsync(contact);
@@ -227,115 +181,15 @@ const PatreDetailScreen = ({ navigation }) => {
                     )}
                   </View>
                 </View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    paddingRight: 15,
-                  }}
-                >
-                  <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CONTACT_INFO')}</Text>
-                  {father.personId && (
-                    <Button
-                      onPress={() => {
-                        navigation.navigate('FatherForm', {
-                          fatherId: father.personId,
-                        });
-                      }}
-                    >
-                      <Ionicons name="md-create" size={23} color={Colors.primaryColor} />
-                    </Button>
-                  )}
-                </View>
-
-                <DefaultItem
-                  show={viewFatherFields.indexOf('email')}
-                  title="FATHER_DETAIL.EMAIL"
-                  body={father.email}
-                  icon={<Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />}
-                  selected={() => {
-                    const value = father.email;
-                    Clipboard.setString(value);
-                    setVisible(true);
-                    setSnackMsg(i18n.t('GENERAL.COPY_CLIPBOARD'));
+                <FatherContactInfo
+                  father={father}
+                  viewPermissions={viewFatherFields}
+                  setSnackBarVisible={() => setVisible(true)}
+                  setSnackMsg={(msg) => setSnackMsg(msg)}
+                  handleSaveContact={() => {
+                    handleSaveContact(father);
                   }}
                 />
-                {father.phones.length >= 1 && (
-                  <DefaultItem
-                    title="FATHER_DETAIL.MAIN_CELL_PHONE"
-                    body={father.phones[0] !== undefined ? father.phones[0].number : null}
-                    icon={<Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />}
-                    selected={() => {
-                      const value = father.phones[0] !== undefined ? father.phones[0].number : null;
-                      Clipboard.setString(value);
-                      setVisible(true);
-                      setSnackMsg(i18n.t('GENERAL.COPY_CLIPBOARD'));
-                    }}
-                  />
-                )}
-
-                {father.phones.length > 1 && (
-                  <DefaultItem
-                    show={viewFatherFields.indexOf('phones')}
-                    title="FATHER_DETAIL.HOME"
-                    body={father.phones[1] !== undefined ? father.phones[1].number : ''}
-                    icon={<Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />}
-                    selected={() => {
-                      const value = father.phones[1] !== undefined ? father.phones[1].number : '';
-                      Clipboard.setString(value);
-                      setVisible(true);
-                      setSnackMsg(i18n.t('GENERAL.COPY_CLIPBOARD'));
-                    }}
-                  />
-                )}
-
-                <View style={{ flexDirection: 'row', width: '100%', marginVertical: 10 }}>
-                  <Button
-                    onPress={() => {
-                      handleSaveContact(father);
-                    }}
-                  >
-                    <View
-                      style={{
-                        backgroundColor: 'white',
-                        borderColor: Colors.primaryColor,
-                        borderRadius: 5,
-                        borderWidth: 2,
-                        paddingHorizontal: 10,
-                        // width: '45%'
-                        height: 50,
-                        marginHorizontal: 15,
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <Text
-                        style={{
-                          textAlign: 'center',
-                          fontSize: 12,
-                          fontFamily: 'work-sans-bold',
-                          textTransform: 'uppercase',
-                          color: Colors.primaryColor,
-                        }}
-                      >
-                        {i18n.t('FATHER_DETAIL.SAVE_CONTACT')}
-                      </Text>
-                    </View>
-                  </Button>
-
-                  <SocialIcons
-                    wa={
-                      father.phones.length >= 1 && father.phones[0].whatsApp === true ? father.phones[0].number : false
-                    }
-                    fb={father.facebookUrl}
-                    slack={father.slackUser}
-                    tw={father.twitterUser}
-                    ig={father.instagramUser}
-                    skype={father.skypeUser}
-                    size={24}
-                  />
-                </View>
-
                 <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CURRENT_HOME')}</Text>
                 {father.activeLivingSituation && (
                   <>
