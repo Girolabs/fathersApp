@@ -15,6 +15,7 @@ exports.PT = {
     CREATE_SUCCESS: 'Criação bem sucedida',
     COPY_CLIPBOARD: 'Copiado para a área de transferência',
     IDEAL: 'Explicação do ideal',
+    BACK: 'Voltar',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'Email ou nome de usuário',
