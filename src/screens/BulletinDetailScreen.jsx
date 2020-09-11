@@ -4,7 +4,7 @@ import { WebView } from 'react-native-webview';
 import i18n from 'i18n-js';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import * as Network from 'expo-network';
-import { Snackbar } from 'react-native-paper';
+import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { getBoardPost } from '../api';
@@ -27,9 +27,11 @@ const BulletinDetail = ({ navigation }) => {
       getBoardPost(postId)
         .then((res) => {
           const { content } = res.data.result;
-          const head = '<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style type="text/css"> body {-webkit-user-select:none;-webkit-touch-callout:none; font-family: "Arial"; background-color:#FFFFFF;font-size:16} div { color : black};*{ user-select: none; };</style></head>';
-          const body = `<!DOCTYPE html />${head}<body oncopy="return false" onpaste="return false" oncut="return false"><div style="padding-bottom: 30px;font-weight: bold; text-align: center">`
-            + `</div>${content}</body></html>`;
+          const head =
+            '<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style type="text/css"> body {-webkit-user-select:none;-webkit-touch-callout:none; font-family: "Arial"; background-color:#FFFFFF;font-size:16} div { color : black};*{ user-select: none; };</style></head>';
+          const body =
+            `<!DOCTYPE html />${head}<body oncopy="return false" onpaste="return false" oncut="return false"><div style="padding-bottom: 30px;font-weight: bold; text-align: center">` +
+            `</div>${content}</body></html>`;
 
           const fetchedPost = {
             ...res.data.result,
@@ -63,9 +65,9 @@ const BulletinDetail = ({ navigation }) => {
       ) : (
         <ActivityIndicator size="large" color={Colors.primaryColor} />
       )}
-      <Snackbar visible={visible} onDismiss={() => setVisible(false)} style={styles.snackError}>
+      <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
         {snackMsg}
-      </Snackbar>
+      </SnackBar>
     </View>
   );
 };

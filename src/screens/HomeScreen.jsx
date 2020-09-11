@@ -6,9 +6,9 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import * as Network from 'expo-network';
 import 'moment/min/locales';
-import { Snackbar } from 'react-native-paper';
 import { NavigationEvents } from 'react-navigation';
 import * as ScreenOrientation from 'expo-screen-orientation';
+import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { I18nContext } from '../context/I18nProvider';
@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     backgroundColor: Colors.surfaceColorPrimary,
+    marginBottom: 15,
   },
   screenLoading: {
     flex: 1,
@@ -153,9 +154,9 @@ const HomeScreen = () => {
                 <ActivityIndicator size="large" color={Colors.primaryColor} />
               </View>
             )}
-            <Snackbar visible={visible} onDismiss={() => setVisible(false)} style={styles.snackError}>
+            <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
               {snackMsg}
-            </Snackbar>
+            </SnackBar>
           </View>
         );
       }}

@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  View, Platform, Text, StyleSheet, TouchableOpacity, TouchableNativeFeedback,
-} from 'react-native';
+import { View, Platform, Text, StyleSheet, TouchableOpacity, TouchableNativeFeedback } from 'react-native';
 import { Flag } from 'react-native-svg-flagkit';
 import countries from 'i18n-iso-countries';
 import moment from 'moment';
@@ -34,6 +32,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surfaceColorPrimary,
     paddingVertical: 15,
   },
+  listItemLeft: {
+    maxWidth: '85%',
+  },
   listItemTitle: {
     fontFamily: 'work-sans-semibold',
     fontSize: 18,
@@ -62,9 +63,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const DefaultItem = ({
-  title, body, selected, img, country_code, lang, date, id, show, icon, badge,
-}) => {
+const DefaultItem = ({ title, body, selected, img, country_code, lang, date, id, show, icon, badge }) => {
   let TouchableComp = TouchableOpacity;
   let formatedDate;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -81,11 +80,9 @@ const DefaultItem = ({
       {show && (
         <>
           {(body || date) && (
-            <TouchableComp
-              onPress={() => (selected ? selected() : null)}
-            >
+            <TouchableComp onPress={() => (selected ? selected() : null)}>
               <View style={styles.container}>
-                <View>
+                <View style={styles.listItemLeft}>
                   {title && <Text style={styles.listItemTitle}>{i18n.t(title)}</Text>}
                   <View style={styles.listItemBodyContainer}>
                     <View>

@@ -22,7 +22,7 @@ import { I18nContext } from '../context/I18nProvider';
 import { Flag } from 'react-native-svg-flagkit';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { getTerritories, getFiliations, getGenerations, getCourses, getPersons } from '../api';
+import { getTerritories, getFiliations, getGenerations, getCourses } from '../api';
 import { NavigationEvents } from 'react-navigation';
 
 const styles = StyleSheet.create({

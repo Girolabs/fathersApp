@@ -19,7 +19,7 @@ import moment from 'moment';
 import 'moment/min/locales';
 import { I18nContext } from '../context/I18nProvider';
 import * as Network from 'expo-network';
-import { Snackbar } from 'react-native-paper';
+import SnackBar from '../components/SnackBar';
 import { getTerritory } from '../api';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
@@ -343,13 +343,9 @@ class DelegationDetailScreen extends Component {
                 <ActivityIndicator size="large" color={Colors.primaryColor} />
               )}
 
-              <Snackbar
-                visible={this.state.visible}
-                onDismiss={() => this.setState({ visible: false })}
-                style={styles.snackError}
-              >
+              <SnackBar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })}>
                 {this.state.snackMsg}
-              </Snackbar>
+              </SnackBar>
             </SafeAreaView>
           );
         }}
