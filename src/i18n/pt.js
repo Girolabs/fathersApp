@@ -144,6 +144,7 @@ exports.PT = {
   SETTINGS: {
     LOGOUT: 'Sair',
     VERSION: 'Versão',
+    LANGUAGE: 'Língua',
   },
   SEARCH: {
     DECEASED: 'Mostrar falecidos',

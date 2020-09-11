@@ -14,7 +14,7 @@ import 'moment/min/locales';
 import i18n from 'i18n-js';
 import { AsyncStorage } from 'react-native';
 import * as Network from 'expo-network';
-
+import { lng } from '../constants/Fields';
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -165,13 +165,6 @@ class AuthScreen extends Component {
   };
 
   render() {
-    const lng = [
-      { name: 'ES', value: 'es' },
-      { name: 'EN', value: 'en' },
-      { name: 'PT', value: 'pt' },
-      { name: 'DE', value: 'de' },
-    ];
-
     const { visible, snackMsg } = this.state;
 
     return (

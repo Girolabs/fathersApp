@@ -144,6 +144,7 @@ exports.ES = {
   SETTINGS: {
     LOGOUT: 'Cerrar sesión',
     VERSION: 'Versión',
+    LANGUAGE: 'Idioma',
   },
   SEARCH: {
     DECEASED: 'Mostrar fallecidos',

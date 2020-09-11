@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
 const Select = ({ value, elements, valueChange, style }) => {
   const [result, setResult] = React.useState(elements[0].name);
   const [options, setOption] = React.useState([]);
+
   React.useEffect(() => {
     const options = [];
     elements.forEach((e) => {
