@@ -144,6 +144,7 @@ exports.DE = {
   SETTINGS: {
     LOGOUT: 'Ausloggen',
     VERSION: 'Ausführung',
+    LANGUAGE: 'Sprache',
   },
   SEARCH: {
     DECEASED: 'Verstorbene anzeigen',
