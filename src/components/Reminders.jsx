@@ -154,9 +154,9 @@ const Reminders = ({ navigation, reminders }) => {
                       >
                         <View>
                           <Text style={styles.innerText}>{item.entityName}</Text>
-                          {item.importantText && (
+                          {item.yearsAgoText && (
                             <Text style={styles.reminderHeader}>
-                              {`${item.importantText.replace('%s', item.yearsAgo)} `}
+                              {`${item.yearsAgoText.replace('%s', item.yearsAgo)} `}
                             </Text>
                           )}
                         </View>
