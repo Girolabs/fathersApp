@@ -9,12 +9,12 @@ import Input from '../components/Input';
 import Button from '../components/Button';
 import Select from '../components/Select';
 import axios from '../../axios-instance';
-import { Snackbar } from 'react-native-paper';
+import SnackBar from '../components/SnackBar';
 import 'moment/min/locales';
 import i18n from 'i18n-js';
 import { AsyncStorage } from 'react-native';
 import * as Network from 'expo-network';
-
+import { lng } from '../constants/Fields';
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -165,13 +165,6 @@ class AuthScreen extends Component {
   };
 
   render() {
-    const lng = [
-      { name: 'ES', value: 'es' },
-      { name: 'EN', value: 'en' },
-      { name: 'PT', value: 'pt' },
-      { name: 'DE', value: 'de' },
-    ];
-
     const { visible, snackMsg } = this.state;
 
     return (
@@ -288,9 +281,9 @@ class AuthScreen extends Component {
                         </Card>
                       )}
 
-                      <Snackbar visible={visible} onDismiss={this._onDismissSnackBar} style={styles.snackSuccess}>
+                      <SnackBar visible={visible} onDismiss={this._onDismissSnackBar}>
                         {snackMsg}
-                      </Snackbar>
+                      </SnackBar>
                     </View>
                   </KeyboardAvoidingView>
                 );

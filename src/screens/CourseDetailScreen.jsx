@@ -20,7 +20,7 @@ import 'moment/min/locales';
 import { Flag } from 'react-native-svg-flagkit';
 
 import * as Network from 'expo-network';
-import { Snackbar } from 'react-native-paper';
+import SnackBar from '../components/SnackBar';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { getCourse, getPerson } from '../api';
@@ -553,13 +553,9 @@ class CourseDetailScreen extends Component {
               ) : (
                 <ActivityIndicator size="large" color={Colors.primaryColor} />
               )}
-              <Snackbar
-                visible={this.state.visible}
-                onDismiss={() => this.setState({ visible: false })}
-                style={styles.snackError}
-              >
+              <SnackBar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })}>
                 {this.state.snackMsg}
-              </Snackbar>
+              </SnackBar>
             </SafeAreaView>
           );
         }}

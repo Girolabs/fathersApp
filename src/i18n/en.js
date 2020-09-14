@@ -15,6 +15,7 @@ exports.EN = {
     CREATE_SUCCESS: 'Create was successful',
     COPY_CLIPBOARD: 'Copied to clipboard',
     IDEAL: 'Ideal statement',
+    BACK: 'Back',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'Email or username',
@@ -144,6 +145,7 @@ exports.EN = {
   SETTINGS: {
     LOGOUT: 'Logout',
     VERSION: 'Version',
+    LANGUAGE: 'Language',
   },
   SEARCH: {
     DECEASED: 'Show deceased',
@@ -175,6 +177,6 @@ exports.EN = {
     ADD: 'Add new',
     FILIATION: ' Filiation',
     HOUSE: 'House',
-    ERROR_END_DATE: 'End date can\'t be before start date',
+    ERROR_END_DATE: "End date can't be before start date",
   },
 };

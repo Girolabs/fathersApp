@@ -6,8 +6,8 @@ import 'moment/min/locales';
 import countries from 'i18n-iso-countries';
 import * as Contacts from 'expo-contacts';
 import * as Network from 'expo-network';
-import { Snackbar } from 'react-native-paper';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import SnackBar from '../components/SnackBar';
 import { I18nContext } from '../context/I18nProvider';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     color: Colors.onSurfaceColorPrimary,
   },
   snackError: {
-    backgroundColor: Colors.secondaryColor,
+    backgroundColor: Colors.onSurfaceColorPrimary,
   },
 });
 
@@ -377,9 +377,9 @@ const PatreDetailScreen = ({ navigation }) => {
             ) : (
               <ActivityIndicator size="large" color={Colors.primaryColor} />
             )}
-            <Snackbar visible={visible} onDismiss={() => setVisible(false)} style={styles.snackError}>
+            <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
               {snackMsg}
-            </Snackbar>
+            </SnackBar>
           </View>
         );
       }}

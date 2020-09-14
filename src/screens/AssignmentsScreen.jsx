@@ -22,7 +22,7 @@ import { I18nContext } from '../context/I18nProvider';
 import { Flag } from 'react-native-svg-flagkit';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { getTerritories, getFiliations, getGenerations, getCourses, getPersons } from '../api';
+import { getTerritories, getFiliations, getGenerations, getCourses } from '../api';
 import { NavigationEvents } from 'react-navigation';
 
 const styles = StyleSheet.create({
@@ -242,35 +242,37 @@ class AssignmentsScreen extends Component {
             });
 
           list = (
-            <SectionList
-              sections={filtered}
-              renderItem={({ item }) => (
-                <ListItem
-                  name={item.person.fullName}
-                  photo={item.person.photo}
-                  roleTitle={item.roleTitle}
-                  startDate={item.startDate}
-                  endDate={item.endDate}
-                  selectPerson={() =>
-                    item.person
-                      ? this.props.navigation.navigate('PatreDetail', {
-                          fatherId: item.person.personId,
-                        })
-                      : null
-                  }
-                />
-              )}
-              renderSectionHeader={({ section: { name, territoryId } }) => (
-                <Header
-                  selectHeader={() => {
-                    this.props.navigation.navigate('DelegationDetail', {
-                      delegationId: territoryId,
-                    });
-                  }}
-                  name={name}
-                />
-              )}
-            />
+            <ScrollView>
+              <SectionList
+                sections={filtered}
+                renderItem={({ item }) => (
+                  <ListItem
+                    name={item.person.fullName}
+                    photo={item.person.photo}
+                    roleTitle={item.roleTitle}
+                    startDate={item.startDate}
+                    endDate={item.endDate}
+                    selectPerson={() =>
+                      item.person
+                        ? this.props.navigation.navigate('PatreDetail', {
+                            fatherId: item.person.personId,
+                          })
+                        : null
+                    }
+                  />
+                )}
+                renderSectionHeader={({ section: { name, territoryId } }) => (
+                  <Header
+                    selectHeader={() => {
+                      this.props.navigation.navigate('DelegationDetail', {
+                        delegationId: territoryId,
+                      });
+                    }}
+                    name={name}
+                  />
+                )}
+              />
+            </ScrollView>
           );
           console.log('filtered', filtered);
           break;
@@ -376,35 +378,37 @@ class AssignmentsScreen extends Component {
         case 2:
           filtered = territories;
           list = (
-            <SectionList
-              sections={filtered}
-              renderItem={({ item }) => (
-                <ListItem
-                  name={item.person.fullName}
-                  photo={item.person.photo}
-                  roleTitle={item.roleTitle}
-                  startDate={item.startDate}
-                  endDate={item.endDate}
-                  selectPerson={() =>
-                    item.person
-                      ? this.props.navigation.navigate('PatreDetail', {
-                          fatherId: item.person.personId,
-                        })
-                      : null
-                  }
-                />
-              )}
-              renderSectionHeader={({ section: { name, territoryId } }) => (
-                <Header
-                  selectHeader={() => {
-                    this.props.navigation.navigate('DelegationDetail', {
-                      delegationId: territoryId,
-                    });
-                  }}
-                  name={name}
-                />
-              )}
-            />
+            <ScrollView>
+              <SectionList
+                sections={filtered}
+                renderItem={({ item }) => (
+                  <ListItem
+                    name={item.person.fullName}
+                    photo={item.person.photo}
+                    roleTitle={item.roleTitle}
+                    startDate={item.startDate}
+                    endDate={item.endDate}
+                    selectPerson={() =>
+                      item.person
+                        ? this.props.navigation.navigate('PatreDetail', {
+                            fatherId: item.person.personId,
+                          })
+                        : null
+                    }
+                  />
+                )}
+                renderSectionHeader={({ section: { name, territoryId } }) => (
+                  <Header
+                    selectHeader={() => {
+                      this.props.navigation.navigate('DelegationDetail', {
+                        delegationId: territoryId,
+                      });
+                    }}
+                    name={name}
+                  />
+                )}
+              />
+            </ScrollView>
           );
           break;
         case 3:

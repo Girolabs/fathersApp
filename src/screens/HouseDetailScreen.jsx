@@ -21,7 +21,7 @@ import 'moment/min/locales';
 import { ScrollView } from 'react-native-gesture-handler';
 import countries from 'i18n-iso-countries';
 import * as Network from 'expo-network';
-import { Snackbar } from 'react-native-paper';
+import SnackBar from '../components/SnackBar';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { getHouse, getFiliation } from '../api';
@@ -300,13 +300,9 @@ class HouseDetailScreen extends Component {
                 ) : (
                   <ActivityIndicator size="large" color={Colors.primaryColor} />
                 )}
-                <Snackbar
-                  visible={this.state.visible}
-                  onDismiss={() => this.setState({ visible: false })}
-                  style={styles.snackError}
-                >
+                <SnackBar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })}>
                   {this.state.snackMsg}
-                </Snackbar>
+                </SnackBar>
               </ScrollView>
             </SafeAreaView>
           );

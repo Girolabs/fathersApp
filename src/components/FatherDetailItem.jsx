@@ -33,6 +33,9 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surfaceColorPrimary,
     paddingVertical: 15,
   },
+  listItemLeft: {
+    maxWidth: '85%',
+  },
   listItemTitle: {
     fontFamily: 'work-sans-semibold',
     fontSize: 18,
@@ -76,7 +79,7 @@ const DefaultItem = ({ title, titleNoI18n, body, selected, img, country_code, la
           {(body || date) && (
             <Buttom onPress={() => (selected ? selected() : null)}>
               <View style={styles.container}>
-                <View>
+                <View style={styles.listItemLeft}>
                   {title && <Text style={styles.listItemTitle}>{i18n.t(title)}</Text>}
                   {titleNoI18n && <Text style={styles.listItemTitle}>{titleNoI18n}</Text>}
                   <View style={styles.listItemBodyContainer}>
