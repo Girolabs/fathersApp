@@ -1,5 +1,14 @@
 import React, { Component, Fragment } from 'react';
-import { View, Text, StyleSheet, TextInput, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+  Platform,
+} from 'react-native';
 import Colors from '../constants/Colors';
 import { Ionicons } from 'expo-vector-icons';
 import { Checkbox } from 'react-native-paper';
@@ -9,6 +18,8 @@ import { Snackbar } from 'react-native-paper';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { getPersons } from '../api';
+import { CheckBox } from 'react-native-elements';
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
   screen: {
@@ -47,6 +58,16 @@ const styles = StyleSheet.create({
   },
   snackError: {
     backgroundColor: Colors.secondaryColor,
+  },
+  CheckBoxContainer: {
+    backgroundColor: 'transparent',
+    borderColor: 'transparent',
+    padding: 0,
+    marginLeft: 0,
+    marginRight: 0,
+  },
+  textCheckBox: {
+    fontFamily: 'work-sans',
   },
   option: {},
 });
@@ -139,23 +160,52 @@ class SearchScreen extends Component {
               <Ionicons name="ios-search" size={25} colors={Colors.primaryColor} />
             </View>
             <View style={styles.filtersContainer}>
-              <View style={styles.optionContainer}>
-                <Checkbox
-                  color={Colors.primaryColor}
-                  status={this.state.showDeceased ? 'checked' : 'unchecked'}
-                  onPress={() => this.setState({ showDeceased: !this.state.showDeceased })}
-                />
-                <Text style={styles.option}>{i18n.t('SEARCH.DECEASED')} </Text>
-              </View>
+              {Platform.OS === 'ios' ? (
+                <Fragment>
+                  <CheckBox
+                    textStyle={styles.textCheckBox}
+                    containerStyle={styles.CheckBoxContainer}
+                    title={i18n.t('SEARCH.DECEASED')}
+                    checked={this.state.showDeceased}
+                    onPress={() => this.setState({ showDeceased: !this.state.showDeceased })}
+                    checkedColor="black"
+                    uncheckedIcon
+                    checkedIcon={<AntDesign name="checksquareo" size={24} color="black" />}
+                    uncheckedIcon={<MaterialCommunityIcons name="checkbox-blank-outline" size={24} color="black" />}
+                  />
+                  <CheckBox
+                    textStyle={styles.textCheckBox}
+                    containerStyle={styles.CheckBoxContainer}
+                    title={i18n.t('SEARCH.EX')}
+                    checked={this.state.showExMember}
+                    onPress={() => this.setState({ showExMember: !this.state.showExMember })}
+                    checkedColor="black"
+                    uncheckedIcon
+                    checkedIcon={<AntDesign name="checksquareo" size={24} color="black" />}
+                    uncheckedIcon={<MaterialCommunityIcons name="checkbox-blank-outline" size={24} color="black" />}
+                  />
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <View style={styles.optionContainer}>
+                    <Checkbox
+                      color={Colors.primaryColor}
+                      status={this.state.showDeceased ? 'checked' : 'unchecked'}
+                      onPress={() => this.setState({ showDeceased: !this.state.showDeceased })}
+                    />
+                    <Text style={styles.option}>{i18n.t('SEARCH.DECEASED')} </Text>
+                  </View>
 
-              <View style={styles.optionContainer}>
-                <Checkbox
-                  color={Colors.primaryColor}
-                  status={this.state.showExMember ? 'checked' : 'unchecked'}
-                  onPress={() => this.setState({ showExMember: !this.state.showExMember })}
-                />
-                <Text style={styles.option}>{i18n.t('SEARCH.EX')} </Text>
-              </View>
+                  <View style={styles.optionContainer}>
+                    <Checkbox
+                      color={Colors.primaryColor}
+                      status={this.state.showExMember ? 'checked' : 'unchecked'}
+                      onPress={() => this.setState({ showExMember: !this.state.showExMember })}
+                    />
+                    <Text style={styles.option}>{i18n.t('SEARCH.EX')} </Text>
+                  </View>
+                </Fragment>
+              )}
             </View>
 
             <FlatList
