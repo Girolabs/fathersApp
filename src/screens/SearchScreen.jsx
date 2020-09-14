@@ -5,7 +5,7 @@ import { Ionicons } from 'expo-vector-icons';
 import { Checkbox } from 'react-native-paper';
 import i18n from 'i18n-js';
 import * as Network from 'expo-network';
-import { Snackbar } from 'react-native-paper';
+import SnackBar from '../components/SnackBar';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { getPersons } from '../api';
@@ -181,13 +181,9 @@ class SearchScreen extends Component {
         ) : (
           <ActivityIndicator size="large" color={Colors.primaryColor} />
         )}
-        <Snackbar
-          visible={this.state.visible}
-          onDismiss={() => this.setState({ visible: false })}
-          style={styles.snackError}
-        >
+        <SnackBar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })}>
           {this.state.snackMsg}
-        </Snackbar>
+        </SnackBar>
       </View>
     );
   }

@@ -13,8 +13,8 @@ import * as Network from 'expo-network';
 import i18n from 'i18n-js';
 import { Ionicons } from 'expo-vector-icons';
 import * as Linking from 'expo-linking';
-import { Snackbar } from 'react-native-paper';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { getBoard } from '../api';
@@ -121,9 +121,9 @@ const BulletinScreen = ({ navigation }) => {
       ) : (
         <ActivityIndicator size="large" color={Colors.primaryColor} />
       )}
-      <Snackbar visible={visible} onDismiss={() => setVisible(false)} style={styles.snackError}>
+      <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
         {snackMsg}
-      </Snackbar>
+      </SnackBar>
     </View>
   );
 };

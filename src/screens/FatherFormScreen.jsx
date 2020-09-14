@@ -19,7 +19,7 @@ import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import * as Network from 'expo-network';
 import i18n from 'i18n-js';
-import { Snackbar } from 'react-native-paper';
+import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import { NavigationEvents } from 'react-navigation';
 import { getPerson, getPersonByUser, getInterfaceData, updateFatherForm } from '../api';
@@ -344,13 +344,9 @@ class FatherFormScreen extends Component {
                       </Fragment>
                     )}
                   </Formik>
-                  <Snackbar
-                    visible={this.state.visible}
-                    onDismiss={() => this.setState({ visible: false })}
-                    style={styles.snackError}
-                  >
+                  <SnackBar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })}>
                     {this.state.snackMsg}
-                  </Snackbar>
+                  </SnackBar>
                 </ScrollView>
               </KeyboardAvoidingView>
             </>

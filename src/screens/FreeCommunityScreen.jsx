@@ -16,7 +16,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Colors from '../constants/Colors';
 import i18n from 'i18n-js';
 import * as Network from 'expo-network';
-import { Snackbar } from 'react-native-paper';
+import SnackBar from '../components/SnackBar';
 import { getCourses } from '../api';
 
 const styles = StyleSheet.create({
@@ -128,13 +128,9 @@ class FreeCommunityScreen extends Component {
         ) : (
           <ActivityIndicator size="large" color={Colors.primaryColor} />
         )}
-        <Snackbar
-          visible={this.state.visible}
-          onDismiss={() => this.setState({ visible: false })}
-          style={styles.snackError}
-        >
+        <SnackBar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })}>
           {this.state.snackMsg}
-        </Snackbar>
+        </SnackBar>
       </SafeAreaView>
     );
   }
