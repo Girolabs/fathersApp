@@ -151,6 +151,7 @@ CommunityScreen.navigationOptions = (navigationData) => ({
       />
     </HeaderButtons>
   ),
+  headerBackTitle: i18n.t('GENERAL.BACK'),
 });
 
 const Filiation = ({ title, flag, onSelect, key }) => {
