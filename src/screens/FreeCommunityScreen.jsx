@@ -149,6 +149,7 @@ FreeCommunityScreen.navigationOptions = (navigationData) => ({
       />
     </HeaderButtons>
   ),
+  headerBackTitle: i18n.t('GENERAL.BACK'),
 });
 
 const Course = ({ title, onSelect }) => {
