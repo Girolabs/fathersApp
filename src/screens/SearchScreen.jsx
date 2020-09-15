@@ -168,10 +168,15 @@ class SearchScreen extends Component {
                     title={i18n.t('SEARCH.DECEASED')}
                     checked={this.state.showDeceased}
                     onPress={() => this.setState({ showDeceased: !this.state.showDeceased })}
-                    checkedColor="black"
-                    uncheckedIcon
-                    checkedIcon={<AntDesign name="checksquareo" size={24} color="black" />}
-                    uncheckedIcon={<MaterialCommunityIcons name="checkbox-blank-outline" size={24} color="black" />}
+                    checkedColor={Colors.onSurfaceColorPrimary}
+                    checkedIcon={<AntDesign name="checksquareo" size={24} color={Colors.onSurfaceColorPrimary} />}
+                    uncheckedIcon={
+                      <MaterialCommunityIcons
+                        name="checkbox-blank-outline"
+                        size={24}
+                        color={Colors.onSurfaceColorPrimary}
+                      />
+                    }
                   />
                   <CheckBox
                     textStyle={styles.textCheckBox}
@@ -179,10 +184,15 @@ class SearchScreen extends Component {
                     title={i18n.t('SEARCH.EX')}
                     checked={this.state.showExMember}
                     onPress={() => this.setState({ showExMember: !this.state.showExMember })}
-                    checkedColor="black"
-                    uncheckedIcon
-                    checkedIcon={<AntDesign name="checksquareo" size={24} color="black" />}
-                    uncheckedIcon={<MaterialCommunityIcons name="checkbox-blank-outline" size={24} color="black" />}
+                    checkedColor={Colors.onSurfaceColorPrimary}
+                    checkedIcon={<AntDesign name="checksquareo" size={24} color={Colors.onSurfaceColorPrimary} />}
+                    uncheckedIcon={
+                      <MaterialCommunityIcons
+                        name="checkbox-blank-outline"
+                        size={24}
+                        color={Colors.onSurfaceColorPrimary}
+                      />
+                    }
                   />
                 </Fragment>
               ) : (
