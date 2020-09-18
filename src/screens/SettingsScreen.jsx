@@ -124,6 +124,7 @@ SettingsScreen.navigationOptions = (navigationData) => ({
       />
     </HeaderButtons>
   ),
+  headerBackTitle: i18n.t('GENERAL.BACK'),
 });
 
 export default SettingsScreen;

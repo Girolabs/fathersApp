@@ -32,6 +32,7 @@ import {
   updateLivingSituation,
 } from '../api';
 import Button from '../components/Button';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const styles = StyleSheet.create({
   title: {
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
   screen: {
     backgroundColor: Colors.surfaceColorPrimary,
     height: '100%',
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
     justifyContent: 'center',
   },
   label: {
@@ -294,7 +295,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
           console.log('onDidFocus');
         }}
       />
-      <KeyboardAvoidingView style={{ flex: 1 }}>
+      <KeyboardAvoidingView style={{ flex: 1, paddingHorizontal: 15 }}>
         <SafeAreaView style={styles.screen}>
           {!loading ? (
             <ScrollView>
@@ -342,30 +343,52 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                 {({ handleChange, values, handleSubmit, errors, setFieldValue }) => (
                   <>
                     <View>
-                      {openStartDate && (
-                        <DateTimePicker
-                          value={startDate ? new Date(startDate) : new Date()}
+                      {
+                        // <DateTimePicker
+                        //   value={startDate ? new Date(startDate) : new Date()}
+                        //   mode="date"
+                        //   display="default"
+                        //   onChange={(event, selectedDate) => {
+                        //     setOpenStartDate(false);
+                        //     const dateFormated = formatDate(selectedDate);
+                        //     setFieldValue('startDate', dateFormated);
+                        //   }}
+                        // />
+                        <DateTimePickerModal
+                          isVisible={openStartDate}
                           mode="date"
-                          display="default"
-                          onChange={(event, selectedDate) => {
+                          onConfirm={(date) => {
                             setOpenStartDate(false);
-                            const dateFormated = formatDate(selectedDate);
+                            const dateFormated = formatDate(date);
                             setFieldValue('startDate', dateFormated);
                           }}
+                          onCancel={() => setOpenStartDate(false)}
                         />
-                      )}
-                      {openEndDate && (
-                        <DateTimePicker
-                          value={endDate ? new Date(endDate) : new Date()}
+                      }
+                      {
+                        //   openEndDate && (
+                        //     <DateTimePicker
+                        //       value={endDate ? new Date(endDate) : new Date()}
+                        //       mode="date"
+                        //       display="default"
+                        //       onChange={(event, selectedDate) => {
+                        //         setOpenEndDate(false);
+                        //         const dateFormated = formatDate(selectedDate);
+                        //         setFieldValue('endDate', dateFormated);
+                        //       }}
+                        //     />
+                        //   )
+                        <DateTimePickerModal
+                          isVisible={openEndDate}
                           mode="date"
-                          display="default"
-                          onChange={(event, selectedDate) => {
+                          onConfirm={(date) => {
                             setOpenEndDate(false);
-                            const dateFormated = formatDate(selectedDate);
+                            const dateFormated = formatDate(date);
                             setFieldValue('endDate', dateFormated);
                           }}
+                          onCancel={() => setOpenEndDate(false)}
                         />
-                      )}
+                      }
                       {isCreate && (
                         <>
                           <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>
@@ -537,6 +560,7 @@ LivingSituationsFormScreen.navigationOptions = (navigationData) => ({
       />
     </HeaderButtons>
   ),
+  headerBackTitle: i18n.t('GENERAL.BACK'),
 });
 
 export default LivingSituationsFormScreen;

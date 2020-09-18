@@ -205,6 +205,7 @@ FiliationDetailScreen.navigationOptions = (navigationData) => ({
       />
     </HeaderButtons>
   ),
+  headerBackTitle: i18n.t('GENERAL.BACK'),
 });
 
 const styles = StyleSheet.create({
