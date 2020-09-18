@@ -18,7 +18,8 @@ import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { getBoard } from '../api';
-
+import { NavigationEvents } from 'react-navigation';
+import * as ScreenOrientation from 'expo-screen-orientation';
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -88,6 +89,14 @@ const BulletinScreen = ({ navigation }) => {
 
   useEffect(() => {
     loadPosts();
+    async function orientationBack() {
+      //Restric orientation PORTRAIT_UP screen
+      console.log(' Destructor Bulletin');
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+    }
+    return () => {
+      orientationBack();
+    };
   }, []);
 
   let TouchableComp = TouchableOpacity;
@@ -97,6 +106,19 @@ const BulletinScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
+      <NavigationEvents
+        onDidFocus={async () => {
+          //Unlock landscape orentation
+          console.log(' Focus on bulletin ');
+          await ScreenOrientation.unlockAsync();
+        }}
+        onWillBlur={async (pay) => {
+          console.log(' on Blur bulletin Screen ');
+          //if the next navigation is not BulletinDetail, restric orientation to PortraitUp mode
+          if (pay.state.routeName !== 'BulletinDetail')
+            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+        }}
+      />
       {!loading ? (
         <FlatList
           data={posts}

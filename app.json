@@ -1,44 +1,33 @@
 {
-    "expo": {
-        "name": "Schoenstatt Fathers",
-        "slug": "schoenstatt-fathers",
-        "platforms": [
-            "ios",
-            "android",
-            "web"
-        ],
-        "version": "0.8",
-        "orientation": "portrait",
-        "icon": "./assets/img/icon_app.png",
-        "primaryColor": "#fffff",
-        "splash": {
-            "backgroundColor": "#000258"
-        },
-        "updates": {
-            "fallbackToCacheTimeout": 0
-        },
-        "assetBundlePatterns": [
-            "**/*"
-        ],
-        "android": {
-            "package": "com.schoenstatt.fathersApp",
-            "versionCode": 8,
-            "permissions": [
-                "CAMERA",
-                "WRITE_EXTERNAL_STORAGE",
-                "WRITE_CONTACTS",
-                "CAMERA_ROLL",
-                "READ_CONTACTS"
-            ]
-        },
-        "ios": {
-            "bundleIdentifier": "com.schoenstatt.fathersApp",
-            "buildNumber": "6",
-            "supportsTablet": false
-        },
-        "extra": {
-            "secretKey": ""
-        },
-        "description": ""
-    }
+  "expo": {
+    "name": "Schoenstatt Fathers",
+    "slug": "schoenstatt-fathers",
+    "platforms": ["ios", "android", "web"],
+    "version": "0.8",
+    "orientation": "portrait",
+    "icon": "./assets/img/icon_app.png",
+    "primaryColor": "#fffff",
+    "splash": {
+      "backgroundColor": "#000258"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "android": {
+      "package": "com.schoenstatt.fathersApp",
+      "versionCode": 8,
+      "permissions": ["CAMERA", "WRITE_EXTERNAL_STORAGE", "WRITE_CONTACTS", "CAMERA_ROLL", "READ_CONTACTS"]
+    },
+    "ios": {
+      "bundleIdentifier": "com.schoenstatt.fathersApp",
+      "buildNumber": "6",
+      "supportsTablet": false,
+      "requireFullScreen": true
+    },
+    "extra": {
+      "secretKey": ""
+    },
+    "description": ""
+  }
 }

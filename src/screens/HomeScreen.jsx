@@ -127,7 +127,7 @@ const HomeScreen = () => {
   };
 
   useEffect(() => {
-    ScreenOrientation.unlockAsync();
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
     loadReminders();
   }, []);
 
