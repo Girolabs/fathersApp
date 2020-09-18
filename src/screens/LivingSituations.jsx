@@ -295,7 +295,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
           console.log('onDidFocus');
         }}
       />
-      <KeyboardAvoidingView style={{ flex: 1, paddingHorizontal: 10 }}>
+      <KeyboardAvoidingView style={{ flex: 1, paddingHorizontal: 15 }}>
         <SafeAreaView style={styles.screen}>
           {!loading ? (
             <ScrollView>
