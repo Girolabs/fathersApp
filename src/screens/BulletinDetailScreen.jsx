@@ -8,7 +8,8 @@ import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { getBoardPost } from '../api';
-
+import { NavigationEvents } from 'react-navigation';
+import * as ScreenOrientation from 'expo-screen-orientation';
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -60,6 +61,17 @@ const BulletinDetail = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
+      <NavigationEvents
+        onDidFocus={async () => {
+          //Unlock landscape orentation
+          console.log(' Focus on Bulletin Detail ');
+          await ScreenOrientation.unlockAsync();
+        }}
+        onDidBlur={async () => {
+          //Restric orentiation to Portrait Up
+          await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+        }}
+      />
       {!loading ? (
         <WebView originWhitelist={['*']} source={{ html: post.content }} />
       ) : (
