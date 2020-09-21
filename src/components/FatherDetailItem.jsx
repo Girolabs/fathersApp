@@ -1,12 +1,11 @@
 import React from 'react';
-import {
-  View, Platform, Text, StyleSheet, TouchableOpacity, TouchableNativeFeedback,
-} from 'react-native';
+import { View, Platform, Text, StyleSheet, TouchableOpacity, TouchableNativeFeedback } from 'react-native';
 import { Flag } from 'react-native-svg-flagkit';
 import countries from 'i18n-iso-countries';
 import moment from 'moment';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
+import Buttom from './Button';
 
 const styles = StyleSheet.create({
   screen: {
@@ -33,6 +32,9 @@ const styles = StyleSheet.create({
   listItem: {
     backgroundColor: Colors.surfaceColorPrimary,
     paddingVertical: 15,
+  },
+  listItemLeft: {
+    maxWidth: '85%',
   },
   listItemTitle: {
     fontFamily: 'work-sans-semibold',
@@ -62,14 +64,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const DefaultItem = ({
-  title, body, selected, img, country_code, lang, date, id, show, icon, badge,
-}) => {
-  let TouchableComp = TouchableOpacity;
+const DefaultItem = ({ title, titleNoI18n, body, selected, img, country_code, lang, date, id, show, icon, badge }) => {
   let formatedDate;
-  if (Platform.OS === 'android' && Platform.Version >= 21) {
-    TouchableComp = TouchableNativeFeedback;
-  }
 
   if (date) {
     moment.locale(lang);
@@ -81,12 +77,11 @@ const DefaultItem = ({
       {show && (
         <>
           {(body || date) && (
-            <TouchableComp
-              onPress={() => (selected ? selected() : null)}
-            >
+            <Buttom onPress={() => (selected ? selected() : null)}>
               <View style={styles.container}>
-                <View>
+                <View style={styles.listItemLeft}>
                   {title && <Text style={styles.listItemTitle}>{i18n.t(title)}</Text>}
+                  {titleNoI18n && <Text style={styles.listItemTitle}>{titleNoI18n}</Text>}
                   <View style={styles.listItemBodyContainer}>
                     <View>
                       {country_code && <Text style={styles.listItemBody}>{countries.getName(country_code, lang)}</Text>}
@@ -108,7 +103,7 @@ const DefaultItem = ({
                 )}
                 {icon && icon}
               </View>
-            </TouchableComp>
+            </Buttom>
           )}
         </>
       )}

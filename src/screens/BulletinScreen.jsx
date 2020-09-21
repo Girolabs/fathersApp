@@ -13,12 +13,13 @@ import * as Network from 'expo-network';
 import i18n from 'i18n-js';
 import { Ionicons } from 'expo-vector-icons';
 import * as Linking from 'expo-linking';
-import { Snackbar } from 'react-native-paper';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { getBoard } from '../api';
-
+import { NavigationEvents } from 'react-navigation';
+import * as ScreenOrientation from 'expo-screen-orientation';
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -88,6 +89,14 @@ const BulletinScreen = ({ navigation }) => {
 
   useEffect(() => {
     loadPosts();
+    async function orientationBack() {
+      //Restric orientation PORTRAIT_UP screen
+      console.log(' Destructor Bulletin');
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+    }
+    return () => {
+      orientationBack();
+    };
   }, []);
 
   let TouchableComp = TouchableOpacity;
@@ -97,6 +106,19 @@ const BulletinScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
+      <NavigationEvents
+        onDidFocus={async () => {
+          //Unlock landscape orentation
+          console.log(' Focus on bulletin ');
+          await ScreenOrientation.unlockAsync();
+        }}
+        onWillBlur={async (pay) => {
+          console.log(' on Blur bulletin Screen ');
+          //if the next navigation is not BulletinDetail, restric orientation to PortraitUp mode
+          if (pay.state.routeName !== 'BulletinDetail')
+            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+        }}
+      />
       {!loading ? (
         <FlatList
           data={posts}
@@ -121,9 +143,9 @@ const BulletinScreen = ({ navigation }) => {
       ) : (
         <ActivityIndicator size="large" color={Colors.primaryColor} />
       )}
-      <Snackbar visible={visible} onDismiss={() => setVisible(false)} style={styles.snackError}>
+      <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
         {snackMsg}
-      </Snackbar>
+      </SnackBar>
     </View>
   );
 };
@@ -141,6 +163,7 @@ BulletinScreen.navigationOptions = (navigationData) => ({
       />
     </HeaderButtons>
   ),
+  headerBackTitle: i18n.t('GENERAL.BACK'),
 });
 
 export default BulletinScreen;

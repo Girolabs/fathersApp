@@ -17,7 +17,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Colors from '../constants/Colors';
 import i18n from 'i18n-js';
 import * as Network from 'expo-network';
-import { Snackbar } from 'react-native-paper';
+import SnackBar from '../components/SnackBar';
 import { getTerritories } from '../api';
 
 const styles = StyleSheet.create({
@@ -130,13 +130,9 @@ class CommunityScreen extends Component {
             <ActivityIndicator size="large" color={Colors.primaryColor} />
           </View>
         )}
-        <Snackbar
-          visible={this.state.visible}
-          onDismiss={() => this.setState({ visible: false })}
-          style={styles.snackError}
-        >
+        <SnackBar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })}>
           {this.state.snackMsg}
-        </Snackbar>
+        </SnackBar>
       </SafeAreaView>
     );
   }
@@ -155,6 +151,7 @@ CommunityScreen.navigationOptions = (navigationData) => ({
       />
     </HeaderButtons>
   ),
+  headerBackTitle: i18n.t('GENERAL.BACK'),
 });
 
 const Filiation = ({ title, flag, onSelect, key }) => {

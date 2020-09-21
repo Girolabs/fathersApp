@@ -15,6 +15,7 @@ exports.ES = {
     CREATE_SUCCESS: 'La creación fue exitosa',
     COPY_CLIPBOARD: 'Copiado al portapapeles',
     IDEAL: 'Explicación del ideal de curso',
+    BACK: 'Volver',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'Correo o usuario',
@@ -144,6 +145,7 @@ exports.ES = {
   SETTINGS: {
     LOGOUT: 'Cerrar sesión',
     VERSION: 'Versión',
+    LANGUAGE: 'Idioma',
   },
   SEARCH: {
     DECEASED: 'Mostrar fallecidos',

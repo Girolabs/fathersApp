@@ -15,6 +15,7 @@ exports.DE = {
     CREATE_SUCCESS: 'Erfolgreich erstellt',
     COPY_CLIPBOARD: 'In die Zwischenablage kopiert',
     IDEAL: 'Beschreibung des Ideals',
+    BACK: 'Zurück',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'E-Mail Adresse oder Benutzername',
@@ -144,6 +145,7 @@ exports.DE = {
   SETTINGS: {
     LOGOUT: 'Ausloggen',
     VERSION: 'Ausführung',
+    LANGUAGE: 'Sprache',
   },
   SEARCH: {
     DECEASED: 'Verstorbene anzeigen',

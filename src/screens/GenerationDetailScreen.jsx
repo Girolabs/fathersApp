@@ -16,7 +16,7 @@ import Colors from '../constants/Colors';
 import moment from 'moment';
 import 'moment/min/locales';
 import * as Network from 'expo-network';
-import { Snackbar } from 'react-native-paper';
+import SnackBar from '../components/SnackBar';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { getGeneration } from '../api';
@@ -181,13 +181,9 @@ class GenerationDetailScreen extends Component {
               ) : (
                 <ActivityIndicator size="large" color={Colors.primaryColor} />
               )}
-              <Snackbar
-                visible={this.state.visible}
-                onDismiss={() => this.setState({ visible: false })}
-                style={styles.snackError}
-              >
+              <SnackBar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })}>
                 {this.state.snackMsg}
-              </Snackbar>
+              </SnackBar>
             </SafeAreaView>
           );
         }}
@@ -209,6 +205,7 @@ GenerationDetailScreen.navigationOptions = (navigationData) => ({
       />
     </HeaderButtons>
   ),
+  headerBackTitle: i18n.t('GENERAL.BACK'),
 });
 
 export default GenerationDetailScreen;
