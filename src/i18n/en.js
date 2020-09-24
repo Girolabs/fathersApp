@@ -163,6 +163,12 @@ exports.EN = {
     SAVE: 'Save',
     EDIT: 'Edit Profile',
     EDIT_LIVING: 'Edit living situation',
+    NAME: 'Name',
+    LASTNAME: 'Lastname',
+    FIRSTNAME: 'Firstname',
+    LESSTHAN50: 'Less than 50 character',
+    LESSTHAN70: 'Less than 70 character',
+    FRIENDLY_FIRSTNAME: 'Friendly FirstName',
   },
   LIVING_SITUATION: {
     EDIT_TITLE: 'Edit active living situation',

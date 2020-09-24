@@ -169,6 +169,27 @@ class FatherFormScreen extends Component {
     let validationSchema;
     if (regex) {
       validationSchema = Yup.object().shape({
+        ...(updateFields.indexOf('firstName') != -1
+          ? { firstName: Yup.string().required().max(50, i18n.t('FATHER_EDIT.LESSTHAN50')) }
+          : null),
+        ...(updateFields.indexOf('lastName') != -1
+          ? { lastName: Yup.string().required().max(50, i18n.t('FATHER_EDIT.LESSTHAN50')) }
+          : null),
+        ...(updateFields.indexOf('friendlyFirstName') != -1
+          ? { friendlyFirstName: Yup.string().required().max(50, i18n.t('FATHER_EDIT.LESSTHAN50')) }
+          : null),
+        ...(updateFields.indexOf('friendlyFirstName') != -1
+          ? { friendlyFirstName: Yup.string().required().max(70, i18n.t('FATHER_EDIT.LESSTHAN70')) }
+          : null),
+        ...(updateFields.indexOf('friendlyLastName') != -1
+          ? { friendlyLastName: Yup.string().required().max(50, i18n.t('FATHER_EDIT.LESSTHAN50')) }
+          : null),
+        ...(updateFields.indexOf('email') != -1
+          ? { email: Yup.string().email().max(70, i18n.t('FATHER_EDIT.LESSTHAN70')) }
+          : null),
+        ...(updateFields.indexOf('email2') != -1
+          ? { email2: Yup.string().email().max(70, i18n.t('FATHER_EDIT.LESSTHAN70')) }
+          : null),
         ...(updateFields.indexOf('slackUser') != -1
           ? { slackUser: Yup.string().matches(regex.slackUserRegex).nullable() }
           : null),
@@ -220,6 +241,24 @@ class FatherFormScreen extends Component {
                   <Formik
                     initialValues={{
                       // email: (!!father.email && father.email) || null,
+                      ...(updateFields.indexOf('firstName') != -1 && !!father.firstName
+                        ? { firstName: father.firstName }
+                        : { firstName: null }),
+                      ...(updateFields.indexOf('lastName') != -1 && !!father.lastName
+                        ? { lastName: father.lastName }
+                        : { lastName: null }),
+                      ...(updateFields.indexOf('friendlyFirstName') != -1 && !!father.friendlyFirstName
+                        ? { friendlyFirstName: father.friendlyFirstName }
+                        : { friendlyFirstName: null }),
+                      ...(updateFields.indexOf('friendlyLastName') != -1 && !!father.friendlyLastName
+                        ? { friendlyLastName: father.friendlyFirstName }
+                        : { friendlyLastName: null }),
+                      ...(updateFields.indexOf('email') != -1 && !!father.email
+                        ? { email: father.email }
+                        : { email: null }),
+                      ...(updateFields.indexOf('email2') != -1 && !!father.email2
+                        ? { email2: father.email2 }
+                        : { email2: null }),
                       ...(updateFields.indexOf('slackUser') != -1 && !!father.slackUser
                         ? { slackUser: father.slackUser }
                         : { slackUser: null }),
@@ -263,6 +302,27 @@ class FatherFormScreen extends Component {
                   >
                     {({ handleChange, handleBlur, handleSubmit, values }) => (
                       <Fragment>
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('firstName') != -1}
+                          label={i18n.t('FATHER_EDIT.FIRSTNAME')}
+                          name="firstName"
+                          mode="outlined"
+                          selectionColor={Colors.primaryColor}
+                        />
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('lastName') != -1}
+                          label={i18n.t('FATHER_EDIT.LASTNAME')}
+                          name="lastName"
+                          mode="outlined"
+                          selectionColor={Colors.primaryColor}
+                        />
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('friendlyFirstName') != -1}
+                          label={i18n.t('FATHER_EDIT.FRIENDLY_FIRSTNAME')}
+                          name="friendlyFirstName"
+                          mode="outlined"
+                          selectionColor={Colors.primaryColor}
+                        />
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('instagramUser') != -1}
                           label={i18n.t('FATHER_EDIT.INSTAGRAM')}
