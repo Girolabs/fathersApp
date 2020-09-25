@@ -24,6 +24,8 @@ import Colors from '../constants/Colors';
 import { NavigationEvents } from 'react-navigation';
 import { getPerson, getPersonByUser, getInterfaceData, updateFatherForm } from '../api';
 import Button from '../components/Button';
+import SwitchWithFormik from '../components/SwitchWithFormik';
+import Select from '../components/Select';
 
 const widthBtn = Platform.OS == 'android' ? '45%' : '100%';
 const styles = StyleSheet.create({
@@ -59,6 +61,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  select: {
+    borderRadius: 5,
+    paddingHorizontal: 10,
+  },
+  selectAndroid: {
+    width: '100%',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+  },
 });
 
 class FatherFormScreen extends Component {
@@ -77,36 +88,20 @@ class FatherFormScreen extends Component {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected == true) {
       getInterfaceData().then((response) => {
-        console.log('father', father);
-        const viewPermRole = father.viewPermissionForCurrentUser;
         const updatePermRole = father.updatePermissionForCurrentUser;
-
-        const personFieldsByViewPermission = response.data.result.personFieldsByViewPermission;
         const personFieldsByUpdatePermission = response.data.result.personFieldsByUpdatePermission;
-
         let updateRoles = Object.keys(personFieldsByUpdatePermission);
-
         const arrayOfRoles = updateRoles.map((rol) => {
           return personFieldsByUpdatePermission[rol];
         });
-        console.log(arrayOfRoles);
-
         const accumulatedFieldsPerRol = arrayOfRoles.map((rol, index) => {
-          /* let accu = [];
-          arrayOfRoles.forEach((el,i) => {
-            if (i<=index) {
-              accu = accu.concat(el);
-            }
-          }) */
           return rol;
         });
-
         let index = updateRoles.indexOf(updatePermRole);
         const updateFields = accumulatedFieldsPerRol[index];
 
-        this.setState({ updateFields });
+        response.personPhoneLabels;
 
-        console.log('final', accumulatedFieldsPerRol);
         const regex = {
           facebookUrlRegex:
             '(?:(?:http|https)://)?(?:www.)?facebook.com/(?:(?:w)*#!/)?(?:pages/)?(?:[?w-]*/)?(?:profile.php?id=(?=d.*))?([w-]*)?',
@@ -127,7 +122,7 @@ class FatherFormScreen extends Component {
             response.data.result.phoneNumberRegex.substring(1, response.data.result.phoneNumberRegex.length - 1),
           //twitterUserRegex:response.data.result.twitterUserRegex && response.data.result.twitterUserRegex.substring(1,response.data.result.twitterUserRegex.length -1),
         };
-        this.setState({ fieldsPerm: accumulatedFieldsPerRol, regex: regex, loading: false });
+        this.setState({ fieldsPerm: accumulatedFieldsPerRol, regex: regex, loading: false, updateFields });
       });
     }
   };
@@ -185,10 +180,13 @@ class FatherFormScreen extends Component {
           ? { friendlyLastName: Yup.string().required().max(50, i18n.t('FATHER_EDIT.LESSTHAN50')) }
           : null),
         ...(updateFields.indexOf('email') != -1
-          ? { email: Yup.string().email().max(70, i18n.t('FATHER_EDIT.LESSTHAN70')) }
+          ? { email: Yup.string().email().max(70, i18n.t('FATHER_EDIT.LESSTHAN70')).nullable() }
           : null),
         ...(updateFields.indexOf('email2') != -1
-          ? { email2: Yup.string().email().max(70, i18n.t('FATHER_EDIT.LESSTHAN70')) }
+          ? { email2: Yup.string().email().max(70, i18n.t('FATHER_EDIT.LESSTHAN70')).nullable() }
+          : null),
+        ...(updateFields.indexOf('cellphone') != -1
+          ? { email2: Yup.string().matches(regex.phoneNumberRegex).nullable() }
           : null),
         ...(updateFields.indexOf('slackUser') != -1
           ? { slackUser: Yup.string().matches(regex.slackUserRegex).nullable() }
@@ -206,6 +204,9 @@ class FatherFormScreen extends Component {
           ? { phone1: Yup.string().matches(regex.phoneNumberRegex).nullable() }
           : null),
         ...(updateFields.indexOf('phone2') != -1
+          ? { phone2: Yup.string().matches(regex.phoneNumberRegex).nullable() }
+          : null),
+        ...(updateFields.indexOf('phone3') != -1
           ? { phone2: Yup.string().matches(regex.phoneNumberRegex).nullable() }
           : null),
         ...(updateFields.indexOf('facebookUrl') != -1
@@ -240,7 +241,6 @@ class FatherFormScreen extends Component {
                   </View>
                   <Formik
                     initialValues={{
-                      // email: (!!father.email && father.email) || null,
                       ...(updateFields.indexOf('firstName') != -1 && !!father.firstName
                         ? { firstName: father.firstName }
                         : { firstName: null }),
@@ -251,7 +251,7 @@ class FatherFormScreen extends Component {
                         ? { friendlyFirstName: father.friendlyFirstName }
                         : { friendlyFirstName: null }),
                       ...(updateFields.indexOf('friendlyLastName') != -1 && !!father.friendlyLastName
-                        ? { friendlyLastName: father.friendlyFirstName }
+                        ? { friendlyLastName: father.friendlyLastName }
                         : { friendlyLastName: null }),
                       ...(updateFields.indexOf('email') != -1 && !!father.email
                         ? { email: father.email }
@@ -259,6 +259,12 @@ class FatherFormScreen extends Component {
                       ...(updateFields.indexOf('email2') != -1 && !!father.email2
                         ? { email2: father.email2 }
                         : { email2: null }),
+                      ...(updateFields.indexOf('cellPhone') != -1 && !!father.cellphone
+                        ? { cellphone: father.cellphone }
+                        : { cellphone: null }),
+                      ...(updateFields.indexOf('cellPhoneHasWhatsApp') != -1 && !!father.cellPhoneHasWhatsApp
+                        ? { cellPhoneHasWhatsApp: !!father.cellPhoneHasWhatsApp }
+                        : { cellPhoneHasWhatsApp: null }),
                       ...(updateFields.indexOf('slackUser') != -1 && !!father.slackUser
                         ? { slackUser: father.slackUser }
                         : { slackUser: null }),
@@ -274,12 +280,15 @@ class FatherFormScreen extends Component {
                       ...(updateFields.indexOf('skypeUser') != -1 && !!father.skypeUser
                         ? { skypeUser: father.skypeUser }
                         : { skypeUser: null }),
-                      ...(updateFields.indexOf('phone1') != -1 && !!father.phones.length > 0
-                        ? { phone1: father.phones[0].number }
+                      ...(updateFields.indexOf('phone1') != -1 && !!father.phone1
+                        ? { phone1: father.phone1 }
                         : { phone1: null }),
-                      ...(updateFields.indexOf('phone2') != -1 && !!father.phones.length & !!father.phones[1]
-                        ? { phone2: father.phones[1].number }
+                      ...(updateFields.indexOf('phone2') != -1 && !!father.phone2
+                        ? { phone2: father.phone2 }
                         : { phone2: null }),
+                      ...(updateFields.indexOf('phone3') != -1 && !!father.phone2
+                        ? { phone3: father.phone3 }
+                        : { phone3: null }),
                     }}
                     onSubmit={(values) => {
                       this.setState({ loading: true });
@@ -324,6 +333,96 @@ class FatherFormScreen extends Component {
                           selectionColor={Colors.primaryColor}
                         />
                         <InputWithFormik
+                          hasPerm={updateFields.indexOf('friendlyLastName') != -1}
+                          label={i18n.t('FATHER_EDIT.FRIENDLY_LASTNAME')}
+                          name="friendlyLastName"
+                          mode="outlined"
+                          selectionColor={Colors.primaryColor}
+                        />
+
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('friendlyLastName') != -1}
+                          label={i18n.t('FATHER_EDIT.FRIENDLY_LASTNAME')}
+                          name="friendlyLastName"
+                          mode="outlined"
+                          selectionColor={Colors.primaryColor}
+                        />
+
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('email') != -1}
+                          label={i18n.t('FATHER_EDIT.EMAIL')}
+                          name="email"
+                          mode="outlined"
+                          selectionColor={Colors.primaryColor}
+                        />
+
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('email2') != -1}
+                          label={i18n.t('FATHER_EDIT.EMAIL2')}
+                          name="email2"
+                          mode="outlined"
+                          selectionColor={Colors.primaryColor}
+                        />
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('cellPhone') != -1}
+                          label={i18n.t('FATHER_EDIT.CELLPHONE')}
+                          name="cellphone"
+                          mode="outlined"
+                          keyboardType="numeric-pad"
+                          selectionColor={Colors.primaryColor}
+                        />
+                        <SwitchWithFormik
+                          hasPerm={updateFields.indexOf('cellPhoneHasWhatsApp') != -1}
+                          label={i18n.t('FATHER_EDIT.CELLPHONE_HAS_WA')}
+                          name="cellPhoneHasWhatsApp"
+                          color={Colors.primaryColor}
+                        />
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('phone1') != -1}
+                          label={i18n.t('FATHER_EDIT.PHONE1')}
+                          placeholder={'+1 262 473-4782'}
+                          name="phone1"
+                          mode="outlined"
+                          keyboardType="number-pad"
+                          selectionColor={Colors.primaryColor}
+                        />
+                        {/* {Platform.OS === 'android' ? (
+                          <Select
+                            style={styles.selectAndroid}
+                            elements={lng}
+                            value={value.lang}
+                            valueChange={value.changeLang}
+                          />
+                        ) : (
+                          <View style={styles.pickerContainer}>
+                            <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
+                            <Select
+                              style={styles.select}
+                              elements={lng}
+                              value={value.lang}
+                              valueChange={value.changeLang}
+                            />
+                          </View>
+                        )} */}
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('phone2') != -1}
+                          label={i18n.t('FATHER_EDIT.PHONE2')}
+                          placeholder={'+1 262 473-4782'}
+                          name="phone2"
+                          mode="outlined"
+                          keyboardType="number-pad"
+                          underlineColor={Colors.primaryColor}
+                        />
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('phone3') != -1}
+                          label={i18n.t('FATHER_EDIT.PHONE3')}
+                          placeholder={'+1 262 473-4782'}
+                          name="phone3"
+                          mode="outlined"
+                          keyboardType="number-pad"
+                          underlineColor={Colors.primaryColor}
+                        />
+                        <InputWithFormik
                           hasPerm={updateFields.indexOf('instagramUser') != -1}
                           label={i18n.t('FATHER_EDIT.INSTAGRAM')}
                           name="instagramUser"
@@ -360,22 +459,7 @@ class FatherFormScreen extends Component {
                           selectionColor={Colors.primaryColor}
                           onPress
                         />
-                        <InputWithFormik
-                          hasPerm={updateFields.indexOf('phone1') != -1}
-                          label={i18n.t('FATHER_EDIT.PHONE1')}
-                          placeholder={'+1 262 473-4782'}
-                          name="phone1"
-                          mode="outlined"
-                          selectionColor={Colors.primaryColor}
-                        />
-                        <InputWithFormik
-                          hasPerm={updateFields.indexOf('phone2') != -1}
-                          label={i18n.t('FATHER_EDIT.PHONE2')}
-                          placeholder={'+1 262 473-4782'}
-                          name="phone2"
-                          mode="outlined"
-                          underlineColor={Colors.primaryColor}
-                        />
+
                         {/* //<InputWithFormik hasPerm={updateFields.indexOf('') != -1} label={i18n.t("FATHER_EDIT.FACEBOOK")} placeholder = {'https://www.facebook.com/'} name = "facebookUrl" /> */}
                         <View style={styles.buttonsContainer}>
                           {/*   { updateFields.indexOf('living')} */}
