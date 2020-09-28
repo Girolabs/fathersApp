@@ -27,6 +27,7 @@ import { NavigationEvents } from 'react-navigation';
 
 const styles = StyleSheet.create({
   screen: {
+    marginTop: 20,
     backgroundColor: Colors.surfaceColorPrimary,
     flex: 1,
     justifyContent: 'center',
