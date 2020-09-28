@@ -28,6 +28,8 @@ const InputWithFormik = ({
   onFocus,
   onBlur,
   keyboardType,
+  numberOfLines,
+  multiline,
   ...props
 }) => {
   const value = _.get(formik.values, name) || '';
@@ -45,6 +47,8 @@ const InputWithFormik = ({
     mode,
     underlineColor,
     keyboardType,
+    numberOfLines,
+    multiline,
   };
   const textFieldProps = { ...innerProps };
 

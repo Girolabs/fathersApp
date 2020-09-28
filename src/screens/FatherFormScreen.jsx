@@ -26,6 +26,9 @@ import { getPerson, getPersonByUser, getInterfaceData, updateFatherForm } from '
 import Button from '../components/Button';
 import SwitchWithFormik from '../components/SwitchWithFormik';
 import Select from '../components/Select';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import * as _ from 'lodash';
+import { Ionicons } from 'expo-vector-icons';
 
 const widthBtn = Platform.OS == 'android' ? '45%' : '100%';
 const styles = StyleSheet.create({
@@ -70,6 +73,38 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
   },
+  selectContainer: {
+    backgroundColor: Colors.surfaceColorSecondary,
+    borderRadius: 5,
+    marginVertical: 5,
+    padding: 0,
+  },
+  label: {
+    fontFamily: 'work-sans-semibold',
+    fontSize: 18,
+    color: Colors.primaryColor,
+    paddingHorizontal: 15,
+  },
+  inputContainer: {
+    width: '93%',
+    height: 50,
+    backgroundColor: Colors.surfaceColorSecondary,
+    borderColor: Colors.onSurfaceColorPrimary,
+    borderWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    marginLeft: 15,
+    borderRadius: 5,
+  },
+  inputDatePicker: {
+    width: '80%',
+  },
+  dateContainer: {
+    paddingVertical: 15,
+  },
 });
 
 class FatherFormScreen extends Component {
@@ -78,6 +113,13 @@ class FatherFormScreen extends Component {
     loading: true,
     updateFields: [],
     keyboardAV: '',
+    phoneLabels: [],
+    personEmergencyOptions: [],
+    openDeaconDate: false,
+    openPriestDate: false,
+    openBishopDate: false,
+    openDeathDate: false,
+    openLeaveDate: false,
   };
   async componentDidMount() {
     this.setState({ loading: true });
@@ -89,6 +131,8 @@ class FatherFormScreen extends Component {
     if (status.isConnected == true) {
       getInterfaceData().then((response) => {
         const updatePermRole = father.updatePermissionForCurrentUser;
+        const personPhoneLabels = response.data.result.personPhoneLabels;
+        const personEmergencyOptions = response.data.result.personEmergencyContactRelationOptions;
         const personFieldsByUpdatePermission = response.data.result.personFieldsByUpdatePermission;
         let updateRoles = Object.keys(personFieldsByUpdatePermission);
         const arrayOfRoles = updateRoles.map((rol) => {
@@ -99,8 +143,15 @@ class FatherFormScreen extends Component {
         });
         let index = updateRoles.indexOf(updatePermRole);
         const updateFields = accumulatedFieldsPerRol[index];
+        let arrayOfPhonesLabels = [];
+        Object.keys(personPhoneLabels).map((key) => {
+          arrayOfPhonesLabels.push({ name: personPhoneLabels[key], value: personPhoneLabels[key] });
+        });
 
-        response.personPhoneLabels;
+        let arrayOfPersonEmergencyOptions = [];
+        Object.keys(personEmergencyOptions).map((key) => {
+          arrayOfPersonEmergencyOptions.push({ name: personEmergencyOptions[key], value: personEmergencyOptions[key] });
+        });
 
         const regex = {
           facebookUrlRegex:
@@ -122,7 +173,14 @@ class FatherFormScreen extends Component {
             response.data.result.phoneNumberRegex.substring(1, response.data.result.phoneNumberRegex.length - 1),
           //twitterUserRegex:response.data.result.twitterUserRegex && response.data.result.twitterUserRegex.substring(1,response.data.result.twitterUserRegex.length -1),
         };
-        this.setState({ fieldsPerm: accumulatedFieldsPerRol, regex: regex, loading: false, updateFields });
+        this.setState({
+          fieldsPerm: accumulatedFieldsPerRol,
+          regex: regex,
+          loading: false,
+          updateFields,
+          phoneLabels: arrayOfPhonesLabels,
+          personEmergencyOptions: arrayOfPersonEmergencyOptions,
+        });
       });
     }
   };
@@ -151,6 +209,21 @@ class FatherFormScreen extends Component {
     } else {
       this.setState({ loading: false, visible: true, snackMsg: i18n.t('GENERAL.NO_INTERNET') });
     }
+  };
+
+  formatDate = (selectedDate) => {
+    const newDate = new Date();
+    newDate.setTime(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60 * 1000);
+    selectedDate = newDate;
+    const year = selectedDate.getUTCFullYear();
+    const month =
+      selectedDate.getUTCMonth() + 1 < 10 ? `0${selectedDate.getUTCMonth() + 1}` : selectedDate.getUTCMonth() + 1;
+    const day = selectedDate.getUTCDate();
+    const dateString = `${year}-${month}-${day}`;
+
+    console.log(selectedDate);
+    console.log(dateString);
+    return dateString;
   };
 
   render() {
@@ -211,6 +284,9 @@ class FatherFormScreen extends Component {
           : null),
         ...(updateFields.indexOf('facebookUrl') != -1
           ? { facebookUrl: Yup.string().matches(regex.facebookUrlRegex).nullable() }
+          : null),
+        ...(updateFields.indexOf('contactNotes') != -1
+          ? { contactNotes: Yup.string().max(2000, i18n.t('FATHER_EDIT.LESSTHAN2000')).nullable() }
           : null),
       });
     }
@@ -283,12 +359,39 @@ class FatherFormScreen extends Component {
                       ...(updateFields.indexOf('phone1') != -1 && !!father.phone1
                         ? { phone1: father.phone1 }
                         : { phone1: null }),
+                      ...(updateFields.indexOf('phone1Label') != -1 && !!father.phone1Label
+                        ? { phone1Label: father.phone1Label }
+                        : { phone1Label: null }),
                       ...(updateFields.indexOf('phone2') != -1 && !!father.phone2
                         ? { phone2: father.phone2 }
                         : { phone2: null }),
+                      ...(updateFields.indexOf('phone2Label') != -1 && !!father.phone2Label
+                        ? { phone2Label: father.phone2Label }
+                        : { phone2Label: null }),
                       ...(updateFields.indexOf('phone3') != -1 && !!father.phone2
                         ? { phone3: father.phone3 }
                         : { phone3: null }),
+                      ...(updateFields.indexOf('phone3Label') != -1 && !!father.phone3Label
+                        ? { phone3Label: father.phone3Label }
+                        : { phone3Label: null }),
+                      ...(updateFields.indexOf('contactNotes') != -1 && !!father.contactNotes
+                        ? { contactNotes: father.contactNotes }
+                        : { contactNotes: null }),
+                      ...(updateFields.indexOf('deaconDate') != -1 && !!father.deaconDate
+                        ? { deaconDate: father.deaconDate.split('T')[0] }
+                        : { deaconDate: null }),
+                      ...(updateFields.indexOf('priestDate') != -1 && !!father.priestDate
+                        ? { priestDate: father.priestDate.split('T')[0] }
+                        : { priestDate: null }),
+                      ...(updateFields.indexOf('bishopDate') != -1 && !!father.bishopDate
+                        ? { bishopDate: father.bishopDate.split('T')[0] }
+                        : { bishopDate: null }),
+                      ...(updateFields.indexOf('deathDate') != -1 && !!father.deathDate
+                        ? { deathDate: father.deathDate.split('T')[0] }
+                        : { deathDate: null }),
+                      ...(updateFields.indexOf('leaveDate') != -1 && !!father.leaveDate
+                        ? { leaveDate: father.leaveDate.split('T')[0] }
+                        : { leaveDate: null }),
                     }}
                     onSubmit={(values) => {
                       this.setState({ loading: true });
@@ -309,7 +412,7 @@ class FatherFormScreen extends Component {
                     enableReinitialize
                     validationSchema={validationSchema}
                   >
-                    {({ handleChange, handleBlur, handleSubmit, values }) => (
+                    {({ handleChange, handleBlur, handleSubmit, values, setFieldValue }) => (
                       <Fragment>
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('firstName') != -1}
@@ -386,24 +489,25 @@ class FatherFormScreen extends Component {
                           keyboardType="number-pad"
                           selectionColor={Colors.primaryColor}
                         />
-                        {/* {Platform.OS === 'android' ? (
+                        {Platform.OS === 'android' ? (
                           <Select
-                            style={styles.selectAndroid}
-                            elements={lng}
-                            value={value.lang}
-                            valueChange={value.changeLang}
+                            containerStyle={styles.selectAndroid}
+                            elements={this.state.phoneLabels}
+                            value={values.phone1Label}
+                            itemColor={Colors.primaryColor}
+                            valueChange={(value) => setFieldValue('phone1Label', value)}
                           />
                         ) : (
                           <View style={styles.pickerContainer}>
                             <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
                             <Select
-                              style={styles.select}
-                              elements={lng}
-                              value={value.lang}
+                              containerStyle={styles.select}
+                              elements={this.state.phoneLabels}
+                              value={values.phone1Label}
                               valueChange={value.changeLang}
                             />
                           </View>
-                        )} */}
+                        )}
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('phone2') != -1}
                           label={i18n.t('FATHER_EDIT.PHONE2')}
@@ -413,6 +517,25 @@ class FatherFormScreen extends Component {
                           keyboardType="number-pad"
                           underlineColor={Colors.primaryColor}
                         />
+                        {Platform.OS === 'android' ? (
+                          <Select
+                            containerStyle={styles.selectAndroid}
+                            elements={this.state.phoneLabels}
+                            value={values.phone2Label}
+                            itemColor={Colors.primaryColor}
+                            valueChange={(value) => setFieldValue('phone2Label', value)}
+                          />
+                        ) : (
+                          <View style={styles.pickerContainer}>
+                            <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
+                            <Select
+                              containerStyle={styles.select}
+                              elements={this.state.phoneLabels}
+                              value={values.phone1Label}
+                              valueChange={value.changeLang}
+                            />
+                          </View>
+                        )}
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('phone3') != -1}
                           label={i18n.t('FATHER_EDIT.PHONE3')}
@@ -421,6 +544,162 @@ class FatherFormScreen extends Component {
                           mode="outlined"
                           keyboardType="number-pad"
                           underlineColor={Colors.primaryColor}
+                        />
+                        {Platform.OS === 'android' ? (
+                          <Select
+                            containerStyle={styles.selectAndroid}
+                            elements={this.state.phoneLabels}
+                            value={values.phone3Label}
+                            itemColor={Colors.primaryColor}
+                            valueChange={(value) => setFieldValue('phone3Label', value)}
+                          />
+                        ) : (
+                          <View style={styles.pickerContainer}>
+                            <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
+                            <Select
+                              containerStyle={styles.select}
+                              elements={this.state.phoneLabels}
+                              value={values.phone1Label}
+                              valueChange={value.changeLang}
+                            />
+                          </View>
+                        )}
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('contactNotes') != -1}
+                          label={i18n.t('FATHER_EDIT.CONTACT_NOTES')}
+                          name={'contactNotes'}
+                          numberOfLines={5}
+                          mode="outlined"
+                          multiline={true}
+                          selectionColor={Colors.primaryColor}
+                        />
+                        <View style={styles.dateContainer}>
+                          <Text style={styles.label}>{i18n.t('FATHER_EDIT.DEACON_DATE')}</Text>
+                          <Button onPress={() => this.setState({ openDeaconDate: true })}>
+                            <View style={styles.inputContainer}>
+                              <Text style={styles.inputDatePicker}>{_.get(values, 'deaconDate') || ''}</Text>
+                              <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+                            </View>
+                          </Button>
+                        </View>
+                        <DateTimePickerModal
+                          isVisible={this.state.openDeaconDate}
+                          mode="date"
+                          onConfirm={(date) => {
+                            this.setState({
+                              openDeaconDate: false,
+                            });
+                            const dateFormated = this.formatDate(date);
+                            setFieldValue('deaconDate', dateFormated);
+                          }}
+                          onCancel={() =>
+                            this.setState({
+                              openDeaconDate: false,
+                            })
+                          }
+                        />
+                        <View style={styles.dateContainer}>
+                          <Text style={styles.label}>{i18n.t('FATHER_EDIT.PRIEST_DATE')}</Text>
+                          <Button onPress={() => this.setState({ openPriestDate: true })}>
+                            <View style={styles.inputContainer}>
+                              <Text style={styles.inputDatePicker}>{_.get(values, 'priestDate') || ''}</Text>
+                              <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+                            </View>
+                          </Button>
+                        </View>
+                        <DateTimePickerModal
+                          isVisible={this.state.openPriestDate}
+                          mode="date"
+                          onConfirm={(date) => {
+                            this.setState({
+                              openPriestDate: false,
+                            });
+                            const dateFormated = this.formatDate(date);
+                            setFieldValue('priestDate', dateFormated);
+                          }}
+                          onCancel={() =>
+                            this.setState({
+                              openPriestDate: false,
+                            })
+                          }
+                        />
+
+                        <View style={styles.dateContainer}>
+                          <Text style={styles.label}>{i18n.t('FATHER_EDIT.BISHOP_DATE')}</Text>
+                          <Button onPress={() => this.setState({ openBishopDate: true })}>
+                            <View style={styles.inputContainer}>
+                              <Text style={styles.inputDatePicker}>{_.get(values, 'bishopDate') || ''}</Text>
+                              <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+                            </View>
+                          </Button>
+                        </View>
+                        <DateTimePickerModal
+                          isVisible={this.state.openBishopDate}
+                          mode="date"
+                          onConfirm={(date) => {
+                            this.setState({
+                              openBishopDate: false,
+                            });
+                            const dateFormated = this.formatDate(date);
+                            setFieldValue('bishopDate', dateFormated);
+                          }}
+                          onCancel={() =>
+                            this.setState({
+                              openBishopDate: false,
+                            })
+                          }
+                        />
+
+                        <View style={styles.dateContainer}>
+                          <Text style={styles.label}>{i18n.t('FATHER_EDIT.DEATH_DATE')}</Text>
+                          <Button onPress={() => this.setState({ openDeathDate: true })}>
+                            <View style={styles.inputContainer}>
+                              <Text style={styles.inputDatePicker}>{_.get(values, 'deathDate') || ''}</Text>
+                              <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+                            </View>
+                          </Button>
+                        </View>
+                        <DateTimePickerModal
+                          isVisible={this.state.openDeathDate}
+                          mode="date"
+                          onConfirm={(date) => {
+                            this.setState({
+                              openDeathDate: false,
+                            });
+                            const dateFormated = this.formatDate(date);
+                            setFieldValue('deathDate', dateFormated);
+                          }}
+                          onCancel={() =>
+                            this.setState({
+                              openDeathDate: false,
+                            })
+                          }
+                        />
+
+                        <View style={styles.dateContainer}>
+                          <Text style={styles.label}>{i18n.t('FATHER_EDIT.LEAVE_DATE')}</Text>
+                          <Button onPress={() => this.setState({ openLeaveDate: true })}>
+                            <View style={styles.inputContainer}>
+                              <Text style={styles.inputDatePicker}>{_.get(values, 'leaveDate') || ''}</Text>
+                              <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+                            </View>
+                          </Button>
+                        </View>
+                        <DateTimePickerModal
+                          isVisible={this.state.openLeaveDate}
+                          mode="date"
+                          onConfirm={(date) => {
+                            this.setState({
+                              openLeaveDate: false,
+                            });
+                            const dateFormated = this.formatDate(date);
+                            setFieldValue('leaveDate', dateFormated);
+                          }}
+                          onCancel={() =>
+                            this.setState({
+                              openLeaveDate: false,
+                            })
+                          }
                         />
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('instagramUser') != -1}
@@ -459,6 +738,34 @@ class FatherFormScreen extends Component {
                           selectionColor={Colors.primaryColor}
                           onPress
                         />
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('emergencyContact1Name') != -1}
+                          label={i18n.t('FATHER_EDIT.EMERGENCY_CONTACT_NAME_1')}
+                          placeholder={'+1 262 473-4782'}
+                          name="phone2"
+                          mode="outlined"
+                          keyboardType="number-pad"
+                          underlineColor={Colors.primaryColor}
+                        />
+                        {Platform.OS === 'android' ? (
+                          <Select
+                            containerStyle={styles.selectAndroid}
+                            elements={this.state.a}
+                            value={values.phone2Label}
+                            itemColor={Colors.primaryColor}
+                            valueChange={(value) => setFieldValue('phone2Label', value)}
+                          />
+                        ) : (
+                          <View style={styles.pickerContainer}>
+                            <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
+                            <Select
+                              containerStyle={styles.select}
+                              elements={this.state.phoneLabels}
+                              value={values.phone1Label}
+                              valueChange={value.changeLang}
+                            />
+                          </View>
+                        )}
 
                         {/* //<InputWithFormik hasPerm={updateFields.indexOf('') != -1} label={i18n.t("FATHER_EDIT.FACEBOOK")} placeholder = {'https://www.facebook.com/'} name = "facebookUrl" /> */}
                         <View style={styles.buttonsContainer}>
