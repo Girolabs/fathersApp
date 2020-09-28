@@ -12,7 +12,7 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import { Formik, Form } from 'formik';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 import InputWithFormik from '../components/InputWithFormik';
 import HeaderButton from '../components/HeaderButton';
@@ -22,7 +22,7 @@ import i18n from 'i18n-js';
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import { NavigationEvents } from 'react-navigation';
-import { getPerson, getPersonByUser, getInterfaceData, updateFatherForm } from '../api';
+import { getPerson, getInterfaceData, updateFatherForm } from '../api';
 import Button from '../components/Button';
 import SwitchWithFormik from '../components/SwitchWithFormik';
 import Select from '../components/Select';
@@ -171,7 +171,6 @@ class FatherFormScreen extends Component {
           phoneNumberRegex:
             response.data.result.phoneNumberRegex &&
             response.data.result.phoneNumberRegex.substring(1, response.data.result.phoneNumberRegex.length - 1),
-          //twitterUserRegex:response.data.result.twitterUserRegex && response.data.result.twitterUserRegex.substring(1,response.data.result.twitterUserRegex.length -1),
         };
         this.setState({
           fieldsPerm: accumulatedFieldsPerRol,
@@ -220,18 +219,10 @@ class FatherFormScreen extends Component {
       selectedDate.getUTCMonth() + 1 < 10 ? `0${selectedDate.getUTCMonth() + 1}` : selectedDate.getUTCMonth() + 1;
     const day = selectedDate.getUTCDate();
     const dateString = `${year}-${month}-${day}`;
-
-    console.log(selectedDate);
-    console.log(dateString);
     return dateString;
   };
 
   render() {
-    let TouchableComp = TouchableOpacity;
-    if (Platform.OS === 'android' && Platform.Version >= 21) {
-      TouchableComp = TouchableNativeFeedback;
-    }
-
     const { father, updateFields, regex, loading } = this.state;
     let { navigation } = this.props;
     let validationSchema;
@@ -288,6 +279,18 @@ class FatherFormScreen extends Component {
         ...(updateFields.indexOf('contactNotes') != -1
           ? { contactNotes: Yup.string().max(2000, i18n.t('FATHER_EDIT.LESSTHAN2000')).nullable() }
           : null),
+        ...(updateFields.indexOf('emergencyContact1Name') != -1
+          ? { emergencyContact1Name: Yup.string().max(255, i18n.t('FATHER_EDIT.LESSTHAN255 ')).nullable() }
+          : null),
+        ...(updateFields.indexOf('emergencyContact2Name') != -1
+          ? { emergencyContact2Name: Yup.string().max(255, i18n.t('FATHER_EDIT.LESSTHAN255 ')).nullable() }
+          : null),
+        ...(updateFields.indexOf('emergencyContact1Phone') != -1
+          ? { emergencyContact1Phone: Yup.string().matches(regex.phoneNumberRegex).nullable() }
+          : null),
+        ...(updateFields.indexOf('emergencyContact2Phone') != -1
+          ? { emergencyContact2Phone: Yup.string().matches(regex.phoneNumberRegex).nullable() }
+          : null),
       });
     }
 
@@ -295,7 +298,6 @@ class FatherFormScreen extends Component {
       <>
         <NavigationEvents
           onDidFocus={async () => {
-            console.log('DidFocus');
             await this.loadPerson();
           }}
         />
@@ -392,11 +394,27 @@ class FatherFormScreen extends Component {
                       ...(updateFields.indexOf('leaveDate') != -1 && !!father.leaveDate
                         ? { leaveDate: father.leaveDate.split('T')[0] }
                         : { leaveDate: null }),
+                      ...(updateFields.indexOf('emergencyContact1Name') != -1 && !!father.emergencyContact1Name
+                        ? { emergencyContact1Name: father.emergencyContact1Name }
+                        : { emergencyContact1Name: null }),
+                      ...(updateFields.indexOf('emergencyContact1Relation') != -1 && !!father.emergencyContact1Relation
+                        ? { emergencyContact1Relation: father.emergencyContact1Relation }
+                        : { emergencyContact1Relation: null }),
+                      ...(updateFields.indexOf('emergencyContact1Phone') != -1 && !!father.emergencyContact1Phone
+                        ? { emergencyContact1Phone: father.emergencyContact1Phone }
+                        : { emergencyContact1Phone: null }),
+                      ...(updateFields.indexOf('emergencyContact2Name') != -1 && !!father.emergencyContact2Name
+                        ? { emergencyContact2Name: father.emergencyContact2Name }
+                        : { emergencyContact2Name: null }),
+                      ...(updateFields.indexOf('emergencyContact2Relation') != -1 && !!father.emergencyContact2Relation
+                        ? { emergencyContact2Relation: father.emergencyContact2Relation }
+                        : { emergencyContact2Relation: null }),
+                      ...(updateFields.indexOf('emergencyContact2Phone') != -1 && !!father.emergencyContact2Phone
+                        ? { emergencyContact2Phone: father.emergencyContact2Phone }
+                        : { emergencyContact2Phone: null }),
                     }}
                     onSubmit={(values) => {
                       this.setState({ loading: true });
-                      console.log(values);
-                      //this.setState({loading:true})
                       updateFatherForm(this.state.father.personId, values).then(
                         () => {
                           this.loadPerson();
@@ -741,31 +759,77 @@ class FatherFormScreen extends Component {
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('emergencyContact1Name') != -1}
                           label={i18n.t('FATHER_EDIT.EMERGENCY_CONTACT_NAME_1')}
-                          placeholder={'+1 262 473-4782'}
-                          name="phone2"
+                          name="emergencyContact1Name"
                           mode="outlined"
-                          keyboardType="number-pad"
                           underlineColor={Colors.primaryColor}
                         />
                         {Platform.OS === 'android' ? (
                           <Select
                             containerStyle={styles.selectAndroid}
-                            elements={this.state.a}
-                            value={values.phone2Label}
+                            elements={this.state.personEmergencyOptions}
+                            value={values.emergencyContact1Relation}
                             itemColor={Colors.primaryColor}
-                            valueChange={(value) => setFieldValue('phone2Label', value)}
+                            valueChange={(value) => setFieldValue('emergencyContact1Relation', value)}
+                          />
+                        ) : (
+                          <View style={styles.pickerContainer}>
+                            <Text style={styles.text}>{i18n.t('FATHER_EDIT.EMERGENCY_RELATION_CONTACT_1')}</Text>
+                            <Select
+                              containerStyle={styles.select}
+                              elements={this.state.personEmergencyOptions}
+                              value={values.emergencyContact1Relation}
+                              itemColor={Colors.primaryColor}
+                              valueChange={(value) => setFieldValue('emergencyContact1Relation', value)}
+                            />
+                          </View>
+                        )}
+
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('emergencyContact1Phone') != -1}
+                          label={i18n.t('FATHER_EDIT.EMERGENCY_CONTACT_PHONE_1')}
+                          placeholder={'+1 262 473-4782'}
+                          name="emergencyContact1Phone"
+                          mode="outlined"
+                          keyboardType="number-pad"
+                          underlineColor={Colors.primaryColor}
+                        />
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('emergencyContact2Name') != -1}
+                          label={i18n.t('FATHER_EDIT.EMERGENCY_CONTACT_NAME_2')}
+                          name="emergencyContact2Name"
+                          mode="outlined"
+                          underlineColor={Colors.primaryColor}
+                        />
+                        {Platform.OS === 'android' ? (
+                          <Select
+                            containerStyle={styles.selectAndroid}
+                            elements={this.state.personEmergencyOptions}
+                            value={values.emergencyContact2Relation}
+                            itemColor={Colors.primaryColor}
+                            valueChange={(value) => setFieldValue('emergencyContact2Relation', value)}
                           />
                         ) : (
                           <View style={styles.pickerContainer}>
                             <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
                             <Select
                               containerStyle={styles.select}
-                              elements={this.state.phoneLabels}
-                              value={values.phone1Label}
-                              valueChange={value.changeLang}
+                              elements={this.state.personEmergencyOptions}
+                              value={values.emergencyContact2Relation}
+                              itemColor={Colors.primaryColor}
+                              valueChange={(value) => setFieldValue('emergencyContact2Relation', value)}
                             />
                           </View>
                         )}
+
+                        <InputWithFormik
+                          hasPerm={updateFields.indexOf('emergencyContact2Phone') != -1}
+                          label={i18n.t('FATHER_EDIT.EMERGENCY_CONTACT_PHONE_2')}
+                          placeholder={'+1 262 473-4782'}
+                          name="emergencyContact2Phone"
+                          mode="outlined"
+                          keyboardType="number-pad"
+                          underlineColor={Colors.primaryColor}
+                        />
 
                         {/* //<InputWithFormik hasPerm={updateFields.indexOf('') != -1} label={i18n.t("FATHER_EDIT.FACEBOOK")} placeholder = {'https://www.facebook.com/'} name = "facebookUrl" /> */}
                         <View style={styles.buttonsContainer}>
@@ -811,9 +875,7 @@ class FatherFormScreen extends Component {
 }
 
 FatherFormScreen.navigationOptions = (navigationData) => {
-  console.log('navigationData', navigationData);
   const showMenu = navigationData.navigation.isFirstRouteInParent();
-
   if (showMenu) {
     return {
       headerTitle: '',
