@@ -343,52 +343,27 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                 {({ handleChange, values, handleSubmit, errors, setFieldValue }) => (
                   <>
                     <View>
-                      {
-                        // <DateTimePicker
-                        //   value={startDate ? new Date(startDate) : new Date()}
-                        //   mode="date"
-                        //   display="default"
-                        //   onChange={(event, selectedDate) => {
-                        //     setOpenStartDate(false);
-                        //     const dateFormated = formatDate(selectedDate);
-                        //     setFieldValue('startDate', dateFormated);
-                        //   }}
-                        // />
-                        <DateTimePickerModal
-                          isVisible={openStartDate}
-                          mode="date"
-                          onConfirm={(date) => {
-                            setOpenStartDate(false);
-                            const dateFormated = formatDate(date);
-                            setFieldValue('startDate', dateFormated);
-                          }}
-                          onCancel={() => setOpenStartDate(false)}
-                        />
-                      }
-                      {
-                        //   openEndDate && (
-                        //     <DateTimePicker
-                        //       value={endDate ? new Date(endDate) : new Date()}
-                        //       mode="date"
-                        //       display="default"
-                        //       onChange={(event, selectedDate) => {
-                        //         setOpenEndDate(false);
-                        //         const dateFormated = formatDate(selectedDate);
-                        //         setFieldValue('endDate', dateFormated);
-                        //       }}
-                        //     />
-                        //   )
-                        <DateTimePickerModal
-                          isVisible={openEndDate}
-                          mode="date"
-                          onConfirm={(date) => {
-                            setOpenEndDate(false);
-                            const dateFormated = formatDate(date);
-                            setFieldValue('endDate', dateFormated);
-                          }}
-                          onCancel={() => setOpenEndDate(false)}
-                        />
-                      }
+                      <DateTimePickerModal
+                        isVisible={openStartDate}
+                        mode="date"
+                        onConfirm={(date) => {
+                          setOpenStartDate(false);
+                          const dateFormated = formatDate(date);
+                          setFieldValue('startDate', dateFormated);
+                        }}
+                        onCancel={() => setOpenStartDate(false)}
+                      />
+                      <DateTimePickerModal
+                        isVisible={openEndDate}
+                        mode="date"
+                        onConfirm={(date) => {
+                          setOpenEndDate(false);
+                          const dateFormated = formatDate(date);
+                          setFieldValue('endDate', dateFormated);
+                        }}
+                        onCancel={() => setOpenEndDate(false)}
+                      />
+
                       {isCreate && (
                         <>
                           <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>
@@ -489,16 +464,14 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                     <View>
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.END_DATE')}</Text>
                       <Button onPress={() => setOpenEndDate(true)}>
-                        <>
-                          <View style={styles.inputContainer}>
-                            <Text style={styles.inputDatePicker}>{_.get(values, 'endDate') || ''}</Text>
-                            <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
-                          </View>
-                          {errors && errors.endDate && (
-                            <Text style={styles.errorText}>{i18n.t('LIVING_SITUATION.ERROR_END_DATE')}</Text>
-                          )}
-                        </>
+                        <View style={styles.inputContainer}>
+                          <Text style={styles.inputDatePicker}>{_.get(values, 'endDate') || ''}</Text>
+                          <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+                        </View>
                       </Button>
+                      {errors && errors.endDate && (
+                        <Text style={styles.errorText}>{i18n.t('LIVING_SITUATION.ERROR_END_DATE')}</Text>
+                      )}
                     </View>
 
                     <View>
