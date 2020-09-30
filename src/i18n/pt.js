@@ -62,6 +62,7 @@ exports.PT = {
     PRIESTLY_ORDINATION: 'Ordenação sacerdotal',
     START_DATE: 'Data de início',
     END_DATE: 'Data final',
+    BISHOP_DATE: 'Ordenação episcopal',
   },
   TERRITORY_DETAIL: {
     INFORMATION: 'Informação',
