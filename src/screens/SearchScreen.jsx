@@ -20,7 +20,8 @@ import HeaderButton from '../components/HeaderButton';
 import { getPersons } from '../api';
 import { CheckBox } from 'react-native-elements';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
-
+import { AsyncStorage } from 'react-native';
+import { lowerFirst } from 'lodash';
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -71,6 +72,7 @@ const styles = StyleSheet.create({
   },
   option: {},
 });
+
 class SearchScreen extends Component {
   state = {
     results: [],
@@ -81,10 +83,17 @@ class SearchScreen extends Component {
     searchText: '',
   };
 
-  loadPersons = (fields) => {
+  loadPersons = async (fields) => {
     getPersons(fields)
-      .then((res) => {
+      .then(async (res) => {
         this.setState({ results: res.data.result, loading: false });
+        console.log('res data', res.data.result);
+        try {
+          console.log('Cargar resultado en el localstorage');
+          await AsyncStorage.setItem('result', JSON.stringify(res.data.result));
+        } catch (e) {
+          console.log('Error al cargar results ', e);
+        }
       })
       .catch(() => {
         this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
@@ -94,7 +103,47 @@ class SearchScreen extends Component {
   async componentDidMount() {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      this.loadPersons('all');
+      //Verificamos si current Date es menor al DateDeadline
+      //Si es menor no hace falta, hacer un nuevo request, se usa lo que esta en el local si existe sino existe se hace el get de los datos
+      //Si es mayor se actualiza el item result on AsyncStorage llamando a la funcion loadPerson('all) y se actuliza el nuevo DateDeadline sumandole 24 horas al current date
+      var isOldresult = false;
+      try {
+        var currentDate = new Date();
+        const tem = await AsyncStorage.getItem('DateDeadline');
+        if (tem !== null) {
+          const date = new Date(tem);
+          if (currentDate > date) {
+            isOldresult(true);
+            var newDateDeadline = new Date();
+            newDateDeadline.setDate(currentDate.getDate() + 1);
+            await AsyncStorage.setItem('DateDeadline', newDateDeadline);
+          }
+        } else {
+          //si no existe cargamos
+          var newDateDeadline = new Date();
+          newDateDeadline.setDate(currentDate.getDate() + 1);
+          await AsyncStorage.setItem('DateDeadline', newDateDeadline);
+        }
+      } catch (e) {
+        console.log('Error at AsyncStorage get item on Date');
+      }
+
+      console.log('isOldresult => ', isOldresult);
+      try {
+        //Verificamos si esta almacenado en el local storage los fields
+        const result = await AsyncStorage.getItem('result');
+        if (result == null) {
+          //si no esta en el local, cargamos los datos
+          this.loadPersons('all');
+        } else {
+          if (isOldresult)
+            //aunque este almacenado en el local storage, se tiene que actualizar los datos ya que vencio el tiempo
+            this.loadPersons('all');
+          else this.setState({ results: JSON.parse(result), loading: false });
+        }
+      } catch (e) {
+        console.log('Error on asyncstorage get item result');
+      }
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
