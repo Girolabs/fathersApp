@@ -810,7 +810,7 @@ class FatherFormScreen extends Component {
                           />
                         ) : (
                           <View style={styles.pickerContainer}>
-                            <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
+                            <Text style={styles.text}>{i18n.t('FATHER_EDIT.EMERGENCY_RELATION_CONTACT_2')}</Text>
                             <Select
                               containerStyle={styles.select}
                               elements={this.state.personEmergencyOptions}
