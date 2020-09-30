@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     color: Colors.primaryColor,
   },
   scrollContainer: {
-    paddingBottom: 80,
+    paddingBottom: 20,
   },
 });
 class AssignmentsScreen extends Component {
