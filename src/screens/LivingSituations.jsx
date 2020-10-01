@@ -252,10 +252,11 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     const year = selectedDate.getUTCFullYear();
     const month =
       selectedDate.getUTCMonth() + 1 < 10 ? `0${selectedDate.getUTCMonth() + 1}` : selectedDate.getUTCMonth() + 1;
-    const day = selectedDate.getUTCDate();
+    var day = selectedDate.getUTCDate();
+    // console.log('day.lenght ', length);
+    if (10-day>0)
+        day='0'+day
     const dateString = `${year}-${month}-${day}`;
-
-    console.log(selectedDate);
     console.log(dateString);
     return dateString;
   };
@@ -438,6 +439,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                         style={{
                           inputAndroid: {
                             backgroundColor: Colors.surfaceColorSecondary,
+                            borderRadius: 10,
                           },
                           iconContainer: {
                             top: 10,
