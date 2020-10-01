@@ -24,7 +24,6 @@ import Colors from '../constants/Colors';
 import { NavigationEvents } from 'react-navigation';
 import { getPerson, getPersonByUser, getInterfaceData, updateFatherForm } from '../api';
 import Button from '../components/Button';
-
 const widthBtn = Platform.OS == 'android' ? '45%' : '100%';
 const styles = StyleSheet.create({
   snackError: {
@@ -335,7 +334,12 @@ class FatherFormScreen extends Component {
                             </Button>
                           )}
 
-                          <Button onPress={handleSubmit}>
+                          <Button onPress={(e)=>{
+                              //We make old the DateDeadline, so search scren is force to make a request
+                              var newDateDeadline = new Date();
+                                AsyncStorage.setItem('DateDeadline', newDateDeadline);
+                              handleSubmit(e)
+                          }}>
                             <View style={styles.btnContainer}>
                               <Text style={styles.btnText}>{i18n.t('FATHER_EDIT.SAVE')}</Text>
                             </View>

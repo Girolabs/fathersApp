@@ -21,7 +21,8 @@ import { getPersons } from '../api';
 import { CheckBox } from 'react-native-elements';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { AsyncStorage } from 'react-native';
-import { lowerFirst } from 'lodash';
+import { NavigationEvents } from 'react-navigation';
+
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -99,10 +100,7 @@ class SearchScreen extends Component {
         this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
       });
   };
-
-  async componentDidMount() {
-    const status = await Network.getNetworkStateAsync();
-    if (status.isConnected) {
+  async getData(){
       //Verificamos si current Date es menor al DateDeadline
       //Si es menor no hace falta, hacer un nuevo request, se usa lo que esta en el local si existe sino existe se hace el get de los datos
       //Si es mayor se actualiza el item result on AsyncStorage llamando a la funcion loadPerson('all) y se actuliza el nuevo DateDeadline sumandole 24 horas al current date
@@ -113,7 +111,7 @@ class SearchScreen extends Component {
         if (tem !== null) {
           const date = new Date(tem);
           if (currentDate > date) {
-            isOldresult(true);
+            isOldresult=true;
             var newDateDeadline = new Date();
             newDateDeadline.setDate(currentDate.getDate() + 1);
             await AsyncStorage.setItem('DateDeadline', newDateDeadline);
@@ -136,6 +134,7 @@ class SearchScreen extends Component {
           //si no esta en el local, cargamos los datos
           this.loadPersons('all');
         } else {
+            console.log('result ',JSON.parse(result));
           if (isOldresult)
             //aunque este almacenado en el local storage, se tiene que actualizar los datos ya que vencio el tiempo
             this.loadPersons('all');
@@ -144,6 +143,11 @@ class SearchScreen extends Component {
       } catch (e) {
         console.log('Error on asyncstorage get item result');
       }
+  }
+  async componentDidMount() {
+    const status = await Network.getNetworkStateAsync();
+    if (status.isConnected) {
+      this.getData()
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
@@ -202,6 +206,11 @@ class SearchScreen extends Component {
   render() {
     return (
       <View style={styles.screen}>
+          <NavigationEvents
+            onDidFocus={()=>{
+              this.getData()
+          }}
+          />
         {!this.state.loading ? (
           <Fragment>
             <View style={styles.inputBox}>
