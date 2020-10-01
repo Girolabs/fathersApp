@@ -37,6 +37,7 @@ exports.ES = {
   FATHER_DETAIL: {
     LAST_UPDATE: 'Ultima actualización:',
     CONTACT_INFO: 'Información de contacto',
+    EMERGENCY_CONTACT:'Contacto de emergencia',
     SAVE_CONTACT: 'Guardar contacto',
     SAVED_CONTACT: 'El contacto se ha guardado',
     EMAIL: 'Email',
