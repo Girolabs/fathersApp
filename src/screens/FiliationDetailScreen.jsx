@@ -23,6 +23,7 @@ import SnackBar from '../components/SnackBar';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { getFiliation } from '../api';
+import FiliationHouses from '../components/FiliationHouses';
 
 class FiliationDetailScreen extends Component {
   state = {
@@ -122,31 +123,7 @@ class FiliationDetailScreen extends Component {
                       </TouchableComp>
                     )}
                   </View>
-                  <View>
-                    <Text style={styles.sectionHeader}>{i18n.t('FILIAL_DETAIL.HOMES')}</Text>
-                    <View>
-                      {filiation.houses
-                        .filter((house) => house.isActive == true)
-                        .map((house) => {
-                          return (
-                            <TouchableComp
-                              onPress={() => {
-                                navigation.navigate('HouseDetail', { houseId: house.houseId });
-                              }}
-                            >
-                              <View style={styles.card}>
-                                <Text style={styles.cardTitle}>{house.name}</Text>
-                                <View style={styles.cardBody}>
-                                  <Text style={styles.cardBodyText}>
-                                    {house.isMainFiliationHouse ? `${i18n.t('FILIAL_DETAIL.MAIN_HOUSE')}` : ''}
-                                  </Text>
-                                </View>
-                              </View>
-                            </TouchableComp>
-                          );
-                        })}
-                    </View>
-                  </View>
+                  <FiliationHouses houses={filiation.houses.filter((house) => house.isActive)} />
                   <View>
                     <Text style={styles.sectionHeader}>{i18n.t('FILIAL_DETAIL.MEMBERS')}</Text>
                     <FlatList

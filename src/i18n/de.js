@@ -82,9 +82,10 @@ exports.DE = {
     FILIAL_INFO: 'Information zur Filiale',
     TERRITORY: 'Gebiet',
     SUPERIOR: 'Oberer',
-    HOMES: 'Häuser',
+    HOUSES: 'Häuser',
     MEMBERS: 'Mitglieder der Filiale',
     MAIN_HOUSE: 'Haupthaus',
+    NO_HOUSES: 'Keine Häuser',
   },
   HOUSE_DETAIL: {
     HOUSE_INFO: 'Information zum Haus',
