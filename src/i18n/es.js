@@ -86,6 +86,7 @@ exports.ES = {
     HOUSES: 'Casas',
     MAIN_HOUSE: 'Casa principal',
     MEMBERS: 'Miembros de la filial',
+    NO_HOUSES: 'Sin casas',
   },
   HOUSE_DETAIL: {
     HOUSE_INFO: 'Información de la casa',

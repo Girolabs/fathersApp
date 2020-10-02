@@ -83,9 +83,10 @@ exports.EN = {
     FILIAL_INFO: 'Filiation information',
     TERRITORY: 'Territory',
     SUPERIOR: 'Superior',
-    HOMES: 'Houses',
+    HOUSES: 'Houses',
     MEMBERS: 'Filiation members',
     MAIN_HOUSE: 'Main house',
+    NO_HOUSES: 'No houses',
   },
   HOUSE_DETAIL: {
     HOUSE_INFO: 'House information',

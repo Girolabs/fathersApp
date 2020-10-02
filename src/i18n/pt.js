@@ -83,9 +83,10 @@ exports.PT = {
     FILIAL_INFO: 'Informação sobre a filial',
     TERRITORY: 'Território',
     SUPERIOR: 'Superior',
-    HOMES: 'Casas',
+    HOUSES: 'Casas',
     MEMBERS: 'Membros da filial',
     MAIN_HOUSE: 'Casa principal',
+    NO_HOUSES: 'Sem casas',
   },
   HOUSE_DETAIL: {
     HOUSE_INFO: 'Informação sobre a casa',
