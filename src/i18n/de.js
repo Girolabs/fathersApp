@@ -37,6 +37,7 @@ exports.DE = {
   FATHER_DETAIL: {
     LAST_UPDATE: 'Letzte Aktualisierung',
     CONTACT_INFO: 'Kontaktinformation',
+    EMERGENCY_CONTACT:'Notfallkontakt',
     SAVE_CONTACT: 'Kontakt speichern',
     SAVED_CONTACT: 'Gespeicherter Kontakt',
     EMAIL: 'Email',
@@ -62,6 +63,7 @@ exports.DE = {
     PRIESTLY_ORDINATION: 'Priesterweihe',
     START_DATE: 'Anfangsdatum',
     END_DATE: 'Enddatum',
+    BISHOP_DATE: ' Bischofsweihe',
   },
   TERRITORY_DETAIL: {
     INFORMATION: 'Information',
@@ -82,9 +84,10 @@ exports.DE = {
     FILIAL_INFO: 'Information zur Filiale',
     TERRITORY: 'Gebiet',
     SUPERIOR: 'Oberer',
-    HOMES: 'Häuser',
+    HOUSES: 'Häuser',
     MEMBERS: 'Mitglieder der Filiale',
     MAIN_HOUSE: 'Haupthaus',
+    NO_HOUSES: 'Keine Häuser',
   },
   HOUSE_DETAIL: {
     HOUSE_INFO: 'Information zum Haus',

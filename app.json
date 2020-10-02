@@ -3,7 +3,7 @@
     "name": "Schoenstatt Fathers",
     "slug": "schoenstatt-fathers",
     "platforms": ["ios", "android", "web"],
-    "version": "0.9",
+    "version": "0.10",
     "orientation": "portrait",
     "icon": "./assets/img/icon_app.png",
     "primaryColor": "#fffff",
@@ -16,7 +16,7 @@
     "assetBundlePatterns": ["**/*"],
     "android": {
       "package": "com.schoenstatt.fathersApp",
-      "versionCode": 9,
+      "versionCode": 10,
       "permissions": ["CAMERA", "WRITE_EXTERNAL_STORAGE", "WRITE_CONTACTS", "CAMERA_ROLL", "READ_CONTACTS"]
     },
     "ios": {

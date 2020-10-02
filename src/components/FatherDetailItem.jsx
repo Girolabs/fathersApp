@@ -76,7 +76,7 @@ const DefaultItem = ({ title, titleNoI18n, body, selected, img, country_code, la
     <>
       {show && (
         <>
-          {(body || date) && (
+          {(body || date || country_code) && (
             <Buttom onPress={() => (selected ? selected() : null)}>
               <View style={styles.container}>
                 <View style={styles.listItemLeft}>
