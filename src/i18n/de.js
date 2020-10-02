@@ -62,6 +62,7 @@ exports.DE = {
     PRIESTLY_ORDINATION: 'Priesterweihe',
     START_DATE: 'Anfangsdatum',
     END_DATE: 'Enddatum',
+    BISHOP_DATE: ' Bischofsweihe',
   },
   TERRITORY_DETAIL: {
     INFORMATION: 'Information',
