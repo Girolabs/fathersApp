@@ -105,3 +105,11 @@ export const updateLivingSituation = (livingSituationId, values) => {
 export const updateFatherForm = (fatherId, values) => {
   return instance.put(`/api/v1/persons/${fatherId}`, values);
 };
+
+export const getCheckUnseenPosts = () => {
+  return instance.get('/api/v1/bulletin-board/check-for-unseen-posts');
+};
+
+export const markAllPost = () => {
+  return instance.post('/api/v1/bulletin-board/mark-all-posts?action=seen');
+};

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -14,12 +14,14 @@ import i18n from 'i18n-js';
 import { Ionicons } from 'expo-vector-icons';
 import * as Linking from 'expo-linking';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { NavigationEvents } from 'react-navigation';
+import * as ScreenOrientation from 'expo-screen-orientation';
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { getBoard } from '../api';
-import { NavigationEvents } from 'react-navigation';
-import * as ScreenOrientation from 'expo-screen-orientation';
+import { BulletinCheckContext } from '../context/BulletinCheckProvider';
+
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -44,6 +46,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     width: '85%',
   },
+  listItemTitleSeen: {
+    fontSize: 18,
+    fontFamily: 'work-sans',
+    color: Colors.primaryColor,
+    paddingHorizontal: 15,
+    width: '85%',
+  },
   leftSideListItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -55,6 +64,7 @@ const BulletinScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
+  const { unseenPostsCount, checkUnseenCounter } = useContext(BulletinCheckContext);
 
   const loadPosts = async () => {
     const status = await Network.getNetworkStateAsync();
@@ -77,7 +87,6 @@ const BulletinScreen = ({ navigation }) => {
   };
 
   const handleRedirect = (item) => {
-    console.log(item);
     if (item.redirectUrl) {
       Linking.openURL(item.redirectUrl);
     } else {
@@ -90,11 +99,11 @@ const BulletinScreen = ({ navigation }) => {
   useEffect(() => {
     loadPosts();
     async function orientationBack() {
-      //Restric orientation PORTRAIT_UP screen
-      console.log(' Destructor Bulletin');
+      // Restric orientation PORTRAIT_UP screen
       await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
     }
     return () => {
+      checkUnseenCounter();
       orientationBack();
     };
   }, []);
@@ -108,15 +117,14 @@ const BulletinScreen = ({ navigation }) => {
     <View style={styles.screen}>
       <NavigationEvents
         onDidFocus={async () => {
-          //Unlock landscape orentation
-          console.log(' Focus on bulletin ');
+          // Unlock landscape orentation
           await ScreenOrientation.unlockAsync();
         }}
         onWillBlur={async (pay) => {
-          console.log(' on Blur bulletin Screen ');
-          //if the next navigation is not BulletinDetail, restric orientation to PortraitUp mode
-          if (pay.state.routeName !== 'BulletinDetail')
+          // if the next navigation is not BulletinDetail, restric orientation to PortraitUp mode
+          if (pay.state.routeName !== 'BulletinDetail') {
             await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+          }
         }}
       />
       {!loading ? (
@@ -131,7 +139,7 @@ const BulletinScreen = ({ navigation }) => {
               <View style={styles.listItem}>
                 <View style={styles.leftSideListItem}>
                   <Ionicons name="md-book" size={25} color={Colors.primaryColor} />
-                  <Text numberOfLines={2} style={styles.listItemTitle}>
+                  <Text numberOfLines={2} style={item.isSeen ? styles.listItemTitleSeen : styles.listItemTitle}>
                     {item.title}
                   </Text>
                 </View>

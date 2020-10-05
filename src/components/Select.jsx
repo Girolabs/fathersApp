@@ -1,19 +1,10 @@
 import React from 'react';
 import { ActionSheetIOS, Text, View, Picker, StyleSheet, Platform, Button } from 'react-native';
 
-import Colors from '../constants/Colors';
 import { result } from 'lodash';
+import Colors from '../constants/Colors';
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.surfaceColorSecondary,
-    borderRadius: 5,
-    marginVertical: 5,
-    padding: 0,
-  },
-});
-
-const Select = ({ value, elements, valueChange, style }) => {
+const Select = ({ value, elements, valueChange, style, containerStyle, itemColor }) => {
   const [result, setResult] = React.useState(elements[0].name);
   const [options, setOption] = React.useState([]);
 
@@ -28,7 +19,7 @@ const Select = ({ value, elements, valueChange, style }) => {
   const onPress = () =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: options,
+        options,
       },
       (buttonIndex) => {
         valueChange(elements[buttonIndex].value);
@@ -36,7 +27,7 @@ const Select = ({ value, elements, valueChange, style }) => {
       },
     );
   return (
-    <View style={{ ...styles.container, ...style }}>
+    <View style={{ ...containerStyle, ...style }}>
       {Platform.OS === 'android' ? (
         <Picker selectedValue={value} onValueChange={(itemValue) => valueChange(itemValue)}>
           {elements.map((el) => {
@@ -44,7 +35,7 @@ const Select = ({ value, elements, valueChange, style }) => {
           })}
         </Picker>
       ) : (
-        <Button color={Colors.onSurfaceColorPrimary} onPress={onPress} title={result} />
+        <Button color={itemColor || Colors.onSurfaceColorPrimary} onPress={onPress} title={result} />
       )}
     </View>
   );
