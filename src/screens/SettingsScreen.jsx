@@ -12,20 +12,12 @@ import { I18nContext } from '../context/I18nProvider';
 import Select from '../components/Select';
 import Button from '../components/Button';
 import { lng } from '../constants/Fields';
+
 const styles = StyleSheet.create({
   screen: {
     alignItems: 'center',
     backgroundColor: Colors.surfaceColorPrimary,
     flex: 1,
-  },
-  select: {
-    borderRadius: 5,
-    paddingHorizontal: 10,
-  },
-  selectAndroid: {
-    width: '100%',
-    borderRadius: 5,
-    paddingHorizontal: 10,
   },
   textContainer: {
     flexDirection: 'row',
@@ -59,6 +51,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 5,
   },
+  selectContainer: {
+    backgroundColor: Colors.surfaceColorSecondary,
+    borderRadius: 5,
+    marginVertical: 5,
+    padding: 0,
+  },
+  selectAndroid: {
+    width: '100%',
+    borderRadius: 5,
+    paddingHorizontal: 10,
+  },
 });
 
 const SettingsScreen = (props) => {
@@ -82,7 +85,13 @@ const SettingsScreen = (props) => {
               <Text style={styles.text}>{Constants.manifest.version}</Text>
             </View>
             {Platform.OS === 'android' ? (
-              <Select style={styles.selectAndroid} elements={lng} value={value.lang} valueChange={value.changeLang} />
+              <Select
+                containerStyle={styles.selectContainer}
+                style={styles.selectAndroid}
+                elements={lng}
+                value={value.lang}
+                valueChange={value.changeLang}
+              />
             ) : (
               <View style={styles.pickerContainer}>
                 <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>

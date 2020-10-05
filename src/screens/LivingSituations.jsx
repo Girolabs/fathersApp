@@ -13,14 +13,13 @@ import { NavigationEvents } from 'react-navigation';
 import i18n from 'i18n-js';
 import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from 'expo-vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { Formik } from 'formik';
-
 import * as Network from 'expo-network';
 import * as _ from 'lodash';
 import * as Yup from 'yup';
 import { Snackbar } from 'react-native-paper';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import {
@@ -32,7 +31,6 @@ import {
   updateLivingSituation,
 } from '../api';
 import Button from '../components/Button';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const styles = StyleSheet.create({
   title: {
@@ -140,31 +138,6 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   const [snackMsg, setSnackMsg] = useState('');
   const [visible, setVisible] = useState('');
 
-  useEffect(() => {
-    const livingSituation = navigation.getParam('livingSituation');
-    const paramPersonId = navigation.getParam('personId');
-    if (!paramPersonId) {
-      navigation.goBack();
-    }
-    console.log('living', livingSituation);
-
-    if (!livingSituation || livingSituation.endDate) {
-      setIsCreate(true);
-
-      loadFiliations();
-      loadHouses();
-    } else {
-      const transFormedLiving = {
-        ...livingSituation,
-        startDate: livingSituation && livingSituation.startDate ? livingSituation.startDate.split('T')[0] : null,
-        endDate: livingSituation && livingSituation.endDate ? livingSituation.endDate.split('T')[0] : null,
-      };
-      setLivingSituation(transFormedLiving);
-    }
-    loadTerritory();
-    setPersonId(paramPersonId);
-  }, []);
-
   const loadHouses = async () => {
     const status = await Network.getNetworkStateAsync();
 
@@ -252,10 +225,11 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     const year = selectedDate.getUTCFullYear();
     const month =
       selectedDate.getUTCMonth() + 1 < 10 ? `0${selectedDate.getUTCMonth() + 1}` : selectedDate.getUTCMonth() + 1;
-    var day = selectedDate.getUTCDate();
+    let day = selectedDate.getUTCDate();
     // console.log('day.lenght ', length);
-    if (10-day>0)
-        day='0'+day
+    if (10 - day > 0) {
+      day = `0${day}`;
+    }
     const dateString = `${year}-${month}-${day}`;
     console.log(dateString);
     return dateString;
@@ -288,6 +262,31 @@ const LivingSituationsFormScreen = ({ navigation }) => {
       },
     );
   };
+
+  useEffect(() => {
+    const livingSituation = navigation.getParam('livingSituation');
+    const paramPersonId = navigation.getParam('personId');
+    if (!paramPersonId) {
+      navigation.goBack();
+    }
+    console.log('living', livingSituation);
+
+    if (!livingSituation || livingSituation.endDate) {
+      setIsCreate(true);
+
+      loadFiliations();
+      loadHouses();
+    } else {
+      const transFormedLiving = {
+        ...livingSituation,
+        startDate: livingSituation && livingSituation.startDate ? livingSituation.startDate.split('T')[0] : null,
+        endDate: livingSituation && livingSituation.endDate ? livingSituation.endDate.split('T')[0] : null,
+      };
+      setLivingSituation(transFormedLiving);
+    }
+    loadTerritory();
+    setPersonId(paramPersonId);
+  }, []);
 
   return (
     <>
@@ -364,7 +363,6 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                         }}
                         onCancel={() => setOpenEndDate(false)}
                       />
-
                       {isCreate && (
                         <>
                           <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>

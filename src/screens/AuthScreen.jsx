@@ -76,6 +76,12 @@ const styles = StyleSheet.create({
   snackError: {
     backgroundColor: Colors.secondaryColor,
   },
+  selectContainer: {
+    backgroundColor: Colors.surfaceColorSecondary,
+    borderRadius: 5,
+    marginVertical: 5,
+    padding: 0,
+  },
 });
 
 class AuthScreen extends Component {
@@ -249,7 +255,12 @@ class AuthScreen extends Component {
                                 value={this.state.identity}
                                 onChange={this.handleIdentity}
                               />
-                              <Select elements={lng} value={value.lang} valueChange={value.changeLang} />
+                              <Select
+                                containerStyle={styles.selectContainer}
+                                elements={lng}
+                                value={value.lang}
+                                valueChange={value.changeLang}
+                              />
                               <Button
                                 onPress={() => {
                                   if (this.state.identity != '') {
