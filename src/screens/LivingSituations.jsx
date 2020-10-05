@@ -225,10 +225,12 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     const year = selectedDate.getUTCFullYear();
     const month =
       selectedDate.getUTCMonth() + 1 < 10 ? `0${selectedDate.getUTCMonth() + 1}` : selectedDate.getUTCMonth() + 1;
-    const day = selectedDate.getUTCDate();
+    let day = selectedDate.getUTCDate();
+    // console.log('day.lenght ', length);
+    if (10 - day > 0) {
+      day = `0${day}`;
+    }
     const dateString = `${year}-${month}-${day}`;
-
-    console.log(selectedDate);
     console.log(dateString);
     return dateString;
   };
@@ -435,6 +437,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                         style={{
                           inputAndroid: {
                             backgroundColor: Colors.surfaceColorSecondary,
+                            borderRadius: 10,
                           },
                           iconContainer: {
                             top: 10,
@@ -461,16 +464,14 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                     <View>
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.END_DATE')}</Text>
                       <Button onPress={() => setOpenEndDate(true)}>
-                        <>
-                          <View style={styles.inputContainer}>
-                            <Text style={styles.inputDatePicker}>{_.get(values, 'endDate') || ''}</Text>
-                            <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
-                          </View>
-                          {errors && errors.endDate && (
-                            <Text style={styles.errorText}>{i18n.t('LIVING_SITUATION.ERROR_END_DATE')}</Text>
-                          )}
-                        </>
+                        <View style={styles.inputContainer}>
+                          <Text style={styles.inputDatePicker}>{_.get(values, 'endDate') || ''}</Text>
+                          <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+                        </View>
                       </Button>
+                      {errors && errors.endDate && (
+                        <Text style={styles.errorText}>{i18n.t('LIVING_SITUATION.ERROR_END_DATE')}</Text>
+                      )}
                     </View>
 
                     <View>

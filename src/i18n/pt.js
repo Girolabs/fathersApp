@@ -37,6 +37,7 @@ exports.PT = {
   FATHER_DETAIL: {
     LAST_UPDATE: 'Última atualização',
     CONTACT_INFO: 'Informações de contato',
+    EMERGENCY_CONTACT: 'Contato de emergência',
     SAVE_CONTACT: 'Guardar contato',
     SAVED_CONTACT: 'Contato salvo',
     EMAIL: 'Email',
@@ -62,6 +63,7 @@ exports.PT = {
     PRIESTLY_ORDINATION: 'Ordenação sacerdotal',
     START_DATE: 'Data de início',
     END_DATE: 'Data final',
+    BISHOP_DATE: 'Ordenação episcopal',
   },
   TERRITORY_DETAIL: {
     INFORMATION: 'Informação',
@@ -82,9 +84,10 @@ exports.PT = {
     FILIAL_INFO: 'Informação sobre a filial',
     TERRITORY: 'Território',
     SUPERIOR: 'Superior',
-    HOMES: 'Casas',
+    HOUSES: 'Casas',
     MEMBERS: 'Membros da filial',
     MAIN_HOUSE: 'Casa principal',
+    NO_HOUSES: 'Sem casas',
   },
   HOUSE_DETAIL: {
     HOUSE_INFO: 'Informação sobre a casa',
