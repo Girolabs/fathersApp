@@ -5,6 +5,7 @@ import { AppLoading } from 'expo';
 import PatresNavigator from './src/navigator/PatresNavigator';
 import I18nProvider from './src/context/I18nProvider';
 import AuthProvider from './src/context/AuthProvider';
+import BulletinCheckProvider from './src/context/BulletinCheckProvider';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -20,7 +21,9 @@ export default function App() {
   return (
     <AuthProvider>
       <I18nProvider>
-        <PatresNavigator />
+        <BulletinCheckProvider>
+          <PatresNavigator />
+        </BulletinCheckProvider>
       </I18nProvider>
     </AuthProvider>
   );
