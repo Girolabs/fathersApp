@@ -517,12 +517,11 @@ class FatherFormScreen extends Component {
                           />
                         ) : (
                           <View style={styles.pickerContainer}>
-                            <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
                             <Select
                               containerStyle={styles.select}
                               elements={this.state.phoneLabels}
                               value={values.phone1Label}
-                              valueChange={value.changeLang}
+                              valueChange={(value) => setFieldValue('phone1Label', value)}
                             />
                           </View>
                         )}
@@ -545,12 +544,11 @@ class FatherFormScreen extends Component {
                           />
                         ) : (
                           <View style={styles.pickerContainer}>
-                            <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
                             <Select
                               containerStyle={styles.select}
                               elements={this.state.phoneLabels}
                               value={values.phone1Label}
-                              valueChange={value.changeLang}
+                              valueChange={(value) => setFieldValue('phone1Label', value)}
                             />
                           </View>
                         )}
@@ -573,12 +571,11 @@ class FatherFormScreen extends Component {
                           />
                         ) : (
                           <View style={styles.pickerContainer}>
-                            <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
                             <Select
                               containerStyle={styles.select}
                               elements={this.state.phoneLabels}
                               value={values.phone1Label}
-                              valueChange={value.changeLang}
+                              valueChange={(value) => setFieldValue('phone1Label', value)}
                             />
                           </View>
                         )}
