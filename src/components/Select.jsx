@@ -1,7 +1,6 @@
 import React from 'react';
-import { ActionSheetIOS, Text, View, Picker, StyleSheet, Platform, Button } from 'react-native';
-
-import { result } from 'lodash';
+import { ActionSheetIOS, Text, View, Picker, Platform, Button, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
 const Select = ({ value, elements, valueChange, style, containerStyle, itemColor }) => {
@@ -35,7 +34,14 @@ const Select = ({ value, elements, valueChange, style, containerStyle, itemColor
           })}
         </Picker>
       ) : (
-        <Button color={itemColor || Colors.onSurfaceColorPrimary} onPress={onPress} title={result} />
+        <TouchableOpacity
+          style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
+          onPress={onPress}
+        >
+          <Button color={itemColor || Colors.onSurfaceColorPrimary} title={result} onPress={onPress} />
+          {/* <Text style={{fontSize:16}} color={itemColor || Colors.onSurfaceColorPrimary} title={result} >{result}</Text> */}
+          <Ionicons name="md-arrow-dropdown" size={24} color="black" />
+        </TouchableOpacity>
       )}
     </View>
   );
