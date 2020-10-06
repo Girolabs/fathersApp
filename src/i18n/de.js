@@ -102,6 +102,7 @@ exports.DE = {
     WIFI: 'WLAN Passwort',
     PUBLIC_NOTES: 'Öffentliche Notizen',
     ADMIN_NOTES: 'Admin Notizen',
+    NO_MEMBERS: 'Keine Mitglieder',
   },
   GENERATION: {
     GENERATION_INFO: 'Information zur Generation',

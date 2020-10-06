@@ -102,6 +102,7 @@ exports.EN = {
     WIFI: 'Wifi password',
     PUBLIC_NOTES: 'Public notes',
     ADMIN_NOTES: 'Admin notes',
+    NO_MEMBERS: 'No memebers',
   },
   GENERATION: {
     GENERATION_INFO: 'Generation information',
