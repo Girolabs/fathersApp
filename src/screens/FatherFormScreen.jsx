@@ -754,7 +754,7 @@ class FatherFormScreen extends Component {
                           onPress
                         />
                         <InputWithFormik
-                          hasPerm={updateFields.indexOf('emergencyContact1Name')}
+                          hasPerm={updateFields.indexOf('emergencyContact1Name') != -1}
                           label={i18n.t('FATHER_EDIT.EMERGENCY_CONTACT_NAME_1')}
                           name="emergencyContact1Name"
                           mode="outlined"
@@ -781,7 +781,7 @@ class FatherFormScreen extends Component {
                         )}
 
                         <InputWithFormik
-                          hasPerm={updateFields.indexOf('emergencyContact1Phone')}
+                          hasPerm={updateFields.indexOf('emergencyContact1Phone') != -1}
                           label={i18n.t('FATHER_EDIT.EMERGENCY_CONTACT_PHONE_1')}
                           placeholder={'+1 262 473-4782'}
                           name="emergencyContact1Phone"
@@ -790,7 +790,7 @@ class FatherFormScreen extends Component {
                           underlineColor={Colors.primaryColor}
                         />
                         <InputWithFormik
-                          hasPerm={updateFields.indexOf('emergencyContact2Name')}
+                          hasPerm={updateFields.indexOf('emergencyContact2Name') != -1}
                           label={i18n.t('FATHER_EDIT.EMERGENCY_CONTACT_NAME_2')}
                           name="emergencyContact2Name"
                           mode="outlined"
@@ -817,7 +817,7 @@ class FatherFormScreen extends Component {
                         )}
 
                         <InputWithFormik
-                          hasPerm={updateFields.indexOf('emergencyContact2Phone')}
+                          hasPerm={updateFields.indexOf('emergencyContact2Phone') != -1}
                           label={i18n.t('FATHER_EDIT.EMERGENCY_CONTACT_PHONE_2')}
                           placeholder={'+1 262 473-4782'}
                           name="emergencyContact2Phone"
