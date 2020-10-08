@@ -102,6 +102,7 @@ exports.PT = {
     WIFI: 'Senha do wifi',
     PUBLIC_NOTES: 'Notas públicas',
     ADMIN_NOTES: 'Notas do administrador',
+    NO_MEMBERS: 'Sem membros',
   },
   GENERATION: {
     GENERATION_INFO: 'Informação sobre a geração',
