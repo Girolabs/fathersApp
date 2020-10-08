@@ -5,8 +5,6 @@ import {
   StyleSheet,
   AsyncStorage,
   Platform,
-  TouchableNativeFeedback,
-  TouchableOpacity,
   ActivityIndicator,
   KeyboardAvoidingView,
   ScrollView,
@@ -29,7 +27,6 @@ import Select from '../components/Select';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import * as _ from 'lodash';
 import { Ionicons } from 'expo-vector-icons';
-
 const widthBtn = Platform.OS == 'android' ? '45%' : '100%';
 const styles = StyleSheet.create({
   snackError: {
@@ -840,6 +837,7 @@ class FatherFormScreen extends Component {
                                   personId: father ? father.personId : null,
                                 });
                               }}
+                              style={{ width: '45%%' }}
                             >
                               <View style={styles.btnContainer}>
                                 <Text style={styles.btnText}>{i18n.t('FATHER_EDIT.EDIT_LIVING')}</Text>
@@ -847,7 +845,7 @@ class FatherFormScreen extends Component {
                             </Button>
                           )}
 
-                          <Button onPress={handleSubmit}>
+                          <Button onPress={handleSubmit} style={{ width: '45%%' }}>
                             <View style={styles.btnContainer}>
                               <Text style={styles.btnText}>{i18n.t('FATHER_EDIT.SAVE')}</Text>
                             </View>
