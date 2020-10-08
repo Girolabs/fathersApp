@@ -246,8 +246,8 @@ class FatherFormScreen extends Component {
         ...(updateFields.indexOf('email2') != -1
           ? { email2: Yup.string().email().max(70, i18n.t('FATHER_EDIT.LESSTHAN70')).nullable() }
           : null),
-        ...(updateFields.indexOf('cellphone') != -1
-          ? { email2: Yup.string().matches(regex.phoneNumberRegex).nullable() }
+        ...(updateFields.indexOf('cellPhone') != -1
+          ? { cellPhone: Yup.string().matches(regex.phoneNumberRegex).nullable() }
           : null),
         ...(updateFields.indexOf('slackUser') != -1
           ? { slackUser: Yup.string().matches(regex.slackUserRegex).nullable() }
@@ -334,9 +334,9 @@ class FatherFormScreen extends Component {
                       ...(updateFields.indexOf('email2') != -1 && !!father.email2
                         ? { email2: father.email2 }
                         : { email2: null }),
-                      ...(updateFields.indexOf('cellPhone') != -1 && !!father.cellphone
-                        ? { cellphone: father.cellphone }
-                        : { cellphone: null }),
+                      ...(updateFields.indexOf('cellPhone') != -1 && !!father.cellPhone
+                        ? { cellPhone: father.cellPhone }
+                        : { cellPhone: null }),
                       ...(updateFields.indexOf('cellPhoneHasWhatsApp') != -1 && !!father.cellPhoneHasWhatsApp
                         ? { cellPhoneHasWhatsApp: !!father.cellPhoneHasWhatsApp }
                         : { cellPhoneHasWhatsApp: null }),
@@ -484,9 +484,9 @@ class FatherFormScreen extends Component {
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('cellPhone') != -1}
                           label={i18n.t('FATHER_EDIT.CELLPHONE')}
-                          name="cellphone"
+                          name="cellPhone"
                           mode="outlined"
-                          keyboardType="numeric-pad"
+                          keyboardType="phone-pad"
                           selectionColor={Colors.primaryColor}
                         />
                         <SwitchWithFormik
@@ -501,7 +501,7 @@ class FatherFormScreen extends Component {
                           placeholder={'+1 262 473-4782'}
                           name="phone1"
                           mode="outlined"
-                          keyboardType="number-pad"
+                          keyboardType="phone-pad"
                           selectionColor={Colors.primaryColor}
                         />
                         {Platform.OS === 'android' ? (
@@ -528,7 +528,7 @@ class FatherFormScreen extends Component {
                           placeholder={'+1 262 473-4782'}
                           name="phone2"
                           mode="outlined"
-                          keyboardType="number-pad"
+                          keyboardType="phone-pad"
                           underlineColor={Colors.primaryColor}
                         />
                         {Platform.OS === 'android' ? (
@@ -555,7 +555,7 @@ class FatherFormScreen extends Component {
                           placeholder={'+1 262 473-4782'}
                           name="phone3"
                           mode="outlined"
-                          keyboardType="number-pad"
+                          keyboardType="phone-pad"
                           underlineColor={Colors.primaryColor}
                         />
                         {Platform.OS === 'android' ? (
@@ -784,7 +784,7 @@ class FatherFormScreen extends Component {
                           placeholder={'+1 262 473-4782'}
                           name="emergencyContact1Phone"
                           mode="outlined"
-                          keyboardType="number-pad"
+                          keyboardType="phone-pad"
                           underlineColor={Colors.primaryColor}
                         />
                         <InputWithFormik
@@ -821,7 +821,7 @@ class FatherFormScreen extends Component {
                           placeholder={'+1 262 473-4782'}
                           name="emergencyContact2Phone"
                           mode="outlined"
-                          keyboardType="number-pad"
+                          keyboardType="phone-pad"
                           underlineColor={Colors.primaryColor}
                         />
 
