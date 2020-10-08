@@ -88,7 +88,8 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: '93%',
     height: 50,
-    backgroundColor: Colors.surfaceColorSecondary,
+
+    backgroundColor: '#f1f2f7',
     borderColor: Colors.onSurfaceColorPrimary,
     borderWidth: 1,
     flexDirection: 'row',
@@ -104,6 +105,17 @@ const styles = StyleSheet.create({
   },
   dateContainer: {
     paddingVertical: 15,
+  },
+  selectContainerIo: {
+    width: '93%',
+    height: 50,
+    backgroundColor: '#f6f6f6',
+    borderColor: '#313142',
+    borderWidth: 1,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    marginLeft: 15,
+    borderRadius: 5,
   },
 });
 
@@ -516,9 +528,9 @@ class FatherFormScreen extends Component {
                             valueChange={(value) => setFieldValue('phone1Label', value)}
                           />
                         ) : (
-                          <View style={styles.pickerContainer}>
+                          <View style={styles.s}>
                             <Select
-                              containerStyle={styles.select}
+                              containerStyle={styles.selectContainerIo}
                               elements={this.state.phoneLabels}
                               value={values.phone1Label}
                               valueChange={(value) => setFieldValue('phone1Label', value)}
