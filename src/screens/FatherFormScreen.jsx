@@ -69,9 +69,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   selectAndroid: {
-    width: '100%',
+    width: '92%',
     borderRadius: 5,
-    paddingHorizontal: 10,
+    height: 55,
+    backgroundColor: '#f6f6f6',
+    borderColor: '#313142',
+    borderWidth: 1,
+    marginLeft: 15,
+  },
+  selectIos: {
+    width: '92%',
+    height: 50,
+    backgroundColor: '#f6f6f6',
+    borderColor: '#313142',
+    borderWidth: 1,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    marginLeft: 15,
+    borderRadius: 5,
   },
   selectContainer: {
     backgroundColor: Colors.surfaceColorSecondary,
@@ -88,7 +103,6 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: '93%',
     height: 50,
-
     backgroundColor: '#f1f2f7',
     borderColor: Colors.onSurfaceColorPrimary,
     borderWidth: 1,
@@ -105,17 +119,6 @@ const styles = StyleSheet.create({
   },
   dateContainer: {
     paddingVertical: 15,
-  },
-  selectContainerIo: {
-    width: '93%',
-    height: 50,
-    backgroundColor: '#f6f6f6',
-    borderColor: '#313142',
-    borderWidth: 1,
-    paddingHorizontal: 15,
-    paddingVertical: 5,
-    marginLeft: 15,
-    borderRadius: 5,
   },
 });
 
@@ -528,14 +531,12 @@ class FatherFormScreen extends Component {
                             valueChange={(value) => setFieldValue('phone1Label', value)}
                           />
                         ) : (
-                          <View style={styles.s}>
-                            <Select
-                              containerStyle={styles.selectContainerIo}
-                              elements={this.state.phoneLabels}
-                              value={values.phone1Label}
-                              valueChange={(value) => setFieldValue('phone1Label', value)}
-                            />
-                          </View>
+                          <Select
+                            containerStyle={styles.selectIos}
+                            elements={this.state.phoneLabels}
+                            value={values.phone1Label}
+                            valueChange={(value) => setFieldValue('phone1Label', value)}
+                          />
                         )}
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('phone2') != -1}
@@ -555,14 +556,12 @@ class FatherFormScreen extends Component {
                             valueChange={(value) => setFieldValue('phone2Label', value)}
                           />
                         ) : (
-                          <View style={styles.pickerContainer}>
-                            <Select
-                              containerStyle={styles.select}
-                              elements={this.state.phoneLabels}
-                              value={values.phone1Label}
-                              valueChange={(value) => setFieldValue('phone1Label', value)}
-                            />
-                          </View>
+                          <Select
+                            containerStyle={styles.selectIos}
+                            elements={this.state.phoneLabels}
+                            value={values.phone1Label}
+                            valueChange={(value) => setFieldValue('phone1Label', value)}
+                          />
                         )}
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('phone3') != -1}
@@ -582,14 +581,12 @@ class FatherFormScreen extends Component {
                             valueChange={(value) => setFieldValue('phone3Label', value)}
                           />
                         ) : (
-                          <View style={styles.pickerContainer}>
-                            <Select
-                              containerStyle={styles.select}
-                              elements={this.state.phoneLabels}
-                              value={values.phone1Label}
-                              valueChange={(value) => setFieldValue('phone1Label', value)}
-                            />
-                          </View>
+                          <Select
+                            containerStyle={styles.selectIos}
+                            elements={this.state.phoneLabels}
+                            value={values.phone1Label}
+                            valueChange={(value) => setFieldValue('phone1Label', value)}
+                          />
                         )}
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('contactNotes') != -1}
@@ -781,15 +778,13 @@ class FatherFormScreen extends Component {
                             valueChange={(value) => setFieldValue('emergencyContact1Relation', value)}
                           />
                         ) : (
-                          <View style={styles.pickerContainer}>
-                            <Select
-                              containerStyle={styles.select}
-                              elements={this.state.personEmergencyOptions}
-                              value={values.emergencyContact1Relation}
-                              itemColor={Colors.primaryColor}
-                              valueChange={(value) => setFieldValue('emergencyContact1Relation', value)}
-                            />
-                          </View>
+                          <Select
+                            containerStyle={styles.selectIos}
+                            elements={this.state.personEmergencyOptions}
+                            value={values.emergencyContact1Relation}
+                            itemColor={Colors.primaryColor}
+                            valueChange={(value) => setFieldValue('emergencyContact1Relation', value)}
+                          />
                         )}
 
                         <InputWithFormik
@@ -817,15 +812,13 @@ class FatherFormScreen extends Component {
                             valueChange={(value) => setFieldValue('emergencyContact2Relation', value)}
                           />
                         ) : (
-                          <View style={styles.pickerContainer}>
-                            <Select
-                              containerStyle={styles.select}
-                              elements={this.state.personEmergencyOptions}
-                              value={values.emergencyContact2Relation}
-                              itemColor={Colors.primaryColor}
-                              valueChange={(value) => setFieldValue('emergencyContact2Relation', value)}
-                            />
-                          </View>
+                          <Select
+                            containerStyle={styles.selectIos}
+                            elements={this.state.personEmergencyOptions}
+                            value={values.emergencyContact2Relation}
+                            itemColor={Colors.primaryColor}
+                            valueChange={(value) => setFieldValue('emergencyContact2Relation', value)}
+                          />
                         )}
 
                         <InputWithFormik
