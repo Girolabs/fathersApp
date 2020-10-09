@@ -334,12 +334,18 @@ class FatherFormScreen extends Component {
                             </Button>
                           )}
 
-                          <Button onPress={(e)=>{
+                          <Button
+                            onPress={(e) => {
                               //We make old the DateDeadline, so search scren is force to make a request
-                              var newDateDeadline = new Date();
+                              try {
+                                let newDateDeadline = new Date();
                                 AsyncStorage.setItem('DateDeadline', newDateDeadline);
-                              handleSubmit(e)
-                          }}>
+                              } catch (e) {
+                                console.log('Error on saving form screen ', e);
+                              }
+                              handleSubmit(e);
+                            }}
+                          >
                             <View style={styles.btnContainer}>
                               <Text style={styles.btnText}>{i18n.t('FATHER_EDIT.SAVE')}</Text>
                             </View>

@@ -100,54 +100,53 @@ class SearchScreen extends Component {
         this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
       });
   };
-  async getData(){
-      //Verificamos si current Date es menor al DateDeadline
-      //Si es menor no hace falta, hacer un nuevo request, se usa lo que esta en el local si existe sino existe se hace el get de los datos
-      //Si es mayor se actualiza el item result on AsyncStorage llamando a la funcion loadPerson('all) y se actuliza el nuevo DateDeadline sumandole 24 horas al current date
-      var isOldresult = false;
-      try {
-        var currentDate = new Date();
-        const tem = await AsyncStorage.getItem('DateDeadline');
-        if (tem !== null) {
-          const date = new Date(tem);
-          if (currentDate > date) {
-            isOldresult=true;
-            var newDateDeadline = new Date();
-            newDateDeadline.setDate(currentDate.getDate() + 1);
-            await AsyncStorage.setItem('DateDeadline', newDateDeadline);
-          }
-        } else {
-          //si no existe cargamos
+  async getData() {
+    //Verificamos si current Date es menor al DateDeadline
+    //Si es menor no hace falta, hacer un nuevo request, se usa lo que esta en el local si existe sino existe se hace el get de los datos
+    //Si es mayor se actualiza el item result on AsyncStorage llamando a la funcion loadPerson('all) y se actuliza el nuevo DateDeadline sumandole 24 horas al current date
+    var isOldresult = false;
+    try {
+      var currentDate = new Date();
+      const tem = await AsyncStorage.getItem('DateDeadline');
+      if (tem !== null) {
+        const date = new Date(tem);
+        if (currentDate > date) {
+          isOldresult = true;
           var newDateDeadline = new Date();
           newDateDeadline.setDate(currentDate.getDate() + 1);
           await AsyncStorage.setItem('DateDeadline', newDateDeadline);
         }
-      } catch (e) {
-        console.log('Error at AsyncStorage get item on Date');
+      } else {
+        //si no existe cargamos
+        var newDateDeadline = new Date();
+        newDateDeadline.setDate(currentDate.getDate() + 1);
+        await AsyncStorage.setItem('DateDeadline', newDateDeadline);
       }
+    } catch (e) {
+      console.log('Error at AsyncStorage get item on Date');
+    }
 
-      console.log('isOldresult => ', isOldresult);
-      try {
-        //Verificamos si esta almacenado en el local storage los fields
-        const result = await AsyncStorage.getItem('result');
-        if (result == null) {
-          //si no esta en el local, cargamos los datos
-          this.loadPersons('all');
-        } else {
-            console.log('result ',JSON.parse(result));
-          if (isOldresult)
-            //aunque este almacenado en el local storage, se tiene que actualizar los datos ya que vencio el tiempo
-            this.loadPersons('all');
-          else this.setState({ results: JSON.parse(result), loading: false });
-        }
-      } catch (e) {
-        console.log('Error on asyncstorage get item result');
+    console.log('isOldresult => ', isOldresult);
+    try {
+      //Verificamos si esta almacenado en el local storage los fields
+      const result = await AsyncStorage.getItem('result');
+      if (result == null) {
+        //si no esta en el local, cargamos los datos
+        this.loadPersons(false);
+      } else {
+        if (isOldresult)
+          //aunque este almacenado en el local storage, se tiene que actualizar los datos ya que vencio el tiempo
+          this.loadPersons(false);
+        else this.setState({ results: JSON.parse(result), loading: false });
       }
+    } catch (e) {
+      console.log('Error on asyncstorage get item result');
+    }
   }
   async componentDidMount() {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      this.getData()
+      this.getData();
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
@@ -206,11 +205,11 @@ class SearchScreen extends Component {
   render() {
     return (
       <View style={styles.screen}>
-          <NavigationEvents
-            onDidFocus={()=>{
-              this.getData()
+        <NavigationEvents
+          onDidFocus={() => {
+            this.getData();
           }}
-          />
+        />
         {!this.state.loading ? (
           <Fragment>
             <View style={styles.inputBox}>
