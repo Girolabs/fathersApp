@@ -40,6 +40,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 15,
   },
+  searchInput: {
+    minWidth: '75%',
+    maxWidth: '85%',
+  },
   item: {
     backgroundColor: Colors.surfaceColorSecondary,
     padding: 15,
@@ -213,7 +217,11 @@ class SearchScreen extends Component {
         {!this.state.loading ? (
           <Fragment>
             <View style={styles.inputBox}>
-              <TextInput placeholder={i18n.t('SEARCH.PLACEHOLDER')} onChangeText={(text) => this.handleFilter(text)} />
+              <TextInput
+                style={styles.searchInput}
+                placeholder={i18n.t('SEARCH.PLACEHOLDER')}
+                onChangeText={(text) => this.handleFilter(text)}
+              />
               <Ionicons name="ios-search" size={25} colors={Colors.primaryColor} />
             </View>
             <View style={styles.filtersContainer}>

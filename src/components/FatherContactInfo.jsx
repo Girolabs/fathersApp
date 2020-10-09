@@ -95,6 +95,35 @@ const FatherContactInfo = ({
             />
           );
         })}
+      {(father.emergencyContact1Name || father.emergencyContact2Name) && (
+        <Text style={styles.headerTitle}>{i18n.t('FATHER_DETAIL.EMERGENCY_CONTACT')}</Text>
+      )}
+      {father.emergencyContact1Name && (
+        <DefaultItem
+          show={viewPermissions.indexOf('phones')}
+          titleNoI18n={father.emergencyContact1Name}
+          body={father.emergencyContact1Phone}
+          icon={<Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />}
+          selected={() => {
+            Clipboard.setString(father.emergencyContact1Phone);
+            setSnackBarVisible();
+            setSnackMsg(i18n.t('GENERAL.COPY_CLIPBOARD'));
+          }}
+        />
+      )}
+      {father.emergencyContact2Name && (
+        <DefaultItem
+          show={viewPermissions.indexOf('phones')}
+          titleNoI18n={father.emergencyContact2Name}
+          body={father.emergencyContact2Phone}
+          icon={<Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />}
+          selected={() => {
+            Clipboard.setString(father.emergencyContact2Phone);
+            setSnackBarVisible();
+            setSnackMsg(i18n.t('GENERAL.COPY_CLIPBOARD'));
+          }}
+        />
+      )}
 
       <View style={styles.bottomContainer}>
         <Button

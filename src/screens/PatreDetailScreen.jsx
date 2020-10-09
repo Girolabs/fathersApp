@@ -211,7 +211,7 @@ const PatreDetailScreen = ({ navigation }) => {
                     />
 
                     <DefaultItem
-                      show={viewFatherFields.indexOf('activeLivingSituation')}
+                      show={viewFatherFields.indexOf('activeLivingSituation') !== -1}
                       title="FATHER_DETAIL.HOME"
                       body={father.activeLivingSituation.houseName}
                       img={father.activeLivingSituation.houseCountry}
@@ -235,7 +235,7 @@ const PatreDetailScreen = ({ navigation }) => {
                 <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PERSONAL_INFO')}</Text>
 
                 <DefaultItem
-                  show={viewFatherFields.indexOf('country')}
+                  show={viewFatherFields.indexOf('country') !== -1}
                   title="FATHER_DETAIL.HOME_COUNTRY"
                   img={father.country}
                   country_code={father.country}
@@ -243,7 +243,7 @@ const PatreDetailScreen = ({ navigation }) => {
                 />
 
                 <DefaultItem
-                  show={viewFatherFields.indexOf('homeTerritoyName')}
+                  show={viewFatherFields.indexOf('homeTerritoyName') !== -1}
                   title="FATHER_DETAIL.HOME_TERRITORY"
                   body={father.homeTerritoryName}
                   selected={() => {
@@ -321,6 +321,11 @@ const PatreDetailScreen = ({ navigation }) => {
                   show={viewFatherFields.indexOf('priestYears') !== -1}
                   title="FATHER_DETAIL.PRIESTLY_ORDINATION"
                   body={father.priestDate ? moment.utc(father.priestDate).format('Do MMMM YYYY') : null}
+                />
+                <DefaultItem
+                  show={viewFatherFields.indexOf('bishopDate') !== -1}
+                  title="FATHER_DETAIL.BISHOP_DATE"
+                  body={father.bishopDate ? moment.utc(father.bishopDate).format('Do MMMM YYYY') : null}
                 />
                 {father.livingSituations && (
                   <>

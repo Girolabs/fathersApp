@@ -13,14 +13,13 @@ import { NavigationEvents } from 'react-navigation';
 import i18n from 'i18n-js';
 import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from 'expo-vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { Formik } from 'formik';
-
 import * as Network from 'expo-network';
 import * as _ from 'lodash';
 import * as Yup from 'yup';
 import { Snackbar } from 'react-native-paper';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import {
@@ -32,7 +31,6 @@ import {
   updateLivingSituation,
 } from '../api';
 import Button from '../components/Button';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const styles = StyleSheet.create({
   title: {
@@ -66,6 +64,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 5,
     borderRadius: 10,
+    marginTop: 10,
+    marginBottom: 7,
   },
   inputDatePicker: {
     width: '80%',
@@ -139,31 +139,6 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   const [personId, setPersonId] = useState(null);
   const [snackMsg, setSnackMsg] = useState('');
   const [visible, setVisible] = useState('');
-
-  useEffect(() => {
-    const livingSituation = navigation.getParam('livingSituation');
-    const paramPersonId = navigation.getParam('personId');
-    if (!paramPersonId) {
-      navigation.goBack();
-    }
-    console.log('living', livingSituation);
-
-    if (!livingSituation || livingSituation.endDate) {
-      setIsCreate(true);
-
-      loadFiliations();
-      loadHouses();
-    } else {
-      const transFormedLiving = {
-        ...livingSituation,
-        startDate: livingSituation && livingSituation.startDate ? livingSituation.startDate.split('T')[0] : null,
-        endDate: livingSituation && livingSituation.endDate ? livingSituation.endDate.split('T')[0] : null,
-      };
-      setLivingSituation(transFormedLiving);
-    }
-    loadTerritory();
-    setPersonId(paramPersonId);
-  }, []);
 
   const loadHouses = async () => {
     const status = await Network.getNetworkStateAsync();
@@ -252,10 +227,12 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     const year = selectedDate.getUTCFullYear();
     const month =
       selectedDate.getUTCMonth() + 1 < 10 ? `0${selectedDate.getUTCMonth() + 1}` : selectedDate.getUTCMonth() + 1;
-    const day = selectedDate.getUTCDate();
+    let day = selectedDate.getUTCDate();
+    // console.log('day.lenght ', length);
+    if (10 - day > 0) {
+      day = `0${day}`;
+    }
     const dateString = `${year}-${month}-${day}`;
-
-    console.log(selectedDate);
     console.log(dateString);
     return dateString;
   };
@@ -287,6 +264,31 @@ const LivingSituationsFormScreen = ({ navigation }) => {
       },
     );
   };
+
+  useEffect(() => {
+    const livingSituation = navigation.getParam('livingSituation');
+    const paramPersonId = navigation.getParam('personId');
+    if (!paramPersonId) {
+      navigation.goBack();
+    }
+    console.log('living', livingSituation);
+
+    if (!livingSituation || livingSituation.endDate) {
+      setIsCreate(true);
+
+      loadFiliations();
+      loadHouses();
+    } else {
+      const transFormedLiving = {
+        ...livingSituation,
+        startDate: livingSituation && livingSituation.startDate ? livingSituation.startDate.split('T')[0] : null,
+        endDate: livingSituation && livingSituation.endDate ? livingSituation.endDate.split('T')[0] : null,
+      };
+      setLivingSituation(transFormedLiving);
+    }
+    loadTerritory();
+    setPersonId(paramPersonId);
+  }, []);
 
   return (
     <>
@@ -343,52 +345,26 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                 {({ handleChange, values, handleSubmit, errors, setFieldValue }) => (
                   <>
                     <View>
-                      {
-                        // <DateTimePicker
-                        //   value={startDate ? new Date(startDate) : new Date()}
-                        //   mode="date"
-                        //   display="default"
-                        //   onChange={(event, selectedDate) => {
-                        //     setOpenStartDate(false);
-                        //     const dateFormated = formatDate(selectedDate);
-                        //     setFieldValue('startDate', dateFormated);
-                        //   }}
-                        // />
-                        <DateTimePickerModal
-                          isVisible={openStartDate}
-                          mode="date"
-                          onConfirm={(date) => {
-                            setOpenStartDate(false);
-                            const dateFormated = formatDate(date);
-                            setFieldValue('startDate', dateFormated);
-                          }}
-                          onCancel={() => setOpenStartDate(false)}
-                        />
-                      }
-                      {
-                        //   openEndDate && (
-                        //     <DateTimePicker
-                        //       value={endDate ? new Date(endDate) : new Date()}
-                        //       mode="date"
-                        //       display="default"
-                        //       onChange={(event, selectedDate) => {
-                        //         setOpenEndDate(false);
-                        //         const dateFormated = formatDate(selectedDate);
-                        //         setFieldValue('endDate', dateFormated);
-                        //       }}
-                        //     />
-                        //   )
-                        <DateTimePickerModal
-                          isVisible={openEndDate}
-                          mode="date"
-                          onConfirm={(date) => {
-                            setOpenEndDate(false);
-                            const dateFormated = formatDate(date);
-                            setFieldValue('endDate', dateFormated);
-                          }}
-                          onCancel={() => setOpenEndDate(false)}
-                        />
-                      }
+                      <DateTimePickerModal
+                        isVisible={openStartDate}
+                        mode="date"
+                        onConfirm={(date) => {
+                          setOpenStartDate(false);
+                          const dateFormated = formatDate(date);
+                          setFieldValue('startDate', dateFormated);
+                        }}
+                        onCancel={() => setOpenStartDate(false)}
+                      />
+                      <DateTimePickerModal
+                        isVisible={openEndDate}
+                        mode="date"
+                        onConfirm={(date) => {
+                          setOpenEndDate(false);
+                          const dateFormated = formatDate(date);
+                          setFieldValue('endDate', dateFormated);
+                        }}
+                        onCancel={() => setOpenEndDate(false)}
+                      />
                       {isCreate && (
                         <>
                           <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>
@@ -441,9 +417,19 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                           inputAndroid: {
                             backgroundColor: Colors.surfaceColorSecondary,
                             borderRadius: 10,
+                            marginTop: 10,
+                            marginBottom: 7,
+                          },
+                          inputIOS: {
+                            backgroundColor: Colors.surfaceColorSecondary,
+                            padding: 10,
+                            paddingVertical: 17,
+                            borderRadius: 10,
+                            marginTop: 10,
+                            marginBottom: 7,
                           },
                           iconContainer: {
-                            top: 10,
+                            top: 22,
                             right: 15,
                           },
                         }}
@@ -463,9 +449,20 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                         style={{
                           inputAndroid: {
                             backgroundColor: Colors.surfaceColorSecondary,
+                            borderRadius: 10,
+                            marginTop: 10,
+                            marginBottom: 7,
+                          },
+                          inputIOS: {
+                            backgroundColor: Colors.surfaceColorSecondary,
+                            padding: 10,
+                            paddingVertical: 17,
+                            borderRadius: 10,
+                            marginTop: 10,
+                            marginBottom: 7,
                           },
                           iconContainer: {
-                            top: 10,
+                            top: 22,
                             right: 15,
                           },
                         }}
@@ -489,16 +486,14 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                     <View>
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.END_DATE')}</Text>
                       <Button onPress={() => setOpenEndDate(true)}>
-                        <>
-                          <View style={styles.inputContainer}>
-                            <Text style={styles.inputDatePicker}>{_.get(values, 'endDate') || ''}</Text>
-                            <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
-                          </View>
-                          {errors && errors.endDate && (
-                            <Text style={styles.errorText}>{i18n.t('LIVING_SITUATION.ERROR_END_DATE')}</Text>
-                          )}
-                        </>
+                        <View style={styles.inputContainer}>
+                          <Text style={styles.inputDatePicker}>{_.get(values, 'endDate') || ''}</Text>
+                          <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+                        </View>
                       </Button>
+                      {errors && errors.endDate && (
+                        <Text style={styles.errorText}>{i18n.t('LIVING_SITUATION.ERROR_END_DATE')}</Text>
+                      )}
                     </View>
 
                     <View>

@@ -139,7 +139,6 @@ class HouseDetailScreen extends Component {
   render() {
     const { navigation } = this.props;
     const { house } = this.state;
-
     return (
       <I18nContext.Consumer>
         {(value) => {
@@ -276,7 +275,11 @@ class HouseDetailScreen extends Component {
                       )}
                       <Text style={styles.sectionHeader}>{i18n.t('HOUSE_DETAIL.MEMBERS')}</Text>
                       <FlatList
-                        data={house.membersHouse}
+                        data={
+                          house.membersHouse.length
+                            ? house.membersHouse
+                            : [{ fullName: i18n.t('HOUSE_DETAIL.NO_MEMBERS') }]
+                        }
                         renderItem={({ item }) => {
                           return (
                             <Button onPress={() => navigation.navigate('PatreDetail', { fatherId: item.personId })}>
@@ -286,7 +289,14 @@ class HouseDetailScreen extends Component {
                                   style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
                                 />
                                 <Text
-                                  style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}
+                                  style={
+                                    house.membersHouse.length
+                                      ? { fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }
+                                      : {
+                                          fontSize: 12,
+                                          fontFamily: 'work-sans',
+                                        }
+                                  }
                                 >
                                   {item.fullName}
                                 </Text>

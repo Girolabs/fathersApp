@@ -1,19 +1,9 @@
 import React from 'react';
-import { ActionSheetIOS, Text, View, Picker, StyleSheet, Platform, Button } from 'react-native';
-
+import { ActionSheetIOS, Text, View, Picker, Platform, Button, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
-import { result } from 'lodash';
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: Colors.surfaceColorSecondary,
-    borderRadius: 5,
-    marginVertical: 5,
-    padding: 0,
-  },
-});
-
-const Select = ({ value, elements, valueChange, style }) => {
+const Select = ({ value, elements, valueChange, style, containerStyle, itemColor }) => {
   const [result, setResult] = React.useState(elements[0].name);
   const [options, setOption] = React.useState([]);
 
@@ -28,7 +18,7 @@ const Select = ({ value, elements, valueChange, style }) => {
   const onPress = () =>
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: options,
+        options,
       },
       (buttonIndex) => {
         valueChange(elements[buttonIndex].value);
@@ -36,7 +26,7 @@ const Select = ({ value, elements, valueChange, style }) => {
       },
     );
   return (
-    <View style={{ ...styles.container, ...style }}>
+    <View style={{ ...containerStyle, ...style }}>
       {Platform.OS === 'android' ? (
         <Picker selectedValue={value} onValueChange={(itemValue) => valueChange(itemValue)}>
           {elements.map((el) => {
@@ -44,7 +34,14 @@ const Select = ({ value, elements, valueChange, style }) => {
           })}
         </Picker>
       ) : (
-        <Button color={Colors.onSurfaceColorPrimary} onPress={onPress} title={result} />
+        <TouchableOpacity
+          style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
+          onPress={onPress}
+        >
+          <Button color={itemColor || Colors.onSurfaceColorPrimary} title={result} onPress={onPress} />
+          {/* <Text style={{fontSize:16}} color={itemColor || Colors.onSurfaceColorPrimary} title={result} >{result}</Text> */}
+          <Ionicons name="md-arrow-dropdown" size={24} color="black" />
+        </TouchableOpacity>
       )}
     </View>
   );
