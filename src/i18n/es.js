@@ -102,6 +102,7 @@ exports.ES = {
     WIFI: 'Contraseña wifi',
     PUBLIC_NOTES: 'Notas públicas',
     ADMIN_NOTES: 'Notas de administrador',
+    NO_MEMBERS: 'Sin miembros',
   },
   GENERATION: {
     GENERATION_INFO: 'Información de la generación',

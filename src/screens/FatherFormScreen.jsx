@@ -5,8 +5,6 @@ import {
   StyleSheet,
   AsyncStorage,
   Platform,
-  TouchableNativeFeedback,
-  TouchableOpacity,
   ActivityIndicator,
   KeyboardAvoidingView,
   ScrollView,
@@ -29,7 +27,6 @@ import Select from '../components/Select';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import * as _ from 'lodash';
 import { Ionicons } from 'expo-vector-icons';
-
 const widthBtn = Platform.OS == 'android' ? '45%' : '100%';
 const styles = StyleSheet.create({
   snackError: {
@@ -69,9 +66,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   selectAndroid: {
-    width: '100%',
+    width: '92%',
     borderRadius: 5,
-    paddingHorizontal: 10,
+    height: 55,
+    backgroundColor: '#f6f6f6',
+    borderColor: '#313142',
+    borderWidth: 1,
+    marginLeft: 15,
+  },
+  selectIos: {
+    width: '92%',
+    height: 50,
+    backgroundColor: '#f6f6f6',
+    borderColor: '#313142',
+    borderWidth: 1,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    marginLeft: 15,
+    borderRadius: 5,
   },
   selectContainer: {
     backgroundColor: Colors.surfaceColorSecondary,
@@ -88,7 +100,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: '93%',
     height: 50,
-    backgroundColor: Colors.surfaceColorSecondary,
+    backgroundColor: '#f1f2f7',
     borderColor: Colors.onSurfaceColorPrimary,
     borderWidth: 1,
     flexDirection: 'row',
@@ -249,8 +261,8 @@ class FatherFormScreen extends Component {
         ...(updateFields.indexOf('email2') != -1
           ? { email2: Yup.string().email().max(70, i18n.t('FATHER_EDIT.LESSTHAN70')).nullable() }
           : null),
-        ...(updateFields.indexOf('cellphone') != -1
-          ? { email2: Yup.string().matches(regex.phoneNumberRegex).nullable() }
+        ...(updateFields.indexOf('cellPhone') != -1
+          ? { cellPhone: Yup.string().matches(regex.phoneNumberRegex).nullable() }
           : null),
         ...(updateFields.indexOf('slackUser') != -1
           ? { slackUser: Yup.string().matches(regex.slackUserRegex).nullable() }
@@ -337,9 +349,9 @@ class FatherFormScreen extends Component {
                       ...(updateFields.indexOf('email2') != -1 && !!father.email2
                         ? { email2: father.email2 }
                         : { email2: null }),
-                      ...(updateFields.indexOf('cellPhone') != -1 && !!father.cellphone
-                        ? { cellphone: father.cellphone }
-                        : { cellphone: null }),
+                      ...(updateFields.indexOf('cellPhone') != -1 && !!father.cellPhone
+                        ? { cellPhone: father.cellPhone }
+                        : { cellPhone: null }),
                       ...(updateFields.indexOf('cellPhoneHasWhatsApp') != -1 && !!father.cellPhoneHasWhatsApp
                         ? { cellPhoneHasWhatsApp: !!father.cellPhoneHasWhatsApp }
                         : { cellPhoneHasWhatsApp: null }),
@@ -487,9 +499,9 @@ class FatherFormScreen extends Component {
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('cellPhone') != -1}
                           label={i18n.t('FATHER_EDIT.CELLPHONE')}
-                          name="cellphone"
+                          name="cellPhone"
                           mode="outlined"
-                          keyboardType="numeric-pad"
+                          keyboardType="phone-pad"
                           selectionColor={Colors.primaryColor}
                         />
                         <SwitchWithFormik
@@ -504,7 +516,7 @@ class FatherFormScreen extends Component {
                           placeholder={'+1 262 473-4782'}
                           name="phone1"
                           mode="outlined"
-                          keyboardType="number-pad"
+                          keyboardType="phone-pad"
                           selectionColor={Colors.primaryColor}
                         />
                         {Platform.OS === 'android' ? (
@@ -516,15 +528,12 @@ class FatherFormScreen extends Component {
                             valueChange={(value) => setFieldValue('phone1Label', value)}
                           />
                         ) : (
-                          <View style={styles.pickerContainer}>
-                            <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
-                            <Select
-                              containerStyle={styles.select}
-                              elements={this.state.phoneLabels}
-                              value={values.phone1Label}
-                              valueChange={value.changeLang}
-                            />
-                          </View>
+                          <Select
+                            containerStyle={styles.selectIos}
+                            elements={this.state.phoneLabels}
+                            value={values.phone1Label}
+                            valueChange={(value) => setFieldValue('phone1Label', value)}
+                          />
                         )}
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('phone2') != -1}
@@ -532,7 +541,7 @@ class FatherFormScreen extends Component {
                           placeholder={'+1 262 473-4782'}
                           name="phone2"
                           mode="outlined"
-                          keyboardType="number-pad"
+                          keyboardType="phone-pad"
                           underlineColor={Colors.primaryColor}
                         />
                         {Platform.OS === 'android' ? (
@@ -544,15 +553,12 @@ class FatherFormScreen extends Component {
                             valueChange={(value) => setFieldValue('phone2Label', value)}
                           />
                         ) : (
-                          <View style={styles.pickerContainer}>
-                            <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
-                            <Select
-                              containerStyle={styles.select}
-                              elements={this.state.phoneLabels}
-                              value={values.phone1Label}
-                              valueChange={value.changeLang}
-                            />
-                          </View>
+                          <Select
+                            containerStyle={styles.selectIos}
+                            elements={this.state.phoneLabels}
+                            value={values.phone1Label}
+                            valueChange={(value) => setFieldValue('phone1Label', value)}
+                          />
                         )}
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('phone3') != -1}
@@ -560,7 +566,7 @@ class FatherFormScreen extends Component {
                           placeholder={'+1 262 473-4782'}
                           name="phone3"
                           mode="outlined"
-                          keyboardType="number-pad"
+                          keyboardType="phone-pad"
                           underlineColor={Colors.primaryColor}
                         />
                         {Platform.OS === 'android' ? (
@@ -572,15 +578,12 @@ class FatherFormScreen extends Component {
                             valueChange={(value) => setFieldValue('phone3Label', value)}
                           />
                         ) : (
-                          <View style={styles.pickerContainer}>
-                            <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
-                            <Select
-                              containerStyle={styles.select}
-                              elements={this.state.phoneLabels}
-                              value={values.phone1Label}
-                              valueChange={value.changeLang}
-                            />
-                          </View>
+                          <Select
+                            containerStyle={styles.selectIos}
+                            elements={this.state.phoneLabels}
+                            value={values.phone1Label}
+                            valueChange={(value) => setFieldValue('phone1Label', value)}
+                          />
                         )}
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('contactNotes') != -1}
@@ -772,16 +775,13 @@ class FatherFormScreen extends Component {
                             valueChange={(value) => setFieldValue('emergencyContact1Relation', value)}
                           />
                         ) : (
-                          <View style={styles.pickerContainer}>
-                            <Text style={styles.text}>{i18n.t('FATHER_EDIT.EMERGENCY_RELATION_CONTACT_1')}</Text>
-                            <Select
-                              containerStyle={styles.select}
-                              elements={this.state.personEmergencyOptions}
-                              value={values.emergencyContact1Relation}
-                              itemColor={Colors.primaryColor}
-                              valueChange={(value) => setFieldValue('emergencyContact1Relation', value)}
-                            />
-                          </View>
+                          <Select
+                            containerStyle={styles.selectIos}
+                            elements={this.state.personEmergencyOptions}
+                            value={values.emergencyContact1Relation}
+                            itemColor={Colors.primaryColor}
+                            valueChange={(value) => setFieldValue('emergencyContact1Relation', value)}
+                          />
                         )}
 
                         <InputWithFormik
@@ -790,7 +790,7 @@ class FatherFormScreen extends Component {
                           placeholder={'+1 262 473-4782'}
                           name="emergencyContact1Phone"
                           mode="outlined"
-                          keyboardType="number-pad"
+                          keyboardType="phone-pad"
                           underlineColor={Colors.primaryColor}
                         />
                         <InputWithFormik
@@ -809,16 +809,13 @@ class FatherFormScreen extends Component {
                             valueChange={(value) => setFieldValue('emergencyContact2Relation', value)}
                           />
                         ) : (
-                          <View style={styles.pickerContainer}>
-                            <Text style={styles.text}>{i18n.t('FATHER_EDIT.EMERGENCY_RELATION_CONTACT_2')}</Text>
-                            <Select
-                              containerStyle={styles.select}
-                              elements={this.state.personEmergencyOptions}
-                              value={values.emergencyContact2Relation}
-                              itemColor={Colors.primaryColor}
-                              valueChange={(value) => setFieldValue('emergencyContact2Relation', value)}
-                            />
-                          </View>
+                          <Select
+                            containerStyle={styles.selectIos}
+                            elements={this.state.personEmergencyOptions}
+                            value={values.emergencyContact2Relation}
+                            itemColor={Colors.primaryColor}
+                            valueChange={(value) => setFieldValue('emergencyContact2Relation', value)}
+                          />
                         )}
 
                         <InputWithFormik
@@ -827,7 +824,7 @@ class FatherFormScreen extends Component {
                           placeholder={'+1 262 473-4782'}
                           name="emergencyContact2Phone"
                           mode="outlined"
-                          keyboardType="number-pad"
+                          keyboardType="phone-pad"
                           underlineColor={Colors.primaryColor}
                         />
 
@@ -843,6 +840,7 @@ class FatherFormScreen extends Component {
                                   personId: father ? father.personId : null,
                                 });
                               }}
+                              style={{ width: '45%%' }}
                             >
                               <View style={styles.btnContainer}>
                                 <Text style={styles.btnText}>{i18n.t('FATHER_EDIT.EDIT_LIVING')}</Text>
@@ -850,7 +848,19 @@ class FatherFormScreen extends Component {
                             </Button>
                           )}
 
-                          <Button onPress={handleSubmit}>
+                          <Button
+                            onPress={(e) => {
+                              //We make old the DateDeadline, so search scren is force to make a request
+                              try {
+                                let newDateDeadline = new Date();
+                                AsyncStorage.setItem('DateDeadline', newDateDeadline);
+                              } catch (e) {
+                                console.log('Error on saving form screen ', e);
+                              }
+                              handleSubmit(e);
+                            }}
+                            style={{ width: '45%%' }}
+                          >
                             <View style={styles.btnContainer}>
                               <Text style={styles.btnText}>{i18n.t('FATHER_EDIT.SAVE')}</Text>
                             </View>
