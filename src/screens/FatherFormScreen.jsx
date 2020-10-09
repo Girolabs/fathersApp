@@ -848,7 +848,19 @@ class FatherFormScreen extends Component {
                             </Button>
                           )}
 
-                          <Button onPress={handleSubmit} style={{ width: '45%%' }}>
+                          <Button
+                            onPress={(e) => {
+                              //We make old the DateDeadline, so search scren is force to make a request
+                              try {
+                                let newDateDeadline = new Date();
+                                AsyncStorage.setItem('DateDeadline', newDateDeadline);
+                              } catch (e) {
+                                console.log('Error on saving form screen ', e);
+                              }
+                              handleSubmit(e);
+                            }}
+                            style={{ width: '45%%' }}
+                          >
                             <View style={styles.btnContainer}>
                               <Text style={styles.btnText}>{i18n.t('FATHER_EDIT.SAVE')}</Text>
                             </View>
