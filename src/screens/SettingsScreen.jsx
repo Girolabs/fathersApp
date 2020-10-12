@@ -62,9 +62,9 @@ const styles = StyleSheet.create({
     padding: 0,
   },
   selectAndroid: {
-    width: '100%',
-    borderRadius: 5,
-    paddingHorizontal: 10,
+    width: '40%',
+    // borderRadius: 5,
+    // paddingHorizontal: 10,
   },
   text2: {
     fontFamily: 'work-sans',
@@ -95,13 +95,16 @@ const SettingsScreen = (props) => {
               <Text style={styles.text2}>{Constants.manifest.version}</Text>
             </View>
             {Platform.OS === 'android' ? (
-              <Select
-                containerStyle={styles.selectContainer}
-                style={styles.selectAndroid}
-                elements={lng}
-                value={value.lang}
-                valueChange={value.changeLang}
-              />
+              <View style={styles.pickerContainer}>
+                <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
+                <Select
+                  // containerStyle={styles.selectContainer}
+                  style={styles.selectAndroid}
+                  elements={lng}
+                  value={value.lang}
+                  valueChange={value.changeLang}
+                />
+              </View>
             ) : (
               <View style={styles.pickerContainer}>
                 <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
