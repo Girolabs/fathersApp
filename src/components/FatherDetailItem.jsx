@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Platform, Text, StyleSheet, TouchableOpacity, TouchableNativeFeedback } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Flag } from 'react-native-svg-flagkit';
 import countries from 'i18n-iso-countries';
 import moment from 'moment';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
 import Buttom from './Button';
+import { getDateFormatByLocale } from '../utils/date-utils';
 
 const styles = StyleSheet.create({
   screen: {
@@ -69,7 +70,8 @@ const DefaultItem = ({ title, titleNoI18n, body, selected, img, country_code, la
 
   if (date) {
     moment.locale(lang);
-    formatedDate = moment.utc(date).format('dddd,  Do MMMM YYYY');
+    const dateFormat = getDateFormatByLocale(lang);
+    formatedDate = moment.utc(date).format(dateFormat);
   }
 
   return (

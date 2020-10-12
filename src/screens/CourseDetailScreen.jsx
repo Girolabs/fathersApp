@@ -25,6 +25,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { getCourse, getPerson } from '../api';
 import IdealStatement from '../components/IdealStatement';
+import { getDateMaskByLocale, getDateFormatByLocale } from '../utils/date-utils';
 
 const styles = StyleSheet.create({
   screen: {
@@ -137,6 +138,8 @@ class CourseDetailScreen extends Component {
     return (
       <I18nContext.Consumer>
         {(value) => {
+          const dateFormat = getDateFormatByLocale(moment.locale());
+          const dateMask = getDateMaskByLocale(moment.locale());
           moment.locale(value.lang);
           return (
             <SafeAreaView style={styles.screen}>
@@ -163,7 +166,7 @@ class CourseDetailScreen extends Component {
                     <View style={styles.listItem}>
                       <Text style={styles.listItemTitle}>{i18n.t('COURSE.CELEBRATION_DATE')}</Text>
                       <Text style={styles.listItemBody}>
-                        {course.celebrationDate ? moment.utc(course.celebrationDate).format('D MMMM YYYY') : ''}
+                        {course.celebrationDate ? moment.utc(course.celebrationDate).format(dateFormat) : ''}
                       </Text>
                     </View>
                     <IdealStatement
@@ -176,7 +179,7 @@ class CourseDetailScreen extends Component {
                       <Text style={styles.listItemTitle}>{i18n.t('COURSE.CONSECRATION_DATE')}</Text>
                       <Text style={styles.listItemBody}>
                         {course.idealConsecrationDate
-                          ? moment.utc(course.idealConsecrationDate).format('D MMMM YYYY')
+                          ? moment.utc(course.idealConsecrationDate).format(dateFormat)
                           : ''}
                       </Text>
                     </View>
@@ -213,11 +216,11 @@ class CourseDetailScreen extends Component {
                                 <Text style={styles.listItemBody}>
                                   {`${
                                     course.leaderAssignment.startDate
-                                      ? moment.utc(course.leaderAssignment.startDate).format('Do MMMM YYYY')
+                                      ? moment.utc(course.leaderAssignment.startDate).format(dateMask)
                                       : ''
-                                  } ${
+                                  } - ${
                                     course.leaderAssignment.endDate
-                                      ? moment.utc(course.leaderAssignment.endDate).format('Do MMMM YYYY')
+                                      ? moment.utc(course.leaderAssignment.endDate).format(dateMask)
                                       : ''
                                   }`}
                                 </Text>
@@ -231,7 +234,7 @@ class CourseDetailScreen extends Component {
                     <View style={styles.listItem}>
                       <Text style={styles.listItemTitle}>{i18n.t('COURSE.NOVITIATE_START')}</Text>
                       <Text style={styles.listItemBody}>
-                        {course.novitiateStartDate ? moment.utc(course.novitiateStartDate).format('D MMMM YYYY') : ''}
+                        {course.novitiateStartDate ? moment.utc(course.novitiateStartDate).format(dateFormat) : ''}
                       </Text>
                     </View>
                     {course.novitiateFiliation && (
@@ -379,7 +382,7 @@ class CourseDetailScreen extends Component {
                           <Text style={styles.listItemTitle}>{i18n.t('COURSE.START_DATE')}</Text>
                           <Text style={styles.listItemBody}>
                             {course.firstTertianshipStartDate
-                              ? moment.utc(course.firstTertianshipStartDate).format('Do MMMM YYYY')
+                              ? moment.utc(course.firstTertianshipStartDate).format(dateFormat)
                               : ''}
                           </Text>
                         </View>
@@ -387,7 +390,7 @@ class CourseDetailScreen extends Component {
                           <Text style={styles.listItemTitle}>{i18n.t('COURSE.END_DATE')}</Text>
                           <Text style={styles.listItemBody}>
                             {course.firstTertianshipEndDate
-                              ? moment.utc(course.firstTertianshipEndDate).format('Do MMMM YYYY')
+                              ? moment.utc(course.firstTertianshipEndDate).format(dateFormat)
                               : ''}
                           </Text>
                         </View>
@@ -446,7 +449,7 @@ class CourseDetailScreen extends Component {
                           <Text style={styles.listItemTitle}>{i18n.t('COURSE.START_DATE')}</Text>
                           <Text style={styles.listItemBody}>
                             {course.secondTertianshipStartDate
-                              ? moment.utc(course.secondTertianshipStartDate).format('Do MMMM YYYY')
+                              ? moment.utc(course.secondTertianshipStartDate).format(dateFormat)
                               : ''}
                           </Text>
                         </View>
@@ -454,7 +457,7 @@ class CourseDetailScreen extends Component {
                           <Text style={styles.listItemTitle}>{i18n.t('COURSE.END_DATE')}</Text>
                           <Text style={styles.listItemBody}>
                             {course.secondTertianshipEndDate
-                              ? moment.utc(course.secondTertianshipEndDate).format('Do MMMM YYYY')
+                              ? moment.utc(course.secondTertianshipEndDate).format(dateFormat)
                               : ''}
                           </Text>
                         </View>
@@ -513,15 +516,13 @@ class CourseDetailScreen extends Component {
                         <View style={styles.listItem}>
                           <Text style={styles.listItemTitle}>{i18n.t('COURSE.START_DATE')}</Text>
                           <Text style={styles.listItemBody}>
-                            {course.sionzeitStartDate
-                              ? moment.utc(course.sionzeitStartDate).format('Do MMMM YYYY')
-                              : ''}
+                            {course.sionzeitStartDate ? moment.utc(course.sionzeitStartDate).format(dateFormat) : ''}
                           </Text>
                         </View>
                         <View style={styles.listItem}>
                           <Text style={styles.listItemTitle}>{i18n.t('COURSE.END_DATE')}</Text>
                           <Text style={styles.listItemBody}>
-                            {course.sionzeitEndDate ? moment.utc(course.sionzeitEndDate).format('Do MMMM YYYY') : ''}
+                            {course.sionzeitEndDate ? moment.utc(course.sionzeitEndDate).format(dateFormat) : ''}
                           </Text>
                         </View>
                       </Fragment>

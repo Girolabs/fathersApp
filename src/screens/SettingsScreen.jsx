@@ -11,7 +11,7 @@ import HeaderButton from '../components/HeaderButton';
 import { I18nContext } from '../context/I18nProvider';
 import Select from '../components/Select';
 import Button from '../components/Button';
-import { lng } from '../constants/Fields';
+import { lng } from '../constants/Langs';
 
 const styles = StyleSheet.create({
   screen: {
