@@ -42,12 +42,14 @@ const styles = StyleSheet.create({
   screen: {
     backgroundColor: Colors.surfaceColorPrimary,
     height: '100%',
-    // paddingHorizontal: 10,
+
     justifyContent: 'center',
   },
   label: {
     fontFamily: 'work-sans-semibold',
     fontSize: 18,
+    marginTop: 10,
+    marginBottom: 10,
     color: Colors.primaryColor,
   },
   pickerInnerContainer: {
@@ -271,13 +273,12 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     if (!paramPersonId) {
       navigation.goBack();
     }
+    loadFiliations();
+    loadHouses();
     console.log('living', livingSituation);
 
     if (!livingSituation || livingSituation.endDate) {
       setIsCreate(true);
-
-      loadFiliations();
-      loadHouses();
     } else {
       const transFormedLiving = {
         ...livingSituation,
@@ -365,50 +366,55 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                         }}
                         onCancel={() => setOpenEndDate(false)}
                       />
-                      {isCreate && (
-                        <>
-                          <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>
-                          <RNPickerSelect
-                            name="filiationId"
-                            style={{
-                              inputAndroid: {
-                                backgroundColor: Colors.surfaceColorSecondary,
-                                borderRadius: 10,
-                              },
-                              iconContainer: {
-                                top: 10,
-                                right: 15,
-                              },
-                            }}
-                            onValueChange={(e) => setFieldValue('filiationId', e)}
-                            value={_.get(values, 'filiationId') || ''}
-                            items={filiations}
-                            Icon={() => {
-                              return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
-                            }}
-                          />
-                          <Text style={styles.label}>{i18n.t('LIVING_SITUATION.HOUSE')}</Text>
-                          <RNPickerSelect
-                            name="houseId"
-                            style={{
-                              inputAndroid: {
-                                backgroundColor: Colors.surfaceColorSecondary,
-                                borderRadius: 10,
-                              },
-                              iconContainer: {
-                                top: 10,
-                                right: 15,
-                              },
-                            }}
-                            onValueChange={(e) => setFieldValue('houseId', e)}
-                            value={_.get(values, 'houseId') || ''}
-                            items={houses}
-                            Icon={() => {
-                              return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
-                            }}
-                          />
-                        </>
-                      )}
+
+                      <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>
+                      <RNPickerSelect
+                        name="filiationId"
+                        style={{
+                          inputAndroid: {
+                            backgroundColor: Colors.surfaceColorSecondary,
+                            borderRadius: 10,
+                          },
+                          iconContainer: {
+                            top: 10,
+                            right: 15,
+                          },
+                        }}
+                        disabled={!isCreate}
+                        onValueChange={(e) => setFieldValue('filiationId', e)}
+                        value={_.get(values, 'filiationId') || ''}
+                        items={filiations}
+                        Icon={() => {
+                          const icon = isCreate ? (
+                            <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />
+                          ) : null;
+                          return icon;
+                        }}
+                      />
+                      <Text style={styles.label}>{i18n.t('LIVING_SITUATION.HOUSE')}</Text>
+                      <RNPickerSelect
+                        name="houseId"
+                        style={{
+                          inputAndroid: {
+                            backgroundColor: Colors.surfaceColorSecondary,
+                            borderRadius: 10,
+                          },
+                          iconContainer: {
+                            top: 10,
+                            right: 15,
+                          },
+                        }}
+                        onValueChange={(e) => setFieldValue('houseId', e)}
+                        value={_.get(values, 'houseId') || ''}
+                        items={houses}
+                        disabled={!isCreate}
+                        Icon={() => {
+                          const icon = isCreate ? (
+                            <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />
+                          ) : null;
+                          return icon;
+                        }}
+                      />
 
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.RESPONSIBLE_TERRITORY')}</Text>
                       <RNPickerSelect
