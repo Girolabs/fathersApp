@@ -189,7 +189,7 @@ exports.PT = {
     LEAVE_DATE: 'Data de Licença',
     EMERGENCY_CONTACT_NAME_1: 'Nome de contato de emergência 1',
     EMERGENCY_CONTACT_PHONE_1: 'Telefone de contato de emergência 1',
-    EMERGENCY_CONTACT_PHONE_2: 'Telefone de contato de emergência 1',
+    EMERGENCY_CONTACT_PHONE_2: 'Telefone de contato de emergência 2',
     EMERGENCY_CONTACT_NAME_2: 'Nome de contato de emergência 2',
     EMERGENCY_RELATION_CONTACT_1: 'Relação de contato de emergência 1',
     EMERGENCY_RELATION_CONTACT_2: 'Relação de contato de emergência 2',
