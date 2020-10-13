@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   selectAndroid: {
-    width: '40%',
+    width: '30%',
 
     // borderRadius: 5,
     // paddingHorizontal: 10,
