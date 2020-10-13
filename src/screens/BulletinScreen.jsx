@@ -64,7 +64,7 @@ const BulletinScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
-  const { unseenPostsCount, checkUnseenCounter } = useContext(BulletinCheckContext);
+  const { unseenPostsCount, markCheckUnseenCounter, checkOnly } = useContext(BulletinCheckContext);
 
   const loadPosts = async () => {
     const status = await Network.getNetworkStateAsync();
@@ -73,7 +73,7 @@ const BulletinScreen = ({ navigation }) => {
         .then((res) => {
           const fetchedPosts = res.data.result;
           setPosts(fetchedPosts);
-          checkUnseenCounter();
+          markCheckUnseenCounter();
           setLoading(false);
         })
         .catch(() => {
@@ -103,8 +103,8 @@ const BulletinScreen = ({ navigation }) => {
       // Restric orientation PORTRAIT_UP screen
       await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
     }
-    checkUnseenCounter();
     return () => {
+      checkOnly();
       orientationBack();
     };
   }, []);

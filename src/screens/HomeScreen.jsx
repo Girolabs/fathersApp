@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import i18n from 'i18n-js';
@@ -14,6 +14,7 @@ import HeaderButton from '../components/HeaderButton';
 import { I18nContext } from '../context/I18nProvider';
 import { getReminders } from '../api';
 import RemindersHeaders from '../components/RemindersHeaders';
+import { BulletinCheckContext } from '../context/BulletinCheckProvider';
 
 const styles = StyleSheet.create({
   screen: {
@@ -103,6 +104,7 @@ const HomeScreen = () => {
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
+  const { unseenPostsCount, markCheckUnseenCounter, checkOnly } = useContext(BulletinCheckContext);
 
   const loadReminders = async () => {
     const status = await Network.getNetworkStateAsync();
@@ -142,6 +144,7 @@ const HomeScreen = () => {
             <NavigationEvents
               onDidFocus={() => {
                 loadReminders();
+                checkOnly();
               }}
             />
             {!loading ? (
