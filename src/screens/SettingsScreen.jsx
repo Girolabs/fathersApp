@@ -55,14 +55,30 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     color: Colors.primaryColor,
   },
+  pickerContainerAndroid: {
+    width: '100%',
+    backgroundColor: Colors.surfaceColorSecondary,
+    marginVertical: 5,
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderRadius: 5,
+    paddingLeft: 20,
+    paddingVertical: 5,
+    fontFamily: 'work-sans-medium',
+    fontSize: 18,
+    lineHeight: 21,
+    color: Colors.primaryColor,
+  },
   selectContainer: {
     backgroundColor: Colors.surfaceColorSecondary,
     borderRadius: 5,
     marginVertical: 5,
-    padding: 0,
   },
   selectAndroid: {
     width: '40%',
+
     // borderRadius: 5,
     // paddingHorizontal: 10,
   },
@@ -95,7 +111,7 @@ const SettingsScreen = (props) => {
               <Text style={styles.text2}>{Constants.manifest.version}</Text>
             </View>
             {Platform.OS === 'android' ? (
-              <View style={styles.pickerContainer}>
+              <View style={styles.pickerContainerAndroid}>
                 <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
                 <Select
                   // containerStyle={styles.selectContainer}
