@@ -22,6 +22,7 @@ import HeaderButton from '../components/HeaderButton';
 import { getGeneration } from '../api';
 import IdealStatement from '../components/IdealStatement';
 import GenerationCourses from '../components/GenerationCourses';
+import { getDateFormatByLocale } from '../utils/date-utils';
 
 const styles = StyleSheet.create({
   screen: {
@@ -140,6 +141,7 @@ class GenerationDetailScreen extends Component {
     return (
       <I18nContext.Consumer>
         {(value) => {
+          const dateFormat = getDateFormatByLocale(value.lang);
           moment.locale(value.lang);
           return (
             <SafeAreaView style={styles.screen}>
@@ -156,7 +158,7 @@ class GenerationDetailScreen extends Component {
                           <Text style={styles.listItemTitle}> {i18n.t('GENERATION.CELEBRATION_DATE')} </Text>
                           <Text style={styles.listItemBody}>
                             {this.state.generation.celebrationDate
-                              ? moment.utc(generation.celebrationDate).format('Do MMMM YYYY')
+                              ? moment.utc(generation.celebrationDate).format(dateFormat)
                               : ''}
                           </Text>
                         </View>
@@ -165,7 +167,7 @@ class GenerationDetailScreen extends Component {
                       <View style={styles.listItem}>
                         <Text style={styles.listItemTitle}>{i18n.t('GENERATION.FOUNDATION_DATE')}</Text>
                         <Text style={styles.listItemBody}>
-                          {generation.foundingDate ? moment.utc(generation.foundingDate).format('Do MMMM YYYY') : ''}
+                          {generation.foundingDate ? moment.utc(generation.foundingDate).format(dateFormat) : ''}
                         </Text>
                       </View>
                       <IdealStatement

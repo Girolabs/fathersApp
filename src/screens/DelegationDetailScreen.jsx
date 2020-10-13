@@ -25,6 +25,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { FontAwesome5 } from '@expo/vector-icons';
 import IdealStatement from '../components/IdealStatement';
+import { getDateMaskByLocale, getDateFormatByLocale } from '../utils/date-utils';
 
 const styles = StyleSheet.create({
   screen: {
@@ -194,6 +195,8 @@ class DelegationDetailScreen extends Component {
     return (
       <I18nContext.Consumer>
         {(value) => {
+          const dateMask = getDateMaskByLocale(value.lang);
+          const dateFormat = getDateFormatByLocale(value.lang);
           moment.locale(value.lang);
           return (
             <SafeAreaView style={styles.screen}>
@@ -223,7 +226,7 @@ class DelegationDetailScreen extends Component {
                       <View style={styles.listItem}>
                         <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.CELEBRATION_DATE')}</Text>
                         <Text style={styles.listItemBody}>
-                          {moment.utc(territory.celebrationDate).format('Do MMMM YYYY')}
+                          {moment.utc(territory.celebrationDate).format(dateFormat)}
                         </Text>
                       </View>
                     )}
@@ -264,9 +267,9 @@ class DelegationDetailScreen extends Component {
                                 <Text style={styles.listItemBody}>{asg.roleTitle}</Text>
                                 <Text style={styles.listItemBody}>{asg.person.fullName}</Text>
                                 <Text style={styles.listItemBody}>
-                                  {`${moment.utc(asg.startDate).format('Do MMMM YYYY')} ${moment
+                                  {`${moment.utc(asg.startDate).format(dateMask)} - ${moment
                                     .utc(asg.endDate)
-                                    .format('Do MMMM YYYY')}`}
+                                    .format(dateMask)}`}
                                 </Text>
                               </View>
                             </View>

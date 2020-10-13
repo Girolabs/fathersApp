@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import Colors from '../constants/Colors';
 import Button from './Button';
 import Reminders from './Reminders';
+import { getDateFormatByLocale } from '../utils/date-utils';
 
 const styles = StyleSheet.create({
   title: {
@@ -56,6 +57,7 @@ const styles = StyleSheet.create({
 });
 
 const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader }) => {
+  const dateFormatByLocale = getDateFormatByLocale(moment.locale());
   const handleShowReminders = (index) => {
     if (selectedHeader === index) {
       onChangeSelectedHeader(null);
@@ -63,6 +65,7 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
       onChangeSelectedHeader(index);
     }
   };
+  console.log(dateFormatByLocale);
 
   return (
     <View>
@@ -72,7 +75,7 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
           data={reminders}
           keyExtractor={(item) => item.entityId}
           renderItem={({ item, index }) => {
-            const date = moment.utc(item[0].date).format('dddd, Do MMMM YYYY');
+            const date = moment.utc(item[0].date).format(dateFormatByLocale);
             const importantReminder = item[0].isImportant;
             const importantTitle =
               importantReminder && item[0].importantText

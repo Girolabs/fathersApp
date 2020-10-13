@@ -14,7 +14,7 @@ import 'moment/min/locales';
 import i18n from 'i18n-js';
 import { AsyncStorage } from 'react-native';
 import * as Network from 'expo-network';
-import { lng } from '../constants/Fields';
+import { lng } from '../constants/Langs';
 const styles = StyleSheet.create({
   screen: {
     flex: 1,

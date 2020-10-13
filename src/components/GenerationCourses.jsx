@@ -6,6 +6,7 @@ import moment from 'moment';
 import Button from './Button';
 import Colors from '../constants/Colors';
 import 'moment/min/locales';
+import { getDateMaskByLocale, getDateFormatByLocale } from '../utils/date-utils';
 
 const styles = StyleSheet.create({
   header: {
@@ -76,6 +77,7 @@ const styles = StyleSheet.create({
 });
 
 const GenerationCourses = ({ navigation, courses }) => {
+  const dateMask = getDateMaskByLocale(moment.locale());
   return (
     <>
       <Text style={styles.header}>{i18n.t('GENERATION.COURSES')}</Text>
@@ -109,11 +111,11 @@ const GenerationCourses = ({ navigation, courses }) => {
                             <Text style={styles.cardBodyText}>
                               {`${
                                 course.leaderAssignment.startDate
-                                  ? moment.utc(course.leaderAssignment.startDate).format('Do MMMM YYYY')
+                                  ? moment.utc(course.leaderAssignment.startDate).format(dateMask)
                                   : ''
                               } - ${
                                 course.leaderAssignment.endDate
-                                  ? moment.utc(course.leaderAssignment.endDate).format('Do MMMM YYYY')
+                                  ? moment.utc(course.leaderAssignment.endDate).format(dateMask)
                                   : ''
                               }`}
                             </Text>

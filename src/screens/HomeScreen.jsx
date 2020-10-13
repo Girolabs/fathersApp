@@ -135,6 +135,7 @@ const HomeScreen = () => {
     <I18nContext.Consumer>
       {(value) => {
         moment.locale(value.lang);
+        console.log(moment.locale());
 
         return (
           <View style={styles.screen}>
