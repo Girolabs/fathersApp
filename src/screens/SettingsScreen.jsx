@@ -50,17 +50,43 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 20,
     paddingVertical: 5,
+    fontFamily: 'work-sans-medium',
+    fontSize: 18,
+    lineHeight: 21,
+    color: Colors.primaryColor,
+  },
+  pickerContainerAndroid: {
+    width: '100%',
+    backgroundColor: Colors.surfaceColorSecondary,
+    marginVertical: 5,
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderRadius: 5,
+    paddingLeft: 20,
+    paddingVertical: 5,
+    fontFamily: 'work-sans-medium',
+    fontSize: 18,
+    lineHeight: 21,
+    color: Colors.primaryColor,
   },
   selectContainer: {
     backgroundColor: Colors.surfaceColorSecondary,
     borderRadius: 5,
     marginVertical: 5,
-    padding: 0,
   },
   selectAndroid: {
-    width: '100%',
-    borderRadius: 5,
-    paddingHorizontal: 10,
+    width: '30%',
+
+    // borderRadius: 5,
+    // paddingHorizontal: 10,
+  },
+  text2: {
+    fontFamily: 'work-sans',
+    fontSize: 18,
+    lineHeight: 21,
+    // color: Colors.primaryColor,
   },
 });
 
@@ -82,16 +108,19 @@ const SettingsScreen = (props) => {
             <View style={styles.textContainer}>
               <Text style={styles.text}>{i18n.t('SETTINGS.VERSION')}</Text>
 
-              <Text style={styles.text}>{Constants.manifest.version}</Text>
+              <Text style={styles.text2}>{Constants.manifest.version}</Text>
             </View>
             {Platform.OS === 'android' ? (
-              <Select
-                containerStyle={styles.selectContainer}
-                style={styles.selectAndroid}
-                elements={lng}
-                value={value.lang}
-                valueChange={value.changeLang}
-              />
+              <View style={styles.pickerContainerAndroid}>
+                <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
+                <Select
+                  // containerStyle={styles.selectContainer}
+                  style={styles.selectAndroid}
+                  elements={lng}
+                  value={value.lang}
+                  valueChange={value.changeLang}
+                />
+              </View>
             ) : (
               <View style={styles.pickerContainer}>
                 <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
@@ -102,14 +131,14 @@ const SettingsScreen = (props) => {
               <Button onPress={onPress}>
                 <View style={styles.textContainer}>
                   <Text style={styles.text}>{i18n.t('SETTINGS.LOGOUT')}</Text>
-                  <Ionicons name="md-close-circle" size={23} color={Colors.primaryColor} />
+                  <Ionicons name="md-close-circle" size={23} />
                 </View>
               </Button>
             ) : (
               <Button onPress={onPress} style={styles.logoutContainer}>
                 <View style={styles.textContainer}>
                   <Text style={styles.text}>{i18n.t('SETTINGS.LOGOUT')}</Text>
-                  <Ionicons name="md-close-circle" size={23} color={Colors.primaryColor} />
+                  <Ionicons name="md-close-circle" size={23} />
                 </View>
               </Button>
             )}
