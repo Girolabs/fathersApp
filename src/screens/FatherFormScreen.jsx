@@ -249,9 +249,6 @@ class FatherFormScreen extends Component {
         ...(updateFields.indexOf('friendlyFirstName') != -1
           ? { friendlyFirstName: Yup.string().required().max(50, i18n.t('FATHER_EDIT.LESSTHAN50')) }
           : null),
-        ...(updateFields.indexOf('friendlyFirstName') != -1
-          ? { friendlyFirstName: Yup.string().required().max(70, i18n.t('FATHER_EDIT.LESSTHAN70')) }
-          : null),
         ...(updateFields.indexOf('friendlyLastName') != -1
           ? { friendlyLastName: Yup.string().required().max(50, i18n.t('FATHER_EDIT.LESSTHAN50')) }
           : null),
@@ -462,13 +459,6 @@ class FatherFormScreen extends Component {
                           hasPerm={updateFields.indexOf('friendlyFirstName') != -1}
                           label={i18n.t('FATHER_EDIT.FRIENDLY_FIRSTNAME')}
                           name="friendlyFirstName"
-                          mode="outlined"
-                          selectionColor={Colors.primaryColor}
-                        />
-                        <InputWithFormik
-                          hasPerm={updateFields.indexOf('friendlyLastName') != -1}
-                          label={i18n.t('FATHER_EDIT.FRIENDLY_LASTNAME')}
-                          name="friendlyLastName"
                           mode="outlined"
                           selectionColor={Colors.primaryColor}
                         />

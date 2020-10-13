@@ -73,6 +73,7 @@ const BulletinScreen = ({ navigation }) => {
         .then((res) => {
           const fetchedPosts = res.data.result;
           setPosts(fetchedPosts);
+          checkUnseenCounter();
           setLoading(false);
         })
         .catch(() => {
@@ -102,8 +103,8 @@ const BulletinScreen = ({ navigation }) => {
       // Restric orientation PORTRAIT_UP screen
       await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
     }
+    checkUnseenCounter();
     return () => {
-      checkUnseenCounter();
       orientationBack();
     };
   }, []);
