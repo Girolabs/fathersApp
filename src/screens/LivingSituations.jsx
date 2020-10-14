@@ -375,8 +375,16 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                             backgroundColor: Colors.surfaceColorSecondary,
                             borderRadius: 10,
                           },
+                          inputIOS: {
+                            backgroundColor: Colors.surfaceColorSecondary,
+                            padding: 10,
+                            paddingVertical: 17,
+                            borderRadius: 10,
+                            marginTop: 10,
+                            marginBottom: 7,
+                          },
                           iconContainer: {
-                            top: 10,
+                            top: 22,
                             right: 15,
                           },
                         }}
@@ -399,8 +407,16 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                             backgroundColor: Colors.surfaceColorSecondary,
                             borderRadius: 10,
                           },
+                          inputIOS: {
+                            backgroundColor: Colors.surfaceColorSecondary,
+                            padding: 10,
+                            paddingVertical: 17,
+                            borderRadius: 10,
+                            marginTop: 10,
+                            marginBottom: 7,
+                          },
                           iconContainer: {
-                            top: 10,
+                            top: 22,
                             right: 15,
                           },
                         }}
