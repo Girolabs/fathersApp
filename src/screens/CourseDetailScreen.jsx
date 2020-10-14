@@ -26,6 +26,8 @@ import HeaderButton from '../components/HeaderButton';
 import { getCourse, getPerson } from '../api';
 import IdealStatement from '../components/IdealStatement';
 import { getDateMaskByLocale, getDateFormatByLocale } from '../utils/date-utils';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { Entypo } from 'expo-vector-icons';
 
 const styles = StyleSheet.create({
   screen: {
@@ -103,7 +105,7 @@ class CourseDetailScreen extends Component {
               course = {
                 ...course,
                 leaderAssignment,
-                persons: course.persons.filter((person) => person.isActive == true && person.isMember == true),
+                persons: course.persons,
               };
               this.setState({ course });
             })
@@ -134,7 +136,7 @@ class CourseDetailScreen extends Component {
     }
     const { course } = this.state;
     const { navigation } = this.props;
-
+    if (course) console.log('Course -> ', course);
     return (
       <I18nContext.Consumer>
         {(value) => {
@@ -543,7 +545,21 @@ class CourseDetailScreen extends Component {
                             <Text
                               style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}
                             >
-                              {person.fullFriendlyName}
+                              {person.fullFriendlyName}&nbsp;
+                              {person.deathDate && (
+                                <>
+                                  {'('}
+                                  <FontAwesome5 name="cross" size={10} color={Colors.primaryColor} />
+                                  {person.deathDate.substring(0, 4) + ')'}
+                                </>
+                              )}
+                              {person.leaveDate && (
+                                <>
+                                  {'(X'}
+                                  {/* <Entypo name="cross" size={15} color={Colors.primaryColor} /> */}
+                                  {person.leaveDate.substring(0, 4) + ')'}
+                                </>
+                              )}
                             </Text>
                           </View>
                         </TouchableComp>
