@@ -194,9 +194,9 @@ const PatreDetailScreen = ({ navigation }) => {
                     handleSaveContact(father);
                   }}
                 />
-                <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CURRENT_HOME')}</Text>
                 {father.activeLivingSituation && (
                   <>
+                    <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CURRENT_HOME')}</Text>
                     <DefaultItem
                       show={viewFatherFields.indexOf('activeLivingSituation')}
                       title="FATHER_DETAIL.FILIATION"
@@ -236,7 +236,22 @@ const PatreDetailScreen = ({ navigation }) => {
                   </>
                 )}
 
-                <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PERSONAL_INFO')}</Text>
+                {(father.country ||
+                  father.homeTerritoryName ||
+                  father.courseName ||
+                  father.generationName ||
+                  father.birthDate ||
+                  father.nameDay ||
+                  father.baptismDate ||
+                  father.postulancyDate ||
+                  father.novitiateDate ||
+                  father.communityMembershipDate ||
+                  father.perpetualContractDate ||
+                  father.deaconDate ||
+                  father.priestDate ||
+                  father.bishopDate) && (
+                  <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PERSONAL_INFO')}</Text>
+                )}
 
                 <DefaultItem
                   show={viewFatherFields.indexOf('country') !== -1}
@@ -331,9 +346,13 @@ const PatreDetailScreen = ({ navigation }) => {
                   title="FATHER_DETAIL.BISHOP_DATE"
                   body={father.bishopDate ? moment.utc(father.bishopDate).format(dateFormatByLocale) : null}
                 />
+
+                <Text style={styles.sectionHeader}>
+                  {father.livingSituations.length ? i18n.t('FATHER_DETAIL.PAST_HOMES') : ''}
+                </Text>
+
                 {father.livingSituations && (
                   <>
-                    <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PAST_HOMES')}</Text>
                     {father.livingSituations.map((pastHome) => (
                       <View>
                         <DefaultItem
