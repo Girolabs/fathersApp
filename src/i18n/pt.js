@@ -12,6 +12,7 @@ exports.PT = {
     NO_INTERNET: 'Sem ligação à internet',
     ERROR: 'Erro',
     EDIT_SUCCESS: 'Edição bem sucedida',
+    PERSON_EDIT_SUCCESS: 'Pessoa atualizada com êxito!',
     CREATE_SUCCESS: 'Criação bem sucedida',
     COPY_CLIPBOARD: 'Copiado para a área de transferência',
     IDEAL: 'Explicação do ideal',
