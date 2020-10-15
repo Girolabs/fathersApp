@@ -226,9 +226,9 @@ const PatreDetailScreen = ({ navigation }) => {
                     handleSaveContact(father);
                   }}
                 />
-                <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CURRENT_HOME')}</Text>
                 {father.activeLivingSituation && (
                   <>
+                    <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CURRENT_HOME')}</Text>
                     <DefaultItem
                       show={viewFatherFields.indexOf('activeLivingSituation')}
                       title="FATHER_DETAIL.FILIATION"
@@ -268,7 +268,22 @@ const PatreDetailScreen = ({ navigation }) => {
                   </>
                 )}
 
-                <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PERSONAL_INFO')}</Text>
+                {(father.country ||
+                  father.homeTerritoryName ||
+                  father.courseName ||
+                  father.generationName ||
+                  father.birthDate ||
+                  father.nameDay ||
+                  father.baptismDate ||
+                  father.postulancyDate ||
+                  father.novitiateDate ||
+                  father.communityMembershipDate ||
+                  father.perpetualContractDate ||
+                  father.deaconDate ||
+                  father.priestDate ||
+                  father.bishopDate) && (
+                  <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PERSONAL_INFO')}</Text>
+                )}
 
                 <DefaultItem
                   show={viewFatherFields.indexOf('country') !== -1}
