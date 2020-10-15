@@ -77,10 +77,8 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   selectAndroid: {
-    width: '30%',
-
-    // borderRadius: 5,
-    // paddingHorizontal: 10,
+    width: '50%',
+    // justifyContent:'flex-end'
   },
   text2: {
     fontFamily: 'work-sans',
