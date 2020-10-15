@@ -178,17 +178,16 @@ class FatherFormScreen extends Component {
         });
         let index = updateRoles.indexOf(updatePermRole);
         const updateFields = accumulatedFieldsPerRol[index];
-        // let arrayOfPhonesLabels = [];
-        // Object.keys(personPhoneLabels).map((key) => {
-        //   arrayOfPhonesLabels.push({ name: personPhoneLabels[key], value: personPhoneLabels[key] });
-        // });
         let temp = Object.entries(personPhoneLabels);
         let arrayOfPhonesLabels = temp.map((e) => ({ label: e[1], value: e[0] }));
-        console.log('arrayOfPhonesLabels2  ', arrayOfPhonesLabels);
-        let arrayOfPersonEmergencyOptions = [];
-        Object.keys(personEmergencyOptions).map((key) => {
-          arrayOfPersonEmergencyOptions.push({ name: personEmergencyOptions[key], value: personEmergencyOptions[key] });
-        });
+
+        temp = Object.entries(personEmergencyOptions);
+        console.log('arrayOfPhonesLabels  ', arrayOfPhonesLabels);
+        let arrayOfPersonEmergencyOptions = temp.map((e) => ({ label: e[1], value: e[0] }));
+        console.log('arrayOfPersonEmergencyOptions ', arrayOfPersonEmergencyOptions);
+        // Object.keys(c).map((key) => {
+        //   arrayOfPersonEmergencyOptions.push({ name: personEmergencyOptions[key], value: personEmergencyOptions[key] });
+        // });
 
         const regex = {
           facebookUrlRegex:
@@ -762,23 +761,15 @@ class FatherFormScreen extends Component {
                           mode="outlined"
                           underlineColor={Colors.primaryColor}
                         />
-                        {Platform.OS === 'android' ? (
-                          <Select
-                            containerStyle={styles.selectAndroid}
-                            elements={this.state.personEmergencyOptions}
-                            value={values.emergencyContact1Relation}
-                            itemColor={Colors.primaryColor}
-                            valueChange={(value) => setFieldValue('emergencyContact1Relation', value)}
-                          />
-                        ) : (
-                          <Select
-                            containerStyle={styles.selectIos}
-                            elements={this.state.personEmergencyOptions}
-                            value={values.emergencyContact1Relation}
-                            itemColor={Colors.primaryColor}
-                            valueChange={(value) => setFieldValue('emergencyContact1Relation', value)}
-                          />
-                        )}
+                        <RNPickerSelect
+                          style={stylePicker}
+                          onValueChange={(value) => {
+                            setFieldValue('emergencyContact1Relation', value);
+                          }}
+                          items={this.state.personEmergencyOptions}
+                          value={values.emergencyContact1Relation}
+                          Icon={() => <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />}
+                        />
 
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('emergencyContact1Phone') != -1}
@@ -796,23 +787,15 @@ class FatherFormScreen extends Component {
                           mode="outlined"
                           underlineColor={Colors.primaryColor}
                         />
-                        {Platform.OS === 'android' ? (
-                          <Select
-                            containerStyle={styles.selectAndroid}
-                            elements={this.state.personEmergencyOptions}
-                            value={values.emergencyContact2Relation}
-                            itemColor={Colors.primaryColor}
-                            valueChange={(value) => setFieldValue('emergencyContact2Relation', value)}
-                          />
-                        ) : (
-                          <Select
-                            containerStyle={styles.selectIos}
-                            elements={this.state.personEmergencyOptions}
-                            value={values.emergencyContact2Relation}
-                            itemColor={Colors.primaryColor}
-                            valueChange={(value) => setFieldValue('emergencyContact2Relation', value)}
-                          />
-                        )}
+                        <RNPickerSelect
+                          style={stylePicker}
+                          onValueChange={(value) => {
+                            setFieldValue('emergencyContact2Relation', value);
+                          }}
+                          items={this.state.personEmergencyOptions}
+                          value={values.emergencyContact2Relation}
+                          Icon={() => <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />}
+                        />
 
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('emergencyContact2Phone') != -1}
