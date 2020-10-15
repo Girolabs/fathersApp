@@ -12,6 +12,7 @@ exports.ES = {
     NO_INTERNET: 'No hay conexión de internet',
     ERROR: 'Error en la consulta',
     EDIT_SUCCESS: 'La edición fue exitosa',
+    PERSON_EDIT_SUCCESS: 'Persona actualizada exitosamente',
     CREATE_SUCCESS: 'La creación fue exitosa',
     COPY_CLIPBOARD: 'Copiado al portapapeles',
     IDEAL: 'Explicación del ideal de curso',

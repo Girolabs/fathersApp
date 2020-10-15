@@ -244,7 +244,10 @@ const LivingSituationsFormScreen = ({ navigation }) => {
       () => {
         setSnackMsg(i18n.t('GENERAL.EDIT_SUCCESS'));
         setVisible(true);
-        navigation.goBack();
+        navigation.replace('PatreDetail', {
+          fatherId: values.personId,
+          updated: true,
+        });
       },
       () => {
         setSnackMsg(i18n.t('GENERAL.ERROR'));
@@ -257,8 +260,12 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     saveLivingSituation(values).then(
       () => {
         setSnackMsg(i18n.t('GENERAL.CREATE_SUCCESS'));
+        console.log('values', values);
         setVisible(true);
-        navigation.goBack();
+        navigation.replace('PatreDetail', {
+          fatherId: values.personId,
+          updated: true,
+        });
       },
       () => {
         setSnackMsg(i18n.t('GENERAL.ERROR'));
@@ -277,7 +284,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     loadHouses();
     console.log('living', livingSituation);
 
-    if (!livingSituation || livingSituation.endDate) {
+    if (!livingSituation) {
       setIsCreate(true);
     } else {
       const transFormedLiving = {
