@@ -24,6 +24,7 @@ import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { getTerritories, getFiliations, getGenerations, getCourses } from '../api';
 import { NavigationEvents } from 'react-navigation';
+import { getDateMaskByLocale } from '../utils/date-utils';
 
 const styles = StyleSheet.create({
   screen: {
@@ -204,6 +205,7 @@ class AssignmentsScreen extends Component {
     console.log('[Assingnments]: ComponentDidUpdate');
   }
   render() {
+    const dateMask = getDateMaskByLocale(moment.locale());
     const { territories, selectedtTab } = this.state;
     let TouchableComp = TouchableOpacity;
     if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -359,8 +361,8 @@ class AssignmentsScreen extends Component {
                                       </TouchableComp>
 
                                       <Text style={styles.itemText}>{`${
-                                        asg.startDate ? moment.utc(asg.startDate).format('Do MMMM YYYY') : ''
-                                      } - ${asg.endDate ? moment.utc(asg.endDate).format('Do MMMM YYYY') : ''}`}</Text>
+                                        asg.startDate ? moment.utc(asg.startDate).format(dateMask) : ''
+                                      } - ${asg.endDate ? moment.utc(asg.endDate).format(dateMask) : ''}`}</Text>
                                     </View>
                                   </View>
                                 )}
@@ -565,6 +567,7 @@ const Header = (props) => {
 };
 
 const ListItem = (props) => {
+  const dateMask = getDateMaskByLocale(moment.locale());
   const { photo, name, startDate, endDate, roleTitle, selectPerson } = props;
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -587,8 +590,8 @@ const ListItem = (props) => {
         <View style={styles.itemTextContainer}>
           <Text style={styles.itemTextTitle}>{roleTitle}</Text>
           <Text style={styles.itemText}>{name}</Text>
-          <Text style={styles.itemText}>{`${startDate ? moment.utc(startDate).format('Do MMMM YYYY') : ''} - ${
-            endDate ? moment.utc(endDate).format('Do MMMM YYYY') : ''
+          <Text style={styles.itemText}>{`${startDate ? moment.utc(startDate).format(dateMask) : ''} - ${
+            endDate ? moment.utc(endDate).format(dateMask) : ''
           }`}</Text>
         </View>
       </View>
@@ -597,6 +600,7 @@ const ListItem = (props) => {
 };
 
 const ListItemGC = (props) => {
+  const dateMask = getDateMaskByLocale(moment.locale());
   const { photo, title, fullName, startDate, endDate, selectTitle, selectPerson } = props;
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -620,8 +624,8 @@ const ListItemGC = (props) => {
         </TouchableComp>
 
         {(startDate || endDate) && (
-          <Text style={styles.itemText}>{`${startDate ? moment.utc(startDate).format('Do MMMM YYYY') : ''} - ${
-            endDate ? moment.utc(endDate).format('Do MMMM YYYY') : ''
+          <Text style={styles.itemText}>{`${startDate ? moment.utc(startDate).format(dateMask) : ''} - ${
+            endDate ? moment.utc(endDate).format(dateMask) : ''
           }`}</Text>
         )}
       </View>

@@ -25,7 +25,8 @@ class BulletinCheckProvider extends Component {
         <BulletinCheckContext.Provider
           value={{
             unseenPostsCount: this.state.unSeenPostsCounter,
-            checkUnseenCounter: () => {
+            checkOnly: () => this.checkUnseenPosts(),
+            markCheckUnseenCounter: () => {
               markAllPost().then((res) => {
                 this.checkUnseenPosts();
               });

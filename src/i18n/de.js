@@ -12,6 +12,7 @@ exports.DE = {
     NO_INTERNET: 'Keine Internetverbindung',
     ERROR: 'Fehler bei der Anfrage',
     EDIT_SUCCESS: 'Bearbeitung erfolgreich',
+    PERSON_EDIT_SUCCESS: 'Person erfolgreich aktualisiert',
     CREATE_SUCCESS: 'Erfolgreich erstellt',
     COPY_CLIPBOARD: 'In die Zwischenablage kopiert',
     IDEAL: 'Beschreibung des Ideals',

@@ -7,6 +7,7 @@ import countries from 'i18n-iso-countries';
 import * as Contacts from 'expo-contacts';
 import * as Network from 'expo-network';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { NavigationEvents } from 'react-navigation';
 import SnackBar from '../components/SnackBar';
 import { I18nContext } from '../context/I18nProvider';
 import Colors from '../constants/Colors';
@@ -14,6 +15,8 @@ import HeaderButton from '../components/HeaderButton';
 import DefaultItem from '../components/FatherDetailItem';
 import FatherContactInfo from '../components/FatherContactInfo';
 import { getInterfaceData, getPerson } from '../api';
+import { getDateFormatByLocale, getMonthFormatByLocale } from '../utils/date-utils';
+import PastLivingSituations from '../components/PastLivingSituations';
 
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
@@ -130,6 +133,10 @@ const PatreDetailScreen = ({ navigation }) => {
             const resFather = response.data.result;
             setFather(resFather);
             loadInterfaceData(resFather);
+            if (navigation.getParam('updated')) {
+              setSnackMsg(i18n.t('GENERAL.EDIT_SUCCESS'));
+              setVisible(true);
+            }
           })
           .catch(() => {
             setLoading(false);
@@ -149,8 +156,37 @@ const PatreDetailScreen = ({ navigation }) => {
     <I18nContext.Consumer>
       {(value) => {
         moment.locale(value.lang);
+        const dateFormatByLocale = getDateFormatByLocale(value.lang);
+        const monthFormatByLocale = getMonthFormatByLocale(value.lang);
+
         return (
           <View style={styles.screen}>
+            <NavigationEvents
+              onDidFocus={() => {
+                const loadPerson = async () => {
+                  const status = await Network.getNetworkStateAsync();
+                  if (status.isConnected === true) {
+                    const fatherId = navigation.getParam('fatherId');
+                    getPerson(fatherId, false)
+                      .then((response) => {
+                        const resFather = response.data.result;
+                        setFather(resFather);
+                        loadInterfaceData(resFather);
+                      })
+                      .catch(() => {
+                        setLoading(false);
+                        setVisible(true);
+                        setSnackMsg(i18n.t('GENERAL.ERROR'));
+                      });
+                  } else {
+                    setLoading(false);
+                    setVisible(true);
+                    setSnackMsg(i18n.t('GENERAL.NO_INTERNET'));
+                  }
+                };
+                loadPerson();
+              }}
+            />
             {father ? (
               <ScrollView>
                 <View style={{ flexDirection: 'row', alignItems: 'center', padding: 15 }}>
@@ -175,7 +211,7 @@ const PatreDetailScreen = ({ navigation }) => {
                           {`${i18n.t('FATHER_DETAIL.LAST_UPDATE')}`}
                         </Text>
                         <Text style={{ color: Colors.onSurfaceColorSecondary, fontFamily: 'work-sans' }}>
-                          {`${moment.utc(father.personalInfoUpdatedOn).format('Do MMMM YYYY')}`}
+                          {`${moment.utc(father.personalInfoUpdatedOn).format(dateFormatByLocale)}`}
                         </Text>
                       </View>
                     )}
@@ -190,9 +226,9 @@ const PatreDetailScreen = ({ navigation }) => {
                     handleSaveContact(father);
                   }}
                 />
-                <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CURRENT_HOME')}</Text>
                 {father.activeLivingSituation && (
                   <>
+                    <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.CURRENT_HOME')}</Text>
                     <DefaultItem
                       show={viewFatherFields.indexOf('activeLivingSituation')}
                       title="FATHER_DETAIL.FILIATION"
@@ -232,7 +268,22 @@ const PatreDetailScreen = ({ navigation }) => {
                   </>
                 )}
 
-                <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PERSONAL_INFO')}</Text>
+                {(father.country ||
+                  father.homeTerritoryName ||
+                  father.courseName ||
+                  father.generationName ||
+                  father.birthDate ||
+                  father.nameDay ||
+                  father.baptismDate ||
+                  father.postulancyDate ||
+                  father.novitiateDate ||
+                  father.communityMembershipDate ||
+                  father.perpetualContractDate ||
+                  father.deaconDate ||
+                  father.priestDate ||
+                  father.bishopDate) && (
+                  <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PERSONAL_INFO')}</Text>
+                )}
 
                 <DefaultItem
                   show={viewFatherFields.indexOf('country') !== -1}
@@ -272,34 +323,34 @@ const PatreDetailScreen = ({ navigation }) => {
                 <DefaultItem
                   show={viewFatherFields.indexOf('birthDate')}
                   title="FATHER_DETAIL.BIRTHDAY"
-                  body={father.birthDate ? moment.utc(father.birthDate).format('Do MMMM YYYY') : null}
+                  body={father.birthDate ? moment.utc(father.birthDate).format(dateFormatByLocale) : null}
                 />
                 <DefaultItem
                   show={viewFatherFields.indexOf('nameDay')}
                   title="FATHER_DETAIL.NAMEDAY"
-                  body={father.nameDay ? moment.utc(father.nameDay).format('Do MMMM YYYY') : null}
+                  body={father.nameDay ? moment.utc(father.nameDay).format(monthFormatByLocale) : null}
                 />
                 <DefaultItem
                   show={viewFatherFields.indexOf('baptismDate')}
                   title="FATHER_DETAIL.BAPTISM"
-                  body={father.baptismDate ? moment.utc(father.baptismDate).format('Do MMMM YYYY') : null}
+                  body={father.baptismDate ? moment.utc(father.baptismDate).format(dateFormatByLocale) : null}
                 />
                 <DefaultItem
                   show={viewFatherFields.indexOf('postulancyDate') !== -1}
                   title="FATHER_DETAIL.POSTULANCY_ADMITTANCE"
-                  body={father.postulancyDate ? moment.utc(father.postulancyDate).format('Do MMMM YYYY') : null}
+                  body={father.postulancyDate ? moment.utc(father.postulancyDate).format(dateFormatByLocale) : null}
                 />
                 <DefaultItem
                   show={viewFatherFields.indexOf('novitiateDate') !== -1}
                   title="FATHER_DETAIL.NOVITIATE_START"
-                  body={father.novitiateDate ? moment.utc(father.novitiateDate).format('Do MMMM YYYY') : null}
+                  body={father.novitiateDate ? moment.utc(father.novitiateDate).format(dateFormatByLocale) : null}
                 />
                 <DefaultItem
                   show={viewFatherFields.indexOf('communityMembershipDate') !== -1}
                   title="FATHER_DETAIL.COMMUNITY_MEMBERSHIP"
                   body={
                     father.communityMembershipDate
-                      ? moment.utc(father.communityMembershipDate).format('Do MMMM YYYY')
+                      ? moment.utc(father.communityMembershipDate).format(dateFormatByLocale)
                       : null
                   }
                 />
@@ -308,76 +359,34 @@ const PatreDetailScreen = ({ navigation }) => {
                   title="FATHER_DETAIL.PERPETUAL_CONTRACT"
                   body={
                     father.perpetualContractDate
-                      ? moment.utc(father.perpetualContractDate).format('Do MMMM YYYY')
+                      ? moment.utc(father.perpetualContractDate).format(dateFormatByLocale)
                       : null
                   }
                 />
                 <DefaultItem
                   show={viewFatherFields.indexOf('deaconDate') !== -1}
                   title="FATHER_DETAIL.DIACONATE_ORDINATION"
-                  body={father.deaconDate ? moment.utc(father.deaconDate).format('Do MMMM YYYY') : null}
+                  body={father.deaconDate ? moment.utc(father.deaconDate).format(dateFormatByLocale) : null}
                 />
                 <DefaultItem
                   show={viewFatherFields.indexOf('priestYears') !== -1}
                   title="FATHER_DETAIL.PRIESTLY_ORDINATION"
-                  body={father.priestDate ? moment.utc(father.priestDate).format('Do MMMM YYYY') : null}
+                  body={father.priestDate ? moment.utc(father.priestDate).format(dateFormatByLocale) : null}
                 />
                 <DefaultItem
                   show={viewFatherFields.indexOf('bishopDate') !== -1}
                   title="FATHER_DETAIL.BISHOP_DATE"
-                  body={father.bishopDate ? moment.utc(father.bishopDate).format('Do MMMM YYYY') : null}
+                  body={father.bishopDate ? moment.utc(father.bishopDate).format(dateFormatByLocale) : null}
                 />
-                {father.livingSituations && (
-                  <>
-                    <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PAST_HOMES')}</Text>
-                    {father.livingSituations.map((pastHome) => (
-                      <View>
-                        <DefaultItem
-                          show={viewFatherFields.indexOf('livingSituations') !== -1}
-                          title="FATHER_DETAIL.FILIATION"
-                          body={pastHome.filiationName}
-                          img={pastHome.filiationCountry}
-                          badge={pastHome.status !== 'intern' && statusLabels ? statusLabels[pastHome.status] : null}
-                          selected={() => {
-                            navigation.navigate('FiliationDetail', { filiationId: pastHome.filiationId });
-                          }}
-                        />
-                        <DefaultItem
-                          show={viewFatherFields.indexOf('livingSituations') !== -1}
-                          title="FATHER_DETAIL.HOME"
-                          body={pastHome.houseName}
-                          img={pastHome.houseCountry}
-                          selected={() => {
-                            navigation.navigate('HouseDetail', { houseId: pastHome.houseId });
-                          }}
-                        />
-                        <DefaultItem
-                          show={viewFatherFields.indexOf('livingSituations') !== -1}
-                          title="FATHER_DETAIL.RESPONSIBLE_TERRITORY"
-                          body={pastHome.responsibleTerritoryName}
-                          selected={() => {
-                            navigation.push('DelegationDetail', {
-                              delegationId: pastHome.responsibleTerritoryId,
-                            });
-                          }}
-                        />
-                        <DefaultItem
-                          show={viewFatherFields.indexOf('livingSituations') !== -1}
-                          title="FATHER_DETAIL.START_DATE"
-                          date={pastHome.startDate}
-                          lang={value.lang}
-                        />
-                        <DefaultItem
-                          title="FATHER_DETAIL.END_DATE"
-                          show={viewFatherFields.indexOf('livingSituations') !== -1}
-                          date={pastHome.endDate}
-                          lang={value.lang}
-                        />
-                        <Text style={styles.sectionHeader} />
-                      </View>
-                    ))}
-                  </>
-                )}
+
+                <PastLivingSituations
+                  livingSituations={father.livingSituations}
+                  viewFields={viewFatherFields && viewFatherFields}
+                  statusLabels={statusLabels && statusLabels}
+                  lang={value.lang}
+                  allowUpdate={father && father.allowUpdateLivingSituation}
+                  father={father}
+                />
               </ScrollView>
             ) : (
               <ActivityIndicator size="large" color={Colors.primaryColor} />
