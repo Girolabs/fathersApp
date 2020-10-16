@@ -429,7 +429,11 @@ class FatherFormScreen extends Component {
                       this.setState({ loading: true });
                       updateFatherForm(this.state.father.personId, values).then(
                         () => {
-                          this.loadPerson();
+                        //this.loadPerson();
+                        this.props.navigation.replace('PatreDetail', {
+                          fatherId: this.state.father.personId,
+                          updated: true,
+                        });
                           this.setState(this.setState({ snackMsg: i18n.t('GENERAL.EDIT_SUCCESS'), visible: true }));
                         },
                         () => {
@@ -832,7 +836,7 @@ class FatherFormScreen extends Component {
                         <View style={styles.buttonsContainer}>
                           {/*   { updateFields.indexOf('living')} */}
 
-                          {father && father.allowUpdateLivingSituation && (
+                         {/*  {father && father.allowUpdateLivingSituation && (
                             <Button
                               onPress={() => {
                                 navigation.navigate('LivingSituationForm', {
@@ -847,7 +851,7 @@ class FatherFormScreen extends Component {
                               </View>
                             </Button>
                           )}
-
+ */}
                           <Button
                             onPress={(e) => {
                               //We make old the DateDeadline, so search scren is force to make a request

@@ -225,8 +225,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     newDate.setTime(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60 * 1000);
     selectedDate = newDate;
     const year = selectedDate.getUTCFullYear();
-    const month =
-      selectedDate.getUTCMonth() + 1 < 10 ? `0${selectedDate.getUTCMonth() + 1}` : selectedDate.getUTCMonth() + 1;
+    const month = selectedDate.getUTCMonth() + 1 < 10 ? `0${selectedDate.getUTCMonth() + 1}` : selectedDate.getUTCMonth() + 1;
     let day = selectedDate.getUTCDate();
     // console.log('day.lenght ', length);
     if (10 - day > 0) {
@@ -242,7 +241,10 @@ const LivingSituationsFormScreen = ({ navigation }) => {
       () => {
         setSnackMsg(i18n.t('GENERAL.EDIT_SUCCESS'));
         setVisible(true);
-        navigation.goBack();
+        navigation.replace('PatreDetail', {
+          fatherId: values.personId,
+          updated: true,
+        });
       },
       () => {
         setSnackMsg(i18n.t('GENERAL.ERROR'));
@@ -261,6 +263,10 @@ const LivingSituationsFormScreen = ({ navigation }) => {
       () => {
         setSnackMsg(i18n.t('GENERAL.ERROR'));
         setVisible(true);
+        navigation.replace('PatreDetail', {
+          fatherId: values.personId,
+          updated: true,
+        });
       },
     );
   };
@@ -273,7 +279,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     }
     console.log('living', livingSituation);
 
-    if (!livingSituation || livingSituation.endDate) {
+    if (!livingSituation) {
       setIsCreate(true);
 
       loadFiliations();
@@ -342,7 +348,9 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                   console.log(transformValues);
                 }}
               >
-                {({ handleChange, values, handleSubmit, errors, setFieldValue }) => (
+                {({
+                  handleChange, values, handleSubmit, errors, setFieldValue,
+                }) => (
                   <>
                     <View>
                       <DateTimePickerModal
@@ -366,48 +374,48 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                         onCancel={() => setOpenEndDate(false)}
                       />
                       {isCreate && (
-                        <>
-                          <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>
-                          <RNPickerSelect
-                            name="filiationId"
-                            style={{
-                              inputAndroid: {
-                                backgroundColor: Colors.surfaceColorSecondary,
-                                borderRadius: 10,
-                              },
-                              iconContainer: {
-                                top: 10,
-                                right: 15,
-                              },
-                            }}
-                            onValueChange={(e) => setFieldValue('filiationId', e)}
-                            value={_.get(values, 'filiationId') || ''}
-                            items={filiations}
-                            Icon={() => {
-                              return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
-                            }}
-                          />
-                          <Text style={styles.label}>{i18n.t('LIVING_SITUATION.HOUSE')}</Text>
-                          <RNPickerSelect
-                            name="houseId"
-                            style={{
-                              inputAndroid: {
-                                backgroundColor: Colors.surfaceColorSecondary,
-                                borderRadius: 10,
-                              },
-                              iconContainer: {
-                                top: 10,
-                                right: 15,
-                              },
-                            }}
-                            onValueChange={(e) => setFieldValue('houseId', e)}
-                            value={_.get(values, 'houseId') || ''}
-                            items={houses}
-                            Icon={() => {
-                              return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
-                            }}
-                          />
-                        </>
+                      <>
+                        <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>
+                        <RNPickerSelect
+                          name="filiationId"
+                          style={{
+                            inputAndroid: {
+                              backgroundColor: Colors.surfaceColorSecondary,
+                              borderRadius: 10,
+                            },
+                            iconContainer: {
+                              top: 10,
+                              right: 15,
+                            },
+                          }}
+                          onValueChange={(e) => setFieldValue('filiationId', e)}
+                          value={_.get(values, 'filiationId') || ''}
+                          items={filiations}
+                          Icon={() => {
+                            return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
+                          }}
+                        />
+                        <Text style={styles.label}>{i18n.t('LIVING_SITUATION.HOUSE')}</Text>
+                        <RNPickerSelect
+                          name="houseId"
+                          style={{
+                            inputAndroid: {
+                              backgroundColor: Colors.surfaceColorSecondary,
+                              borderRadius: 10,
+                            },
+                            iconContainer: {
+                              top: 10,
+                              right: 15,
+                            },
+                          }}
+                          onValueChange={(e) => setFieldValue('houseId', e)}
+                          value={_.get(values, 'houseId') || ''}
+                          items={houses}
+                          Icon={() => {
+                            return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
+                          }}
+                        />
+                      </>
                       )}
 
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.RESPONSIBLE_TERRITORY')}</Text>
@@ -492,7 +500,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                         </View>
                       </Button>
                       {errors && errors.endDate && (
-                        <Text style={styles.errorText}>{i18n.t('LIVING_SITUATION.ERROR_END_DATE')}</Text>
+                      <Text style={styles.errorText}>{i18n.t('LIVING_SITUATION.ERROR_END_DATE')}</Text>
                       )}
                     </View>
 

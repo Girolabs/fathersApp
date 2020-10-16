@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator } from 'react-native';
+import {
+  View, Text, StyleSheet, Image, ScrollView, ActivityIndicator,
+} from 'react-native';
 import moment from 'moment';
 import i18n from 'i18n-js';
 import 'moment/min/locales';
@@ -7,6 +9,7 @@ import countries from 'i18n-iso-countries';
 import * as Contacts from 'expo-contacts';
 import * as Network from 'expo-network';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { NavigationEvents } from 'react-navigation';
 import SnackBar from '../components/SnackBar';
 import { I18nContext } from '../context/I18nProvider';
 import Colors from '../constants/Colors';
@@ -14,6 +17,7 @@ import HeaderButton from '../components/HeaderButton';
 import DefaultItem from '../components/FatherDetailItem';
 import FatherContactInfo from '../components/FatherContactInfo';
 import { getInterfaceData, getPerson } from '../api';
+import PastLivingSituations from '../components/PastLivingSituations';
 
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
@@ -130,6 +134,10 @@ const PatreDetailScreen = ({ navigation }) => {
             const resFather = response.data.result;
             setFather(resFather);
             loadInterfaceData(resFather);
+            if (navigation.getParam('updated')) {
+              setSnackMsg(i18n.t('GENERAL.EDIT_SUCCESS'));
+              setVisible(true);
+            }
           })
           .catch(() => {
             setLoading(false);
@@ -151,6 +159,32 @@ const PatreDetailScreen = ({ navigation }) => {
         moment.locale(value.lang);
         return (
           <View style={styles.screen}>
+            <NavigationEvents
+              onDidFocus={() => {
+                const loadPerson = async () => {
+                  const status = await Network.getNetworkStateAsync();
+                  if (status.isConnected === true) {
+                    const fatherId = navigation.getParam('fatherId');
+                    getPerson(fatherId, false)
+                      .then((response) => {
+                        const resFather = response.data.result;
+                        setFather(resFather);
+                        loadInterfaceData(resFather);
+                      })
+                      .catch(() => {
+                        setLoading(false);
+                        setVisible(true);
+                        setSnackMsg(i18n.t('GENERAL.ERROR'));
+                      });
+                  } else {
+                    setLoading(false);
+                    setVisible(true);
+                    setSnackMsg(i18n.t('GENERAL.NO_INTERNET'));
+                  }
+                };
+                loadPerson();
+              }}
+            />
             {father ? (
               <ScrollView>
                 <View style={{ flexDirection: 'row', alignItems: 'center', padding: 15 }}>
@@ -329,53 +363,14 @@ const PatreDetailScreen = ({ navigation }) => {
                 />
                 {father.livingSituations && (
                   <>
-                    <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PAST_HOMES')}</Text>
-                    {father.livingSituations.map((pastHome) => (
-                      <View>
-                        <DefaultItem
-                          show={viewFatherFields.indexOf('livingSituations') !== -1}
-                          title="FATHER_DETAIL.FILIATION"
-                          body={pastHome.filiationName}
-                          img={pastHome.filiationCountry}
-                          badge={pastHome.status !== 'intern' && statusLabels ? statusLabels[pastHome.status] : null}
-                          selected={() => {
-                            navigation.navigate('FiliationDetail', { filiationId: pastHome.filiationId });
-                          }}
-                        />
-                        <DefaultItem
-                          show={viewFatherFields.indexOf('livingSituations') !== -1}
-                          title="FATHER_DETAIL.HOME"
-                          body={pastHome.houseName}
-                          img={pastHome.houseCountry}
-                          selected={() => {
-                            navigation.navigate('HouseDetail', { houseId: pastHome.houseId });
-                          }}
-                        />
-                        <DefaultItem
-                          show={viewFatherFields.indexOf('livingSituations') !== -1}
-                          title="FATHER_DETAIL.RESPONSIBLE_TERRITORY"
-                          body={pastHome.responsibleTerritoryName}
-                          selected={() => {
-                            navigation.push('DelegationDetail', {
-                              delegationId: pastHome.responsibleTerritoryId,
-                            });
-                          }}
-                        />
-                        <DefaultItem
-                          show={viewFatherFields.indexOf('livingSituations') !== -1}
-                          title="FATHER_DETAIL.START_DATE"
-                          date={pastHome.startDate}
-                          lang={value.lang}
-                        />
-                        <DefaultItem
-                          title="FATHER_DETAIL.END_DATE"
-                          show={viewFatherFields.indexOf('livingSituations') !== -1}
-                          date={pastHome.endDate}
-                          lang={value.lang}
-                        />
-                        <Text style={styles.sectionHeader} />
-                      </View>
-                    ))}
+                    <PastLivingSituations
+                      livingSituations={father.livingSituations}
+                      viewFields={viewFatherFields && viewFatherFields}
+                      statusLabels={statusLabels && statusLabels}
+                      lang={value.lang}
+                      allowUpdate={father && father.allowUpdateLivingSituation}
+                      father={father}
+                    />
                   </>
                 )}
               </ScrollView>

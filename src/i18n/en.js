@@ -12,6 +12,7 @@ exports.EN = {
     NO_INTERNET: 'No internet conection',
     ERROR: 'Error with the request',
     EDIT_SUCCESS: 'Edit was successful',
+    PERSON_EDIT_SUCCESS: 'Person was successfully updated',
     CREATE_SUCCESS: 'Create was successful',
     COPY_CLIPBOARD: 'Copied to clipboard',
     IDEAL: 'Ideal statement',
