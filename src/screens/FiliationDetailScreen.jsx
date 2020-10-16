@@ -24,6 +24,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { getFiliation } from '../api';
 import FiliationHouses from '../components/FiliationHouses';
+import { getDateMaskByLocale } from '../utils/date-utils';
 
 class FiliationDetailScreen extends Component {
   state = {
@@ -64,6 +65,7 @@ class FiliationDetailScreen extends Component {
     return (
       <I18nContext.Consumer>
         {(value) => {
+          const dateMask = getDateMaskByLocale(value.lang);
           moment.locale(value.lang);
           return (
             <SafeAreaView style={styles.screen}>
@@ -109,11 +111,11 @@ class FiliationDetailScreen extends Component {
                               <Text style={styles.listItemBody}>
                                 {`${
                                   filiation.mainAssignment.startDate
-                                    ? moment.utc(filiation.mainAssignment.startDate).format('Do MMMM YYYY')
+                                    ? moment.utc(filiation.mainAssignment.startDate).format(dateMask)
                                     : ''
-                                } ${
+                                } - ${
                                   filiation.mainAssignment.endDate
-                                    ? moment.utc(filiation.mainAssignment.endDate).format('Do MMMM YYYY')
+                                    ? moment.utc(filiation.mainAssignment.endDate).format(dateMask)
                                     : ''
                                 }`}
                               </Text>

@@ -56,7 +56,9 @@ const FatherContactInfo = ({
   return (
     <>
       <View style={styles.headerContainer}>
-        <Text style={styles.headerTitle}>{i18n.t('FATHER_DETAIL.CONTACT_INFO')}</Text>
+        {(father.email || father.phones) && (
+          <Text style={styles.headerTitle}>{i18n.t('FATHER_DETAIL.CONTACT_INFO')}</Text>
+        )}
         <Button
           onPress={() => {
             navigation.navigate('FatherForm', {

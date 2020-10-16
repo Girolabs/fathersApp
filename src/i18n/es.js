@@ -190,7 +190,7 @@ exports.ES = {
     LEAVE_DATE: 'Fecha de partida',
     EMERGENCY_CONTACT_NAME_1: 'Nombre del contacto de emergencia 1',
     EMERGENCY_CONTACT_PHONE_1: 'Teléfono de contacto de emergencia 1',
-    EMERGENCY_CONTACT_PHONE_2: 'Teléfono de contacto de emergencia 1',
+    EMERGENCY_CONTACT_PHONE_2: 'Teléfono de contacto de emergencia 2',
     EMERGENCY_CONTACT_NAME_2: 'Nombre del contacto de emergencia 2',
     EMERGENCY_RELATION_CONTACT_1: 'Relación de contacto de emergencia 1',
     EMERGENCY_RELATION_CONTACT_2: 'Relación de contacto de emergencia 2',

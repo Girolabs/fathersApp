@@ -40,7 +40,6 @@ const PastLivingSituations = ({
                   {`${pastHome.filiationName}-${
                     pastHome.startDate && pastHome.startDate.split('-')[0]
                   }`}
-
                 </Text>
                 <Button
                   onPress={() => {

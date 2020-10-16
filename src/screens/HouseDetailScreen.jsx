@@ -1,17 +1,5 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  ActivityIndicator,
-  Image,
-  TouchableOpacity,
-  FlatList,
-  TouchableNativeFeedback,
-  Platform,
-  Clipboard,
-} from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator, Image, FlatList, Clipboard } from 'react-native';
 import Colors from '../constants/Colors';
 import { I18nContext } from '../context/I18nProvider';
 import { Flag } from 'react-native-svg-flagkit';
