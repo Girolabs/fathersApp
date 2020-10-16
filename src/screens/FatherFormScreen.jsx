@@ -123,8 +123,15 @@ const styles = StyleSheet.create({
 
 const stylePicker = {
   inputAndroid: {
-    backgroundColor: Colors.surfaceColorSecondary,
-    borderRadius: 10,
+    width: '92%',
+    height: 50,
+    backgroundColor: '#f6f6f6',
+    borderColor: '#313142',
+    borderWidth: 1,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    marginLeft: 15,
+    borderRadius: 5,
   },
   inputIOS: {
     width: '92%',
@@ -535,6 +542,7 @@ class FatherFormScreen extends Component {
                           selectionColor={Colors.primaryColor}
                         />
                         <RNPickerSelect
+                          useNativeAndroidPickerStyle={false}
                           style={stylePicker}
                           onValueChange={(value) => {
                             console.log('value', value);
@@ -554,6 +562,7 @@ class FatherFormScreen extends Component {
                           underlineColor={Colors.primaryColor}
                         />
                         <RNPickerSelect
+                          useNativeAndroidPickerStyle={false}
                           style={stylePicker}
                           onValueChange={(value) => {
                             setFieldValue('phone2Label', value);
@@ -572,6 +581,7 @@ class FatherFormScreen extends Component {
                           underlineColor={Colors.primaryColor}
                         />
                         <RNPickerSelect
+                          useNativeAndroidPickerStyle={false}
                           style={stylePicker}
                           onValueChange={(value) => {
                             setFieldValue('phone3Label', value);
@@ -762,6 +772,7 @@ class FatherFormScreen extends Component {
                           underlineColor={Colors.primaryColor}
                         />
                         <RNPickerSelect
+                          useNativeAndroidPickerStyle={false}
                           style={stylePicker}
                           onValueChange={(value) => {
                             setFieldValue('emergencyContact1Relation', value);
@@ -788,6 +799,7 @@ class FatherFormScreen extends Component {
                           underlineColor={Colors.primaryColor}
                         />
                         <RNPickerSelect
+                          useNativeAndroidPickerStyle={false}
                           style={stylePicker}
                           onValueChange={(value) => {
                             setFieldValue('emergencyContact2Relation', value);
