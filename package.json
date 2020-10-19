@@ -50,7 +50,8 @@
     "react-navigation-material-bottom-tabs": "^2.2.10",
     "react-navigation-stack": "^2.3.11",
     "react-navigation-tabs": "^2.8.11",
-    "yup": "^0.29.1"
+    "yup": "^0.29.1",
+    "expo-web-browser": "~8.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

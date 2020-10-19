@@ -88,8 +88,12 @@ const BulletinScreen = ({ navigation }) => {
   };
 
   const handleRedirect = (item) => {
-    if (item.redirectUrl) {
+    if (item.redirectUrl && item.isRedirectUrlExternal) {
       Linking.openURL(item.redirectUrl);
+    } else if (item.redirectUrl && !item.isRedirectUrlExternal) {
+      navigation.navigate('BulletinDetail', {
+        url: item.redirectUrl,
+      });
     } else {
       navigation.navigate('BulletinDetail', {
         postId: item.postId,
