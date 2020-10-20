@@ -19,7 +19,7 @@
       "versionCode": 14,
       "permissions": ["CAMERA", "WRITE_EXTERNAL_STORAGE", "WRITE_CONTACTS", "CAMERA_ROLL", "READ_CONTACTS"],
       "adaptiveIcon": {
-        "foregroundImage": "./assets/img/icon.png",
+        "foregroundImage": "./assets/img/iconAndroid.png",
         "backgroundColor": "#ffffff"
       }
     },
