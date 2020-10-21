@@ -38,7 +38,8 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     marginLeft: 15,
-    maxWidth: '60%',
+    minWidth: '70%',
+    maxWidth: '70%',
   },
 });
 
@@ -152,7 +153,7 @@ const Reminders = ({ navigation, reminders }) => {
                           navigation.navigate(path, params);
                         }}
                       >
-                        <View>
+                        <View style={{ width: '100%' }}>
                           <Text style={styles.innerText}>{item.entityName}</Text>
                           {item.yearsAgoText && (
                             <Text style={styles.reminderHeader}>
