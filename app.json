@@ -29,7 +29,11 @@
     "android": {
       "package": "com.schoenstatt.fathersApp",
       "versionCode": 14,
-      "permissions": ["CAMERA", "WRITE_EXTERNAL_STORAGE", "WRITE_CONTACTS", "CAMERA_ROLL", "READ_CONTACTS"]
+      "permissions": ["CAMERA", "WRITE_EXTERNAL_STORAGE", "WRITE_CONTACTS", "CAMERA_ROLL", "READ_CONTACTS"],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/img/icon.png",
+        "backgroundColor": "#ffffff"
+      }
     },
     "ios": {
       "bundleIdentifier": "com.schoenstatt.fathersApp",
