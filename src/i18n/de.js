@@ -194,6 +194,7 @@ exports.DE = {
     EMERGENCY_CONTACT_NAME_2: 'Name des Notfallkontakts 2',
     EMERGENCY_RELATION_CONTACT_1: 'Notfallkontaktbeziehung 1',
     EMERGENCY_RELATION_CONTACT_2: 'Notfallkontaktbeziehung 2',
+    EX: 'es.',
   },
   LIVING_SITUATION: {
     EDIT_TITLE: 'Aktive Lebenssituation bearbeiten',
