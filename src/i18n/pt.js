@@ -195,6 +195,7 @@ exports.PT = {
     EMERGENCY_CONTACT_NAME_2: 'Nome de contato de emergência 2',
     EMERGENCY_RELATION_CONTACT_1: 'Relação de contato de emergência 1',
     EMERGENCY_RELATION_CONTACT_2: 'Relação de contato de emergência 2',
+    EX: 'ex.',
   },
   LIVING_SITUATION: {
     EDIT_TITLE: 'Editar situação ativa',
