@@ -36,6 +36,7 @@ exports.ES = {
     MISC: 'Otros',
   },
   FATHER_DETAIL: {
+    ASSIGNMENTS: 'Encargos',
     LAST_UPDATE: 'Ultima actualización:',
     CONTACT_INFO: 'Información de contacto',
     EMERGENCY_CONTACT: 'Contacto de emergencia',

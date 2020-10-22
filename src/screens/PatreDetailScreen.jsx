@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     color: Colors.onSurfaceColorPrimary,
   },
   listItemBody: {
-    fontFamily: 'work-sans',
+    fontFamily: 'work-sans-bold',
     fontSize: 15,
     color: Colors.onSurfaceColorPrimary,
   },
@@ -267,6 +267,34 @@ const PatreDetailScreen = ({ navigation }) => {
                     />
                   </>
                 )}
+                {father.assignments.length && (
+                  <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.ASSIGNMENTS')}</Text>
+                )}
+                {father.assignments.map((e) => {
+                  return (
+                    <DefaultItem
+                      show={true}
+                      body={e.name}
+                      listItemBody={e.isActive ? styles.listItemBody : false}
+                      selected={() => {
+                        switch (e.entityType) {
+                          case 'course':
+                            navigation.navigate('CourseDetail', { courseId: e.entityId });
+                            break;
+                          case 'generation':
+                            navigation.navigate('GenerationDetail', { generationId: e.entityId });
+                            break;
+                          case 'filiation':
+                            navigation.navigate('FiliationDetail', { filiationId: e.entityId });
+                            break;
+                          case 'territory':
+                            navigation.navigate('DelegationDetail', { delegationId: e.entityId });
+                            break;
+                        }
+                      }}
+                    />
+                  );
+                })}
 
                 {(father.country ||
                   father.homeTerritoryName ||

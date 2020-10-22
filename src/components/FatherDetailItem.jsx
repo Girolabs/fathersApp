@@ -65,7 +65,21 @@ const styles = StyleSheet.create({
   },
 });
 
-const DefaultItem = ({ title, titleNoI18n, body, selected, img, country_code, lang, date, id, show, icon, badge }) => {
+const DefaultItem = ({
+  title,
+  titleNoI18n,
+  body,
+  selected,
+  img,
+  country_code,
+  lang,
+  date,
+  id,
+  show,
+  icon,
+  badge,
+  listItemBody,
+}) => {
   let formatedDate;
 
   if (date) {
@@ -89,7 +103,7 @@ const DefaultItem = ({ title, titleNoI18n, body, selected, img, country_code, la
                       {country_code && <Text style={styles.listItemBody}>{countries.getName(country_code, lang)}</Text>}
                       {date && <Text style={styles.listItemBody}>{formatedDate}</Text>}
 
-                      {body && <Text style={styles.listItemBody}>{body}</Text>}
+                      {body && <Text style={listItemBody ? listItemBody : styles.listItemBody}>{body}</Text>}
                     </View>
                     {badge && (
                       <View>
