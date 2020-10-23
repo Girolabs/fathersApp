@@ -28,7 +28,7 @@ import FatherContactInfo from '../components/FatherContactInfo';
 import { getInterfaceData, getPerson } from '../api';
 import { getDateFormatByLocale, getMonthFormatByLocale } from '../utils/date-utils';
 import PastLivingSituations from '../components/PastLivingSituations';
-// import ModalProfilePicture from '../components/ModalProfilePicture';
+import ModalProfilePicture from '../components/ModalProfilePicture';
 
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
@@ -178,7 +178,13 @@ const PatreDetailScreen = ({ navigation }) => {
 
         return (
           <View style={styles.screen}>
-            {/* <ModalProfilePicture modalVisible={modal} fatherId={father?father.personId:''} fullName={father?father.fullName:''} photo={father?father.photo:""} Close={()=>setModal(false)}/> */}
+            <ModalProfilePicture
+              modalVisible={modal}
+              fatherId={father ? father.personId : ''}
+              fullName={father ? father.fullName : ''}
+              photo={father ? father.photo : ''}
+              Close={() => setModal(false)}
+            />
             <NavigationEvents
               onDidFocus={() => {
                 const loadPerson = async () => {
@@ -288,8 +294,10 @@ const PatreDetailScreen = ({ navigation }) => {
                     />
                   </>
                 )}
-                {father.assignments.length && (
+                {father.assignments.length ? (
                   <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.ASSIGNMENTS')}</Text>
+                ) : (
+                  <></>
                 )}
                 {father.assignments.map((e) => {
                   return (
