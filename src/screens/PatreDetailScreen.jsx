@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ScrollView,
+  ActivityIndicator,
+  Platform,
+  TouchableOpacity,
+  TouchableNativeFeedback,
+  Linking,
+} from 'react-native';
 import moment from 'moment';
 import i18n from 'i18n-js';
 import 'moment/min/locales';
@@ -17,6 +28,7 @@ import FatherContactInfo from '../components/FatherContactInfo';
 import { getInterfaceData, getPerson } from '../api';
 import { getDateFormatByLocale, getMonthFormatByLocale } from '../utils/date-utils';
 import PastLivingSituations from '../components/PastLivingSituations';
+import ModalProfilePicture from '../components/ModalProfilePicture';
 
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
@@ -49,7 +61,7 @@ const styles = StyleSheet.create({
     color: Colors.onSurfaceColorPrimary,
   },
   listItemBody: {
-    fontFamily: 'work-sans',
+    fontFamily: 'work-sans-bold',
     fontSize: 15,
     color: Colors.onSurfaceColorPrimary,
   },
@@ -66,7 +78,11 @@ const PatreDetailScreen = ({ navigation }) => {
   const [snackMsg, setSnackMsg] = useState('');
   const [viewFatherFields, setViewFatherFields] = useState([]);
   const [statusLabels, setStatusLabels] = useState({});
-
+  const [modal, setModal] = useState(false);
+  let TouchableComp = TouchableOpacity;
+  if (Platform.OS === 'android' && Platform.Version >= 21) {
+    TouchableComp = TouchableNativeFeedback;
+  }
   const handleSaveContact = async (father) => {
     const { status } = await Contacts.requestPermissionsAsync();
     if (status === 'granted') {
@@ -132,6 +148,7 @@ const PatreDetailScreen = ({ navigation }) => {
           .then((response) => {
             const resFather = response.data.result;
             setFather(resFather);
+            console.log('resFather ', resFather);
             loadInterfaceData(resFather);
             if (navigation.getParam('updated')) {
               setSnackMsg(i18n.t('GENERAL.EDIT_SUCCESS'));
@@ -161,6 +178,13 @@ const PatreDetailScreen = ({ navigation }) => {
 
         return (
           <View style={styles.screen}>
+            <ModalProfilePicture
+              modalVisible={modal}
+              fatherId={father ? father.personId : ''}
+              fullName={father ? father.fullName : ''}
+              photo={father ? father.photo : ''}
+              Close={() => setModal(false)}
+            />
             <NavigationEvents
               onDidFocus={() => {
                 const loadPerson = async () => {
@@ -171,6 +195,7 @@ const PatreDetailScreen = ({ navigation }) => {
                       .then((response) => {
                         const resFather = response.data.result;
                         setFather(resFather);
+                        console.log('resFather ', resFather);
                         loadInterfaceData(resFather);
                       })
                       .catch(() => {
@@ -190,11 +215,13 @@ const PatreDetailScreen = ({ navigation }) => {
             {father ? (
               <ScrollView>
                 <View style={{ flexDirection: 'row', alignItems: 'center', padding: 15 }}>
-                  <Image
-                    style={{ width: 100, height: 100, borderRadius: 50 }}
-                    resizMode="center"
-                    source={{ uri: `https://schoenstatt-fathers.link${father.photo}` }}
-                  />
+                  <TouchableComp onPress={() => setModal(true)}>
+                    <Image
+                      style={{ width: 100, height: 100, borderRadius: 50 }}
+                      resizMode="center"
+                      source={{ uri: `https://schoenstatt-fathers.link${father.photo}` }}
+                    />
+                  </TouchableComp>
                   <View style={{ padding: 15, width: '80%' }}>
                     <Text
                       style={{
@@ -267,6 +294,36 @@ const PatreDetailScreen = ({ navigation }) => {
                     />
                   </>
                 )}
+                {father.assignments.length ? (
+                  <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.ASSIGNMENTS')}</Text>
+                ) : (
+                  <></>
+                )}
+                {father.assignments.map((e) => {
+                  return (
+                    <DefaultItem
+                      show={true}
+                      body={e.name}
+                      listItemBody={e.isActive ? styles.listItemBody : false}
+                      selected={() => {
+                        switch (e.entityType) {
+                          case 'course':
+                            navigation.navigate('CourseDetail', { courseId: e.entityId });
+                            break;
+                          case 'generation':
+                            navigation.navigate('GenerationDetail', { generationId: e.entityId });
+                            break;
+                          case 'filiation':
+                            navigation.navigate('FiliationDetail', { filiationId: e.entityId });
+                            break;
+                          case 'territory':
+                            navigation.navigate('DelegationDetail', { delegationId: e.entityId });
+                            break;
+                        }
+                      }}
+                    />
+                  );
+                })}
 
                 {(father.country ||
                   father.homeTerritoryName ||

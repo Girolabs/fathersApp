@@ -539,7 +539,7 @@ class FatherFormScreen extends Component {
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('phone1') != -1}
                           label={i18n.t('FATHER_EDIT.PHONE1')}
-                          placeholder={'+1 262 473-4782'}
+                          placeholder={i18n.t('FATHER_EDIT.EX') + ' +1 262 473-4782'}
                           name="phone1"
                           mode="outlined"
                           keyboardType="phone-pad"
@@ -559,7 +559,7 @@ class FatherFormScreen extends Component {
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('phone2') != -1}
                           label={i18n.t('FATHER_EDIT.PHONE2')}
-                          placeholder={'+1 262 473-4782'}
+                          placeholder={i18n.t('FATHER_EDIT.EX') + ' +1 262 473-4782'}
                           name="phone2"
                           mode="outlined"
                           keyboardType="phone-pad"
@@ -578,7 +578,7 @@ class FatherFormScreen extends Component {
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('phone3') != -1}
                           label={i18n.t('FATHER_EDIT.PHONE3')}
-                          placeholder={'+1 262 473-4782'}
+                          placeholder={i18n.t('FATHER_EDIT.EX') + ' +1 262 473-4782'}
                           name="phone3"
                           mode="outlined"
                           keyboardType="phone-pad"
@@ -789,7 +789,7 @@ class FatherFormScreen extends Component {
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('emergencyContact1Phone') != -1}
                           label={i18n.t('FATHER_EDIT.EMERGENCY_CONTACT_PHONE_1')}
-                          placeholder={'+1 262 473-4782'}
+                          placeholder={i18n.t('FATHER_EDIT.EX') + ' +1 262 473-4782'}
                           name="emergencyContact1Phone"
                           mode="outlined"
                           keyboardType="phone-pad"
@@ -816,7 +816,7 @@ class FatherFormScreen extends Component {
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('emergencyContact2Phone') != -1}
                           label={i18n.t('FATHER_EDIT.EMERGENCY_CONTACT_PHONE_2')}
-                          placeholder={'+1 262 473-4782'}
+                          placeholder={i18n.t('FATHER_EDIT.EX') + ' +1 262 473-4782'}
                           name="emergencyContact2Phone"
                           mode="outlined"
                           keyboardType="phone-pad"

@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Sentry from 'sentry-expo';
 
 import { useFonts } from '@use-expo/font';
 import { AppLoading } from 'expo';
@@ -6,6 +7,12 @@ import PatresNavigator from './src/navigator/PatresNavigator';
 import I18nProvider from './src/context/I18nProvider';
 import AuthProvider from './src/context/AuthProvider';
 import BulletinCheckProvider from './src/context/BulletinCheckProvider';
+
+Sentry.init({
+  dsn: 'https://9f3fff92f0324708b8ef98da9c96b5e7@o464423.ingest.sentry.io/5473069',
+  enableInExpoDevelopment: true,
+  debug: true, // Sentry will try to print out useful debugging information if something goes wrong with sending an event. Set this to `false` in production.
+});
 
 export default function App() {
   const [fontsLoaded] = useFonts({

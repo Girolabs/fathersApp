@@ -125,7 +125,29 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondaryColor,
   },
 });
-
+const stylePicker = {
+  inputAndroid: {
+    backgroundColor: Colors.surfaceColorSecondary,
+    padding: 10,
+    paddingVertical: 17,
+    borderRadius: 10,
+    marginTop: 10,
+    marginBottom: 7,
+    height: 50,
+  },
+  inputIOS: {
+    backgroundColor: Colors.surfaceColorSecondary,
+    padding: 10,
+    paddingVertical: 17,
+    borderRadius: 10,
+    marginTop: 10,
+    marginBottom: 7,
+  },
+  iconContainer: {
+    top: 20,
+    right: 15,
+  },
+};
 const LivingSituationsFormScreen = ({ navigation }) => {
   const [livingSituation, setLivingSituation] = useState({});
   const [isCreate, setIsCreate] = useState(false);
@@ -230,7 +252,6 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     const month =
       selectedDate.getUTCMonth() + 1 < 10 ? `0${selectedDate.getUTCMonth() + 1}` : selectedDate.getUTCMonth() + 1;
     let day = selectedDate.getUTCDate();
-    // console.log('day.lenght ', length);
     if (10 - day > 0) {
       day = `0${day}`;
     }
@@ -377,24 +398,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>
                       <RNPickerSelect
                         name="filiationId"
-                        style={{
-                          inputAndroid: {
-                            backgroundColor: Colors.surfaceColorSecondary,
-                            borderRadius: 10,
-                          },
-                          inputIOS: {
-                            backgroundColor: Colors.surfaceColorSecondary,
-                            padding: 10,
-                            paddingVertical: 17,
-                            borderRadius: 10,
-                            marginTop: 10,
-                            marginBottom: 7,
-                          },
-                          iconContainer: {
-                            top: 22,
-                            right: 15,
-                          },
-                        }}
+                        useNativeAndroidPickerStyle={false}
+                        style={stylePicker}
                         disabled={!isCreate}
                         onValueChange={(e) => setFieldValue('filiationId', e)}
                         value={_.get(values, 'filiationId') || ''}
@@ -409,24 +414,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.HOUSE')}</Text>
                       <RNPickerSelect
                         name="houseId"
-                        style={{
-                          inputAndroid: {
-                            backgroundColor: Colors.surfaceColorSecondary,
-                            borderRadius: 10,
-                          },
-                          inputIOS: {
-                            backgroundColor: Colors.surfaceColorSecondary,
-                            padding: 10,
-                            paddingVertical: 17,
-                            borderRadius: 10,
-                            marginTop: 10,
-                            marginBottom: 7,
-                          },
-                          iconContainer: {
-                            top: 22,
-                            right: 15,
-                          },
-                        }}
+                        useNativeAndroidPickerStyle={false}
+                        style={stylePicker}
                         onValueChange={(e) => setFieldValue('houseId', e)}
                         value={_.get(values, 'houseId') || ''}
                         items={houses}
@@ -442,26 +431,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.RESPONSIBLE_TERRITORY')}</Text>
                       <RNPickerSelect
                         name="responsibleTerritoryId"
-                        style={{
-                          inputAndroid: {
-                            backgroundColor: Colors.surfaceColorSecondary,
-                            borderRadius: 10,
-                            marginTop: 10,
-                            marginBottom: 7,
-                          },
-                          inputIOS: {
-                            backgroundColor: Colors.surfaceColorSecondary,
-                            padding: 10,
-                            paddingVertical: 17,
-                            borderRadius: 10,
-                            marginTop: 10,
-                            marginBottom: 7,
-                          },
-                          iconContainer: {
-                            top: 22,
-                            right: 15,
-                          },
-                        }}
+                        useNativeAndroidPickerStyle={false}
+                        style={stylePicker}
                         onValueChange={(e) => setFieldValue('responsibleTerritoryId', e)}
                         value={_.get(values, 'responsibleTerritoryId') || ''}
                         items={territories}
@@ -475,26 +446,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.STATUS')}</Text>
                       <RNPickerSelect
                         name="status"
-                        style={{
-                          inputAndroid: {
-                            backgroundColor: Colors.surfaceColorSecondary,
-                            borderRadius: 10,
-                            marginTop: 10,
-                            marginBottom: 7,
-                          },
-                          inputIOS: {
-                            backgroundColor: Colors.surfaceColorSecondary,
-                            padding: 10,
-                            paddingVertical: 17,
-                            borderRadius: 10,
-                            marginTop: 10,
-                            marginBottom: 7,
-                          },
-                          iconContainer: {
-                            top: 22,
-                            right: 15,
-                          },
-                        }}
+                        useNativeAndroidPickerStyle={false}
+                        style={stylePicker}
                         onValueChange={(e) => setFieldValue('status', e)}
                         value={_.get(values, 'status') || ''}
                         items={statusLabels}

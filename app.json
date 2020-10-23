@@ -10,6 +10,18 @@
     "splash": {
       "backgroundColor": "#000258"
     },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "Girolabs",
+            "project": "girolabs",
+            "authToken": "5c32d5485cf8487a8b92ea1e5a4fb81635465aa75fbd4e8abc2a9ffbaa595f97"
+          }
+        }
+      ]
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -17,7 +29,11 @@
     "android": {
       "package": "com.schoenstatt.fathersApp",
       "versionCode": 14,
-      "permissions": ["CAMERA", "WRITE_EXTERNAL_STORAGE", "WRITE_CONTACTS", "CAMERA_ROLL", "READ_CONTACTS"]
+      "permissions": ["CAMERA", "WRITE_EXTERNAL_STORAGE", "WRITE_CONTACTS", "CAMERA_ROLL", "READ_CONTACTS"],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/img/icon.png",
+        "backgroundColor": "#ffffff"
+      }
     },
     "ios": {
       "bundleIdentifier": "com.schoenstatt.fathersApp",
