@@ -3,7 +3,7 @@
     "name": "Schoenstatt Fathers",
     "slug": "schoenstatt-fathers",
     "platforms": ["ios", "android", "web"],
-    "version": "0.14",
+    "version": "0.15",
     "orientation": "portrait",
     "icon": "./assets/img/icon_app.png",
     "primaryColor": "#fffff",
