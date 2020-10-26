@@ -341,6 +341,8 @@ const PatreDetailScreen = ({ navigation }) => {
                   father.perpetualContractDate ||
                   father.deaconDate ||
                   father.priestDate ||
+                  father.deathDate ||
+                  father.leaveDate ||
                   father.bishopDate) && (
                   <Text style={styles.sectionHeader}>{i18n.t('FATHER_DETAIL.PERSONAL_INFO')}</Text>
                 )}
@@ -386,6 +388,11 @@ const PatreDetailScreen = ({ navigation }) => {
                   body={father.birthDate ? moment.utc(father.birthDate).format(dateFormatByLocale) : null}
                 />
                 <DefaultItem
+                  show={viewFatherFields.indexOf('deathDate')}
+                  title="FATHER_DETAIL.DEATHDATE"
+                  body={father.deathDate ? moment.utc(father.deathDate).format(dateFormatByLocale) : null}
+                />
+                <DefaultItem
                   show={viewFatherFields.indexOf('nameDay')}
                   title="FATHER_DETAIL.NAMEDAY"
                   body={father.nameDay ? moment.utc(father.nameDay).format(monthFormatByLocale) : null}
@@ -415,6 +422,11 @@ const PatreDetailScreen = ({ navigation }) => {
                   }
                 />
                 <DefaultItem
+                  show={viewFatherFields.indexOf('leaveDate')}
+                  title="FATHER_DETAIL.LEAVEDATE"
+                  body={father.leaveDate ? moment.utc(father.leaveDate).format(dateFormatByLocale) : null}
+                />
+                <DefaultItem
                   show={viewFatherFields.indexOf('perpetualContractDate') !== -1}
                   title="FATHER_DETAIL.PERPETUAL_CONTRACT"
                   body={
@@ -438,7 +450,6 @@ const PatreDetailScreen = ({ navigation }) => {
                   title="FATHER_DETAIL.BISHOP_DATE"
                   body={father.bishopDate ? moment.utc(father.bishopDate).format(dateFormatByLocale) : null}
                 />
-
                 <PastLivingSituations
                   livingSituations={father.livingSituations}
                   viewFields={viewFatherFields && viewFatherFields}

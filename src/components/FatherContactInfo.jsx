@@ -82,7 +82,6 @@ const FatherContactInfo = ({
       />
       {father.phones &&
         father.phones.map((phone) => {
-          console.log('phones', phone);
           return (
             <DefaultItem
               show={viewPermissions.indexOf('phones')}
