@@ -29,7 +29,7 @@ import { getInterfaceData, getPerson } from '../api';
 import { getDateFormatByLocale, getMonthFormatByLocale } from '../utils/date-utils';
 import PastLivingSituations from '../components/PastLivingSituations';
 import ModalProfilePicture from '../components/ModalProfilePicture';
-
+import { MaterialIcons } from '@expo/vector-icons';
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/de.json'));
@@ -168,7 +168,6 @@ const PatreDetailScreen = ({ navigation }) => {
     };
     loadPerson();
   }, []);
-
   return (
     <I18nContext.Consumer>
       {(value) => {
@@ -216,11 +215,15 @@ const PatreDetailScreen = ({ navigation }) => {
               <ScrollView>
                 <View style={{ flexDirection: 'row', alignItems: 'center', padding: 15 }}>
                   <TouchableComp onPress={() => setModal(true)}>
-                    <Image
-                      style={{ width: 100, height: 100, borderRadius: 50 }}
-                      resizMode="center"
-                      source={{ uri: `https://schoenstatt-fathers.link${father.photo}` }}
-                    />
+                    {father.photo ? (
+                      <Image
+                        style={{ width: 100, height: 100, borderRadius: 50 }}
+                        resizMode="center"
+                        source={{ uri: `https://schoenstatt-fathers.link${father.photo}` }}
+                      />
+                    ) : (
+                      <MaterialIcons name="add-a-photo" size={80} color="black" />
+                    )}
                   </TouchableComp>
                   <View style={{ padding: 15, width: '80%' }}>
                     <Text
