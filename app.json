@@ -28,7 +28,7 @@
     "assetBundlePatterns": ["**/*"],
     "android": {
       "package": "com.schoenstatt.fathersApp",
-      "versionCode": 14,
+      "versionCode": 15,
       "permissions": ["CAMERA", "WRITE_EXTERNAL_STORAGE", "WRITE_CONTACTS", "CAMERA_ROLL", "READ_CONTACTS"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/img/icon.png",
@@ -37,7 +37,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.schoenstatt.fathersApp",
-      "buildNumber": "14",
+      "buildNumber": "1",
       "supportsTablet": false,
       "requireFullScreen": true
     },
