@@ -5,6 +5,8 @@ import Button from './Button';
 import Colors from '../constants/Colors';
 import i18n from 'i18n-js';
 import countries from 'i18n-iso-countries';
+import { MaterialIcons } from '@expo/vector-icons';
+
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/de.json'));
@@ -47,11 +49,24 @@ const ModalProfilePicture = (props) => {
 
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Image
-              style={{ width: 300, height: 300, borderRadius: 10 }}
-              resizMode="center"
-              source={{ uri: `https://schoenstatt-fathers.link${props.photo}` }}
-            />
+            {props.photo ? (
+              <Image
+                style={{ width: 300, height: 300, borderRadius: 10 }}
+                resizMode="center"
+                source={{ uri: `https://schoenstatt-fathers.link${props.photo}` }}
+              />
+            ) : (
+              <Button
+                onPress={() => {
+                  let mail = 'webmaster@schoenstatt-fathers.link';
+                  let subject = `Photo update for person ${props.fatherId}`;
+                  let body = `Dear webmaster, please update the photo for ${props.fullName} with the one I will attach to this email. Thanks!`;
+                  Linking.openURL(`mailto:${mail}?subject=${subject}&body=${body}`);
+                }}
+              >
+                <MaterialIcons name="add-a-photo" size={300} color="white" />
+              </Button>
+            )}
           </View>
         </View>
       </Modal>
@@ -86,7 +101,7 @@ const styles = StyleSheet.create({
   modalView: {
     // margin: 20,
     backgroundColor: Colors.primaryColor,
-    // borderRadius: 20,
+    borderRadius: 10,
     padding: 5,
     alignItems: 'center',
     shadowColor: '#000',

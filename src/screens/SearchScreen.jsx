@@ -150,7 +150,7 @@ class SearchScreen extends Component {
   async componentDidMount() {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      this.getData();
+      await this.getData();
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
@@ -210,8 +210,8 @@ class SearchScreen extends Component {
     return (
       <View style={styles.screen}>
         <NavigationEvents
-          onDidFocus={() => {
-            this.getData();
+          onDidFocus={async () => {
+            await this.getData();
           }}
         />
         {!this.state.loading ? (
