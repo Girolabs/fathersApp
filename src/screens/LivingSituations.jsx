@@ -134,6 +134,7 @@ const stylePicker = {
     marginTop: 10,
     marginBottom: 7,
     height: 50,
+    color: 'black',
   },
   inputIOS: {
     backgroundColor: Colors.surfaceColorSecondary,
