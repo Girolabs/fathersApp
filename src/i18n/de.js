@@ -36,6 +36,8 @@ exports.DE = {
     MISC: 'Verschiedenes',
   },
   FATHER_DETAIL: {
+    DEATHDATE: 'Sterbedatum',
+    LEAVEDATE: 'Hat die Gemeinschaft verlassen',
     ASSIGNMENTS: 'Ämter / Aufgaben',
     LAST_UPDATE: 'Letzte Aktualisierung',
     CONTACT_INFO: 'Kontaktinformation',

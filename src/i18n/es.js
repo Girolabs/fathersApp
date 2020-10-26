@@ -36,6 +36,8 @@ exports.ES = {
     MISC: 'Otros',
   },
   FATHER_DETAIL: {
+    DEATHDATE: 'Fallecido',
+    LEAVEDATE: 'Salió de la Comunidad',
     ASSIGNMENTS: 'Encargos',
     LAST_UPDATE: 'Ultima actualización:',
     CONTACT_INFO: 'Información de contacto',
