@@ -613,6 +613,7 @@ class FatherFormScreen extends Component {
                           </Button>
                         </View>
                         <DateTimePickerModal
+                          isDarkModeEnabled={false}
                           isVisible={this.state.openDeaconDate}
                           mode="date"
                           onConfirm={(date) => {
@@ -638,6 +639,7 @@ class FatherFormScreen extends Component {
                           </Button>
                         </View>
                         <DateTimePickerModal
+                          isDarkModeEnabled={false}
                           isVisible={this.state.openPriestDate}
                           mode="date"
                           onConfirm={(date) => {
@@ -664,6 +666,7 @@ class FatherFormScreen extends Component {
                           </Button>
                         </View>
                         <DateTimePickerModal
+                          isDarkModeEnabled={false}
                           isVisible={this.state.openBishopDate}
                           mode="date"
                           onConfirm={(date) => {
@@ -690,6 +693,7 @@ class FatherFormScreen extends Component {
                           </Button>
                         </View>
                         <DateTimePickerModal
+                          isDarkModeEnabled={false}
                           isVisible={this.state.openDeathDate}
                           mode="date"
                           onConfirm={(date) => {
@@ -716,6 +720,7 @@ class FatherFormScreen extends Component {
                           </Button>
                         </View>
                         <DateTimePickerModal
+                          isDarkModeEnabled={false}
                           isVisible={this.state.openLeaveDate}
                           mode="date"
                           onConfirm={(date) => {
