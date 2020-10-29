@@ -283,6 +283,7 @@ class SearchScreen extends Component {
 
             <FlatList
               data={this.state.filterResults}
+              keyExtractor={(item) => item.personId.toString()}
               renderItem={({ item, index }) => {
                 return (
                   <TouchableOpacity

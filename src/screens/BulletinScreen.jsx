@@ -135,6 +135,7 @@ const BulletinScreen = ({ navigation }) => {
       {!loading ? (
         <FlatList
           data={posts}
+          keyExtractor={(item) => item.postId.toString()}
           renderItem={({ item }) => (
             <TouchableComp
               onPress={() => {
