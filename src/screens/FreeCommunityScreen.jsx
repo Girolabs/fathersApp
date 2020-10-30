@@ -102,6 +102,7 @@ class FreeCommunityScreen extends Component {
       <SafeAreaView style={styles.container}>
         {this.state.generations.length > 0 ? (
           <SectionList
+            stickySectionHeadersEnabled={false}
             sections={this.state.generations}
             keyExtractor={(item) => item.courseId}
             renderItem={({ item }) => {

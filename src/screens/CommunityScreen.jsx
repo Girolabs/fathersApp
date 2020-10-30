@@ -102,6 +102,7 @@ class CommunityScreen extends Component {
       <SafeAreaView style={styles.container}>
         {this.state.delegations.length > 0 ? (
           <SectionList
+            stickySectionHeadersEnabled={false}
             sections={this.state.delegations}
             keyExtractor={(item) => item.filiationId.toString()}
             renderItem={({ item }) => (

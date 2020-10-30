@@ -246,6 +246,7 @@ class AssignmentsScreen extends Component {
 
           list = (
               <SectionList
+                stickySectionHeadersEnabled={false}
                 keyExtractor={item=> item.assignmentId.toString()}
                 sections={filtered}
                 renderItem={({ item }) => (
@@ -387,6 +388,7 @@ class AssignmentsScreen extends Component {
           filtered = territories;
           list = (
               <SectionList
+                stickySectionHeadersEnabled={false}
                 keyExtractor={item=> item.assignmentId.toString()}
                 sections={filtered}
                 renderItem={({ item }) => (
