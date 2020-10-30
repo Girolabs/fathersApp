@@ -315,7 +315,7 @@ class SearchScreen extends Component {
 
 SearchScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: (
+  headerRight:()=> (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

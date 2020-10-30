@@ -133,6 +133,7 @@ class HouseDetailScreen extends Component {
           moment.locale(value.lang);
           return (
             <SafeAreaView>
+              <ScrollView>
                 {house ? (
                   <View style={styles.screen}>
                     <View style={styles.titleContainer}>
@@ -146,128 +147,122 @@ class HouseDetailScreen extends Component {
                       <Flag id={house.country} size={0.2} />
                     </View>
                     <View>
-
-                      <FlatList
-                      keyExtractor={item=> item.personId.toString()}
-                        ListHeaderComponent={
-                            <>
-                             <Text style={styles.sectionHeader}>{i18n.t('HOUSE_DETAIL.HOUSE_INFO')}</Text>
-                                <View style={styles.listItem}>
-                                    <Button
-                                    onPress={() => {
-                                        navigation.navigate('FiliationDetail', { filiationId: house.filialId });
-                                    }}
-                                    >
-                                    <View>
-                                        <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.FILIAL')}</Text>
-                                        <Text style={styles.listItemBody}>{house.filiationName}</Text>
-                                    </View>
-                                    </Button>
+                      <Text style={styles.sectionHeader}>{i18n.t('HOUSE_DETAIL.HOUSE_INFO')}</Text>
+                      <View style={styles.listItem}>
+                        <Button
+                          onPress={() => {
+                            navigation.navigate('FiliationDetail', { filiationId: house.filialId });
+                          }}
+                        >
+                          <View>
+                            <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.FILIAL')}</Text>
+                            <Text style={styles.listItemBody}>{house.filiationName}</Text>
+                          </View>
+                        </Button>
+                      </View>
+                      {house.phones &&
+                        house.phones.map((phone, index) => {
+                          return (
+                            <Button
+                              onPress={() => {
+                                Clipboard.setString(phone.number);
+                                this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
+                              }}
+                            >
+                              <View style={styles.listItem}>
+                                <Text style={styles.listItemTitle}>
+                                  {phone.label ? phone.label : i18n.t('HOUSE_DETAIL.PHONE')}
+                                </Text>
+                                <View style={styles.listItemBodyContainer}>
+                                  <Text style={styles.listItemBody}>{phone.number}</Text>
+                                  <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
                                 </View>
-                                {house.phones &&
-                                    house.phones.map((phone, index) => {
-                                    return (
-                                        <Button
-                                        onPress={() => {
-                                            Clipboard.setString(phone.number);
-                                            this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
-                                        }}
-                                        >
-                                        <View style={styles.listItem}>
-                                            <Text style={styles.listItemTitle}>
-                                            {phone.label ? phone.label : i18n.t('HOUSE_DETAIL.PHONE')}
-                                            </Text>
-                                            <View style={styles.listItemBodyContainer}>
-                                            <Text style={styles.listItemBody}>{phone.number}</Text>
-                                            <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
-                                            </View>
-                                        </View>
-                                        </Button>
-                                    );
-                                    })}
+                              </View>
+                            </Button>
+                          );
+                        })}
 
-                                {house.fax && (
-                                    <Button
-                                    onPress={() => {
-                                        Clipboard.setString(house.fax);
-                                        this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
-                                    }}
-                                    >
-                                    <View style={styles.listItem}>
-                                        <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.FAX')}</Text>
-                                        <View style={styles.listItemBodyContainer}>
-                                        <Text style={styles.listItemBody}>{house.fax}</Text>
-                                        <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
-                                        </View>
-                                    </View>
-                                    </Button>
-                                )}
-                                {house.diocese && (
-                                    <View style={styles.listItem}>
-                                    <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.DIOCESE')}</Text>
-                                    <Text style={styles.listItemBody}>{house.diocese}</Text>
-                                    </View>
-                                )}
+                      {house.fax && (
+                        <Button
+                          onPress={() => {
+                            Clipboard.setString(house.fax);
+                            this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
+                          }}
+                        >
+                          <View style={styles.listItem}>
+                            <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.FAX')}</Text>
+                            <View style={styles.listItemBodyContainer}>
+                              <Text style={styles.listItemBody}>{house.fax}</Text>
+                              <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
+                            </View>
+                          </View>
+                        </Button>
+                      )}
+                      {house.diocese && (
+                        <View style={styles.listItem}>
+                          <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.DIOCESE')}</Text>
+                          <Text style={styles.listItemBody}>{house.diocese}</Text>
+                        </View>
+                      )}
 
-                                {house.email && (
-                                    <View style={styles.listItem}>
-                                    <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.EMAIL')}</Text>
-                                    <Text style={styles.listItemBody}>{house.email}</Text>
-                                    </View>
-                                )}
-                                {house.wifiPassword && (
-                                    <Button
-                                    onPress={() => {
-                                        Clipboard.setString(house.wifiPassword);
-                                        this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
-                                    }}
-                                    >
-                                    <View style={styles.listItem}>
-                                        <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.WIFI')}</Text>
-                                        <View style={styles.listItemBodyContainer}>
-                                        <Text style={styles.listItemBody}>{house.wifiPassword}</Text>
-                                        <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
-                                        </View>
-                                    </View>
-                                    </Button>
-                                )}
+                      {house.email && (
+                        <View style={styles.listItem}>
+                          <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.EMAIL')}</Text>
+                          <Text style={styles.listItemBody}>{house.email}</Text>
+                        </View>
+                      )}
+                      {house.wifiPassword && (
+                        <Button
+                          onPress={() => {
+                            Clipboard.setString(house.wifiPassword);
+                            this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
+                          }}
+                        >
+                          <View style={styles.listItem}>
+                            <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.WIFI')}</Text>
+                            <View style={styles.listItemBodyContainer}>
+                              <Text style={styles.listItemBody}>{house.wifiPassword}</Text>
+                              <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
+                            </View>
+                          </View>
+                        </Button>
+                      )}
 
-                                <Button
-                                    onPress={() => {
-                                    Clipboard.setString(
-                                        house.street1 + ' ' + house.cityState + ' ' + countries.getName(house.country, value.lang),
-                                    );
-                                    this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
-                                    }}
-                                >
-                                    <View style={styles.listItem}>
-                                    <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.ADDRESS')}</Text>
-                                    <View style={styles.listItemBodyContainer}>
-                                        <View>
-                                        <Text style={styles.listItemBody}>{house.street1}</Text>
-                                        <Text style={styles.listItemBody}>{house.cityState}</Text>
-                                        <Text style={styles.listItemBody}>{countries.getName(house.country, value.lang)}</Text>
-                                        </View>
+                      <Button
+                        onPress={() => {
+                          Clipboard.setString(
+                            house.street1 + ' ' + house.cityState + ' ' + countries.getName(house.country, value.lang),
+                          );
+                          this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
+                        }}
+                      >
+                        <View style={styles.listItem}>
+                          <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.ADDRESS')}</Text>
+                          <View style={styles.listItemBodyContainer}>
+                            <View>
+                              <Text style={styles.listItemBody}>{house.street1}</Text>
+                              <Text style={styles.listItemBody}>{house.cityState}</Text>
+                              <Text style={styles.listItemBody}>{countries.getName(house.country, value.lang)}</Text>
+                            </View>
 
-                                        <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
-                                    </View>
-                                    </View>
-                                </Button>
-                                {house.publicNotes && (
-                                    <View style={styles.listItem}>
-                                    <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.PUBLIC_NOTES')}</Text>
-                                    <Text style={styles.listItemBody}>{house.publicNotes}</Text>
-                                    </View>
-                                )}
-                                {house.adminNotes && (
-                                    <View style={styles.listItem}>
-                                    <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.ADMIN_NOTES')}</Text>
-                                    <Text style={styles.listItemBody}>{house.adminNotes}</Text>
-                                    </View>
-                                )}
-                                <Text style={styles.sectionHeader}>{i18n.t('HOUSE_DETAIL.MEMBERS')}</Text>
-                            </>
-                        }
+                            <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
+                          </View>
+                        </View>
+                      </Button>
+                      {house.publicNotes && (
+                        <View style={styles.listItem}>
+                          <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.PUBLIC_NOTES')}</Text>
+                          <Text style={styles.listItemBody}>{house.publicNotes}</Text>
+                        </View>
+                      )}
+                      {house.adminNotes && (
+                        <View style={styles.listItem}>
+                          <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.ADMIN_NOTES')}</Text>
+                          <Text style={styles.listItemBody}>{house.adminNotes}</Text>
+                        </View>
+                      )}
+                      <Text style={styles.sectionHeader}>{i18n.t('HOUSE_DETAIL.MEMBERS')}</Text>
+                      <FlatList
                         data={
                           house.membersHouse.length
                             ? house.membersHouse
@@ -306,6 +301,7 @@ class HouseDetailScreen extends Component {
                 <SnackBar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })}>
                   {this.state.snackMsg}
                 </SnackBar>
+              </ScrollView>
             </SafeAreaView>
           );
         }}
@@ -315,7 +311,7 @@ class HouseDetailScreen extends Component {
 }
 HouseDetailScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: () =>(
+  headerRight: ()=>(
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

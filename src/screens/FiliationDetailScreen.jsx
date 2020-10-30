@@ -135,7 +135,7 @@ class FiliationDetailScreen extends Component {
                     {/* renderItem= */}
                     {filiation.persons.map((item) => {
                       return (
-                        <TouchableComp onPress={() => navigation.navigate('PatreDetail', { fatherId: item.personId })}>
+                        <TouchableComp key={item.personId.toString()} onPress={() => navigation.navigate('PatreDetail', { fatherId: item.personId })}>
                           <View style={styles.memberItem}>
                             <Image
                               source={{ uri: `https://schoenstatt-fathers.link${item.photo}` }}
@@ -174,7 +174,7 @@ class FiliationDetailScreen extends Component {
 
 FiliationDetailScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: (
+  headerRight: ()=>(
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

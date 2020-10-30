@@ -106,7 +106,7 @@ class CommunityScreen extends Component {
             keyExtractor={(item) => item.filiationId.toString()}
             renderItem={({ item }) => (
               <Filiation
-                key={item.filiationId}
+                key={item.filiationId.toString()}
                 title={item.name}
                 flag={item.country}
                 onSelect={() => this.props.navigation.navigate('FiliationDetail', { filiationId: item.filiationId })}
