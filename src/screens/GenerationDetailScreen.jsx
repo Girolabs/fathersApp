@@ -196,7 +196,7 @@ class GenerationDetailScreen extends Component {
 
 GenerationDetailScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: (
+  headerRight: ()=>(
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

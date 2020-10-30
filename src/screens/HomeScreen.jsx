@@ -170,7 +170,7 @@ const HomeScreen = () => {
 
 HomeScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: (
+  headerRight: () => (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

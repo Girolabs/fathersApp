@@ -283,6 +283,7 @@ class SearchScreen extends Component {
 
             <FlatList
               data={this.state.filterResults}
+              keyExtractor={(item) => item.personId.toString()}
               renderItem={({ item, index }) => {
                 return (
                   <TouchableOpacity
@@ -314,7 +315,7 @@ class SearchScreen extends Component {
 
 SearchScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: (
+  headerRight:()=> (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

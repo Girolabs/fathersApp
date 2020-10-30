@@ -105,7 +105,7 @@ const BulletinDetail = ({ navigation }) => {
 
 BulletinDetail.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: (
+  headerRight: ()=> (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

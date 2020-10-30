@@ -79,6 +79,7 @@ const DefaultItem = ({
   icon,
   badge,
   listItemBody,
+  key,
 }) => {
   let formatedDate;
 
@@ -93,7 +94,7 @@ const DefaultItem = ({
       {show && (
         <>
           {(body || date || country_code) && (
-            <Buttom onPress={() => (selected ? selected() : null)}>
+            <Buttom onPress={() => (selected ? selected() : null)} key={key}>
               <View style={styles.container}>
                 <View style={styles.listItemLeft}>
                   {title && <Text style={styles.listItemTitle}>{i18n.t(title)}</Text>}

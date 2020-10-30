@@ -103,9 +103,10 @@ class CommunityScreen extends Component {
         {this.state.delegations.length > 0 ? (
           <SectionList
             sections={this.state.delegations}
+            keyExtractor={(item) => item.filiationId.toString()}
             renderItem={({ item }) => (
               <Filiation
-                key={item.filiationId}
+                key={item.filiationId.toString()}
                 title={item.name}
                 flag={item.country}
                 onSelect={() => this.props.navigation.navigate('FiliationDetail', { filiationId: item.filiationId })}
@@ -140,7 +141,7 @@ class CommunityScreen extends Component {
 
 CommunityScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: (
+  headerRight: () => (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

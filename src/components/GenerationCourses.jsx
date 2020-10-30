@@ -85,6 +85,7 @@ const GenerationCourses = ({ navigation, courses }) => {
         courses.map((course) => {
           return (
             <Button
+              key={course.courseId.toString()}
               onPress={() => {
                 navigation.navigate('CourseDetail', {
                   courseId: course.courseId,

@@ -71,6 +71,7 @@ class FiliationDetailScreen extends Component {
             <SafeAreaView style={styles.screen}>
               {filiation ? (
                 <ScrollView>
+                  {/*remove  ScrollView */}
                   <View style={styles.titleContainer}>
                     <Text style={styles.title}>{filiation.name}</Text>
                     <Flag id={filiation.country} size={0.2} />
@@ -128,32 +129,32 @@ class FiliationDetailScreen extends Component {
                   <FiliationHouses houses={filiation.houses.filter((house) => house.isActive)} />
                   <View>
                     <Text style={styles.sectionHeader}>{i18n.t('FILIAL_DETAIL.MEMBERS')}</Text>
-                    <FlatList
+                    {/* <FlatList
                       data={filiation.persons}
-                      renderItem={({ item }) => {
-                        return (
-                          <TouchableComp
-                            onPress={() => navigation.navigate('PatreDetail', { fatherId: item.personId })}
-                          >
-                            <View style={styles.memberItem}>
-                              <Image
-                                source={{ uri: `https://schoenstatt-fathers.link${item.photo}` }}
-                                style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
-                              />
-                              <Text
-                                style={{
-                                  fontSize: 12,
-                                  color: Colors.primaryColor,
-                                  fontFamily: 'work-sans-semibold',
-                                }}
-                              >
-                                {item.fullName}
-                              </Text>
-                            </View>
-                          </TouchableComp>
-                        );
-                      }}
-                    />
+                      keyExtractor={(item) => item.personId.toString()} */}
+                    {/* renderItem= */}
+                    {filiation.persons.map((item) => {
+                      return (
+                        <TouchableComp key={item.personId.toString()} onPress={() => navigation.navigate('PatreDetail', { fatherId: item.personId })}>
+                          <View style={styles.memberItem}>
+                            <Image
+                              source={{ uri: `https://schoenstatt-fathers.link${item.photo}` }}
+                              style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
+                            />
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: Colors.primaryColor,
+                                fontFamily: 'work-sans-semibold',
+                              }}
+                            >
+                              {item.fullName}
+                            </Text>
+                          </View>
+                        </TouchableComp>
+                      );
+                    })}
+                    {/* /> */}
                   </View>
                 </ScrollView>
               ) : (
@@ -173,7 +174,7 @@ class FiliationDetailScreen extends Component {
 
 FiliationDetailScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: (
+  headerRight: ()=>(
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

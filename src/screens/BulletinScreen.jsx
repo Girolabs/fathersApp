@@ -135,6 +135,7 @@ const BulletinScreen = ({ navigation }) => {
       {!loading ? (
         <FlatList
           data={posts}
+          keyExtractor={(item) => item.postId.toString()}
           renderItem={({ item }) => (
             <TouchableComp
               onPress={() => {
@@ -165,7 +166,7 @@ const BulletinScreen = ({ navigation }) => {
 
 BulletinScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: (
+  headerRight: ()=> (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

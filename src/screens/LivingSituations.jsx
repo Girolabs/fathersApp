@@ -527,7 +527,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
 
 LivingSituationsFormScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: (
+  headerRight: ()=> (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

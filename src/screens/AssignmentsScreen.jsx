@@ -169,7 +169,7 @@ class AssignmentsScreen extends Component {
           };
         });
 
-        console.log('t', territories);
+        // console.log('t', territories);
 
         territories = territories.map((territory) => {
           return {
@@ -202,7 +202,7 @@ class AssignmentsScreen extends Component {
   };
 
   componentDidUpdate() {
-    console.log('[Assingnments]: ComponentDidUpdate');
+    // console.log('[Assingnments]: ComponentDidUpdate');
   }
   render() {
     const dateMask = getDateMaskByLocale(moment.locale());
@@ -245,8 +245,8 @@ class AssignmentsScreen extends Component {
             });
 
           list = (
-            <ScrollView>
               <SectionList
+                keyExtractor={item=> item.assignmentId.toString()}
                 sections={filtered}
                 renderItem={({ item }) => (
                   <ListItem
@@ -275,9 +275,9 @@ class AssignmentsScreen extends Component {
                   />
                 )}
               />
-            </ScrollView>
+
           );
-          console.log('filtered', filtered);
+        //   console.log('filtered', filtered);
           break;
 
         case 1:
@@ -308,6 +308,7 @@ class AssignmentsScreen extends Component {
                 return (
                   <View>
                     <TouchableComp
+                        key={territory.territoryId.toString()}
                       onPress={() => {
                         this.props.navigation.navigate('DelegationDetail', {
                           delegationId: territory.territoryId,
@@ -320,7 +321,7 @@ class AssignmentsScreen extends Component {
                       </View>
                     </TouchableComp>
                     {territory.filiations.map((filiation) => {
-                      console.log(filiation);
+                    //   console.log(filiation);
                       return (
                         <Fragment>
                           {filiation.data.map((asg) => {
@@ -337,6 +338,7 @@ class AssignmentsScreen extends Component {
                                     />
                                     <View style={styles.itemTextContainer}>
                                       <TouchableComp
+                                        key={asg.filiationId.toString()}
                                         onPress={() => {
                                           this.props.navigation.navigate('FiliationDetail', {
                                             filiationId: asg.filiationId,
@@ -351,6 +353,7 @@ class AssignmentsScreen extends Component {
 
                                       <Text style={styles.itemText}>{asg.roleTitle}</Text>
                                       <TouchableComp
+                                        key={asg.person.personId.toString()}
                                         onPress={() => {
                                           this.props.navigation.navigate('PatreDetail', {
                                             fatherId: asg.person.personId,
@@ -375,14 +378,16 @@ class AssignmentsScreen extends Component {
                   </View>
                 );
               })}
-            </ScrollView>
-          );
+          </ScrollView>
+
+            );
+
           break;
         case 2:
           filtered = territories;
           list = (
-            <ScrollView>
               <SectionList
+                keyExtractor={item=> item.assignmentId.toString()}
                 sections={filtered}
                 renderItem={({ item }) => (
                   <ListItem
@@ -411,7 +416,6 @@ class AssignmentsScreen extends Component {
                   />
                 )}
               />
-            </ScrollView>
           );
           break;
         case 3:
@@ -479,7 +483,7 @@ class AssignmentsScreen extends Component {
     return (
       <I18nContext.Consumer>
         {(value) => {
-          console.log(value);
+        //   console.log(value);
           moment.locale(value.lang);
           return (
             <SafeAreaView style={styles.screen}>
@@ -531,7 +535,7 @@ class AssignmentsScreen extends Component {
 
 AssignmentsScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: (
+  headerRight: () =>(
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

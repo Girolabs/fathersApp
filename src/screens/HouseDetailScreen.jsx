@@ -311,7 +311,7 @@ class HouseDetailScreen extends Component {
 }
 HouseDetailScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: (
+  headerRight: ()=>(
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"
