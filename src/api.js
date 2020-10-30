@@ -15,7 +15,7 @@ const instance = axios.create({
 instance.interceptors.request.use(async (config) => {
   let token = await AsyncStorage.getItem('token');
   // console.log('Token Interceptor', token);
-  console.log(config);
+//   console.log(config);
   const lang = i18n.locale;
   token = token ? JSON.parse(token).jwt : null;
   config.headers.Authorization = token ? `Bearer ${token}` : '';

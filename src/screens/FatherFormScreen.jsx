@@ -904,7 +904,7 @@ FatherFormScreen.navigationOptions = (navigationData) => {
   } else {
     return {
       headerTitle: '',
-      headerRight: (
+      headerRight: () =>(
         <HeaderButtons HeaderButtonComponent={HeaderButton}>
           <Item
             title="Menu"

@@ -103,7 +103,7 @@ class CommunityScreen extends Component {
         {this.state.delegations.length > 0 ? (
           <SectionList
             sections={this.state.delegations}
-            keyExtractor={(item) => item.filiationId}
+            keyExtractor={(item) => item.filiationId.toString()}
             renderItem={({ item }) => (
               <Filiation
                 key={item.filiationId}
