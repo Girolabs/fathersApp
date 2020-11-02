@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, Text, Linking } from 'react-native';
+import { View, StyleSheet, FlatList, Text, Linking, Image } from 'react-native';
 import { FontAwesome5, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { Flag } from 'react-native-svg-flagkit';
 import { withNavigation } from 'react-navigation';
@@ -7,6 +7,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import Colors from '../constants/Colors';
 import Button from './Button';
+import logo from '../../assets/img/iconPriestDate.png';
 
 const styles = StyleSheet.create({
   innerText: {
@@ -54,7 +55,14 @@ const Reminders = ({ navigation, reminders }) => {
         icon = <FontAwesome5 name="birthday-cake" size={24} color={Colors.primaryColor} />;
         break;
       case 'priestDate':
-        icon = <FontAwesome5 name="wine-glass-alt" size={24} color={Colors.primaryColor} />;
+        // icon = <FontAwesome5 name="wine-glass-alt" size={24} color={Colors.primaryColor} />;
+        icon= <Image
+        style={{
+            width: 24,
+            height: 35,
+          }}
+        source={logo}
+      />
         break;
       case 'deathDate':
         icon = <FontAwesome5 name="cross" size={24} color={Colors.primaryColor} />;
