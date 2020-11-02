@@ -28,8 +28,27 @@ const IdealStatement = ({ languages, recommendedLang, entity, navigation }) => {
   Object.keys(languages);
 
   const langs = Object.keys(languages).map((el) => {
+    var languagesFullname=''
+    switch (el){
+        case 'es':
+            languagesFullname = "Español"
+            break;
+        case 'en':
+            languagesFullname = "English"
+            break;
+        case 'pt':
+            languagesFullname = "Português"
+            break;
+        case 'de':
+            languagesFullname = "Deutsch"
+            break;
+
+
+
+
+    }
     return {
-      name: el,
+      name: languagesFullname,
       value: languages[el],
     };
   });
