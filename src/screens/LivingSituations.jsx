@@ -178,6 +178,11 @@ const LivingSituationsFormScreen = ({ navigation }) => {
             };
           }
         });
+        fetchedHouses.sort(function(a, b) {
+            var textA = a.label.toUpperCase();
+            var textB = b.label.toUpperCase();
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
         setHouses(fetchedHouses);
       });
     }
@@ -187,6 +192,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected == true) {
       getInterfaceData().then((response) => {
+          console.log('getInterfaceData  ', response);
         const { livingConditionStatusLabels } = response.data.result;
         const statusLabels = [];
         console.log(Object.keys(livingConditionStatusLabels));
@@ -207,7 +213,6 @@ const LivingSituationsFormScreen = ({ navigation }) => {
 
   const loadFiliations = async () => {
     const status = await Network.getNetworkStateAsync();
-
     if (status.isConnected == true) {
       getFiliations(false).then((response) => {
         const fetchedFiliations = response.data.result
@@ -220,6 +225,12 @@ const LivingSituationsFormScreen = ({ navigation }) => {
             }
           })
           .filter((el) => el != undefined);
+
+          fetchedFiliations.sort(function(a, b) {
+            var textA = a.label.toUpperCase();
+            var textB = b.label.toUpperCase();
+            return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+        });
         setFiliations(fetchedFiliations);
       });
     }
