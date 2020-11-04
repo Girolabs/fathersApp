@@ -853,7 +853,7 @@ class FatherFormScreen extends Component {
                               //We make old the DateDeadline, so search scren is force to make a request
                               try {
                                 let newDateDeadline = new Date();
-                                AsyncStorage.setItem('DateDeadline', newDateDeadline);
+                                AsyncStorage.setItem('DateDeadline', newDateDeadline.toString());
                               } catch (e) {
                                 console.log('Error on saving form screen ', e);
                               }
@@ -889,7 +889,7 @@ FatherFormScreen.navigationOptions = (navigationData) => {
   if (showMenu) {
     return {
       headerTitle: '',
-      headerRight:()=> (
+      headerRight: () => (
         <HeaderButtons HeaderButtonComponent={HeaderButton}>
           <Item
             title="Menu"
@@ -904,7 +904,7 @@ FatherFormScreen.navigationOptions = (navigationData) => {
   } else {
     return {
       headerTitle: '',
-      headerRight: () =>(
+      headerRight: () => (
         <HeaderButtons HeaderButtonComponent={HeaderButton}>
           <Item
             title="Menu"
