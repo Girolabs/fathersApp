@@ -118,15 +118,19 @@ class SearchScreen extends Component {
           isOldresult = true;
           var newDateDeadline = new Date();
           newDateDeadline.setDate(currentDate.getDate() + 1);
-          await AsyncStorage.setItem('DateDeadline', newDateDeadline);
+          await AsyncStorage.setItem('DateDeadline', newDateDeadline.toString());
         }
       } else {
         //si no existe cargamos
         var newDateDeadline = new Date();
         newDateDeadline.setDate(currentDate.getDate() + 1);
-        await AsyncStorage.setItem('DateDeadline', newDateDeadline);
+        await AsyncStorage.setItem('DateDeadline', newDateDeadline.toString());
       }
     } catch (e) {
+      //if an error ocurr we just create a newDateDeadline
+      var newDateDeadline = new Date();
+      newDateDeadline.setDate(currentDate.getDate() + 1);
+      await AsyncStorage.setItem('DateDeadline', newDateDeadline.toString());
       console.log('Error at AsyncStorage get item on Date');
     }
 
@@ -144,6 +148,8 @@ class SearchScreen extends Component {
         else this.setState({ results: JSON.parse(result), loading: false });
       }
     } catch (e) {
+      //Si ocurre error suponemos que  getItem ocurrio el error
+      this.loadPersons(false);
       console.log('Error on asyncstorage get item result');
     }
   }
@@ -315,7 +321,7 @@ class SearchScreen extends Component {
 
 SearchScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight:()=> (
+  headerRight: () => (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"
