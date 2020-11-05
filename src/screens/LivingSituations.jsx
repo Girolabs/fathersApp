@@ -199,7 +199,26 @@ const LivingSituationsFormScreen = ({ navigation }) => {
         });
 
         setStatusLabels(statusLabels);
-        console.log(statusLabels);
+        //GET FILIAITIONS DATA
+        const fetchedFiliations = response.data.result.filiationOptions.sort((a,b)=>{
+            return a.sort-b.sort
+        }).map((filiation) => {
+              return {
+                label: filiation.label,
+                value: filiation.id,
+              };
+          })
+          setFiliations(fetchedFiliations)
+          //GET HOUSE DATA
+          const fetchedHouses = response.data.result.houseOptions.sort((a,b)=>{
+            return a.sort-b.sort
+            }).map((house) => {
+                return {
+                    label: house.label,
+                    value: house.id,
+                };
+            })
+            setHouses(fetchedHouses);
         setLoading(false);
       });
     }
@@ -302,10 +321,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     if (!paramPersonId) {
       navigation.goBack();
     }
-    loadFiliations();
-    loadHouses();
-    console.log('living', livingSituation);
-
+    // loadFiliations();
+    // loadHouses();
     if (!livingSituation) {
       setIsCreate(true);
     } else {
