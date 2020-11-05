@@ -265,9 +265,9 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   };
 
   const formatDate = (selectedDate) => {
-    const newDate = new Date();
-    newDate.setTime(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60 * 1000);
-    selectedDate = newDate;
+    // const newDate = new Date();
+    // newDate.setTime(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60 * 1000);
+    // selectedDate = newDate;
     const year = selectedDate.getUTCFullYear();
     const month =
       selectedDate.getUTCMonth() + 1 < 10 ? `0${selectedDate.getUTCMonth() + 1}` : selectedDate.getUTCMonth() + 1;
