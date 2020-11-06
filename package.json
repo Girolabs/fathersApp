@@ -20,6 +20,7 @@
     "expo-permissions": "~9.3.0",
     "expo-screen-orientation": "~2.0.0",
     "expo-vector-icons": "^10.0.1",
+    "expo-web-browser": "~8.5.0",
     "formik": "^2.1.4",
     "i18n-iso-countries": "^5.2.0",
     "i18n-js": "^3.5.1",
@@ -36,6 +37,7 @@
     "react-native-gesture-handler": "~1.7.0",
     "react-native-locale-detector": "^1.0.1",
     "react-native-modal-datetime-picker": "^8.9.3",
+    "react-native-modal-selector": "^2.0.3",
     "react-native-paper": "^3.8.0",
     "react-native-picker-select": "^7.0.0",
     "react-native-reanimated": "~1.13.0",
@@ -50,9 +52,8 @@
     "react-navigation-material-bottom-tabs": "^2.2.10",
     "react-navigation-stack": "^2.3.11",
     "react-navigation-tabs": "^2.8.11",
-    "yup": "^0.29.1",
-    "expo-web-browser": "~8.5.0",
-    "sentry-expo": "^3.0.2"
+    "sentry-expo": "^3.0.2",
+    "yup": "^0.29.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
