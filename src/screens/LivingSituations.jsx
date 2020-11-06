@@ -164,6 +164,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   const [personId, setPersonId] = useState(null);
   const [snackMsg, setSnackMsg] = useState('');
   const [visible, setVisible] = useState('');
+  const [filiationMainHouses,setFiliationMainHouses]=useState([]);
+  const [houseHasBeenSelectedFlag,setHouseHasBeenSelectedFlag] = useState(false) //It become true when the user manually select a house option
   const loadHouses = async () => {
     const status = await Network.getNetworkStateAsync();
 
@@ -187,6 +189,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     if (status.isConnected == true) {
       getInterfaceData().then((response) => {
         const { livingConditionStatusLabels } = response.data.result;
+        console.log('get interface data ',response.data.result);
+        setFiliationMainHouses(response.data.result.filiationMainHouses);
         const statusLabels = [];
         Object.keys(livingConditionStatusLabels).forEach((key) => {
           console.log(key);
@@ -450,7 +454,23 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                          name="filiation"
                          data={filiations}
                          initValue={_.get(values, 'filiationName') || ''}
-                         onChange={(option)=>{setFieldValue('filiationId', option.value);setFieldValue('filiationName', option.label);}}
+                         onChange={(option)=>{
+                            setFieldValue('filiationId', option.value);
+                            setFieldValue('filiationName', option.label);
+                            if(!houseHasBeenSelectedFlag && isCreate){
+                            //Automaticly fill the house input with the  mainhouse of the fillation, if the house has not yet been chosen
+                                const houseId = filiationMainHouses[option.value]
+                                const house = houses.find(e=> houseId === e.value)
+                                console.log('autofill house',house);
+                                if(house){
+                                    setFieldValue('houseId', houseId);
+                                    setFieldValue('houseName', house.label)
+                                }else{
+                                    setFieldValue('houseId', '');
+                                    setFieldValue('houseName','')
+                                }
+                            }
+                            }}
                          value={_.get(values, 'filiationName') }
                          arrowDropDown={isCreate}
                          disabled={!isCreate}
@@ -480,6 +500,10 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                          value={_.get(values, 'houseName') }
                          arrowDropDown={isCreate}
                          disabled={!isCreate}
+                         onModalClose={e=>{
+                            if(e.label && !houseHasBeenSelectedFlag)
+                            setHouseHasBeenSelectedFlag(true);
+                        }}
                         />
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.RESPONSIBLE_TERRITORY')}</Text>
                       {/* <RNPickerSelect
