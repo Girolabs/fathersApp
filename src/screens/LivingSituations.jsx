@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import i18n from 'i18n-js';
-import RNPickerSelect from 'react-native-picker-select';
+// import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from 'expo-vector-icons';
 import { Formik } from 'formik';
 import * as Network from 'expo-network';
@@ -31,7 +31,7 @@ import {
   updateLivingSituation,
 } from '../api';
 import Button from '../components/Button';
-
+import SelectModal from '../components/SelectModal'
 const styles = StyleSheet.create({
   title: {
     fontFamily: 'work-sans-semibold',
@@ -164,7 +164,6 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   const [personId, setPersonId] = useState(null);
   const [snackMsg, setSnackMsg] = useState('');
   const [visible, setVisible] = useState('');
-
   const loadHouses = async () => {
     const status = await Network.getNetworkStateAsync();
 
@@ -189,7 +188,6 @@ const LivingSituationsFormScreen = ({ navigation }) => {
       getInterfaceData().then((response) => {
         const { livingConditionStatusLabels } = response.data.result;
         const statusLabels = [];
-        console.log(Object.keys(livingConditionStatusLabels));
         Object.keys(livingConditionStatusLabels).forEach((key) => {
           console.log(key);
           statusLabels.push({
@@ -197,7 +195,6 @@ const LivingSituationsFormScreen = ({ navigation }) => {
             value: key,
           });
         });
-
         setStatusLabels(statusLabels);
         //GET FILIAITIONS DATA
         const fetchedFiliations = response.data.result.filiationOptions.sort((a,b)=>{
@@ -247,7 +244,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   const loadTerritory = async () => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
-      getTerritories(false).then((res) => {
+      getTerritories(false).then( (res) => {
         loadStatusCondition();
         if (res.data.status === 'OK') {
           const fetchedDelegations = res.data.result
@@ -283,6 +280,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   const editLivingSituation = (livingSituationId, values) => {
     updateLivingSituation(livingSituationId, values).then(
       () => {
+        console.log('editLivingSituation = > ', values);
         setSnackMsg(i18n.t('GENERAL.EDIT_SUCCESS'));
         setVisible(true);
         navigation.replace('PatreDetail', {
@@ -301,7 +299,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     saveLivingSituation(values).then(
       () => {
         setSnackMsg(i18n.t('GENERAL.CREATE_SUCCESS'));
-        console.log('values', values);
+        console.log('createLivingSituation = > ', values);
         setVisible(true);
         navigation.replace('PatreDetail', {
           fatherId: values.personId,
@@ -314,6 +312,19 @@ const LivingSituationsFormScreen = ({ navigation }) => {
       },
     );
   };
+  useEffect(()=>{
+      //This use effect is use to update the initial value  status label to livingsituation
+      //so can be used it as a initial value on the form
+    if(livingSituation && statusLabels){
+        const statusLab = statusLabels.find(e => e.value === livingSituation.status)
+      const transFormedLiving = {
+        ...livingSituation,
+        statusLabel:statusLab && statusLab.label,
+      };
+      setLivingSituation(transFormedLiving);
+      console.log('livingSituation  ',transFormedLiving);
+    }
+  },[statusLabels])
 
   useEffect(() => {
     const livingSituation = navigation.getParam('livingSituation');
@@ -326,12 +337,15 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     if (!livingSituation) {
       setIsCreate(true);
     } else {
+
       const transFormedLiving = {
         ...livingSituation,
         startDate: livingSituation && livingSituation.startDate ? livingSituation.startDate.split('T')[0] : null,
         endDate: livingSituation && livingSituation.endDate ? livingSituation.endDate.split('T')[0] : null,
       };
       setLivingSituation(transFormedLiving);
+      console.log(' setLivingSituation ', transFormedLiving)
+
     }
     loadTerritory();
     setPersonId(paramPersonId);
@@ -353,7 +367,6 @@ const LivingSituationsFormScreen = ({ navigation }) => {
               ) : (
                 <Text style={styles.title}>{i18n.t('LIVING_SITUATION.EDIT_TITLE')}</Text>
               )}
-
               <Formik
                 enableReinitialize
                 initialValues={{
@@ -361,10 +374,14 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                   startDate: livingSituation && livingSituation.startDate,
                   endDate: livingSituation && livingSituation.endDate,
                   status: livingSituation.status,
+                  statusLabel:livingSituation.status && livingSituation.statusLabel,
                   publicNotes: livingSituation && livingSituation.publicNotes,
                   adminNotes: '',
                   filiationId: livingSituation && livingSituation.filiationId,
                   houseId: livingSituation && livingSituation.houseId,
+                  filiationName: livingSituation && livingSituation.filiationName,
+                  houseName: livingSituation && livingSituation.houseName,
+                  responsibleTerritoryName: livingSituation && livingSituation.responsibleTerritoryName,
                 }}
                 validationSchema={Yup.object().shape({
                   startDate: Yup.date(),
@@ -414,7 +431,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                       />
 
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.FILIATION')}</Text>
-                      <RNPickerSelect
+                      {/* <RNPickerSelect
                         name="filiationId"
                         useNativeAndroidPickerStyle={false}
                         style={stylePicker}
@@ -428,9 +445,19 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                           ) : null;
                           return icon;
                         }}
-                      />
+                      /> */}
+                        <SelectModal
+                         name="filiation"
+                         data={filiations}
+                         initValue={_.get(values, 'filiationName') || ''}
+                         onChange={(option)=>{setFieldValue('filiationId', option.value);setFieldValue('filiationName', option.label);}}
+                         value={_.get(values, 'filiationName') }
+                         arrowDropDown={isCreate}
+                         disabled={!isCreate}
+                        />
+
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.HOUSE')}</Text>
-                      <RNPickerSelect
+                      {/* <RNPickerSelect
                         name="houseId"
                         useNativeAndroidPickerStyle={false}
                         style={stylePicker}
@@ -444,10 +471,19 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                           ) : null;
                           return icon;
                         }}
-                      />
-
+                      /> */}
+                        <SelectModal
+                         name="houseId"
+                         data={houses}
+                         initValue={_.get(values, 'houseName') || ''}
+                         onChange={(option)=>{setFieldValue('houseId', option.value);setFieldValue('houseName', option.label);}}
+                         value={_.get(values, 'houseName') }
+                         arrowDropDown={isCreate}
+                         disabled={!isCreate}
+                        />
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.RESPONSIBLE_TERRITORY')}</Text>
-                      <RNPickerSelect
+                      {/* <RNPickerSelect
+                      responsibleTerritoryName
                         name="responsibleTerritoryId"
                         useNativeAndroidPickerStyle={false}
                         style={stylePicker}
@@ -457,12 +493,22 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                         Icon={() => {
                           return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
                         }}
-                      />
+                      /> */}
+                        <SelectModal
+                         name="responsibleTerritoryId"
+                         data={territories}
+                         initValue={_.get(values, 'responsibleTerritoryName') || ''}
+                         onChange={(option)=>{setFieldValue('responsibleTerritoryId', option.value);setFieldValue('responsibleTerritoryName', option.label);}}
+                         value={_.get(values, 'responsibleTerritoryName') }
+                         arrowDropDown={isCreate}
+                         disabled={!isCreate}
+                        />
+
                     </View>
 
                     <View style={styles.itemContainer}>
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.STATUS')}</Text>
-                      <RNPickerSelect
+                      {/* <RNPickerSelect
                         name="status"
                         useNativeAndroidPickerStyle={false}
                         style={stylePicker}
@@ -472,7 +518,16 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                         Icon={() => {
                           return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
                         }}
-                      />
+                      /> */}
+                        <SelectModal
+                         name="status"
+                         data={statusLabels}
+                         initValue={_.get(values, 'statusLabel') || ''}
+                         onChange={(option)=>{setFieldValue('status', option.value),setFieldValue('statusLabel',option.label)}}
+                         value={_.get(values, 'statusLabel') }
+                         arrowDropDown={isCreate}
+                         disabled={!isCreate}
+                        />
                     </View>
                     <View>
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.START_DATE')}</Text>
@@ -559,3 +614,4 @@ LivingSituationsFormScreen.navigationOptions = (navigationData) => ({
 });
 
 export default LivingSituationsFormScreen;
+
