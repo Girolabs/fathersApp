@@ -177,13 +177,7 @@ const PatreDetailScreen = ({ navigation }) => {
 
         return (
           <View style={styles.screen}>
-            <ModalProfilePicture
-              modalVisible={modal}
-              fatherId={father ? father.personId : ''}
-              fullName={father ? father.fullName : ''}
-              photo={father ? father.photo : ''}
-              Close={() => setModal(false)}
-            />
+
             <NavigationEvents
               onDidFocus={() => {
                 const loadPerson = async () => {
@@ -211,8 +205,16 @@ const PatreDetailScreen = ({ navigation }) => {
                 loadPerson();
               }}
             />
+
             {father ? (
               <ScrollView>
+                <ModalProfilePicture
+                    modalVisible={modal}
+                    fatherId={father ? father.personId : ''}
+                    fullName={father ? father.fullName : ''}
+                    photo={father ? father.photo : ''}
+                    Close={() => setModal(false)}
+                />
                 <View style={{ flexDirection: 'row', alignItems: 'center', padding: 15 }}>
                   <TouchableComp onPress={() => setModal(true)}>
                     {father.photo ? (
@@ -303,23 +305,8 @@ const PatreDetailScreen = ({ navigation }) => {
                   <></>
                 )}
                 {father.assignments.map((e) => {
-                    let key=0;
-                    switch (e.entityType) {
-                        case 'course':
-                            key=e.entityId.toString()
-                          break;
-                        case 'generation':
-                            key= e.entityId.toString()
-                          break;
-                        case 'filiation':
-                            key= e.entityId.toString()
-                          break;
-                        case 'territory':
-                          key= e.entityId.toString()
-                      }
                   return (
                     <DefaultItem
-                        key={key}
                       show={true}
                       body={e.name}
                       listItemBody={e.isActive ? styles.listItemBody : false}
