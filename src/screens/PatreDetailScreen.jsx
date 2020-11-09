@@ -305,23 +305,8 @@ const PatreDetailScreen = ({ navigation }) => {
                   <></>
                 )}
                 {father.assignments.map((e) => {
-                    let key=0;
-                    switch (e.entityType) {
-                        case 'course':
-                            key=e.entityId.toString()
-                          break;
-                        case 'generation':
-                            key= e.entityId.toString()
-                          break;
-                        case 'filiation':
-                            key= e.entityId.toString()
-                          break;
-                        case 'territory':
-                          key= e.entityId.toString()
-                      }
                   return (
                     <DefaultItem
-                        key={key}
                       show={true}
                       body={e.name}
                       listItemBody={e.isActive ? styles.listItemBody : false}
