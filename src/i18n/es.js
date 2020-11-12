@@ -99,6 +99,7 @@ exports.ES = {
     FAX: 'Fax',
     DIOCESE: 'Diócesis',
     ADDRESS: 'Domicilio',
+    POSTAL_ADDRESS: 'Dirección postal',
     EMAIL: 'Email',
     MAIN_HOUSE: 'Casa principal',
     MEMBERS: 'Miembros de la casa',

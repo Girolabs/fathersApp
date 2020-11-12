@@ -99,6 +99,7 @@ exports.DE = {
     FAX: 'Fax',
     DIOCESE: 'Diözese',
     ADDRESS: 'Adresse',
+    POSTAL_ADDRESS: 'Postadresse',
     EMAIL: 'Email',
     MAIN_HOUSE: 'Haupthaus',
     MEMBERS: 'Mitglieder des Hauses',
