@@ -21,7 +21,9 @@ countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
 
 const styles = StyleSheet.create({
   screen: {
+    flex: 1,
     backgroundColor: Colors.surfaceColorPrimary,
+    justifyContent: 'center',
   },
   titleContainer: {
     flexDirection: 'row',
@@ -102,6 +104,7 @@ class HouseDetailScreen extends Component {
             const membersHouse = filiation.persons
               .filter((person) => person.activeLivingSituation.houseId == house.houseId)
               .filter((person) => person.isActive == true && person.isMember == true);
+            console.log(house);
             this.setState({ house: { ...house, membersHouse, filiationName: filiation.name } });
           })
           .catch(() => {
@@ -132,10 +135,10 @@ class HouseDetailScreen extends Component {
         {(value) => {
           moment.locale(value.lang);
           return (
-            <SafeAreaView>
-              <ScrollView>
-                {house ? (
-                  <View style={styles.screen}>
+            <SafeAreaView style={styles.screen}>
+              {house ? (
+                <ScrollView>
+                  <View>
                     <View style={styles.titleContainer}>
                       <View style={styles.titleContainerText}>
                         <Text style={styles.title}>{house.name}</Text>
@@ -230,9 +233,7 @@ class HouseDetailScreen extends Component {
 
                       <Button
                         onPress={() => {
-                          Clipboard.setString(
-                            house.street1 + ' ' + house.cityState + ' ' + countries.getName(house.country, value.lang),
-                          );
+                          Clipboard.setString(house.formattedAddress);
                           this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
                         }}
                       >
@@ -240,15 +241,32 @@ class HouseDetailScreen extends Component {
                           <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.ADDRESS')}</Text>
                           <View style={styles.listItemBodyContainer}>
                             <View>
-                              <Text style={styles.listItemBody}>{house.street1}</Text>
-                              <Text style={styles.listItemBody}>{house.cityState}</Text>
-                              <Text style={styles.listItemBody}>{countries.getName(house.country, value.lang)}</Text>
+                              <Text style={styles.listItemBody}>{house.formattedAddress}</Text>
                             </View>
 
                             <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
                           </View>
                         </View>
                       </Button>
+                      {house.formattedPostAddress && (
+                        <Button
+                          onPress={() => {
+                            Clipboard.setString(house.formattedPostAddress);
+                            this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
+                          }}
+                        >
+                          <View style={styles.listItem}>
+                            <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.POSTAL_ADDRESS')}</Text>
+                            <View style={styles.listItemBodyContainer}>
+                              <View>
+                                <Text style={styles.listItemBody}>{house.formattedPostAddress}</Text>
+                              </View>
+
+                              <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
+                            </View>
+                          </View>
+                        </Button>
+                      )}
                       {house.publicNotes && (
                         <View style={styles.listItem}>
                           <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.PUBLIC_NOTES')}</Text>
@@ -270,7 +288,12 @@ class HouseDetailScreen extends Component {
                         }
                         renderItem={({ item }) => {
                           return (
-                            <Button onPress={() => navigation.navigate('PatreDetail', { fatherId: item.personId })}>
+                            <Button
+                              onPress={() => {
+                                if (item.personId)
+                                  return navigation.navigate('PatreDetail', { fatherId: item.personId });
+                              }}
+                            >
                               <View style={styles.memberItem}>
                                 <Image
                                   source={{ uri: `https://schoenstatt-fathers.link${item.photo}` }}
@@ -295,13 +318,13 @@ class HouseDetailScreen extends Component {
                       />
                     </View>
                   </View>
-                ) : (
-                  <ActivityIndicator size="large" color={Colors.primaryColor} />
-                )}
-                <SnackBar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })}>
-                  {this.state.snackMsg}
-                </SnackBar>
-              </ScrollView>
+                </ScrollView>
+              ) : (
+                <ActivityIndicator size="large" color={Colors.primaryColor} />
+              )}
+              <SnackBar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })}>
+                {this.state.snackMsg}
+              </SnackBar>
             </SafeAreaView>
           );
         }}
@@ -311,7 +334,7 @@ class HouseDetailScreen extends Component {
 }
 HouseDetailScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: ()=>(
+  headerRight: () => (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

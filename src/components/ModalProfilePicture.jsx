@@ -51,7 +51,7 @@ const ModalProfilePicture = (props) => {
           <View style={styles.modalView}>
             {props.photo ? (
               <Image
-                style={{ width: 300, height: 300, borderRadius: 10 }}
+                style={{ width: 300, height: 400, borderRadius: 10 }}
                 resizMode="center"
                 source={{ uri: `https://schoenstatt-fathers.link${props.photo}` }}
               />
