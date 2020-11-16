@@ -90,7 +90,7 @@ const Reminders = ({ navigation, reminders }) => {
         path = 'GenerationDetail';
         break;
       default:
-        path = 'PatreDetail';
+        path = 'null';
         break;
     }
     return path;
@@ -148,6 +148,7 @@ const Reminders = ({ navigation, reminders }) => {
                     {item.isImportant ? (
                       <Button
                         onPress={() => {
+                        if(path)
                           navigation.navigate(path, params);
                         }}
                       >
