@@ -31,7 +31,7 @@ import {
   updateLivingSituation,
 } from '../api';
 import Button from '../components/Button';
-import SelectModal from '../components/SelectModal'
+import SelectModal from '../components/SelectModal';
 const styles = StyleSheet.create({
   title: {
     fontFamily: 'work-sans-semibold',
@@ -164,8 +164,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   const [personId, setPersonId] = useState(null);
   const [snackMsg, setSnackMsg] = useState('');
   const [visible, setVisible] = useState('');
-  const [filiationMainHouses,setFiliationMainHouses]=useState([]);
-  const [houseHasBeenSelectedFlag,setHouseHasBeenSelectedFlag] = useState(false) //It become true when the user manually select a house option
+  const [filiationMainHouses, setFiliationMainHouses] = useState([]);
+  const [houseHasBeenSelectedFlag, setHouseHasBeenSelectedFlag] = useState(false); //It become true when the user manually select a house option
   const loadHouses = async () => {
     const status = await Network.getNetworkStateAsync();
 
@@ -189,7 +189,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     if (status.isConnected == true) {
       getInterfaceData().then((response) => {
         const { livingConditionStatusLabels } = response.data.result;
-        console.log('get interface data ',response.data.result);
+        console.log('get interface data ', response.data.result);
         setFiliationMainHouses(response.data.result.filiationMainHouses);
         const statusLabels = [];
         Object.keys(livingConditionStatusLabels).forEach((key) => {
@@ -201,25 +201,29 @@ const LivingSituationsFormScreen = ({ navigation }) => {
         });
         setStatusLabels(statusLabels);
         //GET FILIAITIONS DATA
-        const fetchedFiliations = response.data.result.filiationOptions.sort((a,b)=>{
-            return a.sort-b.sort
-        }).map((filiation) => {
-              return {
-                label: filiation.label,
-                value: filiation.id,
-              };
+        const fetchedFiliations = response.data.result.filiationOptions
+          .sort((a, b) => {
+            return a.sort - b.sort;
           })
-          setFiliations(fetchedFiliations)
-          //GET HOUSE DATA
-          const fetchedHouses = response.data.result.houseOptions.sort((a,b)=>{
-            return a.sort-b.sort
-            }).map((house) => {
-                return {
-                    label: house.label,
-                    value: house.id,
-                };
-            })
-            setHouses(fetchedHouses);
+          .map((filiation) => {
+            return {
+              label: filiation.label,
+              value: filiation.id,
+            };
+          });
+        setFiliations(fetchedFiliations);
+        //GET HOUSE DATA
+        const fetchedHouses = response.data.result.houseOptions
+          .sort((a, b) => {
+            return a.sort - b.sort;
+          })
+          .map((house) => {
+            return {
+              label: house.label,
+              value: house.id,
+            };
+          });
+        setHouses(fetchedHouses);
         setLoading(false);
       });
     }
@@ -248,7 +252,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   const loadTerritory = async () => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
-      getTerritories(false).then( (res) => {
+      getTerritories(false).then((res) => {
         loadStatusCondition();
         if (res.data.status === 'OK') {
           const fetchedDelegations = res.data.result
@@ -269,10 +273,9 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     // const newDate = new Date();
     // newDate.setTime(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60 * 1000);
     // selectedDate = newDate;
-    const year = selectedDate.getUTCFullYear();
-    const month =
-      selectedDate.getUTCMonth() + 1 < 10 ? `0${selectedDate.getUTCMonth() + 1}` : selectedDate.getUTCMonth() + 1;
-    let day = selectedDate.getUTCDate();
+    const year = selectedDate.getFullYear();
+    const month = selectedDate.getMonth() + 1 < 10 ? `0${selectedDate.getMonth() + 1}` : selectedDate.getMonth() + 1;
+    let day = selectedDate.getDate();
     if (10 - day > 0) {
       day = `0${day}`;
     }
@@ -316,19 +319,19 @@ const LivingSituationsFormScreen = ({ navigation }) => {
       },
     );
   };
-  useEffect(()=>{
-      //This use effect is use to update the initial value  status label to livingsituation
-      //so can be used it as a initial value on the form
-    if(livingSituation && statusLabels){
-        const statusLab = statusLabels.find(e => e.value === livingSituation.status)
+  useEffect(() => {
+    //This use effect is use to update the initial value  status label to livingsituation
+    //so can be used it as a initial value on the form
+    if (livingSituation && statusLabels) {
+      const statusLab = statusLabels.find((e) => e.value === livingSituation.status);
       const transFormedLiving = {
         ...livingSituation,
-        statusLabel:statusLab && statusLab.label,
+        statusLabel: statusLab && statusLab.label,
       };
       setLivingSituation(transFormedLiving);
-      console.log('livingSituation  ',transFormedLiving);
+      console.log('livingSituation  ', transFormedLiving);
     }
-  },[statusLabels])
+  }, [statusLabels]);
 
   useEffect(() => {
     const livingSituation = navigation.getParam('livingSituation');
@@ -341,15 +344,13 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     if (!livingSituation) {
       setIsCreate(true);
     } else {
-
       const transFormedLiving = {
         ...livingSituation,
         startDate: livingSituation && livingSituation.startDate ? livingSituation.startDate.split('T')[0] : null,
         endDate: livingSituation && livingSituation.endDate ? livingSituation.endDate.split('T')[0] : null,
       };
       setLivingSituation(transFormedLiving);
-      console.log(' setLivingSituation ', transFormedLiving)
-
+      console.log(' setLivingSituation ', transFormedLiving);
     }
     loadTerritory();
     setPersonId(paramPersonId);
@@ -378,7 +379,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                   startDate: livingSituation && livingSituation.startDate,
                   endDate: livingSituation && livingSituation.endDate,
                   status: livingSituation.status,
-                  statusLabel:livingSituation.status && livingSituation.statusLabel,
+                  statusLabel: livingSituation.status && livingSituation.statusLabel,
                   publicNotes: livingSituation && livingSituation.publicNotes,
                   adminNotes: '',
                   filiationId: livingSituation && livingSituation.filiationId,
@@ -450,31 +451,31 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                           return icon;
                         }}
                       /> */}
-                        <SelectModal
-                         name="filiation"
-                         data={filiations}
-                         initValue={_.get(values, 'filiationName') || ''}
-                         onChange={(option)=>{
-                            setFieldValue('filiationId', option.value);
-                            setFieldValue('filiationName', option.label);
-                            if(!houseHasBeenSelectedFlag && isCreate){
+                      <SelectModal
+                        name="filiation"
+                        data={filiations}
+                        initValue={_.get(values, 'filiationName') || ''}
+                        onChange={(option) => {
+                          setFieldValue('filiationId', option.value);
+                          setFieldValue('filiationName', option.label);
+                          if (!houseHasBeenSelectedFlag && isCreate) {
                             //Automaticly fill the house input with the  mainhouse of the fillation, if the house has not yet been chosen
-                                const houseId = filiationMainHouses[option.value]
-                                const house = houses.find(e=> houseId === e.value)
-                                console.log('autofill house',house);
-                                if(house){
-                                    setFieldValue('houseId', houseId);
-                                    setFieldValue('houseName', house.label)
-                                }else{
-                                    setFieldValue('houseId', '');
-                                    setFieldValue('houseName','')
-                                }
+                            const houseId = filiationMainHouses[option.value];
+                            const house = houses.find((e) => houseId === e.value);
+                            console.log('autofill house', house);
+                            if (house) {
+                              setFieldValue('houseId', houseId);
+                              setFieldValue('houseName', house.label);
+                            } else {
+                              setFieldValue('houseId', '');
+                              setFieldValue('houseName', '');
                             }
-                            }}
-                         value={_.get(values, 'filiationName') }
-                         arrowDropDown={isCreate}
-                         disabled={!isCreate}
-                        />
+                          }
+                        }}
+                        value={_.get(values, 'filiationName')}
+                        arrowDropDown={isCreate}
+                        disabled={!isCreate}
+                      />
 
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.HOUSE')}</Text>
                       {/* <RNPickerSelect
@@ -492,19 +493,21 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                           return icon;
                         }}
                       /> */}
-                        <SelectModal
-                         name="houseId"
-                         data={houses}
-                         initValue={_.get(values, 'houseName') || ''}
-                         onChange={(option)=>{setFieldValue('houseId', option.value);setFieldValue('houseName', option.label);}}
-                         value={_.get(values, 'houseName') }
-                         arrowDropDown={isCreate}
-                         disabled={!isCreate}
-                         onModalClose={e=>{
-                            if(e.label && !houseHasBeenSelectedFlag)
-                            setHouseHasBeenSelectedFlag(true);
+                      <SelectModal
+                        name="houseId"
+                        data={houses}
+                        initValue={_.get(values, 'houseName') || ''}
+                        onChange={(option) => {
+                          setFieldValue('houseId', option.value);
+                          setFieldValue('houseName', option.label);
                         }}
-                        />
+                        value={_.get(values, 'houseName')}
+                        arrowDropDown={isCreate}
+                        disabled={!isCreate}
+                        onModalClose={(e) => {
+                          if (e.label && !houseHasBeenSelectedFlag) setHouseHasBeenSelectedFlag(true);
+                        }}
+                      />
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.RESPONSIBLE_TERRITORY')}</Text>
                       {/* <RNPickerSelect
                       responsibleTerritoryName
@@ -518,16 +521,18 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                           return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
                         }}
                       /> */}
-                        <SelectModal
-                         name="responsibleTerritoryId"
-                         data={territories}
-                         initValue={_.get(values, 'responsibleTerritoryName') || ''}
-                         onChange={(option)=>{setFieldValue('responsibleTerritoryId', option.value);setFieldValue('responsibleTerritoryName', option.label);}}
-                         value={_.get(values, 'responsibleTerritoryName') }
-                         arrowDropDown={isCreate}
-                         disabled={!isCreate}
-                        />
-
+                      <SelectModal
+                        name="responsibleTerritoryId"
+                        data={territories}
+                        initValue={_.get(values, 'responsibleTerritoryName') || ''}
+                        onChange={(option) => {
+                          setFieldValue('responsibleTerritoryId', option.value);
+                          setFieldValue('responsibleTerritoryName', option.label);
+                        }}
+                        value={_.get(values, 'responsibleTerritoryName')}
+                        arrowDropDown={isCreate}
+                        disabled={!isCreate}
+                      />
                     </View>
 
                     <View style={styles.itemContainer}>
@@ -543,15 +548,17 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                           return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
                         }}
                       /> */}
-                        <SelectModal
-                         name="status"
-                         data={statusLabels}
-                         initValue={_.get(values, 'statusLabel') || ''}
-                         onChange={(option)=>{setFieldValue('status', option.value),setFieldValue('statusLabel',option.label)}}
-                         value={_.get(values, 'statusLabel') }
-                         arrowDropDown={isCreate}
-                         disabled={!isCreate}
-                        />
+                      <SelectModal
+                        name="status"
+                        data={statusLabels}
+                        initValue={_.get(values, 'statusLabel') || ''}
+                        onChange={(option) => {
+                          setFieldValue('status', option.value), setFieldValue('statusLabel', option.label);
+                        }}
+                        value={_.get(values, 'statusLabel')}
+                        arrowDropDown={isCreate}
+                        disabled={!isCreate}
+                      />
                     </View>
                     <View>
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.START_DATE')}</Text>
@@ -623,7 +630,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
 
 LivingSituationsFormScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: ()=> (
+  headerRight: () => (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"
@@ -638,4 +645,3 @@ LivingSituationsFormScreen.navigationOptions = (navigationData) => ({
 });
 
 export default LivingSituationsFormScreen;
-

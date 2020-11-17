@@ -254,14 +254,17 @@ class FatherFormScreen extends Component {
   };
 
   formatDate = (selectedDate) => {
-    const newDate = new Date();
-    newDate.setTime(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60 * 1000);
-    selectedDate = newDate;
-    const year = selectedDate.getUTCFullYear();
-    const month =
-      selectedDate.getUTCMonth() + 1 < 10 ? `0${selectedDate.getUTCMonth() + 1}` : selectedDate.getUTCMonth() + 1;
-    const day = selectedDate.getUTCDate();
+    // const newDate = new Date();
+    // newDate.setTime(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60 * 1000);
+    // selectedDate = newDate;
+    const year = selectedDate.getFullYear();
+    const month = selectedDate.getMonth() + 1 < 10 ? `0${selectedDate.getMonth() + 1}` : selectedDate.getMonth() + 1;
+    let day = selectedDate.getDate();
+    if (10 - day > 0) {
+      day = `0${day}`;
+    }
     const dateString = `${year}-${month}-${day}`;
+    console.log(dateString);
     return dateString;
   };
 
