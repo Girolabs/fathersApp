@@ -15,7 +15,7 @@ const instance = axios.create({
 instance.interceptors.request.use(async (config) => {
   let token = await AsyncStorage.getItem('token');
   // console.log('Token Interceptor', token);
-//   console.log(config);
+  //   console.log(config);
   const lang = i18n.locale;
   token = token ? JSON.parse(token).jwt : null;
   config.headers.Authorization = token ? `Bearer ${token}` : '';
@@ -25,8 +25,8 @@ instance.interceptors.request.use(async (config) => {
 
 export default instance;
 
-export const getReminders = () => {
-  return instance.get('/api/v1/date-tiles');
+export const getReminders = (startDate) => {
+  return instance.get(`/api/v1/date-tiles${!!startDate ? `?startDate=${startDate}` : ''}`);
 };
 
 export const getBoard = () => {

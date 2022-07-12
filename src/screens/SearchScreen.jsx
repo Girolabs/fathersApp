@@ -186,7 +186,8 @@ class SearchScreen extends Component {
           persona.lastNameWithoutAccents &&
           (persona.firstNameWithoutAccents + ' ' + persona.lastNameWithoutAccents).trim().startsWith(texto)) ||
         (persona.firstNameWithoutAccents && persona.firstNameWithoutAccents.trim().startsWith(texto)) ||
-        (persona.lastNameWithoutAccents && persona.lastNameWithoutAccents.trim().startsWith(texto))
+        (persona.lastNameWithoutAccents && persona.lastNameWithoutAccents.trim().startsWith(texto)) ||
+        (persona.firstNameWithoutAccents + ' ' + persona.lastNameWithoutAccents).trim().includes(texto)
       ) {
         return persona;
       }

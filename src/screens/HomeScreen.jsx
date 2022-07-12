@@ -110,7 +110,9 @@ const HomeScreen = () => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
       setLoading(true);
-      getReminders()
+      //pasar fecha de hoy como parametro en getReminders
+      const startDate = new Date().toISOString().split('T')[0];
+      getReminders(startDate)
         .then((res) => {
           const fetchedReminders = res.data.result.slice(0, 6);
           setReminders(fetchedReminders);

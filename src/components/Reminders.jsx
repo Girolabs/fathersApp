@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import Colors from '../constants/Colors';
 import Button from './Button';
 import logo from '../../assets/img/iconPriestDate.png';
+import bishopLogo from '../../assets/img/bishop.png';
 
 const styles = StyleSheet.create({
   innerText: {
@@ -56,16 +57,29 @@ const Reminders = ({ navigation, reminders }) => {
         break;
       case 'priestDate':
         // icon = <FontAwesome5 name="wine-glass-alt" size={24} color={Colors.primaryColor} />;
-        icon= <Image
-        style={{
-            width: 24,
-            height: 35,
-          }}
-        source={logo}
-      />
+        icon = (
+          <Image
+            style={{
+              width: 24,
+              height: 35,
+            }}
+            source={logo}
+          />
+        );
         break;
       case 'deathDate':
         icon = <FontAwesome5 name="cross" size={24} color={Colors.primaryColor} />;
+        break;
+      case 'bishopDate':
+        icon = (
+          <Image
+            style={{
+              width: 24.5,
+              height: 27.5,
+            }}
+            source={bishopLogo}
+          />
+        );
         break;
       default:
         icon = <Ionicons name="ios-calendar" size={24} color={Colors.primaryColor} />;
@@ -148,8 +162,7 @@ const Reminders = ({ navigation, reminders }) => {
                     {item.isImportant ? (
                       <Button
                         onPress={() => {
-                        if(path)
-                          navigation.navigate(path, params);
+                          if (path) navigation.navigate(path, params);
                         }}
                       >
                         <View>
