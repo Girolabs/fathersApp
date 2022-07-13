@@ -76,8 +76,8 @@ class FreeCommunityScreen extends Component {
         let temp = data[0];
         data.shift();
         data.push(temp);
-
-        this.setState({ generations: data });
+        const datafilter = data.filter((d) => d.generationId !== undefined);
+        this.setState({ generations: datafilter });
       })
       .catch(() => {
         this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
@@ -115,6 +115,7 @@ class FreeCommunityScreen extends Component {
             }}
             renderSectionHeader={({ section: { name, generationId } }) => (
               <TouchableComp
+                key={generationId}
                 onPress={(section) => {
                   if (generationId) this.props.navigation.navigate('GenerationDetail', { generationId: generationId });
                 }}
@@ -139,7 +140,7 @@ class FreeCommunityScreen extends Component {
 
 FreeCommunityScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight:()=> (
+  headerRight: () => (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"
