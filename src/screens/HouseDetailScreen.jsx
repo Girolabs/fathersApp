@@ -12,7 +12,7 @@ import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
-import { getHouse, getFiliation } from '../api';
+import { getHouse, getFiliation, getPersons } from '../api';
 import { Ionicons } from 'expo-vector-icons';
 import Button from '../components/Button';
 
@@ -95,6 +95,11 @@ class HouseDetailScreen extends Component {
   };
 
   loadHouse = (houseId, fields) => {
+    getPersons().then((res)=> {
+      console.log(res.data.result)/*.filter( (r) => r.activeLivingSituation !== null).map( (r) => {
+        return {house: r.activeLivingSituation}
+      }));*/
+    });
     getHouse(houseId, fields)
       .then((resHouse) => {
         const house = resHouse.data.result;

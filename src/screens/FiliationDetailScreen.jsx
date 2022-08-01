@@ -34,6 +34,7 @@ class FiliationDetailScreen extends Component {
   loadFiliation = (filiationId, fields) => {
     getFiliation(filiationId, fields)
       .then((res) => {
+        console.log(res.data.result);
         const fetchedFiliation = {
           ...res.data.result,
           persons: res.data.result.persons.filter((person) => person.isActive == true && person.isMember == true),

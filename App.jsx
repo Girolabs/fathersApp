@@ -1,8 +1,14 @@
 import React from 'react';
 import * as Sentry from 'sentry-expo';
-
-import { useFonts } from '@use-expo/font';
-import { AppLoading } from 'expo';
+// import {
+//   useFonts,
+//   WorkSans_400Regular,
+//   WorkSans_500Medium,
+//   WorkSans_600SemiBold,
+//   WorkSans_700Bold,
+// } from '@expo-google-fonts/inter';
+import { useFonts } from 'expo-font';
+import AppLoading from 'expo-app-loading';
 import PatresNavigator from './src/navigator/PatresNavigator';
 import I18nProvider from './src/context/I18nProvider';
 import AuthProvider from './src/context/AuthProvider';

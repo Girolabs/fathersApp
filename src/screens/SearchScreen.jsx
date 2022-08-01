@@ -176,6 +176,7 @@ class SearchScreen extends Component {
       filterResults = this.state.results.filter((persona) => persona.isLiving != false);
     } else {
       console.log('Ningun filtro');
+      console.log("personas", this.state.results)
       filterResults = this.state.results.filter((persona) => persona.isLiving != false);
       filterResults = filterResults.filter((persona) => persona.isMember != false);
     }

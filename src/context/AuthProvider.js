@@ -1,15 +1,15 @@
-import React, { Component, createContext } from 'react';
-import axios from '../../axios-instance';
-import { AsyncStorage } from 'react-native';
+import React, { Component, createContext, useState } from 'react';
 
 const AuthContext = createContext();
 
-class AuthProvider extends Component {
-  state = {
+const AuthProvider = ({ children }) => {
+  /*state = {
     jwt: '',
     expiration: '',
-  };
-/* 
+  };*/
+  const [jwt, setJwt] = useState('');
+  const [expiration, setExpiration] = useState('');
+  /* 
   handleLogin = (user, password, navigation) => {
     const data = {};
     axios.get(`users/login?identity=${user}&credential=${encodeURIComponent(password)}`, { data: null }).then((res) => {
@@ -20,7 +20,7 @@ class AuthProvider extends Component {
     });
   }; */
 
-/*   handleIdentity = ( identity ) => {
+  /*   handleIdentity = ( identity ) => {
     const data = {};
     axios.get(`users/request-verification-token?identity=${encodeURIComponent(identity)}`,{ data:null })
       .then((res) => {
@@ -31,23 +31,17 @@ class AuthProvider extends Component {
       })
   } */
 
-
-  
-
-  render() {
-    const { children } = this.props;
-    return (
-      <AuthContext.Provider
-        value={{
-          handleLogin: (user, password, navigation) => this.handleLogin(user, password, navigation),
-          storeJwt: (token) => this.storeJwt(token)
-        }}
-      >
-        {children}
-      </AuthContext.Provider>
-    );
-  }
-}
+  return (
+    <AuthContext.Provider
+      value={{
+        handleLogin: (user, password, navigation) => this.handleLogin(user, password, navigation),
+        storeJwt: (token) => this.storeJwt(token),
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
 export default AuthProvider;
 export { AuthContext };
