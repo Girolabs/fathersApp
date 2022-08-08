@@ -1,9 +1,8 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start": "expo start --dev-client",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "eject": "expo eject",
     "lint": "eslint --ext .jsx,.js src"
@@ -37,7 +36,7 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-i18next": "^11.3.4",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
+    "react-native": "~0.63.4",
     "react-native-elements": "^2.3.2",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-locale-detector": "^1.0.1",
@@ -58,7 +57,11 @@
     "react-navigation-stack": "^2.3.11",
     "react-navigation-tabs": "^2.8.11",
     "sentry-expo": "^3.1.0",
-    "yup": "^0.29.1"
+    "yup": "^0.29.1",
+    "expo-splash-screen": "~0.10.2",
+    "expo-status-bar": "~1.0.4",
+    "expo-updates": "~0.5.4",
+    "react-native-unimodules": "~0.13.3"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
@@ -86,5 +89,7 @@
       "git add"
     ],
     "*.{js,jsx,css,md}": "prettier --write"
-  }
+  },
+  "name": "fathersApp",
+  "version": "1.0.0"
 }
