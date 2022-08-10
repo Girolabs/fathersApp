@@ -15,7 +15,7 @@
     "@react-native-picker/picker": "2.4.2",
     "@sentry/react-native": "^4.1.3",
     "@use-expo/font": "^2.0.0",
-    "axios": "^0.19.2",
+    "axios": "^0.21.2",
     "deprecated-react-native-prop-types": "^2.3.0",
     "expo": "^46.0.0",
     "expo-app-loading": "~2.1.0",
