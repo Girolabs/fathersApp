@@ -1,5 +1,6 @@
 import React from 'react';
-import { ActionSheetIOS, Text, View, Picker, Platform, Button, TouchableOpacity } from 'react-native';
+import { ActionSheetIOS, Text, View, Platform, Button, TouchableOpacity } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 

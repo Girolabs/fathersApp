@@ -45,6 +45,7 @@
     "extra": {
       "secretKey": ""
     },
-    "description": ""
+    "description": "",
+    "plugins": ["sentry-expo"]
   }
 }
