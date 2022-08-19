@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActionSheetIOS, Text, View, Platform, Button, TouchableOpacity } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { Picker as SelectPicker } from '@react-native-picker/picker';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
@@ -29,11 +29,11 @@ const Select = ({ value, elements, valueChange, style, containerStyle, itemColor
   return (
     <View style={{ ...containerStyle, ...style }}>
       {Platform.OS === 'android' ? (
-        <Picker selectedValue={value} onValueChange={(itemValue) => valueChange(itemValue)}>
+        <SelectPicker selectedValue={value} onValueChange={(itemValue) => valueChange(itemValue)}>
           {elements.map((el) => {
-            return <Picker.Item color={Colors.onSurfaceColorPrimary} label={el.name} value={el.value} />;
+            return <SelectPicker.Item color={Colors.onSurfaceColorPrimary} label={el.name} value={el.value} />;
           })}
-        </Picker>
+        </SelectPicker>
       ) : (
         <TouchableOpacity
           style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}
