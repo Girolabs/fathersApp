@@ -250,7 +250,7 @@ class AuthScreen extends Component {
                                 required
                                 email
                                 autoCapitalize="none"
-                                keyboardType="email-addres"
+                                keyboardType="email-address"
                                 placeholder={i18n.t('AUTH_SCREEN.IDENTITY_PLACEHOLDER')}
                                 value={this.state.identity}
                                 onChange={this.handleIdentity}
