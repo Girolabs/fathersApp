@@ -1,7 +1,7 @@
 import React from 'react';
 import { ActionSheetIOS, Text, View, Platform, Button, TouchableOpacity } from 'react-native';
 import { Picker as SelectPicker } from '@react-native-picker/picker';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from 'expo-vector-icons';
 import Colors from '../constants/Colors';
 
 const Select = ({ value, elements, valueChange, style, containerStyle, itemColor }) => {
