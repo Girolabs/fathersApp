@@ -208,6 +208,7 @@ class AuthScreen extends Component {
                           {!this.state.loading ? (
                             <Fragment>
                               <Input
+                                placeholderTextColor="gray"
                                 id="identity"
                                 label="Identity"
                                 required
@@ -218,6 +219,7 @@ class AuthScreen extends Component {
                               />
 
                               <Input
+                                placeholderTextColor="gray"
                                 id="token"
                                 label="Token"
                                 required
@@ -261,6 +263,7 @@ class AuthScreen extends Component {
                           {!this.state.loading ? (
                             <Fragment>
                               <Input
+                                placeholderTextColor="gray"
                                 id="email"
                                 label="Email"
                                 required
