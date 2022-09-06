@@ -26,6 +26,8 @@ import LivingSituationsFormScreen from '../screens/LivingSituations';
 import BulletinScreen from '../screens/BulletinScreen';
 import BulletinDetailScreen from '../screens/BulletinDetailScreen';
 import IdealStatementDetail from '../components/IdealStatementDetail';
+import GalleryScreen from '../screens/GalleryScreen';
+import AssignmentsFormScreen from '../screens/AssignmentsFormScreen';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -246,6 +248,28 @@ const SettingsNavigator = createStackNavigator(
   },
 );
 
+const GalleryNavigator = createStackNavigator(
+  {
+    Gallery: {
+      screen: GalleryScreen,
+    },
+  },
+  {
+    defaultNavigationOptions: defaultStackNavOptions,
+  },
+);
+
+const AssigmentsFormScreenNavigator = createStackNavigator(
+  {
+    AssigmentsForm: {
+      screen: AssignmentsFormScreen,
+    },
+  },
+  {
+    defaultNavigationOptions: defaultStackNavOptions,
+  },
+);
+
 const DrawerNavigator = createDrawerNavigator(
   {
     HomeSearch: {
@@ -282,6 +306,18 @@ const DrawerNavigator = createDrawerNavigator(
       screen: AssignmentsNavigator,
       navigationOptions: {
         drawerLabel: i18n.t('GENERAL.ASSIGNMENTS'),
+      },
+    },
+    AssigmentsForm: {
+      screen: AssigmentsFormScreenNavigator,
+      navigationOptions: {
+        drawerLabel: i18n.t('GENERAL.SETTINGS'),
+      },
+    },
+    Gallery: {
+      screen: GalleryNavigator,
+      navigationOptions: {
+        drawerLabel: i18n.t('GENERAL.SETTINGS'),
       },
     },
     Settings: {
