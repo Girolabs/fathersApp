@@ -50,6 +50,27 @@ function toIsoString(date) {
 const today = new Date();
 const todayString = toIsoString(today);
 
+const entities = [
+  { name: 'Entity 1', value: 1 },
+  { name: 'Entity 2', value: 2 },
+  { name: 'Entity 3', value: 3 },
+  { name: 'Entity 4', value: 4 },
+];
+
+const roles = [
+  { name: 'Rol 1', value: 1 },
+  { name: 'Rol 2', value: 2 },
+  { name: 'Rol 3', value: 3 },
+  { name: 'Rol 4', value: 4 },
+];
+
+const persons = [
+  { name: 'Person 1', value: 1 },
+  { name: 'Person 2', value: 2 },
+  { name: 'Person 3', value: 3 },
+  { name: 'Person 4', value: 4 },
+];
+
 const EditableDateItem = function (props) {
   //const [showPicker, setShowPicker] = useState(false);
   const [show, setShow] = useState(false);
@@ -116,136 +137,234 @@ const EditableDateItem = function (props) {
 };
 
 const AssigmentsFormScreen = () => {
+  const [entity, setEntity] = useState('');
   const [rol, setRol] = useState('');
   const [person, setPerson] = useState('');
   const [publicNotes, setPublicNotes] = useState('');
   const [startDate, setStartDate] = useState(todayString);
   const [endDate, setEndDate] = useState(todayString);
+  const [isCreate, setIsCreate] = useState(true);
   return (
-    <View
-      style={{
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F2F3FF',
-      }}
-    >
-      <Text
+    <ScrollView>
+      <View
         style={{
-          fontFamily: 'work-sans-semibold',
-          color: Colors.primaryColor,
-          fontSize: 20,
-          textAlign: 'left',
-          letterSpacing: 2.5,
-          textTransform: 'uppercase',
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#F2F3FF',
         }}
       >
-        {i18n.t('GENERAL.ASSIGNMENTS')}
-      </Text>
-      <TextInput
-        style={{
-          width: '80%',
-          height: 50,
-          marginVertical: 10,
-          borderRadius: 5,
-          backgroundColor: '#FFFFFF',
-        }}
-        theme={{ colors: { primary: Colors.primaryColor, underlineColor: 'transparent' } }}
-        label="Role ID"
-        required
-        autoCapitalize="none"
-        placeholderTextColor={Colors.onSurfaceColorSecondary}
-        value={rol}
-        onChange={(value) => setRol(value)}
-      />
-      <TextInput
-        style={{
-          width: '80%',
-          height: 50,
-          marginVertical: 10,
-          borderRadius: 5,
-          backgroundColor: '#FFFFFF',
-        }}
-        theme={{ colors: { primary: Colors.primaryColor, underlineColor: 'transparent' } }}
-        label="Person ID"
-        required
-        autoCapitalize="none"
-        placeholderTextColor={Colors.onSurfaceColorSecondary}
-        value={person}
-        onChange={(value) => setPerson(value)}
-      />
-      <Text
-        style={{
-          color: Colors.onSurfaceColorPrimary,
-          fontWeight: 'bold',
-        }}
-      >
-        {i18n.t('FATHER_DETAIL.START_DATE')}
-      </Text>
-      <EditableDateItem
-        date={startDate}
-        onDateChange={(value) => {
-          setStartDate(value);
-        }}
-        disabled={true}
-      />
-      <Text
-        style={{
-          color: Colors.onSurfaceColorPrimary,
-          fontWeight: 'bold',
-        }}
-      >
-        {i18n.t('FATHER_DETAIL.END_DATE')}
-      </Text>
-      <EditableDateItem
-        date={endDate}
-        onDateChange={(value) => {
-          setEndDate(value);
-        }}
-        disabled={true}
-      />
-      <TextInput
-        style={{
-          width: '80%',
-          height: 50,
-          marginVertical: 10,
-          borderRadius: 5,
-          backgroundColor: '#FFFFFF',
-        }}
-        theme={{ colors: { primary: Colors.primaryColor, underlineColor: 'transparent' } }}
-        label={i18n.t('LIVING_SITUATION.PUBLIC_NOTES')}
-        required
-        autoCapitalize="none"
-        placeholderTextColor={Colors.onSurfaceColorSecondary}
-        value={publicNotes}
-        onChange={(value) => setPublicNotes(value)}
-      />
-      <Button>
+        {isCreate ? (
+          <Text
+            style={{
+              fontFamily: 'work-sans-semibold',
+              color: Colors.primaryColor,
+              fontSize: 20,
+              textAlign: 'left',
+              letterSpacing: 2.5,
+              //textTransform: 'uppercase',
+              //margin: 10,
+              padding: 20,
+            }}
+          >
+            Formulario de {i18n.t('GENERAL.ASSIGNMENTS')}
+          </Text>
+        ) : (
+          <Text
+            style={{
+              fontFamily: 'work-sans-semibold',
+              color: Colors.primaryColor,
+              fontSize: 20,
+              textAlign: 'left',
+              letterSpacing: 2.5,
+              //textTransform: 'uppercase',
+              //margin: 10,
+              padding: 20,
+            }}
+          >
+            Editar {i18n.t('GENERAL.ASSIGNMENTS')}
+          </Text>
+        )}
+        {
+          <View
+            style={{
+              width: '80%',
+            }}
+          >
+            <Text
+              style={{
+                color: Colors.onSurfaceColorSecondary,
+                //color: Colors.onSurfaceColorPrimary,
+                fontWeight: 'bold',
+                //textAlign: 'center',
+              }}
+              required
+            >
+              Lista de Entidades
+            </Text>
+            <Select
+              style={{
+                backgroundColor: Colors.surfaceColorSecondary,
+                height: 50,
+                marginVertical: 10,
+                borderRadius: 5,
+              }}
+              elements={entities}
+              value={entity}
+              valueChange={(value) => setEntity(value)}
+            />
+          </View>
+        }
+        {
+          <View
+            style={{
+              width: '80%',
+            }}
+          >
+            <Text
+              style={{
+                color: Colors.onSurfaceColorSecondary,
+                //color: Colors.onSurfaceColorPrimary,
+                fontWeight: 'bold',
+                //textAlign: 'center',
+              }}
+              required
+            >
+              Lista de {i18n.t('GENERAL.ASSIGNMENTS')}
+            </Text>
+            <Select
+              style={{
+                backgroundColor: Colors.surfaceColorSecondary,
+                height: 50,
+                marginVertical: 10,
+                borderRadius: 5,
+              }}
+              elements={roles}
+              value={rol}
+              valueChange={(value) => setRol(value)}
+            />
+          </View>
+        }
+        {
+          <View
+            style={{
+              width: '80%',
+            }}
+          >
+            <Text
+              style={{
+                color: Colors.onSurfaceColorSecondary,
+                //color: Colors.onSurfaceColorPrimary,
+                fontWeight: 'bold',
+                //textAlign: 'center',
+              }}
+              required
+            >
+              Lista de Personas
+            </Text>
+            <Select
+              style={{
+                backgroundColor: Colors.surfaceColorSecondary,
+                height: 50,
+                marginVertical: 10,
+                borderRadius: 5,
+              }}
+              elements={persons}
+              value={person}
+              valueChange={(value) => setPerson(value)}
+            />
+          </View>
+        }
+
         <View
           style={{
             width: '80%',
-            marginVertical: 10,
-            borderRadius: 8,
-            backgroundColor: 'gray',
-            backgroundColor: Colors.primaryColor,
-            paddingHorizontal: 5,
-            paddingVertical: 10,
           }}
         >
           <Text
             style={{
-              color: 'white',
-              textAlign: 'center',
-              textTransform: 'uppercase',
-              fontFamily: 'work-sans-bold',
+              //color: Colors.onSurfaceColorPrimary,
+              color: Colors.onSurfaceColorSecondary,
+              fontWeight: 'bold',
+              //textAlign: 'center',
             }}
           >
-            {i18n.t('FATHER_EDIT.SAVE')}
+            {i18n.t('FATHER_DETAIL.START_DATE')}
           </Text>
         </View>
-      </Button>
-    </View>
+        <EditableDateItem
+          date={startDate}
+          onDateChange={(value) => {
+            setStartDate(value);
+          }}
+          disabled={true}
+        />
+        <View
+          style={{
+            width: '80%',
+          }}
+        >
+          <Text
+            style={{
+              //color: Colors.onSurfaceColorPrimary,
+              color: Colors.onSurfaceColorSecondary,
+              fontWeight: 'bold',
+              //textAlign: 'center',
+            }}
+          >
+            {i18n.t('FATHER_DETAIL.END_DATE')}
+          </Text>
+        </View>
+        <EditableDateItem
+          date={endDate}
+          onDateChange={(value) => {
+            setEndDate(value);
+          }}
+          disabled={true}
+        />
+        <TextInput
+          style={{
+            width: '80%',
+            height: 50,
+            marginVertical: 10,
+            borderRadius: 5,
+            backgroundColor: '#FFFFFF',
+          }}
+          theme={{ colors: { primary: '#0104AC', underlineColor: 'transparent' } }}
+          label={i18n.t('LIVING_SITUATION.PUBLIC_NOTES')}
+          required
+          autoCapitalize="none"
+          placeholderTextColor={Colors.onSurfaceColorSecondary}
+          value={publicNotes}
+          onChange={(value) => setPublicNotes(value)}
+        />
+        <Button>
+          <View
+            style={{
+              width: '80%',
+              marginVertical: 10,
+              borderRadius: 8,
+              backgroundColor: 'gray',
+              backgroundColor: Colors.primaryColor,
+              paddingHorizontal: 5,
+              paddingVertical: 10,
+            }}
+          >
+            <Text
+              style={{
+                color: 'white',
+                textAlign: 'center',
+                textTransform: 'uppercase',
+                fontFamily: 'work-sans-bold',
+              }}
+            >
+              {i18n.t('FATHER_EDIT.SAVE')}
+            </Text>
+          </View>
+        </Button>
+      </View>
+    </ScrollView>
   );
 };
 AssigmentsFormScreen.navigationOptions = (navigationData) => ({

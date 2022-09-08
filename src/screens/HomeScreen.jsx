@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Text, ScrollView, Image, Modal } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import i18n from 'i18n-js';
 import moment from 'moment';
@@ -15,6 +15,8 @@ import { I18nContext } from '../context/I18nProvider';
 import { getReminders } from '../api';
 import RemindersHeaders from '../components/RemindersHeaders';
 import { BulletinCheckContext } from '../context/BulletinCheckProvider';
+import { Pressable } from 'react-native';
+import { Ionicons } from 'expo-vector-icons';
 
 const styles = StyleSheet.create({
   screen: {
@@ -105,6 +107,7 @@ const HomeScreen = () => {
   const [visible, setVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
   const { unseenPostsCount, markCheckUnseenCounter, checkOnly } = useContext(BulletinCheckContext);
+  const [photoModal, setPhotoModal] = useState(false);
 
   const loadReminders = async () => {
     const status = await Network.getNetworkStateAsync();
@@ -142,28 +145,111 @@ const HomeScreen = () => {
         console.log(moment.locale());
 
         return (
-          <View style={styles.screen}>
-            <NavigationEvents
-              onDidFocus={() => {
-                loadReminders();
-                checkOnly();
-              }}
-            />
-            {!loading ? (
-              <RemindersHeaders
-                reminders={reminders}
-                selectedHeader={selectedReminder}
-                onChangeSelectedHeader={(index) => setSelectedReminder(index)}
+          <ScrollView nestedScrollEnabled={true}>
+            <View style={styles.screen}>
+              <NavigationEvents
+                onDidFocus={() => {
+                  loadReminders();
+                  checkOnly();
+                }}
               />
-            ) : (
-              <View style={styles.screenLoading}>
-                <ActivityIndicator size="large" color={Colors.primaryColor} />
-              </View>
-            )}
-            <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
-              {snackMsg}
-            </SnackBar>
-          </View>
+              {photoModal ? (
+                <Modal>
+                  <Pressable
+                    style={{
+                      margin: 10,
+                      width: 23,
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                    }}
+                    onPress={() => setPhotoModal(false)}
+                  >
+                    <Ionicons name="ios-arrow-back" size={23} />
+                  </Pressable>
+                  <View
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: 'gray',
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  >
+                    <Image
+                      style={{
+                        backgroundColor: 'blue',
+                        width: 300,
+                        height: 300,
+                        borderRadius: 8,
+                      }}
+                    />
+                  </View>
+                </Modal>
+              ) : null}
+              {!loading ? (
+                <>
+                  <RemindersHeaders
+                    reminders={reminders}
+                    selectedHeader={selectedReminder}
+                    onChangeSelectedHeader={(index) => setSelectedReminder(index)}
+                  />
+                  <View
+                    style={{
+                      margin: 20,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: 'work-sans-semibold',
+                        color: Colors.primaryColor,
+                        fontSize: 15,
+                        textAlign: 'center',
+                        letterSpacing: 2.5,
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      Últimas fotos subidas
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                    }}
+                  >
+                    <Pressable
+                      style={{ width: '30%', height: 100, backgroundColor: '#292929', borderRadius: 8 }}
+                      onPress={() => setPhotoModal(!photoModal)}
+                    >
+                      <Image />
+                    </Pressable>
+                    <Pressable
+                      style={{ width: '30%', height: 100, backgroundColor: '#292929', borderRadius: 8 }}
+                      onPress={() => setPhotoModal(!photoModal)}
+                    >
+                      <Image />
+                    </Pressable>
+                    <Pressable
+                      style={{ width: '30%', height: 100, backgroundColor: '#292929', borderRadius: 8 }}
+                      onPress={() => setPhotoModal(!photoModal)}
+                    >
+                      <Image />
+                    </Pressable>
+                  </View>
+                </>
+              ) : (
+                <View style={styles.screenLoading}>
+                  <ActivityIndicator size="large" color={Colors.primaryColor} />
+                </View>
+              )}
+              <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
+                {snackMsg}
+              </SnackBar>
+            </View>
+          </ScrollView>
         );
       }}
     </I18nContext.Consumer>
