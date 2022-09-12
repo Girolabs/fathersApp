@@ -111,6 +111,7 @@ const HomeScreen = ({ navigation }) => {
   const { unseenPostsCount, markCheckUnseenCounter, checkOnly } = useContext(BulletinCheckContext);
   const [photoModal, setPhotoModal] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [showComments, setShowComments] = useState(false);
 
   const loadReminders = async () => {
     const status = await Network.getNetworkStateAsync();
@@ -167,7 +168,7 @@ const HomeScreen = ({ navigation }) => {
                     }}
                     onPress={() => setPhotoModal(false)}
                   >
-                    <Ionicons name="ios-arrow-back" size={23} />
+                    <Ionicons name="ios-arrow-back" size={24} />
                   </Pressable>
                   <View
                     style={{
@@ -201,89 +202,173 @@ const HomeScreen = ({ navigation }) => {
                   />
                   <View
                     style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      margin: 20,
+                      backgroundColor: '#F8CE46',
+                      marginTop: 20,
+                      borderRadius: 8,
                     }}
                   >
-                    <Text
+                    <View
                       style={{
-                        fontFamily: 'work-sans-semibold',
-                        fontWeight: 'bold',
-                        color: Colors.primaryColor,
-                        fontSize: 15,
-                        textAlign: 'center',
-                        letterSpacing: 2.5,
-                        textTransform: 'uppercase',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        margin: 20,
                       }}
                     >
-                      Photos <Ionicons name="md-images" size={20} />
-                    </Text>
+                      <Text
+                        style={{
+                          fontFamily: 'work-sans-semibold',
+                          fontWeight: 'bold',
+                          color: Colors.primaryColor,
+                          fontSize: 15,
+                          textAlign: 'center',
+                          letterSpacing: 2.5,
+                          textTransform: 'uppercase',
+                        }}
+                      >
+                        Photos <Ionicons name="md-images" size={20} />
+                      </Text>
+                      <Pressable
+                        style={{
+                          width: 23,
+                        }}
+                        onPress={() => {
+                          navigation.navigate('Gallery');
+                        }}
+                      >
+                        <Ionicons name="md-add" size={23} color={Colors.primaryColor} />
+                      </Pressable>
+                    </View>
+                    <View
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-evenly',
+                      }}
+                    >
+                      <Pressable
+                        style={{ width: '30%', height: 100, backgroundColor: '#fff', borderRadius: 8 }}
+                        onPress={() => {
+                          setPhotoModal(!photoModal);
+                          setSelectedPhoto(bishopLogo);
+                        }}
+                      >
+                        <Image source={bishopLogo} style={{ width: '100%', height: '100%' }} />
+                      </Pressable>
+                      <Pressable
+                        style={{ width: '30%', height: 100, backgroundColor: '#fff', borderRadius: 8 }}
+                        onPress={() => {
+                          setPhotoModal(!photoModal);
+                          setSelectedPhoto(person);
+                        }}
+                      >
+                        <Image source={person} style={{ width: '100%', height: '100%' }} />
+                      </Pressable>
+                      <Pressable
+                        style={{
+                          width: '30%',
+                          height: 100,
+                          backgroundColor: Colors.onSurfaceColorPrimary,
+                          borderRadius: 8,
+                        }}
+                        onPress={() => {
+                          setPhotoModal(!photoModal);
+                          setSelectedPhoto(fatherIcon);
+                        }}
+                      >
+                        <Image source={fatherIcon} style={{ width: '100%', height: '100%' }} />
+                      </Pressable>
+                    </View>
                     <Pressable
                       style={{
-                        width: 23,
+                        flexDirection: 'row',
+                        justifyContent: 'flex-end',
+                        margin: 20,
                       }}
-                      onPress={() => {
-                        navigation.navigate('Gallery');
-                      }}
+                      onPress={() => setShowComments(!showComments)}
                     >
-                      <Ionicons name="md-add" size={23} />
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          color: Colors.primaryColor,
+                          fontWeight: 'bold',
+                          marginRight: 10,
+                        }}
+                      >
+                        Comments
+                      </Text>
+                      <Foundation name="comments" size={25} color={Colors.primaryColor} />
                     </Pressable>
+                    {showComments ? (
+                      <View style={{ marginBottom: 20 }}>
+                        <View
+                          style={{
+                            width: '90%',
+                            height: 'auto',
+                            backgroundColor: '#B6B6D9',
+                            borderRadius: 8,
+                            marginBottom: 5,
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: 15,
+                              color: '#292929',
+                              paddingVertical: 10,
+                              paddingHorizontal: 20,
+                            }}
+                          >
+                            Comentario
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            width: '90%',
+                            height: 'auto',
+                            backgroundColor: '#B6B6D9',
+                            borderRadius: 8,
+                            marginVertical: 5,
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: 15,
+                              color: '#292929',
+                              paddingVertical: 10,
+                              paddingHorizontal: 20,
+                            }}
+                          >
+                            ComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentario
+                          </Text>
+                        </View>
+                        <View
+                          style={{
+                            width: '90%',
+                            height: 'auto',
+                            backgroundColor: '#B6B6D9',
+                            borderRadius: 8,
+                            marginVertical: 5,
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: 15,
+                              color: '#292929',
+                              paddingVertical: 10,
+                              paddingHorizontal: 20,
+                            }}
+                          >
+                            ComentarioComentarioComentarioComentarioComentarioComentarioComentario
+                          </Text>
+                        </View>
+                      </View>
+                    ) : null}
                   </View>
-                  <View
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'space-evenly',
-                    }}
-                  >
-                    <Pressable
-                      style={{ width: '30%', height: 100, backgroundColor: '#292929', borderRadius: 8 }}
-                      onPress={() => {
-                        setPhotoModal(!photoModal);
-                        setSelectedPhoto(bishopLogo);
-                      }}
-                    >
-                      <Image source={bishopLogo} style={{ width: '100%', height: '100%' }} />
-                    </Pressable>
-                    <Pressable
-                      style={{ width: '30%', height: 100, backgroundColor: '#292929', borderRadius: 8 }}
-                      onPress={() => {
-                        setPhotoModal(!photoModal);
-                        setSelectedPhoto(person);
-                      }}
-                    >
-                      <Image source={person} style={{ width: '100%', height: '100%' }} />
-                    </Pressable>
-                    <Pressable
-                      style={{ width: '30%', height: 100, backgroundColor: '#292929', borderRadius: 8 }}
-                      onPress={() => {
-                        setPhotoModal(!photoModal);
-                        setSelectedPhoto(fatherIcon);
-                      }}
-                    >
-                      <Image source={fatherIcon} style={{ width: '100%', height: '100%' }} />
-                    </Pressable>
-                  </View>
-                  <Pressable
-                    style={{
-                      flexDirection: 'row',
-                      justifyContent: 'flex-end',
-                      margin: 20,
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 15,
-                        color: Colors.primaryColor,
-                        fontWeight: 'bold',
-                        marginRight: 10,
-                      }}
-                    >
-                      Comments
-                    </Text>
-                    <Foundation name="comments" size={25} color={Colors.primaryColor} />
-                  </Pressable>
                 </>
               ) : (
                 <View style={styles.screenLoading}>
