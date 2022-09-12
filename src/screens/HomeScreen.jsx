@@ -6,7 +6,7 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import * as Network from 'expo-network';
 import 'moment/min/locales';
-import { NavigationEvents } from 'react-navigation';
+import { NavigationEvents, navigation } from 'react-navigation';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
@@ -16,8 +16,10 @@ import { getReminders } from '../api';
 import RemindersHeaders from '../components/RemindersHeaders';
 import { BulletinCheckContext } from '../context/BulletinCheckProvider';
 import { Pressable } from 'react-native';
-import { Ionicons } from 'expo-vector-icons';
-
+import { Ionicons, Foundation } from 'expo-vector-icons';
+import bishopLogo from '../../assets/img/bishop.png';
+import person from '../../assets/img/person.png';
+import fatherIcon from '../../assets/img/fatherIcon.png';
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -100,7 +102,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const [reminders, setReminders] = useState([]);
   const [selectedReminder, setSelectedReminder] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -108,6 +110,7 @@ const HomeScreen = () => {
   const [snackMsg, setSnackMsg] = useState('');
   const { unseenPostsCount, markCheckUnseenCounter, checkOnly } = useContext(BulletinCheckContext);
   const [photoModal, setPhotoModal] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
 
   const loadReminders = async () => {
     const status = await Network.getNetworkStateAsync();
@@ -158,7 +161,7 @@ const HomeScreen = () => {
                   <Pressable
                     style={{
                       margin: 10,
-                      width: 23,
+                      width: 25,
                       flexDirection: 'row',
                       justifyContent: 'center',
                     }}
@@ -172,18 +175,19 @@ const HomeScreen = () => {
                       flexDirection: 'row',
                       justifyContent: 'center',
                       alignItems: 'center',
-                      backgroundColor: 'gray',
+                      //backgroundColor: Colors.onSurfaceColorPrimary,
                       width: '100%',
                       height: '100%',
                     }}
                   >
                     <Image
                       style={{
-                        backgroundColor: 'blue',
-                        width: 300,
-                        height: 300,
+                        backgroundColor: Colors.onSurfaceColorSecondary,
+                        width: 350,
+                        height: 350,
                         borderRadius: 8,
                       }}
+                      source={selectedPhoto}
                     />
                   </View>
                 </Modal>
@@ -197,12 +201,15 @@ const HomeScreen = () => {
                   />
                   <View
                     style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
                       margin: 20,
                     }}
                   >
                     <Text
                       style={{
                         fontFamily: 'work-sans-semibold',
+                        fontWeight: 'bold',
                         color: Colors.primaryColor,
                         fontSize: 15,
                         textAlign: 'center',
@@ -210,8 +217,18 @@ const HomeScreen = () => {
                         textTransform: 'uppercase',
                       }}
                     >
-                      Últimas fotos subidas
+                      Photos <Ionicons name="md-images" size={20} />
                     </Text>
+                    <Pressable
+                      style={{
+                        width: 23,
+                      }}
+                      onPress={() => {
+                        navigation.navigate('Gallery');
+                      }}
+                    >
+                      <Ionicons name="md-add" size={23} />
+                    </Pressable>
                   </View>
                   <View
                     style={{
@@ -222,23 +239,51 @@ const HomeScreen = () => {
                   >
                     <Pressable
                       style={{ width: '30%', height: 100, backgroundColor: '#292929', borderRadius: 8 }}
-                      onPress={() => setPhotoModal(!photoModal)}
+                      onPress={() => {
+                        setPhotoModal(!photoModal);
+                        setSelectedPhoto(bishopLogo);
+                      }}
                     >
-                      <Image />
+                      <Image source={bishopLogo} style={{ width: '100%', height: '100%' }} />
                     </Pressable>
                     <Pressable
                       style={{ width: '30%', height: 100, backgroundColor: '#292929', borderRadius: 8 }}
-                      onPress={() => setPhotoModal(!photoModal)}
+                      onPress={() => {
+                        setPhotoModal(!photoModal);
+                        setSelectedPhoto(person);
+                      }}
                     >
-                      <Image />
+                      <Image source={person} style={{ width: '100%', height: '100%' }} />
                     </Pressable>
                     <Pressable
                       style={{ width: '30%', height: 100, backgroundColor: '#292929', borderRadius: 8 }}
-                      onPress={() => setPhotoModal(!photoModal)}
+                      onPress={() => {
+                        setPhotoModal(!photoModal);
+                        setSelectedPhoto(fatherIcon);
+                      }}
                     >
-                      <Image />
+                      <Image source={fatherIcon} style={{ width: '100%', height: '100%' }} />
                     </Pressable>
                   </View>
+                  <Pressable
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-end',
+                      margin: 20,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: Colors.primaryColor,
+                        fontWeight: 'bold',
+                        marginRight: 10,
+                      }}
+                    >
+                      Comments
+                    </Text>
+                    <Foundation name="comments" size={25} color={Colors.primaryColor} />
+                  </Pressable>
                 </>
               ) : (
                 <View style={styles.screenLoading}>

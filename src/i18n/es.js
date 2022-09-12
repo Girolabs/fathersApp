@@ -215,4 +215,21 @@ exports.ES = {
     HOUSE: 'Casa',
     ERROR_END_DATE: 'La fecha de fin no puede ser anterior a la fecha de inicio',
   },
+  GALLERY: {
+    TITLE: 'Galería',
+    PHOTOS: 'Fotos',
+    COMMENTS: 'Comentarios',
+    CHOOSE_PHOTO: 'Elige una foto',
+    DESCRIPTION: 'Descripción',
+    SAVE: 'Guardar',
+  },
+  ASSIGNMENTS_FORM: {
+    TITLE: 'Formulario de Asignaciones',
+    ENTITIES_LIST: 'Lista de entidades',
+    ROLE_LIST: 'Lista de roles',
+    PERSON_LIST: 'Lista de personas',
+    START_DATE: 'Fecha de inicio',
+    END_DATE: 'Fecha de término',
+    PUBLIC_NOTES: 'Notas públicas',
+  },
 };

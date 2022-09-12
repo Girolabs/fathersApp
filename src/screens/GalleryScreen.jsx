@@ -64,7 +64,7 @@ const GalleryScreen = () => {
           textTransform: 'uppercase',
         }}
       >
-        Gallery
+        {/*i18n.t('GALLERY.TITLE')*/}Gallery
       </Text>
       <Pressable
         style={{

@@ -105,10 +105,10 @@ const DefaultDrawer = (props) => {
       path: 'AssigmentsForm',
       label: i18n.t('LIVING_SITUATION.ADD'),
     },
-    {
+    /*{
       path: 'Gallery',
       label: i18n.t('LIVING_SITUATION.ADD'),
-    },
+    },*/
     {
       path: 'Settings',
       label: i18n.t('GENERAL.SETTINGS'),

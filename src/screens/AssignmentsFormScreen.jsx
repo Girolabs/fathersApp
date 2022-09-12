@@ -58,10 +58,10 @@ const entities = [
 ];
 
 const roles = [
-  { name: 'Rol 1', value: 1 },
-  { name: 'Rol 2', value: 2 },
-  { name: 'Rol 3', value: 3 },
-  { name: 'Rol 4', value: 4 },
+  { name: 'Role 1', value: 1 },
+  { name: 'Role 2', value: 2 },
+  { name: 'Role 3', value: 3 },
+  { name: 'Role 4', value: 4 },
 ];
 
 const persons = [
@@ -72,12 +72,11 @@ const persons = [
 ];
 
 const EditableDateItem = function (props) {
-  //const [showPicker, setShowPicker] = useState(false);
   const [show, setShow] = useState(false);
 
   let editableItemStyle = StyleSheet.create({
     item: {
-      width: '80%',
+      width: '90%',
       height: 50,
       display: 'flex',
       flexDirection: 'row',
@@ -138,7 +137,7 @@ const EditableDateItem = function (props) {
 
 const AssigmentsFormScreen = () => {
   const [entity, setEntity] = useState('');
-  const [rol, setRol] = useState('');
+  const [role, setRole] = useState('');
   const [person, setPerson] = useState('');
   const [publicNotes, setPublicNotes] = useState('');
   const [startDate, setStartDate] = useState(todayString);
@@ -168,7 +167,7 @@ const AssigmentsFormScreen = () => {
               padding: 20,
             }}
           >
-            Formulario de {i18n.t('GENERAL.ASSIGNMENTS')}
+            Formulario de Asignaciones
           </Text>
         ) : (
           <Text
@@ -189,7 +188,7 @@ const AssigmentsFormScreen = () => {
         {
           <View
             style={{
-              width: '80%',
+              width: '90%',
             }}
           >
             <Text
@@ -219,7 +218,7 @@ const AssigmentsFormScreen = () => {
         {
           <View
             style={{
-              width: '80%',
+              width: '90%',
             }}
           >
             <Text
@@ -241,15 +240,15 @@ const AssigmentsFormScreen = () => {
                 borderRadius: 5,
               }}
               elements={roles}
-              value={rol}
-              valueChange={(value) => setRol(value)}
+              value={role}
+              valueChange={(value) => setRole(value)}
             />
           </View>
         }
         {
           <View
             style={{
-              width: '80%',
+              width: '90%',
             }}
           >
             <Text
@@ -279,7 +278,7 @@ const AssigmentsFormScreen = () => {
 
         <View
           style={{
-            width: '80%',
+            width: '90%',
           }}
         >
           <Text
@@ -302,7 +301,7 @@ const AssigmentsFormScreen = () => {
         />
         <View
           style={{
-            width: '80%',
+            width: '90%',
           }}
         >
           <Text
@@ -325,7 +324,7 @@ const AssigmentsFormScreen = () => {
         />
         <TextInput
           style={{
-            width: '80%',
+            width: '90%',
             height: 50,
             marginVertical: 10,
             borderRadius: 5,
@@ -342,7 +341,7 @@ const AssigmentsFormScreen = () => {
         <Button>
           <View
             style={{
-              width: '80%',
+              width: '90%',
               marginVertical: 10,
               borderRadius: 8,
               backgroundColor: 'gray',

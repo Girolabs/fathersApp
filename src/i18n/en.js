@@ -215,4 +215,21 @@ exports.EN = {
     HOUSE: 'House',
     ERROR_END_DATE: "End date can't be before start date",
   },
+  GALLERY: {
+    TITLE: 'Gallery',
+    PHOTOS: 'Photos',
+    COMMENTS: 'Comments',
+    CHOOSE_PHOTO: 'Choose a photo',
+    DESCRIPTION: 'Description',
+    SAVE: 'Save',
+  },
+  ASSIGNMENTS_FORM: {
+    TITLE: 'Assignments Form',
+    ENTITIES_LIST: 'Entities list',
+    ROLE_LIST: 'Role list',
+    PERSON_LIST: 'Person list',
+    START_DATE: 'Start date',
+    END_DATE: 'End date',
+    PUBLIC_NOTES: 'Public notes',
+  },
 };

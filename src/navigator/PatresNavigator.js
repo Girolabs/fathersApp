@@ -90,6 +90,9 @@ const HomeNavigator = createStackNavigator(
     IdealStatementDetail: {
       screen: IdealStatementDetail,
     },
+    Gallery: {
+      screen: GalleryScreen,
+    },
   },
   {
     defaultNavigationOptions: defaultStackNavOptions,
