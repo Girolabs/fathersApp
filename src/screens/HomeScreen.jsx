@@ -20,6 +20,8 @@ import { Ionicons, Foundation } from 'expo-vector-icons';
 import bishopLogo from '../../assets/img/bishop.png';
 import person from '../../assets/img/person.png';
 import fatherIcon from '../../assets/img/fatherIcon.png';
+import CustomSlider from '../components/CarouselSlider';
+import data from '../data/data';
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -202,7 +204,7 @@ const HomeScreen = ({ navigation }) => {
                   />
                   <View
                     style={{
-                      backgroundColor: '#F8CE46',
+                      backgroundColor: '#B6B6D9',
                       marginTop: 20,
                       borderRadius: 8,
                     }}
@@ -242,10 +244,12 @@ const HomeScreen = ({ navigation }) => {
                       style={{
                         display: 'flex',
                         flexDirection: 'row',
-                        justifyContent: 'space-evenly',
+                        justifyContent: 'space-around',
+                        overflow: 'hidden',
                       }}
                     >
-                      <Pressable
+                      <CustomSlider data={data} />
+                      {/*<Pressable
                         style={{ width: '30%', height: 100, backgroundColor: '#fff', borderRadius: 8 }}
                         onPress={() => {
                           setPhotoModal(!photoModal);
@@ -276,7 +280,7 @@ const HomeScreen = ({ navigation }) => {
                         }}
                       >
                         <Image source={fatherIcon} style={{ width: '100%', height: '100%' }} />
-                      </Pressable>
+                      </Pressable>*/}
                     </View>
                     <Pressable
                       style={{
@@ -304,7 +308,7 @@ const HomeScreen = ({ navigation }) => {
                           style={{
                             width: '90%',
                             height: 'auto',
-                            backgroundColor: '#B6B6D9',
+                            backgroundColor: '#F2F3FF',
                             borderRadius: 8,
                             marginBottom: 5,
                             marginLeft: 'auto',
@@ -326,7 +330,7 @@ const HomeScreen = ({ navigation }) => {
                           style={{
                             width: '90%',
                             height: 'auto',
-                            backgroundColor: '#B6B6D9',
+                            backgroundColor: '#F2F3FF',
                             borderRadius: 8,
                             marginVertical: 5,
                             marginLeft: 'auto',
@@ -348,7 +352,7 @@ const HomeScreen = ({ navigation }) => {
                           style={{
                             width: '90%',
                             height: 'auto',
-                            backgroundColor: '#B6B6D9',
+                            backgroundColor: '#F2F3FF',
                             borderRadius: 8,
                             marginVertical: 5,
                             marginLeft: 'auto',
