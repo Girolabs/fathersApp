@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { ScrollView, StyleSheet, KeyboardAvoidingView, View, Text, Image, ActivityIndicator } from 'react-native';
+import { ScrollView, StyleSheet, KeyboardAvoidingView, View, Text, Image, ActivityIndicator , Platform} from 'react-native';
 import { I18nContext } from '../context/I18nProvider';
 import { AuthContext } from '../context/AuthProvider';
 import Colors from '../constants/Colors';
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surfaceColorSecondary,
     borderRadius: 5,
     marginVertical: 5,
-    padding: 0,
+    padding: Platform.OS === 'ios' ? 15 : 0
   },
 });
 

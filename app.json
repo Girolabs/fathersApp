@@ -38,7 +38,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.schoenstatt.fathersApp",
-      "buildNumber": "1",
+      "buildNumber": "4",
       "supportsTablet": false,
       "requireFullScreen": true
     },
