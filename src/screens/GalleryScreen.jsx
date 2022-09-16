@@ -118,20 +118,25 @@ const GalleryScreen = () => {
       <Button>
         <View
           style={{
+            backgroundColor: 'white',
+            borderColor: Colors.primaryColor,
+            borderRadius: 5,
+            borderWidth: 2,
+            paddingHorizontal: 10,
             width: '80%',
+            height: 50,
+            justifyContent: 'center',
             marginVertical: 10,
-            borderRadius: 8,
-            backgroundColor: Colors.primaryColor,
-            paddingHorizontal: 5,
-            paddingVertical: 10,
           }}
         >
           <Text
             style={{
-              color: 'white',
               textAlign: 'center',
-              textTransform: 'uppercase',
+              fontSize: 12,
+              width: '100%',
               fontFamily: 'work-sans-bold',
+              textTransform: 'uppercase',
+              color: Colors.primaryColor,
             }}
             placeholderTextColor={Colors.onSurfaceColorSecondary}
           >

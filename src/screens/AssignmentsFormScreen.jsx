@@ -216,10 +216,12 @@ const AssigmentsFormScreen = () => {
         >
           <Text
             style={{
-              color: Colors.onSurfaceColorSecondary,
+              //color: Colors.onSurfaceColorSecondary,
               //color: Colors.onSurfaceColorPrimary,
               fontWeight: 'bold',
               //textAlign: 'center',
+              fontFamily: 'work-sans-semibold',
+              color: Colors.primaryColor,
             }}
             required
           >
@@ -246,10 +248,12 @@ const AssigmentsFormScreen = () => {
         >
           <Text
             style={{
-              color: Colors.onSurfaceColorSecondary,
+              //color: Colors.onSurfaceColorSecondary,
               //color: Colors.onSurfaceColorPrimary,
               fontWeight: 'bold',
               //textAlign: 'center',
+              fontFamily: 'work-sans-semibold',
+              color: Colors.primaryColor,
             }}
             required
           >
@@ -298,10 +302,12 @@ const AssigmentsFormScreen = () => {
       >
         <Text
           style={{
+            //color: Colors.onSurfaceColorSecondary,
             //color: Colors.onSurfaceColorPrimary,
-            color: Colors.onSurfaceColorSecondary,
             fontWeight: 'bold',
             //textAlign: 'center',
+            fontFamily: 'work-sans-semibold',
+            color: Colors.primaryColor,
           }}
         >
           {i18n.t('FATHER_DETAIL.START_DATE')}
@@ -321,10 +327,12 @@ const AssigmentsFormScreen = () => {
       >
         <Text
           style={{
+            //color: Colors.onSurfaceColorSecondary,
             //color: Colors.onSurfaceColorPrimary,
-            color: Colors.onSurfaceColorSecondary,
             fontWeight: 'bold',
             //textAlign: 'center',
+            fontFamily: 'work-sans-semibold',
+            color: Colors.primaryColor,
           }}
         >
           {i18n.t('FATHER_DETAIL.END_DATE')}
@@ -337,40 +345,61 @@ const AssigmentsFormScreen = () => {
         }}
         disabled={true}
       />
-      <TextInput
+      <View
         style={{
           width: '90%',
-          height: 50,
-          marginVertical: 10,
-          borderRadius: 5,
-          backgroundColor: '#FFFFFF',
         }}
-        theme={{ colors: { primary: '#0104AC', underlineColor: 'transparent' } }}
-        label={i18n.t('LIVING_SITUATION.PUBLIC_NOTES')}
-        required
-        autoCapitalize="none"
-        placeholderTextColor={Colors.onSurfaceColorSecondary}
-        value={publicNotes}
-        onChange={(value) => setPublicNotes(value)}
-      />
+      >
+        <Text
+          style={{
+            //color: Colors.onSurfaceColorSecondary,
+            //color: Colors.onSurfaceColorPrimary,
+            fontWeight: 'bold',
+            //textAlign: 'center',
+            fontFamily: 'work-sans-semibold',
+            color: Colors.primaryColor,
+          }}
+        >
+          {i18n.t('LIVING_SITUATION.PUBLIC_NOTES')}
+        </Text>
+        <TextInput
+          style={{
+            height: 50,
+            marginVertical: 10,
+            borderRadius: 5,
+            backgroundColor: '#FFFFFF',
+          }}
+          theme={{ colors: { primary: '#0104AC', underlineColor: 'transparent' } }}
+          //label={i18n.t('LIVING_SITUATION.PUBLIC_NOTES')}
+          required
+          autoCapitalize="none"
+          placeholderTextColor={Colors.onSurfaceColorSecondary}
+          value={publicNotes}
+          onChange={(value) => setPublicNotes(value)}
+        />
+      </View>
       <Button>
         <View
           style={{
+            backgroundColor: 'white',
+            borderColor: Colors.primaryColor,
+            borderRadius: 5,
+            borderWidth: 2,
+            paddingHorizontal: 10,
             width: '90%',
+            height: 50,
+            justifyContent: 'center',
             marginVertical: 10,
-            borderRadius: 8,
-            backgroundColor: 'gray',
-            backgroundColor: Colors.primaryColor,
-            paddingHorizontal: 5,
-            paddingVertical: 10,
           }}
         >
           <Text
             style={{
-              color: 'white',
               textAlign: 'center',
-              textTransform: 'uppercase',
+              fontSize: 12,
+              width: '100%',
               fontFamily: 'work-sans-bold',
+              textTransform: 'uppercase',
+              color: Colors.primaryColor,
             }}
           >
             {i18n.t('FATHER_EDIT.SAVE')}

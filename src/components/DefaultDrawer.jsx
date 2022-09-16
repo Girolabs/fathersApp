@@ -11,7 +11,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import i18n from 'i18n-js';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from 'expo-vector-icons';
 import { NavigationEvents } from 'react-navigation';
 import Colors from '../constants/Colors';
 import logo from '../../assets/img/fatherIcon.png';
@@ -135,7 +135,7 @@ const DefaultDrawer = (props) => {
                     navigation.toggleDrawer();
                   }}
                 >
-                  <Ionicons name="md-close" size={36} color={Colors.surfaceColorPrimary} />
+                  <Ionicons name="md-close" size={28} color={Colors.surfaceColorPrimary} />
                 </TouchableOpacity>
               </View>
 
