@@ -115,7 +115,11 @@ const GalleryScreen = () => {
         required
         autoCapitalize="none"
       />
-      <Button>
+      <Button style={{
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'center'
+          }}>
         <View
           style={{
             backgroundColor: 'white',

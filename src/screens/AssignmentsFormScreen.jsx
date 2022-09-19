@@ -131,7 +131,7 @@ const EditableDateItem = function (props) {
 
 const AssigmentsFormScreen = () => {
   const [entity, setEntity] = useState('');
-  const [role, setRole] = useState('');
+  const [role, setRole] = useState(1);
   const [person, setPerson] = useState(null);
   const [publicNotes, setPublicNotes] = useState('');
   const [startDate, setStartDate] = useState(todayString);
@@ -233,6 +233,7 @@ const AssigmentsFormScreen = () => {
               height: 50,
               marginVertical: 10,
               borderRadius: 5,
+              padding: Platform.OS === 'ios' ? 8 : 0
             }}
             elements={roles}
             value={role}
@@ -244,6 +245,7 @@ const AssigmentsFormScreen = () => {
         <View
           style={{
             width: '90%',
+            zIndex: 9
           }}
         >
           <Text
@@ -378,7 +380,11 @@ const AssigmentsFormScreen = () => {
           onChange={(value) => setPublicNotes(value)}
         />
       </View>
-      <Button>
+      <Button style={{
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'center'
+          }} >
         <View
           style={{
             backgroundColor: 'white',
