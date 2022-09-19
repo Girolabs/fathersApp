@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { ParallaxImage } from 'react-native-snap-carousel';
-import { View, Text, Pressable, SafeAreaView, Image } from 'react-native';
+import { View, Text, Pressable, SafeAreaView, Image, Modal } from 'react-native';
 import styles from '../constants/styles';
-import { Modal } from 'react-native';
 import { Ionicons } from 'expo-vector-icons';
 import Colors from '../constants/Colors';
 
@@ -11,7 +10,7 @@ const CarouselItem = ({ item, index }, parallaxProps) => {
     <>
       <Pressable
         onPress={() => {
-          console.log('press');
+          alert(item.title);
         }}
       >
         <SafeAreaView style={styles.item}>

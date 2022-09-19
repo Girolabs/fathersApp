@@ -4,7 +4,7 @@ import CarouselItem from './CarouselItem';
 import styles from '../constants/styles';
 
 const { width } = Dimensions.get('window');
-export default function CustomSlider({ data }) {
+export const CustomSlider = ({ data }) => {
   const settings = {
     sliderWidth: width,
     sliderHeight: width,
@@ -18,4 +18,4 @@ export default function CustomSlider({ data }) {
       <Carousel {...settings} />
     </View>
   );
-}
+};

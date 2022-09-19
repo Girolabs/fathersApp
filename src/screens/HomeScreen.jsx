@@ -20,7 +20,7 @@ import { Ionicons, Foundation } from 'expo-vector-icons';
 import bishopLogo from '../../assets/img/bishop.png';
 import person from '../../assets/img/person.png';
 import fatherIcon from '../../assets/img/fatherIcon.png';
-import CustomSlider from '../components/CarouselSlider';
+import { CustomSlider } from '../components/CarouselSlider';
 import data from '../data/data';
 const styles = StyleSheet.create({
   screen: {

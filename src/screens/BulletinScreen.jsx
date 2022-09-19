@@ -8,6 +8,8 @@ import {
   TouchableNativeFeedback,
   Platform,
   ActivityIndicator,
+  Pressable,
+  Image,
 } from 'react-native';
 import * as Network from 'expo-network';
 import i18n from 'i18n-js';
@@ -21,6 +23,7 @@ import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { getBoard } from '../api';
 import { BulletinCheckContext } from '../context/BulletinCheckProvider';
+import archive from '../../assets/archive.png';
 
 const styles = StyleSheet.create({
   screen: {
@@ -133,27 +136,82 @@ const BulletinScreen = ({ navigation }) => {
         }}
       />
       {!loading ? (
-        <FlatList
-          data={posts}
-          keyExtractor={(item) => item.postId.toString()}
-          renderItem={({ item }) => (
-            <TouchableComp
+        <>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginVertical: 20,
+              marginHorizontal: 20,
+            }}
+          >
+            <Pressable
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}
               onPress={() => {
-                handleRedirect(item);
+                navigation.navigate('Archived');
               }}
             >
-              <View style={styles.listItem}>
-                <View style={styles.leftSideListItem}>
-                  <Ionicons name="md-book" size={25} color={Colors.primaryColor} />
-                  <Text numberOfLines={2} style={item.isSeen ? styles.listItemTitleSeen : styles.listItemTitle}>
-                    {item.title}
-                  </Text>
+              <Text
+                style={{
+                  fontFamily: 'work-sans',
+                  fontStyle: 'normal',
+                  marginRight: 5,
+                  fontSize: 15,
+                  fontWeight: '400',
+                  color: '#0104AC',
+                }}
+              >
+                Archivados
+              </Text>
+              <Image source={archive} />
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                navigation.navigate('Edit');
+              }}
+            >
+              <Text
+                style={{
+                  fontFamily: 'work-sans',
+                  fontStyle: 'normal',
+                  fontSize: 15,
+                  fontWeight: '400',
+                  color: '#0104AC',
+                }}
+              >
+                Editar
+              </Text>
+            </Pressable>
+          </View>
+          <FlatList
+            data={posts}
+            keyExtractor={(item) => item.postId.toString()}
+            renderItem={({ item }) => (
+              <TouchableComp
+                onPress={() => {
+                  handleRedirect(item);
+                }}
+              >
+                <View style={styles.listItem}>
+                  <View style={styles.leftSideListItem}>
+                    <Ionicons
+                      name={item.title === 'Links' ? 'md-link' : 'md-book'}
+                      size={25}
+                      color={Colors.primaryColor}
+                    />
+                    <Text numberOfLines={2} style={item.isSeen ? styles.listItemTitleSeen : styles.listItemTitle}>
+                      {item.title}
+                    </Text>
+                  </View>
+                  <Ionicons name="ios-arrow-forward" size={25} color={Colors.primaryColor} />
                 </View>
-                <Ionicons name="ios-arrow-forward" size={25} color={Colors.primaryColor} />
-              </View>
-            </TouchableComp>
-          )}
-        />
+              </TouchableComp>
+            )}
+          />
+        </>
       ) : (
         <ActivityIndicator size="large" color={Colors.primaryColor} />
       )}

@@ -28,6 +28,8 @@ import BulletinDetailScreen from '../screens/BulletinDetailScreen';
 import IdealStatementDetail from '../components/IdealStatementDetail';
 import GalleryScreen from '../screens/GalleryScreen';
 import AssignmentsFormScreen from '../screens/AssignmentsFormScreen';
+import ArchivedScreen from '../screens/ArchivedScreen';
+import UnarchiveScreen from '../screens/UnarchiveScreen';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -42,12 +44,12 @@ const defaultStackNavOptions = {
   headerTintColor: Colors.onSurfaceColorPrimary,
 };
 
-/* const BulletinNavigator = createStackNavigator({
+/*const BulletinNavigator = createStackNavigator({
   screen: BulletinScreen,
   BulletinDetail: {
     screen: BulletinDetailScreen,
-  },
-}); */
+  }
+});*/
 
 const HomeNavigator = createStackNavigator(
   {
@@ -83,6 +85,12 @@ const HomeNavigator = createStackNavigator(
     },
     BulletinDetail: {
       screen: BulletinDetailScreen,
+    },
+    Archived: {
+      screen: ArchivedScreen,
+    },
+    Edit: {
+      screen: UnarchiveScreen,
     },
     LivingSituationForm: {
       screen: LivingSituationsFormScreen,
