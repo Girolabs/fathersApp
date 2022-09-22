@@ -21,7 +21,7 @@ import i18n from 'i18n-js';
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import { NavigationEvents } from 'react-navigation';
-import { getPerson, getInterfaceData, updateFatherForm } from '../api';
+import { getPersons } from '../api';
 import Button from '../components/Button';
 import SwitchWithFormik from '../components/SwitchWithFormik';
 import Select from '../components/Select';
@@ -33,6 +33,7 @@ import Input from '../components/Input';
 import { TextInput } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
+import { useEffect } from 'react';
 
 function toIsoString(date) {
   var tzo = -date.getTimezoneOffset(),
@@ -132,11 +133,26 @@ const EditableDateItem = function (props) {
 const AssigmentsFormScreen = () => {
   const [entity, setEntity] = useState('');
   const [role, setRole] = useState(1);
+  const [persons, setPersons] = useState(null);
   const [person, setPerson] = useState(null);
   const [publicNotes, setPublicNotes] = useState('');
   const [startDate, setStartDate] = useState(todayString);
   const [endDate, setEndDate] = useState(todayString);
   const [isCreate, setIsCreate] = useState(true);
+
+  useEffect(() => {
+    getPersons().then((res) => {
+      const resData = res.data.result;
+      const resDataFilter = resData.filter((p) => p.isActive === true);
+      setPersons(
+        resDataFilter.map((p) => ({
+          id: p.personId,
+          title: p.fullName,
+        })),
+      );
+      console.log('Personas activas', resDataFilter);
+    });
+  }, []);
   return (
     <View
       style={{
@@ -233,7 +249,7 @@ const AssigmentsFormScreen = () => {
               height: 50,
               marginVertical: 10,
               borderRadius: 5,
-              padding: Platform.OS === 'ios' ? 8 : 0
+              padding: Platform.OS === 'ios' ? 8 : 0,
             }}
             elements={roles}
             value={role}
@@ -245,7 +261,7 @@ const AssigmentsFormScreen = () => {
         <View
           style={{
             width: '90%',
-            zIndex: 9
+            zIndex: 9,
           }}
         >
           <Text
@@ -266,12 +282,11 @@ const AssigmentsFormScreen = () => {
             clearOnFocus={false}
             closeOnSubmit={false}
             initialValue={{ id: '2' }}
-            onSelectItem={setPerson}
-            dataSet={[
-              { id: '1', title: 'Person1' },
-              { id: '2', title: 'Person2' },
-              { id: '3', title: 'Person3' },
-            ]}
+            onSelectItem={(item) => {
+              item && setPerson(item.id);
+              console.log(person);
+            }}
+            dataSet={persons}
           />
           {/*<Text
               style={{
@@ -377,14 +392,16 @@ const AssigmentsFormScreen = () => {
           autoCapitalize="none"
           placeholderTextColor={Colors.onSurfaceColorSecondary}
           value={publicNotes}
-          onChange={(value) => setPublicNotes(value)}
+          onChangeText={(value) => setPublicNotes(value)}
         />
       </View>
-      <Button style={{
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'center'
-          }} >
+      <Button
+        style={{
+          width: '100%',
+          flexDirection: 'row',
+          justifyContent: 'center',
+        }}
+      >
         <View
           style={{
             backgroundColor: 'white',
