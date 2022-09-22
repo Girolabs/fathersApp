@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, FlatList, Text, Linking, Image } from 'react-native';
-import { FontAwesome5, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons } from 'expo-vector-icons';
 import { Flag } from 'react-native-svg-flagkit';
 import { withNavigation } from 'react-navigation';
 import moment from 'moment';

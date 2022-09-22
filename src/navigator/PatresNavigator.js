@@ -29,7 +29,7 @@ import IdealStatementDetail from '../components/IdealStatementDetail';
 import GalleryScreen from '../screens/GalleryScreen';
 import AssignmentsFormScreen from '../screens/AssignmentsFormScreen';
 import ArchivedScreen from '../screens/ArchivedScreen';
-import UnarchiveScreen from '../screens/UnarchiveScreen';
+import ArchiveScreen from '../screens/ArchiveScreen';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -90,7 +90,7 @@ const HomeNavigator = createStackNavigator(
       screen: ArchivedScreen,
     },
     Edit: {
-      screen: UnarchiveScreen,
+      screen: ArchiveScreen,
     },
     LivingSituationForm: {
       screen: LivingSituationsFormScreen,

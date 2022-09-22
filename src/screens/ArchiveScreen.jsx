@@ -21,7 +21,7 @@ import { Pressable } from 'react-native';
 import { ScrollView } from 'react-native';
 import BulletinItem from '../components/BulletinItem';
 
-const ArchivedScreen = ({ navigation }) => {
+const ArchiveScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
@@ -81,7 +81,7 @@ const ArchivedScreen = ({ navigation }) => {
                 letterSpacing: 1,
               }}
             >
-              Desarchivar
+              Archivar
             </Text>
           </Pressable>
         </View>
@@ -95,4 +95,4 @@ const ArchivedScreen = ({ navigation }) => {
   );
 };
 
-export default ArchivedScreen;
+export default ArchiveScreen;
