@@ -8,14 +8,14 @@ export const CustomSlider = ({ data }) => {
   const settings = {
     sliderWidth: width,
     sliderHeight: width,
-    itemWidth: width - 80,
+    itemWidth: width - 230,
     data: data,
     renderItem: CarouselItem,
     hasParallaxImages: true,
   };
   return (
     <View style={styles.container}>
-      <Carousel {...settings} />
+      <Carousel {...settings} firstItem={1} />
     </View>
   );
 };

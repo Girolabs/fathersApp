@@ -159,7 +159,7 @@ const HomeScreen = ({ navigation }) => {
                   checkOnly();
                 }}
               />
-              {photoModal ? (
+              {/*photoModal ? (
                 <Modal>
                   <Pressable
                     style={{
@@ -194,7 +194,7 @@ const HomeScreen = ({ navigation }) => {
                     />
                   </View>
                 </Modal>
-              ) : null}
+                    ) : null*/}
               {!loading ? (
                 <>
                   <RemindersHeaders
@@ -202,54 +202,67 @@ const HomeScreen = ({ navigation }) => {
                     selectedHeader={selectedReminder}
                     onChangeSelectedHeader={(index) => setSelectedReminder(index)}
                   />
-                  <View
+                </>
+              ) : (
+                <View style={styles.screenLoading}>
+                  <ActivityIndicator size="large" color={Colors.primaryColor} />
+                </View>
+              )}
+              <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
+                {snackMsg}
+              </SnackBar>
+            </View>
+            {!loading ? (
+              <View
+                style={{
+                  backgroundColor: '#fff',
+                  marginTop: 20,
+                  width: '100%',
+                  height: '100%',
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    margin: 30,
+                  }}
+                >
+                  <Text
                     style={{
-                      backgroundColor: '#B6B6D9',
-                      marginTop: 20,
-                      borderRadius: 8,
+                      fontFamily: 'work-sans-semibold',
+                      fontWeight: '600',
+                      color: Colors.primaryColor,
+                      fontSize: 27,
+                      textAlign: 'center',
                     }}
                   >
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        margin: 20,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: 'work-sans-semibold',
-                          fontWeight: 'bold',
-                          color: Colors.primaryColor,
-                          fontSize: 15,
-                          textAlign: 'center',
-                          letterSpacing: 2.5,
-                          textTransform: 'uppercase',
-                        }}
-                      >
-                        Photos <Ionicons name="md-images" size={20} />
-                      </Text>
-                      <Pressable
-                        style={{
-                          width: 23,
-                        }}
-                        onPress={() => {
-                          navigation.navigate('Gallery');
-                        }}
-                      >
-                        <Ionicons name="md-add" size={23} color={Colors.primaryColor} />
-                      </Pressable>
-                    </View>
-                    <View
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-around',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      <CustomSlider data={data} />
-                      {/*<Pressable
+                    Photos
+                  </Text>
+                  <Pressable
+                    style={{
+                      width: 30,
+                      height: 30,
+                      alignItems: 'center',
+                    }}
+                    onPress={() => {
+                      navigation.navigate('Gallery');
+                    }}
+                  >
+                    <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
+                  </Pressable>
+                </View>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <CustomSlider data={data} />
+                  {/*<Pressable
                         style={{ width: '30%', height: 100, backgroundColor: '#fff', borderRadius: 8 }}
                         onPress={() => {
                           setPhotoModal(!photoModal);
@@ -281,8 +294,8 @@ const HomeScreen = ({ navigation }) => {
                       >
                         <Image source={fatherIcon} style={{ width: '100%', height: '100%' }} />
                       </Pressable>*/}
-                    </View>
-                    <Pressable
+                </View>
+                {/*<Pressable
                       style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-end',
@@ -301,88 +314,109 @@ const HomeScreen = ({ navigation }) => {
                         Comments
                       </Text>
                       <Foundation name="comments" size={25} color={Colors.primaryColor} />
-                    </Pressable>
-                    {showComments ? (
-                      <View style={{ marginBottom: 20 }}>
-                        <View
-                          style={{
-                            width: '90%',
-                            height: 'auto',
-                            backgroundColor: '#F2F3FF',
-                            borderRadius: 8,
-                            marginBottom: 5,
-                            marginLeft: 'auto',
-                            marginRight: 'auto',
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: 15,
-                              color: '#292929',
-                              paddingVertical: 10,
-                              paddingHorizontal: 20,
-                            }}
-                          >
-                            Comentario
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            width: '90%',
-                            height: 'auto',
-                            backgroundColor: '#F2F3FF',
-                            borderRadius: 8,
-                            marginVertical: 5,
-                            marginLeft: 'auto',
-                            marginRight: 'auto',
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: 15,
-                              color: '#292929',
-                              paddingVertical: 10,
-                              paddingHorizontal: 20,
-                            }}
-                          >
-                            ComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentario
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            width: '90%',
-                            height: 'auto',
-                            backgroundColor: '#F2F3FF',
-                            borderRadius: 8,
-                            marginVertical: 5,
-                            marginLeft: 'auto',
-                            marginRight: 'auto',
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: 15,
-                              color: '#292929',
-                              paddingVertical: 10,
-                              paddingHorizontal: 20,
-                            }}
-                          >
-                            ComentarioComentarioComentarioComentarioComentarioComentarioComentario
-                          </Text>
-                        </View>
-                      </View>
-                    ) : null}
+                      </Pressable>*/}
+                <Pressable
+                  onPress={() => navigation.navigate('Photos')}
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: 28,
+                    marginBottom: 25,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: 'work-sans-semibold',
+                      fontWeight: '600',
+                      fontSize: 15,
+                      color: '#0104AC',
+                      marginRight: 20,
+                    }}
+                  >
+                    Ver todo
+                  </Text>
+                  <Ionicons name="ios-arrow-forward" size={23} color="#0104AC" />
+                </Pressable>
+                <View
+                  style={{
+                    borderBottomColor: '#F2F3FF',
+                    borderBottomWidth: StyleSheet.hairlineWidth,
+                    width: '90%',
+                  }}
+                />
+                {showComments ? (
+                  <View style={{ marginBottom: 20 }}>
+                    <View
+                      style={{
+                        width: '90%',
+                        height: 'auto',
+                        backgroundColor: '#F2F3FF',
+                        borderRadius: 8,
+                        marginBottom: 5,
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          color: '#292929',
+                          paddingVertical: 10,
+                          paddingHorizontal: 20,
+                        }}
+                      >
+                        Comentario
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        width: '90%',
+                        height: 'auto',
+                        backgroundColor: '#F2F3FF',
+                        borderRadius: 8,
+                        marginVertical: 5,
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          color: '#292929',
+                          paddingVertical: 10,
+                          paddingHorizontal: 20,
+                        }}
+                      >
+                        ComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentario
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        width: '90%',
+                        height: 'auto',
+                        backgroundColor: '#F2F3FF',
+                        borderRadius: 8,
+                        marginVertical: 5,
+                        marginLeft: 'auto',
+                        marginRight: 'auto',
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontSize: 15,
+                          color: '#292929',
+                          paddingVertical: 10,
+                          paddingHorizontal: 20,
+                        }}
+                      >
+                        ComentarioComentarioComentarioComentarioComentarioComentarioComentario
+                      </Text>
+                    </View>
                   </View>
-                </>
-              ) : (
-                <View style={styles.screenLoading}>
-                  <ActivityIndicator size="large" color={Colors.primaryColor} />
-                </View>
-              )}
-              <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
-                {snackMsg}
-              </SnackBar>
-            </View>
+                ) : null}
+              </View>
+            ) : null}
           </ScrollView>
         );
       }}

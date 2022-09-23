@@ -7,20 +7,32 @@ const styles = StyleSheet.create({
     //paddingTop: 30,
   },
   title: {
+    position: 'absolute',
+    top: '77%',
+    left: '8.75%',
+    right: '12.5%',
+    bottom: '7.51%',
     fontSize: 15,
     color: 'white',
     padding: 5,
     height: 'auto',
+    fontFamily: 'work-sans',
+    fontWeight: '400',
+    fontSize: 12,
+    alignItems: 'flex-end',
+    width: '80%',
+    height: 40,
   },
   item: {
-    width: '100%',
-    height: screenWidth - 20, //height will be 20 units less than screen width.
+    width: 160,
+    //height: screenWidth - 20, //height will be 20 units less than screen width.
+    height: 213,
   },
   imageContainer: {
     flex: 1,
     borderRadius: 5,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
+    //borderBottomLeftRadius: 0,
+    //borderBottomRightRadius: 0,
     backgroundColor: Colors.onSurfaceColorPrimary,
     marginBottom: Platform.select({ ios: 0, android: 1 }), //handle rendering bug.
   },

@@ -30,6 +30,8 @@ import GalleryScreen from '../screens/GalleryScreen';
 import AssignmentsFormScreen from '../screens/AssignmentsFormScreen';
 import ArchivedScreen from '../screens/ArchivedScreen';
 import ArchiveScreen from '../screens/ArchiveScreen';
+import PhotosScreen from '../screens/PhotosScreen';
+import PhotoScreen from '../screens/PhotoScreen';
 
 const defaultStackNavOptions = {
   headerStyle: {
@@ -100,6 +102,12 @@ const HomeNavigator = createStackNavigator(
     },
     Gallery: {
       screen: GalleryScreen,
+    },
+    Photos: {
+      screen: PhotosScreen,
+    },
+    Photo: {
+      screen: PhotoScreen,
     },
   },
   {

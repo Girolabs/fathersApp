@@ -20,18 +20,9 @@ const CarouselItem = ({ item, index }, parallaxProps) => {
             style={styles.image}
             {...parallaxProps} /* pass in the necessary props */
           />
-          <View
-            style={{
-              backgroundColor: 'black',
-              width: '100%',
-              borderBottomLeftRadius: 5,
-              borderBottomRightRadius: 5,
-            }}
-          >
-            <Text style={styles.title} numberOfLines={2}>
-              {item.description}
-            </Text>
-          </View>
+          <Text style={styles.title} numberOfLines={2}>
+            {item.description}
+          </Text>
         </SafeAreaView>
       </Pressable>
     </>
