@@ -199,6 +199,9 @@ const CommunityNavigator = createStackNavigator(
     LivingSituationForm: {
       screen: LivingSituationsFormScreen,
     },
+    AssigmentsForm: {
+      screen: AssignmentsFormScreen,
+    },
   },
   {
     defaultNavigationOptions: defaultStackNavOptions,

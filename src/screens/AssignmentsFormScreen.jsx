@@ -176,7 +176,7 @@ const AssigmentsFormScreen = () => {
             padding: 20,
           }}
         >
-          Formulario de Asignaciones
+          Agregar {i18n.t('GENERAL.ASSIGNMENTS')}
         </Text>
       ) : (
         <Text
