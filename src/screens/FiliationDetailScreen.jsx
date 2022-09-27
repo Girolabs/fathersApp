@@ -29,14 +29,11 @@ import { getDateMaskByLocale } from '../utils/date-utils';
 import { Ionicons } from 'expo-vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import pencil from '../../assets/editpencil.png';
-import { getTerritory } from '../api';
 
 class FiliationDetailScreen extends Component {
   state = {
     filiation: null,
-    territory: null,
     showHistorical: false,
-    assignments: [],
   };
 
   loadFiliation = (filiationId, fields) => {
@@ -54,56 +51,20 @@ class FiliationDetailScreen extends Component {
       });
   };
 
-  loadTerritory = (territoryId, fields) => {
-    getTerritory(territoryId, fields)
-      .then((res) => {
-        const fetchedDelegation = {
-          ...res.data.result,
-          homeTerritoryMembers: res.data.result.homeTerritoryMembers.filter(
-            (member) => member.isActive == true && member.isMember == true,
-          ),
-        };
-        const fetchedAssignments =
-          fetchedDelegation.assignments && fetchedDelegation.assignments.filter((asg) => asg.isActive);
-        this.setState({
-          territory: fetchedDelegation,
-          assignments: fetchedAssignments,
-        });
-      })
-      .catch((err) => {
-        this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
-      });
-  };
-
   async componentDidMount() {
     const { navigation } = this.props;
     const filiationId = navigation.getParam('filiationId');
-    const territoryId = navigation.getParam('delegationId');
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
       this.loadFiliation(filiationId, false);
-      this.loadTerritory(territoryId, 'all');
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.showHistorical != this.state.showHistorical) {
-      if (this.state.territory) {
-        if (!this.state.showHistorical) {
-          const activeAsg = this.state.territory.assignments.filter((asg) => asg.isActive);
-          this.setState({ assignments: activeAsg });
-        } else {
-          this.setState({ assignments: this.state.territory.assignments });
-        }
-      }
-    }
-  }
-
   render() {
     const { navigation } = this.props;
-    const { filiation, assignments, showHistorical } = this.state;
+    const { filiation, showHistorical } = this.state;
     let TouchableComp = TouchableOpacity;
     if (Platform.OS === 'android' && Platform.Version >= 21) {
       TouchableComp = TouchableNativeFeedback;
@@ -213,87 +174,63 @@ class FiliationDetailScreen extends Component {
                     >
                       <Ionicons name="md-add" size={24} color={Colors.primaryColor} fontWeight="700" />
                     </Pressable>
-                    {assignments.map((asg) => {
-                      return (
-                        <TouchableComp
-                          onPress={() => {
-                            navigation.navigate('PatreDetail', { fatherId: asg.person.personId });
-                          }}
-                        >
-                          <View style={styles.fatherItem}>
-                            <Image
-                              source={{ uri: `https://schoenstatt-fathers.link${asg.person.photo}` }}
-                              style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }}
-                            />
-                            <View style={{ flexDirection: 'column' }}>
-                              <Text style={styles.listItemBody}>{asg.roleTitle}</Text>
-                              <Text style={styles.listItemBody}>{asg.person.fullName}</Text>
-                              <Text style={styles.listItemBody}>
-                                {`${moment.utc(asg.startDate).format(dateMask)} - ${moment
-                                  .utc(asg.endDate)
-                                  .format(dateMask)}`}
-                              </Text>
-                            </View>
-                          </View>
-                        </TouchableComp>
-                      );
-                    })}
-                    {filiation.mainAssignment && (
-                      <TouchableComp
-                        onPress={() => {
-                          navigation.navigate('PatreDetail', {
-                            fatherId: filiation.mainAssignment.person.personId,
-                          });
-                        }}
-                      >
-                        <View style={styles.listItem}>
-                          <Text style={styles.listItemTitle}>{i18n.t('FILIAL_DETAIL.SUPERIOR')}</Text>
-                          <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 10 }}>
-                            <Image
-                              source={{
-                                uri: `https://schoenstatt-fathers.link${filiation.mainAssignment.person.photo}`,
-                              }}
-                              style={{
-                                width: 50,
-                                height: 50,
-                                borderRadius: 25,
-                                marginRight: 10,
-                                borderWidth: 1,
-                                borderColor: '#292929',
-                              }}
-                            />
+                    {filiation.assignments.map((item) => {
+                      if (showHistorical ? item : item.isActive)
+                        return (
+                          <TouchableComp
+                            onPress={() => {
+                              navigation.navigate('PatreDetail', {
+                                fatherId: item.person.personId,
+                              });
+                            }}
+                          >
+                            <View style={styles.listItem}>
+                              <Text style={styles.listItemTitle}>{i18n.t('FILIAL_DETAIL.SUPERIOR')}</Text>
+                              <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 10 }}>
+                                <Image
+                                  source={{
+                                    uri: `https://schoenstatt-fathers.link${item.person.photo}`,
+                                  }}
+                                  style={{
+                                    width: 50,
+                                    height: 50,
+                                    borderRadius: 25,
+                                    marginRight: 10,
+                                    borderWidth: 1,
+                                    borderColor: '#292929',
+                                  }}
+                                />
 
-                            <View>
-                              <Text style={styles.listItemBodyBlack}>{filiation.mainAssignment.roleTitle}</Text>
-                              <Text style={styles.listItemBodyBlue}>{filiation.mainAssignment.person.fullName}</Text>
-                              <Text style={styles.listItemBody}>
-                                {`${
-                                  filiation.mainAssignment.startDate
-                                    ? moment.utc(filiation.mainAssignment.startDate).format(dateMask)
-                                    : ''
-                                } - ${
-                                  filiation.mainAssignment.endDate
-                                    ? moment.utc(filiation.mainAssignment.endDate).format(dateMask)
-                                    : ''
-                                }`}
-                              </Text>
+                                <View>
+                                  <Text style={styles.listItemBodyBlack}>{item.roleTitle}</Text>
+                                  <Text style={styles.listItemBodyBlue}>{item.person.fullName}</Text>
+                                  <Text style={styles.listItemBody}>
+                                    {`${
+                                      filiation.mainAssignment.startDate
+                                        ? moment.utc(item.startDate).format(dateMask)
+                                        : ''
+                                    } - ${
+                                      filiation.mainAssignment.endDate ? moment.utc(item.endDate).format(dateMask) : ''
+                                    }`}
+                                  </Text>
+                                </View>
+                                <Pressable
+                                  style={{
+                                    position: 'absolute',
+                                    left: '90%',
+                                    padding: 5,
+                                  }}
+                                  onPress={() => {
+                                    navigation.navigate('AssigmentsForm');
+                                  }}
+                                >
+                                  <Image source={pencil} />
+                                </Pressable>
+                              </View>
                             </View>
-                            <Pressable
-                              style={{
-                                position: 'absolute',
-                                left: '90%',
-                                padding: 5,
-                              }}
-                              onPress={() => {
-                                navigation.navigate('AssigmentsForm');
-                              }}
-                            >
-                              <Image source={pencil} />
-                            </Pressable>
-                          </View>
-                        </View>
-                      </TouchableComp>
-                    )}
+                          </TouchableComp>
+                        );
+                    })}
                   </View>
                   <FiliationHouses houses={filiation.houses.filter((house) => house.isActive)} />
                   <View>
@@ -302,6 +239,7 @@ class FiliationDetailScreen extends Component {
                       data={filiation.persons}
                       keyExtractor={(item) => item.personId.toString()} */}
                     {/* renderItem= */}
+                    {/* /> */}
                     {filiation.persons.map((item) => {
                       return (
                         <TouchableComp
@@ -326,7 +264,6 @@ class FiliationDetailScreen extends Component {
                         </TouchableComp>
                       );
                     })}
-                    {/* /> */}
                   </View>
                 </ScrollView>
               ) : (
