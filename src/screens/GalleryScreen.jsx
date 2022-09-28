@@ -148,7 +148,7 @@ const GalleryScreen = () => {
                 width: 10,
               }}
             ></View>
-            <Text>Write a caption</Text>
+            <Text>Caption</Text>
           </>
         }
         required

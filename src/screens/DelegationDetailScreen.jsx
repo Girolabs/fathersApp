@@ -71,16 +71,32 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.onSurfaceColorPrimary,
   },
+  listItemBodyInactive: {
+    fontFamily: 'work-sans',
+    fontSize: 12,
+    color: '#B6B6D9',
+  },
   listItemBodyBlack: {
     fontFamily: 'work-sans-semibold',
     fontSize: 12,
     color: Colors.onSurfaceColorPrimary,
+  },
+  listItemBodyBlackInactive: {
+    fontFamily: 'work-sans-semibold',
+    fontSize: 12,
+    color: '#B6B6D9',
   },
   listItemBodyBlue: {
     fontFamily: 'work-sans-semibold',
     fontWeight: '600',
     fontSize: 15,
     color: '#0104AC',
+  },
+  listItemBodyBlueInactive: {
+    fontFamily: 'work-sans-semibold',
+    fontWeight: '600',
+    fontSize: 15,
+    color: '#B6B6D9',
   },
   card: {
     width: '90%',
@@ -254,13 +270,15 @@ class DelegationDetailScreen extends Component {
                           entity={territory}
                         />
                         <View style={[styles.listItem]}>
-                          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.ASSIGNMENTS')}</Text>
                             <View
                               style={{
                                 flexDirection: 'row',
                                 justifyContent: 'space-between',
-                                width: 50,
+                                alignItems: 'center',
+                                width: 70,
+                                marginRight: '3%',
                               }}
                             >
                               <TouchableComp
@@ -271,15 +289,18 @@ class DelegationDetailScreen extends Component {
                                 <FontAwesome5
                                   name="history"
                                   size={24}
-                                  color={showHistorical ? Colors.primaryColor : Colors.onSurfaceColorPrimary}
+                                  color={showHistorical ? Colors.primaryColor : '#B6B6D9'}
                                 />
                               </TouchableComp>
                               <Pressable
                                 onPress={() => {
-                                  navigation.navigate('AssigmentsForm');
+                                  navigation.navigate('AssigmentsForm', {
+                                    name: territory.name,
+                                    isCreate: true,
+                                  });
                                 }}
                               >
-                                <Ionicons name="md-add" size={24} color={Colors.primaryColor} fontWeight="700" />
+                                <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
                               </Pressable>
                             </View>
                           </View>
@@ -299,13 +320,21 @@ class DelegationDetailScreen extends Component {
                                       borderRadius: 25,
                                       marginRight: 10,
                                       borderWidth: 1,
-                                      borderColor: '#292929',
+                                      borderColor: asg.isActive ? '#292929' : '#B6B6D9',
                                     }}
                                   />
                                   <View style={{ flexDirection: 'column' }}>
-                                    <Text style={styles.listItemBodyBlack}>{asg.roleTitle}</Text>
-                                    <Text style={styles.listItemBodyBlue}>{asg.person.fullName}</Text>
-                                    <Text style={styles.listItemBody}>
+                                    <Text
+                                      style={asg.isActive ? styles.listItemBodyBlack : styles.listItemBodyBlackInactive}
+                                    >
+                                      {asg.roleTitle}
+                                    </Text>
+                                    <Text
+                                      style={asg.isActive ? styles.listItemBodyBlue : styles.listItemBodyBlueInactive}
+                                    >
+                                      {asg.person.fullName}
+                                    </Text>
+                                    <Text style={asg.isActive ? styles.listItemBody : styles.listItemBodyInactive}>
                                       {`${moment.utc(asg.startDate).format(dateMask)} - ${moment
                                         .utc(asg.endDate)
                                         .format(dateMask)}`}
@@ -318,7 +347,11 @@ class DelegationDetailScreen extends Component {
                                       padding: 5,
                                     }}
                                     onPress={() => {
-                                      navigation.navigate('AssigmentsForm');
+                                      navigation.navigate('AssigmentsForm', {
+                                        name: territory.name,
+                                        fatherId: asg.person.personId,
+                                        isCreate: false,
+                                      });
                                     }}
                                   >
                                     <Image source={pencil} />

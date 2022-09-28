@@ -52,7 +52,7 @@ class FiliationDetailScreen extends Component {
   };
 
   async componentDidMount() {
-    const { navigation } = this.props;
+    const { navigation, updated } = this.props;
     const filiationId = navigation.getParam('filiationId');
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
@@ -144,18 +144,14 @@ class FiliationDetailScreen extends Component {
                         justifyContent: 'center',
                         alignItems: 'center',
                         position: 'absolute',
-                        left: '82%',
+                        left: '75%',
                         top: 8,
                       }}
                       onPress={() => {
                         this.setState({ showHistorical: !showHistorical });
                       }}
                     >
-                      <FontAwesome5
-                        name="history"
-                        size={24}
-                        color={showHistorical ? Colors.primaryColor : Colors.onSurfaceColorPrimary}
-                      />
+                      <FontAwesome5 name="history" size={24} color={showHistorical ? Colors.primaryColor : '#B6B6D9'} />
                     </Pressable>
                     <Pressable
                       style={{
@@ -165,14 +161,17 @@ class FiliationDetailScreen extends Component {
                         justifyContent: 'center',
                         alignItems: 'center',
                         position: 'absolute',
-                        left: '90%',
+                        left: '88%',
                         top: 8,
                       }}
                       onPress={() => {
-                        navigation.navigate('AssigmentsForm');
+                        navigation.navigate('AssigmentsForm', {
+                          name: filiation.name,
+                          isCreate: true,
+                        });
                       }}
                     >
-                      <Ionicons name="md-add" size={24} color={Colors.primaryColor} fontWeight="700" />
+                      <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
                     </Pressable>
                     {filiation.assignments.map((item) => {
                       if (showHistorical ? item : item.isActive)
@@ -197,14 +196,22 @@ class FiliationDetailScreen extends Component {
                                     borderRadius: 25,
                                     marginRight: 10,
                                     borderWidth: 1,
-                                    borderColor: '#292929',
+                                    borderColor: item.isActive ? '#292929' : '#B6B6D9',
                                   }}
                                 />
 
                                 <View>
-                                  <Text style={styles.listItemBodyBlack}>{item.roleTitle}</Text>
-                                  <Text style={styles.listItemBodyBlue}>{item.person.fullName}</Text>
-                                  <Text style={styles.listItemBody}>
+                                  <Text
+                                    style={item.isActive ? styles.listItemBodyBlack : styles.listItemBodyBlackInactive}
+                                  >
+                                    {item.roleTitle}
+                                  </Text>
+                                  <Text
+                                    style={item.isActive ? styles.listItemBodyBlue : styles.listItemBodyBlueInactive}
+                                  >
+                                    {item.person.fullName}
+                                  </Text>
+                                  <Text style={item.isActive ? styles.listItemBody : styles.listItemBodyInactive}>
                                     {`${
                                       filiation.mainAssignment.startDate
                                         ? moment.utc(item.startDate).format(dateMask)
@@ -221,7 +228,11 @@ class FiliationDetailScreen extends Component {
                                     padding: 5,
                                   }}
                                   onPress={() => {
-                                    navigation.navigate('AssigmentsForm');
+                                    this.props.navigation.navigate('AssigmentsForm', {
+                                      name: filiation.name,
+                                      fatherId: item.person.personId,
+                                      isCreate: false,
+                                    });
                                   }}
                                 >
                                   <Image source={pencil} />
@@ -340,16 +351,32 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.onSurfaceColorPrimary,
   },
+  listItemBodyInactive: {
+    fontFamily: 'work-sans',
+    fontSize: 12,
+    color: '#B6B6D9',
+  },
   listItemBodyBlack: {
     fontFamily: 'work-sans-semibold',
     fontSize: 12,
     color: Colors.onSurfaceColorPrimary,
+  },
+  listItemBodyBlackInactive: {
+    fontFamily: 'work-sans-semibold',
+    fontSize: 12,
+    color: '#B6B6D9',
   },
   listItemBodyBlue: {
     fontFamily: 'work-sans-semibold',
     fontWeight: '600',
     fontSize: 15,
     color: '#0104AC',
+  },
+  listItemBodyBlueInactive: {
+    fontFamily: 'work-sans-semibold',
+    fontWeight: '600',
+    fontSize: 15,
+    color: '#B6B6D9',
   },
   card: {
     width: '90%',

@@ -30,10 +30,10 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flex: 1,
-    borderRadius: 5,
+    borderRadius: 15,
     //borderBottomLeftRadius: 0,
     //borderBottomRightRadius: 0,
-    backgroundColor: Colors.onSurfaceColorPrimary,
+    //backgroundColor: Colors.onSurfaceColorPrimary,
     marginBottom: Platform.select({ ios: 0, android: 1 }), //handle rendering bug.
   },
   image: {

@@ -130,15 +130,18 @@ const EditableDateItem = function (props) {
   );
 };
 
-const AssigmentsFormScreen = () => {
+const AssigmentsFormScreen = ({ navigation }) => {
+  const fatherId = navigation.getParam('fatherId');
+  const updated = navigation.getParam('isCreate');
+  const name = navigation.getParam('name');
   const [entity, setEntity] = useState('');
   const [role, setRole] = useState(1);
   const [persons, setPersons] = useState(null);
-  const [person, setPerson] = useState(null);
+  const [person, setPerson] = useState(fatherId ? fatherId : null);
   const [publicNotes, setPublicNotes] = useState('');
   const [startDate, setStartDate] = useState(todayString);
   const [endDate, setEndDate] = useState(todayString);
-  const [isCreate, setIsCreate] = useState(true);
+  const [isCreate, setIsCreate] = useState(updated);
 
   useEffect(() => {
     getPersons().then((res) => {
@@ -163,6 +166,19 @@ const AssigmentsFormScreen = () => {
         backgroundColor: '#F2F3FF',
       }}
     >
+      <Text
+        style={{
+          fontFamily: 'work-sans-semibold',
+          color: Colors.primaryColor,
+          fontSize: 20,
+          textAlign: 'left',
+          letterSpacing: 2.5,
+          //textTransform: 'uppercase',
+          //margin: 10,
+        }}
+      >
+        {name}
+      </Text>
       {isCreate ? (
         <Text
           style={{
@@ -176,7 +192,7 @@ const AssigmentsFormScreen = () => {
             padding: 20,
           }}
         >
-          Agregar {i18n.t('GENERAL.ASSIGNMENTS')}
+          Asignar cargo
         </Text>
       ) : (
         <Text
@@ -191,39 +207,9 @@ const AssigmentsFormScreen = () => {
             padding: 20,
           }}
         >
-          Editar {i18n.t('GENERAL.ASSIGNMENTS')}
+          Editar cargo
         </Text>
       )}
-      {/*
-          <View
-            style={{
-              width: '90%',
-            }}
-          >
-            <Text
-              style={{
-                color: Colors.onSurfaceColorSecondary,
-                //color: Colors.onSurfaceColorPrimary,
-                fontWeight: 'bold',
-                //textAlign: 'center',
-              }}
-              required
-            >
-              Lista de Entidades
-            </Text>
-            <Select
-              style={{
-                backgroundColor: Colors.surfaceColorSecondary,
-                height: 50,
-                marginVertical: 10,
-                borderRadius: 5,
-              }}
-              elements={entities}
-              value={entity}
-              valueChange={(value) => setEntity(value)}
-            />
-          </View>
-            */}
       {
         <View
           style={{
@@ -281,10 +267,10 @@ const AssigmentsFormScreen = () => {
             containerStyle={{ marginVertical: 10 }}
             clearOnFocus={false}
             closeOnSubmit={false}
-            initialValue={{ id: '2' }}
+            initialValue={{ id: person }}
             onSelectItem={(item) => {
               item && setPerson(item.id);
-              console.log(person);
+              console.log('aca', person);
             }}
             dataSet={persons}
           />
