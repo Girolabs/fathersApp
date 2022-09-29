@@ -307,6 +307,7 @@ class DelegationDetailScreen extends Component {
                           {assignments.map((asg) => {
                             return (
                               <TouchableComp
+                                key={asg.person.personId}
                                 onPress={() => {
                                   navigation.navigate('PatreDetail', { fatherId: asg.person.personId });
                                 }}
@@ -348,9 +349,10 @@ class DelegationDetailScreen extends Component {
                                     }}
                                     onPress={() => {
                                       navigation.navigate('AssigmentsForm', {
-                                        name: territory.name,
+                                        entityName: territory.name,
                                         fatherId: asg.person.personId,
                                         isCreate: false,
+                                        personName: asg.person.fullName,
                                       });
                                     }}
                                   >
@@ -445,7 +447,7 @@ class DelegationDetailScreen extends Component {
 
 DelegationDetailScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: (
+  headerRight: () => (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

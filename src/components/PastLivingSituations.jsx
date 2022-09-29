@@ -34,7 +34,7 @@ const PastLivingSituations = ({
           </View>
 
           {livingSituations.map((pastHome) => (
-            <View>
+            <View key={pastHome.startDate}>
               <View style={styles.headerContainer}>
                 <Text style={styles.sectionHeader}>{`${pastHome.filiationName}-${
                   pastHome.startDate && pastHome.startDate.split('-')[0]

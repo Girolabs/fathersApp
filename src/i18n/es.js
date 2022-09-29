@@ -229,7 +229,7 @@ exports.ES = {
   ASSIGNMENTS_FORM: {
     TITLE: 'Asignar cargo',
     TITLE_EDIT: 'Editar cargo',
-    ENTITIES_LIST: 'Lista de entidades',
+    ENTITY: 'Entidad',
     ROLE_LIST: 'Lista de roles',
     PERSON_LIST: 'Lista de personas',
     START_DATE: 'Fecha de inicio',

@@ -70,6 +70,7 @@ const FatherContactInfo = ({
         </Button>
       </View>
       <DefaultItem
+        key={father.personId}
         show={viewPermissions.indexOf('email')}
         title="FATHER_DETAIL.EMAIL"
         body={father.email}
@@ -84,6 +85,7 @@ const FatherContactInfo = ({
         father.phones.map((phone) => {
           return (
             <DefaultItem
+              key={phone.number}
               show={viewPermissions.indexOf('phones')}
               titleNoI18n={phone.label}
               body={phone.number}
@@ -101,6 +103,7 @@ const FatherContactInfo = ({
       )}
       {father.emergencyContact1Name && (
         <DefaultItem
+          key={father.emergencyContact1Name}
           show={viewPermissions.indexOf('phones')}
           titleNoI18n={father.emergencyContact1Name}
           body={father.emergencyContact1Phone}
@@ -114,6 +117,7 @@ const FatherContactInfo = ({
       )}
       {father.emergencyContact2Name && (
         <DefaultItem
+          key={father.emergencyContact2Name}
           show={viewPermissions.indexOf('phones')}
           titleNoI18n={father.emergencyContact2Name}
           body={father.emergencyContact2Phone}
@@ -148,7 +152,7 @@ const FatherContactInfo = ({
         </Button>
 
         <SocialIcons
-          wa={father.phones.length >= 1 && father.phones[0].whatsApp === true ? father.phones[0].number : false}
+          wa={father.phones.length >= 1 && father.phones[0].whatsApp === true ? father.phones[0].number : null}
           fb={father.facebookUrl}
           slack={father.slackUser}
           tw={father.twitterUser}

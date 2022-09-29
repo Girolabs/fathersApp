@@ -177,7 +177,6 @@ const PatreDetailScreen = ({ navigation }) => {
 
         return (
           <View style={styles.screen}>
-
             <NavigationEvents
               onDidFocus={() => {
                 const loadPerson = async () => {
@@ -209,11 +208,11 @@ const PatreDetailScreen = ({ navigation }) => {
             {father ? (
               <ScrollView>
                 <ModalProfilePicture
-                    modalVisible={modal}
-                    fatherId={father ? father.personId : ''}
-                    fullName={father ? father.fullName : ''}
-                    photo={father ? father.photo : ''}
-                    Close={() => setModal(false)}
+                  modalVisible={modal}
+                  fatherId={father ? father.personId : ''}
+                  fullName={father ? father.fullName : ''}
+                  photo={father ? father.photo : ''}
+                  Close={() => setModal(false)}
                 />
                 <View style={{ flexDirection: 'row', alignItems: 'center', padding: 15 }}>
                   <TouchableComp onPress={() => setModal(true)}>
@@ -307,6 +306,7 @@ const PatreDetailScreen = ({ navigation }) => {
                 {father.assignments.map((e) => {
                   return (
                     <DefaultItem
+                      key={e.name}
                       show={true}
                       body={e.name}
                       listItemBody={e.isActive ? styles.listItemBody : false}
@@ -476,7 +476,7 @@ const PatreDetailScreen = ({ navigation }) => {
 
 PatreDetailScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight:()=> (
+  headerRight: () => (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

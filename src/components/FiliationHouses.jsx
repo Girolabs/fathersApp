@@ -50,6 +50,7 @@ const FiliationHouses = ({ houses, navigation }) => {
           {houses.map((house) => {
             return (
               <Button
+                key={house.houseId}
                 onPress={() => {
                   navigation.navigate('HouseDetail', { houseId: house.houseId });
                 }}

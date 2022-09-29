@@ -31,7 +31,9 @@ const Select = ({ value, elements, valueChange, style, containerStyle, itemColor
       {Platform.OS === 'android' ? (
         <SelectPicker selectedValue={value} onValueChange={(itemValue) => valueChange(itemValue)}>
           {elements.map((el) => {
-            return <SelectPicker.Item color={Colors.onSurfaceColorPrimary} label={el.name} value={el.value} />;
+            return (
+              <SelectPicker.Item key={el.name} color={Colors.onSurfaceColorPrimary} label={el.name} value={el.value} />
+            );
           })}
         </SelectPicker>
       ) : (

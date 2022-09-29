@@ -52,7 +52,7 @@ class FiliationDetailScreen extends Component {
   };
 
   async componentDidMount() {
-    const { navigation, updated } = this.props;
+    const { navigation } = this.props;
     const filiationId = navigation.getParam('filiationId');
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
@@ -177,6 +177,7 @@ class FiliationDetailScreen extends Component {
                       if (showHistorical ? item : item.isActive)
                         return (
                           <TouchableComp
+                            key={item.personId.toString()}
                             onPress={() => {
                               navigation.navigate('PatreDetail', {
                                 fatherId: item.person.personId,
@@ -229,9 +230,10 @@ class FiliationDetailScreen extends Component {
                                   }}
                                   onPress={() => {
                                     this.props.navigation.navigate('AssigmentsForm', {
-                                      name: filiation.name,
+                                      entityName: filiation.name,
                                       fatherId: item.person.personId,
                                       isCreate: false,
+                                      personName: item.person.fullName,
                                     });
                                   }}
                                 >

@@ -156,7 +156,7 @@ CommunityScreen.navigationOptions = (navigationData) => ({
   headerBackTitle: i18n.t('GENERAL.BACK'),
 });
 
-const Filiation = ({ title, flag, onSelect, key }) => {
+const Filiation = ({ title, flag, onSelect }) => {
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableComp = TouchableNativeFeedback;
@@ -164,7 +164,7 @@ const Filiation = ({ title, flag, onSelect, key }) => {
 
   return (
     <TouchableComp
-      key={key}
+      //key={key}
       onPress={() => {
         onSelect();
       }}

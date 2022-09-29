@@ -133,7 +133,8 @@ const EditableDateItem = function (props) {
 const AssigmentsFormScreen = ({ navigation }) => {
   const fatherId = navigation.getParam('fatherId');
   const updated = navigation.getParam('isCreate');
-  const name = navigation.getParam('name');
+  const entityName = navigation.getParam('entityName');
+  const personName = navigation.getParam('personName');
   const [entity, setEntity] = useState('');
   const [role, setRole] = useState(1);
   const [persons, setPersons] = useState(null);
@@ -177,7 +178,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
           //margin: 10,
         }}
       >
-        {name}
+        Entity: {entityName}
       </Text>
       {isCreate ? (
         <Text
@@ -263,17 +264,38 @@ const AssigmentsFormScreen = ({ navigation }) => {
           >
             Lista de Personas
           </Text>
-          <AutocompleteDropdown
-            containerStyle={{ marginVertical: 10 }}
-            clearOnFocus={false}
-            closeOnSubmit={false}
-            initialValue={{ id: person }}
-            onSelectItem={(item) => {
-              item && setPerson(item.id);
-              console.log('aca', person);
-            }}
-            dataSet={persons}
-          />
+          {isCreate ? (
+            <AutocompleteDropdown
+              key={person?.personId}
+              containerStyle={{ marginVertical: 10 }}
+              clearOnFocus={false}
+              closeOnSubmit={false}
+              //initialValue={{ id: person }}
+              onSelectItem={(item) => {
+                item && setPerson(item.id);
+                console.log('aca', person);
+              }}
+              dataSet={persons}
+            />
+          ) : (
+            <TextInput
+              style={{
+                height: 50,
+                marginVertical: 10,
+                borderRadius: 5,
+                backgroundColor: '#FFFFFF',
+              }}
+              theme={{ colors: { primary: '#0104AC', underlineColor: 'transparent' } }}
+              required
+              value={person}
+              autoCapitalize="none"
+              placeholderTextColor={Colors.onSurfaceColorSecondary}
+              placeholder={personName}
+              onChangeText={(value) => setPerson(value)}
+              disabled={true}
+            />
+          )}
+
           {/*<Text
               style={{
                 color: Colors.onSurfaceColorSecondary,

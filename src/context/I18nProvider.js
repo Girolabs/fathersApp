@@ -18,9 +18,8 @@ class I18nProvider extends Component {
     i18n.translations = {
       en: EN,
       es: ES,
-      de:DE,
-      pt:PT
-
+      de: DE,
+      pt: PT,
     };
     const storageLang = await AsyncStorage.getItem('lang');
 
@@ -50,7 +49,7 @@ class I18nProvider extends Component {
   };
 
   render() {
-    console.log('[Rendering]: I18nProvider')
+    console.log('[Rendering]: I18nProvider');
     return (
       <Fragment>
         {this.state.lang && i18n.translations ? (
