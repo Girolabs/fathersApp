@@ -166,7 +166,9 @@ class FiliationDetailScreen extends Component {
                       }}
                       onPress={() => {
                         navigation.navigate('AssigmentsForm', {
-                          name: filiation.name,
+                          entityName: filiation.name,
+                          roles: filiation.assignments.map((item) => ({ name: item.roleTitle, value: item.roleId })),
+                          entityId: filiation.filiationId,
                           isCreate: true,
                         });
                       }}
@@ -177,7 +179,7 @@ class FiliationDetailScreen extends Component {
                       if (showHistorical ? item : item.isActive)
                         return (
                           <TouchableComp
-                            key={item.personId.toString()}
+                            key={[item.personId.toString(), item.startDate]}
                             onPress={() => {
                               navigation.navigate('PatreDetail', {
                                 fatherId: item.person.personId,
@@ -231,6 +233,9 @@ class FiliationDetailScreen extends Component {
                                   onPress={() => {
                                     this.props.navigation.navigate('AssigmentsForm', {
                                       entityName: filiation.name,
+                                      entityId: filiation.filiationId,
+                                      roleTitle: item.roleTitle,
+                                      roleId: item.roleId,
                                       fatherId: item.person.personId,
                                       isCreate: false,
                                       personName: item.person.fullName,

@@ -8,10 +8,27 @@ import Colors from '../constants/Colors';
 import { useEffect } from 'react';
 import like from '../../assets/heart.png';
 import comments from '../../assets/message-circle.png';
+import * as ScreenOrientation from 'expo-screen-orientation';
+import { NavigationEvents } from 'react-navigation';
 
 const PhotoScreen = () => {
+  useEffect(() => {
+    async function orientationBack() {
+      // Restric orientation PORTRAIT_UP screen
+      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+    }
+    return () => {
+      orientationBack();
+    };
+  }, []);
   return (
     <ScrollView>
+      <NavigationEvents
+        onDidFocus={async () => {
+          // Unlock landscape orentation
+          await ScreenOrientation.unlockAsync();
+        }}
+      />
       <View
         style={{
           backgroundColor: '#F2F3FF',

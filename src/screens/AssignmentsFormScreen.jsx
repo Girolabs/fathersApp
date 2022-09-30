@@ -59,12 +59,12 @@ const entities = [
   { name: 'Entity 4', value: 4 },
 ];
 
-const roles = [
+/*const roles = [
   { name: 'Role 1', value: 1 },
   { name: 'Role 2', value: 2 },
   { name: 'Role 3', value: 3 },
   { name: 'Role 4', value: 4 },
-];
+];*/
 
 const EditableDateItem = function (props) {
   const [show, setShow] = useState(false);
@@ -131,13 +131,19 @@ const EditableDateItem = function (props) {
 };
 
 const AssigmentsFormScreen = ({ navigation }) => {
-  const fatherId = navigation.getParam('fatherId');
-  const updated = navigation.getParam('isCreate');
+  const rolesRep = navigation.getParam('roles');
+  let hash = {};
+  const entityRoles = rolesRep?.filter((o) => (hash[o.value] ? false : (hash[o.value] = true)));
+  const entityId = navigation.getParam('entityId');
   const entityName = navigation.getParam('entityName');
+  const fatherId = navigation.getParam('fatherId');
+  const roleTitle = navigation.getParam('roleTitle');
+  const roleId = navigation.getParam('roleId');
+  const updated = navigation.getParam('isCreate');
   const personName = navigation.getParam('personName');
-  const [entity, setEntity] = useState('');
-  const [role, setRole] = useState(1);
+  const [role, setRole] = useState(roleId ? roleId : entityRoles[0].value);
   const [persons, setPersons] = useState(null);
+  const [roles, setRoles] = useState(entityRoles ? entityRoles : null);
   const [person, setPerson] = useState(fatherId ? fatherId : null);
   const [publicNotes, setPublicNotes] = useState('');
   const [startDate, setStartDate] = useState(todayString);
@@ -154,7 +160,9 @@ const AssigmentsFormScreen = ({ navigation }) => {
           title: p.fullName,
         })),
       );
-      console.log('Personas activas', resDataFilter);
+      //console.log('Personas activas', resDataFilter);
+      console.log('id de la entidad', entityId);
+      console.log('roles', entityRoles);
     });
   }, []);
   return (
@@ -228,20 +236,39 @@ const AssigmentsFormScreen = ({ navigation }) => {
             }}
             required
           >
-            Lista de {i18n.t('GENERAL.ASSIGNMENTS')}
+            {isCreate ? 'Lista de Roles' : 'Rol'}
           </Text>
-          <Select
-            style={{
-              backgroundColor: Colors.surfaceColorSecondary,
-              height: 50,
-              marginVertical: 10,
-              borderRadius: 5,
-              padding: Platform.OS === 'ios' ? 8 : 0,
-            }}
-            elements={roles}
-            value={role}
-            valueChange={(value) => setRole(value)}
-          />
+          {isCreate ? (
+            <Select
+              style={{
+                backgroundColor: Colors.surfaceColorSecondary,
+                height: 50,
+                marginVertical: 10,
+                borderRadius: 5,
+                padding: Platform.OS === 'ios' ? 8 : 0,
+              }}
+              elements={roles}
+              value={role}
+              valueChange={(value) => setRole(value)}
+            />
+          ) : (
+            <TextInput
+              style={{
+                height: 50,
+                marginVertical: 10,
+                borderRadius: 5,
+                backgroundColor: '#FFFFFF',
+              }}
+              theme={{ colors: { primary: '#0104AC', underlineColor: 'transparent' } }}
+              required
+              value={role}
+              autoCapitalize="none"
+              placeholderTextColor={Colors.onSurfaceColorSecondary}
+              placeholder={roleTitle}
+              onChangeText={(value) => setRole(value)}
+              disabled={true}
+            />
+          )}
         </View>
       }
       {
@@ -262,7 +289,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
             }}
             required
           >
-            Lista de Personas
+            {isCreate ? 'Lista de Personas' : 'Persona'}
           </Text>
           {isCreate ? (
             <AutocompleteDropdown
@@ -404,6 +431,22 @@ const AssigmentsFormScreen = ({ navigation }) => {
         />
       </View>
       <Button
+        onPress={() =>
+          console.log(
+            'Entidad: ',
+            entityId,
+            'Role: ',
+            role,
+            'Persona: ',
+            person,
+            'fecha ini:',
+            startDate,
+            'fecha fin: ',
+            endDate,
+            'Notas: ',
+            publicNotes,
+          )
+        }
         style={{
           width: '100%',
           flexDirection: 'row',

@@ -295,7 +295,12 @@ class DelegationDetailScreen extends Component {
                               <Pressable
                                 onPress={() => {
                                   navigation.navigate('AssigmentsForm', {
-                                    name: territory.name,
+                                    entityName: territory.name,
+                                    roles: territory.assignments.map((item) => ({
+                                      name: item.roleTitle,
+                                      value: item.roleId,
+                                    })),
+                                    entityId: territory.territoryId,
                                     isCreate: true,
                                   });
                                 }}
@@ -307,7 +312,7 @@ class DelegationDetailScreen extends Component {
                           {assignments.map((asg) => {
                             return (
                               <TouchableComp
-                                key={asg.person.personId}
+                                key={[asg.person.personId, asg.startDate]}
                                 onPress={() => {
                                   navigation.navigate('PatreDetail', { fatherId: asg.person.personId });
                                 }}
@@ -350,6 +355,9 @@ class DelegationDetailScreen extends Component {
                                     onPress={() => {
                                       navigation.navigate('AssigmentsForm', {
                                         entityName: territory.name,
+                                        entityId: territory.territoryId,
+                                        roleTitle: asg.roleTitle,
+                                        roleId: asg.roleId,
                                         fatherId: asg.person.personId,
                                         isCreate: false,
                                         personName: asg.person.fullName,
