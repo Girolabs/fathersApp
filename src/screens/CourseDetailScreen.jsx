@@ -10,6 +10,7 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  Pressable,
 } from 'react-native';
 import Constants from 'expo-constants';
 import { I18nContext } from '../context/I18nProvider';
@@ -28,6 +29,8 @@ import IdealStatement from '../components/IdealStatement';
 import { getDateMaskByLocale, getDateFormatByLocale } from '../utils/date-utils';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from 'expo-vector-icons';
+import pencil from '../../assets/editpencil.png';
+import { Ionicons } from 'expo-vector-icons';
 
 const styles = StyleSheet.create({
   screen: {
@@ -71,6 +74,33 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.onSurfaceColorPrimary,
   },
+  listItemBodyInactive: {
+    fontFamily: 'work-sans',
+    fontSize: 12,
+    color: '#B6B6D9',
+  },
+  listItemBodyBlack: {
+    fontFamily: 'work-sans-semibold',
+    fontSize: 12,
+    color: Colors.onSurfaceColorPrimary,
+  },
+  listItemBodyBlackInactive: {
+    fontFamily: 'work-sans-semibold',
+    fontSize: 12,
+    color: '#B6B6D9',
+  },
+  listItemBodyBlue: {
+    fontFamily: 'work-sans-semibold',
+    fontWeight: '600',
+    fontSize: 15,
+    color: '#0104AC',
+  },
+  listItemBodyBlueInactive: {
+    fontFamily: 'work-sans-semibold',
+    fontWeight: '600',
+    fontSize: 15,
+    color: '#B6B6D9',
+  },
   memberItem: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -87,6 +117,7 @@ const styles = StyleSheet.create({
 class CourseDetailScreen extends Component {
   state = {
     course: null,
+    showHistorical: false,
   };
 
   loadCourse = (courseId, fields) => {
@@ -134,7 +165,7 @@ class CourseDetailScreen extends Component {
     if (Platform.OS === 'android' && Platform.Version >= 21) {
       TouchableComp = TouchableNativeFeedback;
     }
-    const { course } = this.state;
+    const { course, showHistorical } = this.state;
     const { navigation } = this.props;
     if (course) console.log('Course -> ', course);
     return (
@@ -142,6 +173,7 @@ class CourseDetailScreen extends Component {
         {(value) => {
           const dateFormat = getDateFormatByLocale(moment.locale());
           const dateMask = getDateMaskByLocale(moment.locale());
+          const dateMaskAssignment = getDateMaskByLocale(value.lang);
           moment.locale(value.lang);
           return (
             <SafeAreaView style={styles.screen}>
@@ -529,6 +561,127 @@ class CourseDetailScreen extends Component {
                         </View>
                       </Fragment>
                     )}
+                    {course.assignments.length > 0 ? (
+                      <View>
+                        <Text style={styles.sectionHeader}>{i18n.t('GENERAL.ASSIGNMENTS')}</Text>
+                        <Pressable
+                          style={{
+                            width: 30,
+                            height: 30,
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            position: 'absolute',
+                            left: '75%',
+                            top: 8,
+                          }}
+                          onPress={() => {
+                            this.setState({ showHistorical: !showHistorical });
+                          }}
+                        >
+                          <FontAwesome5
+                            name="history"
+                            size={24}
+                            color={showHistorical ? Colors.primaryColor : '#B6B6D9'}
+                          />
+                        </Pressable>
+
+                        <Pressable
+                          style={{
+                            width: 30,
+                            height: 30,
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            position: 'absolute',
+                            left: '88%',
+                            top: 8,
+                          }}
+                          onPress={() => {
+                            navigation.navigate('AssigmentsForm', {
+                              entityName: course.name,
+                              roles: course.assignments.map((item) => ({ name: item.roleTitle, value: item.roleId })),
+                              entityId: course.courseId,
+                              isCreate: true,
+                            });
+                          }}
+                        >
+                          <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
+                        </Pressable>
+
+                        {course.assignments.map((asg) => {
+                          if (showHistorical ? asg : asg.isActive)
+                            return (
+                              <TouchableComp
+                                key={[asg.personId.toString(), asg.startDate]}
+                                onPress={() => {
+                                  navigation.navigate('PatreDetail', {
+                                    fatherId: asg.person.personId,
+                                  });
+                                }}
+                              >
+                                <View style={styles.listItem}>
+                                  <Text style={styles.listItemTitle}>{i18n.t('FILIAL_DETAIL.SUPERIOR')}</Text>
+                                  <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 10 }}>
+                                    <Image
+                                      source={{
+                                        uri: `https://schoenstatt-fathers.link${asg.person.photo}`,
+                                      }}
+                                      style={{
+                                        width: 50,
+                                        height: 50,
+                                        borderRadius: 25,
+                                        marginRight: 10,
+                                        borderWidth: 1,
+                                        borderColor: asg.isActive ? '#292929' : '#B6B6D9',
+                                      }}
+                                    />
+
+                                    <View>
+                                      <Text
+                                        style={
+                                          asg.isActive ? styles.listItemBodyBlack : styles.listItemBodyBlackInactive
+                                        }
+                                      >
+                                        {asg.roleTitle}
+                                      </Text>
+                                      <Text
+                                        style={asg.isActive ? styles.listItemBodyBlue : styles.listItemBodyBlueInactive}
+                                      >
+                                        {asg.person.fullName}
+                                      </Text>
+                                      <Text style={asg.isActive ? styles.listItemBody : styles.listItemBodyInactive}>
+                                        {/*`${moment.utc(asg.startDate).format(dateMask)}`*/}
+                                        {asg.startDate ? moment.utc(asg.startDate).format(dateMask) : '-'}
+                                      </Text>
+                                    </View>
+                                    <Pressable
+                                      style={{
+                                        position: 'absolute',
+                                        left: '90%',
+                                        padding: 5,
+                                      }}
+                                      onPress={() => {
+                                        this.props.navigation.navigate('AssigmentsForm', {
+                                          entityName: course.name,
+                                          entityId: course.courseId,
+                                          roleTitle: asg.roleTitle,
+                                          roleId: asg.roleId,
+                                          fatherId: asg.person.personId,
+                                          isCreate: false,
+                                          personName: asg.person.fullName,
+                                        });
+                                      }}
+                                    >
+                                      <Image source={pencil} />
+                                    </Pressable>
+                                  </View>
+                                </View>
+                              </TouchableComp>
+                            );
+                        })}
+                      </View>
+                    ) : null}
                     <Text style={styles.sectionHeader}>{i18n.t('COURSE.MEMBERS')}</Text>
                     {course.persons.map((person) => {
                       return (
@@ -583,7 +736,7 @@ class CourseDetailScreen extends Component {
 
 CourseDetailScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: ()=>(
+  headerRight: () => (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

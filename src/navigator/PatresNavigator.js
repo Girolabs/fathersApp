@@ -233,6 +233,9 @@ const FreeCommunityNavigator = createStackNavigator({
   IdealStatementDetail: {
     screen: IdealStatementDetail,
   },
+  AssigmentsForm: {
+    screen: AssignmentsFormScreen,
+  },
 });
 
 const AssignmentsNavigator = createStackNavigator({

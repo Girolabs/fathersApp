@@ -9,6 +9,8 @@ import {
   TouchableNativeFeedback,
   TouchableOpacity,
   ActivityIndicator,
+  Pressable,
+  Image,
 } from 'react-native';
 import { I18nContext } from '../context/I18nProvider';
 import i18n from 'i18n-js';
@@ -19,10 +21,13 @@ import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
-import { getGeneration } from '../api';
+import { getGeneration, getGenerations } from '../api';
 import IdealStatement from '../components/IdealStatement';
 import GenerationCourses from '../components/GenerationCourses';
-import { getDateFormatByLocale } from '../utils/date-utils';
+import { getDateFormatByLocale, getDateMaskByLocale } from '../utils/date-utils';
+import pencil from '../../assets/editpencil.png';
+import { Ionicons } from 'expo-vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const styles = StyleSheet.create({
   screen: {
@@ -64,6 +69,33 @@ const styles = StyleSheet.create({
     fontFamily: 'work-sans',
     fontSize: 12,
     color: Colors.onSurfaceColorPrimary,
+  },
+  listItemBodyInactive: {
+    fontFamily: 'work-sans',
+    fontSize: 12,
+    color: '#B6B6D9',
+  },
+  listItemBodyBlack: {
+    fontFamily: 'work-sans-semibold',
+    fontSize: 12,
+    color: Colors.onSurfaceColorPrimary,
+  },
+  listItemBodyBlackInactive: {
+    fontFamily: 'work-sans-semibold',
+    fontSize: 12,
+    color: '#B6B6D9',
+  },
+  listItemBodyBlue: {
+    fontFamily: 'work-sans-semibold',
+    fontWeight: '600',
+    fontSize: 15,
+    color: '#0104AC',
+  },
+  listItemBodyBlueInactive: {
+    fontFamily: 'work-sans-semibold',
+    fontWeight: '600',
+    fontSize: 15,
+    color: '#B6B6D9',
   },
   card: {
     width: '90%',
@@ -107,18 +139,28 @@ const styles = StyleSheet.create({
 class GenerationDetailScreen extends Component {
   state = {
     generation: {},
+    generations: [],
     loading: true,
+    showHistorical: false,
+    hasAssignment: null,
   };
 
   loadGeneration = (generationId, fields) => {
     getGeneration(generationId, fields)
       .then((res) => {
         const generation = res.data.result;
+        //console.log('generacion', generation);
         this.setState({ generation: generation, loading: false });
       })
       .catch(() => {
         this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
       });
+    getGenerations('all').then((resGenerations) => {
+      let generations = resGenerations.data.result;
+      let generationsAssignment = generations.filter((g) => g.mainAssignment !== null);
+      console.log('aca', generationsAssignment);
+      this.setState({ generations: generations, hasAssignment: generationsAssignment });
+    });
   };
   async componentDidMount() {
     const { navigation } = this.props;
@@ -131,7 +173,7 @@ class GenerationDetailScreen extends Component {
     }
   }
   render() {
-    const { generation } = this.state;
+    const { generation, generations, showHistorical, hasAssignment } = this.state;
     const { navigation } = this.props;
     let TouchableComp = TouchableOpacity;
     if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -142,6 +184,7 @@ class GenerationDetailScreen extends Component {
       <I18nContext.Consumer>
         {(value) => {
           const dateFormat = getDateFormatByLocale(value.lang);
+          const dateMask = getDateMaskByLocale(moment.locale());
           moment.locale(value.lang);
           return (
             <SafeAreaView style={styles.screen}>
@@ -176,6 +219,140 @@ class GenerationDetailScreen extends Component {
                         navigation={navigation}
                         entity={generation}
                       />
+                      {hasAssignment ? (
+                        <View>
+                          <Text style={styles.sectionHeader}>{i18n.t('GENERAL.ASSIGNMENTS')}</Text>
+                          <Pressable
+                            style={{
+                              width: 30,
+                              height: 30,
+                              flexDirection: 'row',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              position: 'absolute',
+                              left: '75%',
+                              top: 8,
+                            }}
+                            onPress={() => {
+                              this.setState({ showHistorical: !showHistorical });
+                            }}
+                          >
+                            <FontAwesome5
+                              name="history"
+                              size={24}
+                              color={showHistorical ? Colors.primaryColor : '#B6B6D9'}
+                            />
+                          </Pressable>
+
+                          <Pressable
+                            style={{
+                              width: 30,
+                              height: 30,
+                              flexDirection: 'row',
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              position: 'absolute',
+                              left: '88%',
+                              top: 8,
+                            }}
+                            onPress={() => {
+                              navigation.navigate('AssigmentsForm', {
+                                entityName: generation.name,
+                                roles: generations.map((item) => ({
+                                  name: item.mainAssignment?.roleTitle,
+                                  value: item.mainAssignment?.roleId,
+                                })),
+                                entityId: generation.generationId,
+                                isCreate: true,
+                              });
+                            }}
+                          >
+                            <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
+                          </Pressable>
+
+                          {generations.map((asg) => {
+                            if (asg.name === generation.name && showHistorical ? asg : asg.isActive)
+                              return (
+                                <TouchableComp
+                                  key={[asg.mainAssignment?.personId.toString(), asg.mainAssignment?.startDate]}
+                                  onPress={() => {
+                                    navigation.navigate('PatreDetail', {
+                                      fatherId: asg.person.personId,
+                                    });
+                                  }}
+                                >
+                                  <View style={styles.listItem}>
+                                    <Text style={styles.listItemTitle}>{i18n.t('FILIAL_DETAIL.SUPERIOR')}</Text>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 10 }}>
+                                      <Image
+                                        source={{
+                                          uri: `https://schoenstatt-fathers.link${asg.mainAssignment?.person.photo}`,
+                                        }}
+                                        style={{
+                                          width: 50,
+                                          height: 50,
+                                          borderRadius: 25,
+                                          marginRight: 10,
+                                          borderWidth: 1,
+                                          borderColor: asg.mainAssignment ? '#292929' : '#B6B6D9',
+                                        }}
+                                      />
+
+                                      <View>
+                                        <Text
+                                          style={
+                                            asg.mainAssignment
+                                              ? styles.listItemBodyBlack
+                                              : styles.listItemBodyBlackInactive
+                                          }
+                                        >
+                                          {asg.mainAssignment?.roleTitle}
+                                        </Text>
+                                        <Text
+                                          style={
+                                            asg.mainAssignment
+                                              ? styles.listItemBodyBlue
+                                              : styles.listItemBodyBlueInactive
+                                          }
+                                        >
+                                          {asg.mainAssignment?.person.fullName}
+                                        </Text>
+                                        <Text
+                                          style={asg.mainAssignment ? styles.listItemBody : styles.listItemBodyInactive}
+                                        >
+                                          {/*`${moment.utc(asg.startDate).format(dateMask)}`*/}
+                                          {`${moment.utc(asg.mainAssignment?.startDate).format(dateMask)} - ${moment
+                                            .utc(asg.mainAssignment?.endDate)
+                                            .format(dateMask)}`}
+                                        </Text>
+                                      </View>
+                                      <Pressable
+                                        style={{
+                                          position: 'absolute',
+                                          left: '90%',
+                                          padding: 5,
+                                        }}
+                                        onPress={() => {
+                                          this.props.navigation.navigate('AssigmentsForm', {
+                                            entityName: generation.name,
+                                            entityId: generation.generationId,
+                                            roleTitle: asg.mainAssignment.roleTitle,
+                                            roleId: asg.mainAssignment.roleId,
+                                            fatherId: asg.mainAssignment.person.personId,
+                                            isCreate: false,
+                                            personName: asg.mainAssignment.person.fullName,
+                                          });
+                                        }}
+                                      >
+                                        <Image source={pencil} />
+                                      </Pressable>
+                                    </View>
+                                  </View>
+                                </TouchableComp>
+                              );
+                          })}
+                        </View>
+                      ) : null}
                       <GenerationCourses courses={generation.courses} />
                     </View>
                   </View>
@@ -196,7 +373,7 @@ class GenerationDetailScreen extends Component {
 
 GenerationDetailScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: ()=>(
+  headerRight: () => (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"
