@@ -133,7 +133,9 @@ const EditableDateItem = function (props) {
 const AssigmentsFormScreen = ({ navigation }) => {
   const rolesRep = navigation.getParam('roles');
   let hash = {};
-  const entityRoles = rolesRep?.filter((o) => (hash[o.value] ? false : (hash[o.value] = true)));
+  const entityRoles = rolesRep?.filter(
+    (o) => (hash[o.name] && hash[o.name] ? false : (hash[o.name] = true)) && hash[o.value] === undefined,
+  );
   const entityId = navigation.getParam('entityId');
   const entityName = navigation.getParam('entityName');
   const fatherId = navigation.getParam('fatherId');

@@ -185,6 +185,7 @@ class DelegationDetailScreen extends Component {
           assignments: fetchedAssignments,
           filiations: fetchedActiveFiliations,
         });
+        console.log('ACA', fetchedDelegation);
       })
       .catch((err) => {
         this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
@@ -269,108 +270,114 @@ class DelegationDetailScreen extends Component {
                           navigation={navigation}
                           entity={territory}
                         />
-                        <View style={[styles.listItem]}>
-                          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.ASSIGNMENTS')}</Text>
+                        {territory.assignments.length > 0 ? (
+                          <View style={[styles.listItem]}>
                             <View
-                              style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                width: 70,
-                                marginRight: '3%',
-                              }}
+                              style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
                             >
-                              <TouchableComp
-                                onPress={() => {
-                                  this.setState({ showHistorical: !showHistorical });
+                              <Text style={styles.listItemTitle}>{i18n.t('TERRITORY_DETAIL.ASSIGNMENTS')}</Text>
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  justifyContent: 'space-between',
+                                  alignItems: 'center',
+                                  width: 70,
+                                  marginRight: '3%',
                                 }}
                               >
-                                <FontAwesome5
-                                  name="history"
-                                  size={24}
-                                  color={showHistorical ? Colors.primaryColor : '#B6B6D9'}
-                                />
-                              </TouchableComp>
-                              <Pressable
-                                onPress={() => {
-                                  navigation.navigate('AssigmentsForm', {
-                                    entityName: territory.name,
-                                    roles: territory.assignments.map((item) => ({
-                                      name: item.roleTitle,
-                                      value: item.roleId,
-                                    })),
-                                    entityId: territory.territoryId,
-                                    isCreate: true,
-                                  });
-                                }}
-                              >
-                                <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
-                              </Pressable>
-                            </View>
-                          </View>
-                          {assignments.map((asg) => {
-                            return (
-                              <TouchableComp
-                                key={[asg.person.personId, asg.startDate]}
-                                onPress={() => {
-                                  navigation.navigate('PatreDetail', { fatherId: asg.person.personId });
-                                }}
-                              >
-                                <View style={styles.fatherItem}>
-                                  <Image
-                                    source={{ uri: `https://schoenstatt-fathers.link${asg.person.photo}` }}
-                                    style={{
-                                      width: 50,
-                                      height: 50,
-                                      borderRadius: 25,
-                                      marginRight: 10,
-                                      borderWidth: 1,
-                                      borderColor: asg.isActive ? '#292929' : '#B6B6D9',
-                                    }}
+                                <TouchableComp
+                                  onPress={() => {
+                                    this.setState({ showHistorical: !showHistorical });
+                                  }}
+                                >
+                                  <FontAwesome5
+                                    name="history"
+                                    size={24}
+                                    color={showHistorical ? Colors.primaryColor : '#B6B6D9'}
                                   />
-                                  <View style={{ flexDirection: 'column' }}>
-                                    <Text
-                                      style={asg.isActive ? styles.listItemBodyBlack : styles.listItemBodyBlackInactive}
+                                </TouchableComp>
+                                <Pressable
+                                  onPress={() => {
+                                    navigation.navigate('AssigmentsForm', {
+                                      entityName: territory.name,
+                                      roles: territory.assignments.map((item) => ({
+                                        name: item.roleTitle,
+                                        value: item.roleId,
+                                      })),
+                                      entityId: territory.territoryId,
+                                      isCreate: true,
+                                    });
+                                  }}
+                                >
+                                  <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
+                                </Pressable>
+                              </View>
+                            </View>
+                            {assignments.map((asg) => {
+                              return (
+                                <TouchableComp
+                                  key={[asg.person.personId, asg.startDate]}
+                                  onPress={() => {
+                                    navigation.navigate('PatreDetail', { fatherId: asg.person.personId });
+                                  }}
+                                >
+                                  <View style={styles.fatherItem}>
+                                    <Image
+                                      source={{ uri: `https://schoenstatt-fathers.link${asg.person.photo}` }}
+                                      style={{
+                                        width: 50,
+                                        height: 50,
+                                        borderRadius: 25,
+                                        marginRight: 10,
+                                        borderWidth: 1,
+                                        borderColor: asg.isActive ? '#292929' : '#B6B6D9',
+                                      }}
+                                    />
+                                    <View style={{ flexDirection: 'column' }}>
+                                      <Text
+                                        style={
+                                          asg.isActive ? styles.listItemBodyBlack : styles.listItemBodyBlackInactive
+                                        }
+                                      >
+                                        {asg.roleTitle}
+                                      </Text>
+                                      <Text
+                                        style={asg.isActive ? styles.listItemBodyBlue : styles.listItemBodyBlueInactive}
+                                      >
+                                        {asg.person.fullName}
+                                      </Text>
+                                      <Text style={asg.isActive ? styles.listItemBody : styles.listItemBodyInactive}>
+                                        {`${moment.utc(asg.startDate).format(dateMask)} - ${moment
+                                          .utc(asg.endDate)
+                                          .format(dateMask)}`}
+                                      </Text>
+                                    </View>
+                                    <Pressable
+                                      style={{
+                                        position: 'absolute',
+                                        left: '90%',
+                                        padding: 5,
+                                      }}
+                                      onPress={() => {
+                                        navigation.navigate('AssigmentsForm', {
+                                          entityName: territory.name,
+                                          entityId: territory.territoryId,
+                                          roleTitle: asg.roleTitle,
+                                          roleId: asg.roleId,
+                                          fatherId: asg.person.personId,
+                                          isCreate: false,
+                                          personName: asg.person.fullName,
+                                        });
+                                      }}
                                     >
-                                      {asg.roleTitle}
-                                    </Text>
-                                    <Text
-                                      style={asg.isActive ? styles.listItemBodyBlue : styles.listItemBodyBlueInactive}
-                                    >
-                                      {asg.person.fullName}
-                                    </Text>
-                                    <Text style={asg.isActive ? styles.listItemBody : styles.listItemBodyInactive}>
-                                      {`${moment.utc(asg.startDate).format(dateMask)} - ${moment
-                                        .utc(asg.endDate)
-                                        .format(dateMask)}`}
-                                    </Text>
+                                      <Image source={pencil} />
+                                    </Pressable>
                                   </View>
-                                  <Pressable
-                                    style={{
-                                      position: 'absolute',
-                                      left: '90%',
-                                      padding: 5,
-                                    }}
-                                    onPress={() => {
-                                      navigation.navigate('AssigmentsForm', {
-                                        entityName: territory.name,
-                                        entityId: territory.territoryId,
-                                        roleTitle: asg.roleTitle,
-                                        roleId: asg.roleId,
-                                        fatherId: asg.person.personId,
-                                        isCreate: false,
-                                        personName: asg.person.fullName,
-                                      });
-                                    }}
-                                  >
-                                    <Image source={pencil} />
-                                  </Pressable>
-                                </View>
-                              </TouchableComp>
-                            );
-                          })}
-                        </View>
+                                </TouchableComp>
+                              );
+                            })}
+                          </View>
+                        ) : null}
                       </View>
                       <View styles={{ marginTop: 10, marginBottom: 5, backgroundColor: Colors.surfaceColorSecondary }}>
                         <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_DETAIL.TERRITORY_FILIATION')}</Text>

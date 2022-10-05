@@ -157,7 +157,13 @@ class GenerationDetailScreen extends Component {
       });
     getGenerations('all').then((resGenerations) => {
       let generations = resGenerations.data.result;
-      let generationsAssignment = generations.filter((g) => g.mainAssignment !== null);
+      let generationsAssignment = generations.map((asg) => {
+        if (asg.name === this.state.generation.name && asg.mainAssignment.person.fullName !== undefined) {
+          return true;
+        } else {
+          return false;
+        }
+      });
       console.log('aca', generationsAssignment);
       this.setState({ generations: generations, hasAssignment: generationsAssignment });
     });
@@ -271,18 +277,22 @@ class GenerationDetailScreen extends Component {
                           </Pressable>
 
                           {generations.map((asg) => {
-                            if (asg.name === generation.name && showHistorical ? asg : asg.isActive)
+                            if (
+                              asg.name === generation.name && showHistorical
+                                ? asg
+                                : asg.assignments.isActive && asg.mainAssignment.roleTitle
+                            )
                               return (
                                 <TouchableComp
                                   key={[asg.mainAssignment?.personId.toString(), asg.mainAssignment?.startDate]}
                                   onPress={() => {
                                     navigation.navigate('PatreDetail', {
-                                      fatherId: asg.person.personId,
+                                      fatherId: asg.mainAssignment.person.personId,
                                     });
                                   }}
                                 >
                                   <View style={styles.listItem}>
-                                    <Text style={styles.listItemTitle}>{i18n.t('FILIAL_DETAIL.SUPERIOR')}</Text>
+                                    {/*<Text style={styles.listItemTitle}>{i18n.t('FILIAL_DETAIL.SUPERIOR')}</Text>*/}
                                     <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 10 }}>
                                       <Image
                                         source={{
@@ -294,14 +304,14 @@ class GenerationDetailScreen extends Component {
                                           borderRadius: 25,
                                           marginRight: 10,
                                           borderWidth: 1,
-                                          borderColor: asg.mainAssignment ? '#292929' : '#B6B6D9',
+                                          borderColor: asg.assignments?.isActive ? '#292929' : '#B6B6D9',
                                         }}
                                       />
 
                                       <View>
                                         <Text
                                           style={
-                                            asg.mainAssignment
+                                            asg.assignments?.isActive
                                               ? styles.listItemBodyBlack
                                               : styles.listItemBodyBlackInactive
                                           }
@@ -310,7 +320,7 @@ class GenerationDetailScreen extends Component {
                                         </Text>
                                         <Text
                                           style={
-                                            asg.mainAssignment
+                                            asg.assignments?.isActive
                                               ? styles.listItemBodyBlue
                                               : styles.listItemBodyBlueInactive
                                           }
@@ -318,7 +328,11 @@ class GenerationDetailScreen extends Component {
                                           {asg.mainAssignment?.person.fullName}
                                         </Text>
                                         <Text
-                                          style={asg.mainAssignment ? styles.listItemBody : styles.listItemBodyInactive}
+                                          style={
+                                            asg.assignments?.isActive
+                                              ? styles.listItemBody
+                                              : styles.listItemBodyInactive
+                                          }
                                         >
                                           {/*`${moment.utc(asg.startDate).format(dateMask)}`*/}
                                           {`${moment.utc(asg.mainAssignment?.startDate).format(dateMask)} - ${moment

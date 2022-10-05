@@ -134,122 +134,132 @@ class FiliationDetailScreen extends Component {
                               )*/}
                   </View>
                   {/*Nueva seccion*/}
-                  <View>
-                    <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_DETAIL.ASSIGNMENTS')} </Text>
-                    <Pressable
-                      style={{
-                        width: 30,
-                        height: 30,
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        position: 'absolute',
-                        left: '75%',
-                        top: 8,
-                      }}
-                      onPress={() => {
-                        this.setState({ showHistorical: !showHistorical });
-                      }}
-                    >
-                      <FontAwesome5 name="history" size={24} color={showHistorical ? Colors.primaryColor : '#B6B6D9'} />
-                    </Pressable>
-                    <Pressable
-                      style={{
-                        width: 30,
-                        height: 30,
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        position: 'absolute',
-                        left: '88%',
-                        top: 8,
-                      }}
-                      onPress={() => {
-                        navigation.navigate('AssigmentsForm', {
-                          entityName: filiation.name,
-                          roles: filiation.assignments.map((item) => ({ name: item.roleTitle, value: item.roleId })),
-                          entityId: filiation.filiationId,
-                          isCreate: true,
-                        });
-                      }}
-                    >
-                      <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
-                    </Pressable>
-                    {filiation.assignments.map((item) => {
-                      if (showHistorical ? item : item.isActive)
-                        return (
-                          <TouchableComp
-                            key={[item.personId.toString(), item.startDate]}
-                            onPress={() => {
-                              navigation.navigate('PatreDetail', {
-                                fatherId: item.person.personId,
-                              });
-                            }}
-                          >
-                            <View style={styles.listItem}>
-                              <Text style={styles.listItemTitle}>{i18n.t('FILIAL_DETAIL.SUPERIOR')}</Text>
-                              <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 10 }}>
-                                <Image
-                                  source={{
-                                    uri: `https://schoenstatt-fathers.link${item.person.photo}`,
-                                  }}
-                                  style={{
-                                    width: 50,
-                                    height: 50,
-                                    borderRadius: 25,
-                                    marginRight: 10,
-                                    borderWidth: 1,
-                                    borderColor: item.isActive ? '#292929' : '#B6B6D9',
-                                  }}
-                                />
+                  {filiation.assignments.length > 0 ? (
+                    <View>
+                      <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_DETAIL.ASSIGNMENTS')} </Text>
+                      <Pressable
+                        style={{
+                          width: 30,
+                          height: 30,
+                          flexDirection: 'row',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          position: 'absolute',
+                          left: '75%',
+                          top: 8,
+                        }}
+                        onPress={() => {
+                          this.setState({ showHistorical: !showHistorical });
+                        }}
+                      >
+                        <FontAwesome5
+                          name="history"
+                          size={24}
+                          color={showHistorical ? Colors.primaryColor : '#B6B6D9'}
+                        />
+                      </Pressable>
+                      <Pressable
+                        style={{
+                          width: 30,
+                          height: 30,
+                          flexDirection: 'row',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          position: 'absolute',
+                          left: '88%',
+                          top: 8,
+                        }}
+                        onPress={() => {
+                          navigation.navigate('AssigmentsForm', {
+                            entityName: filiation.name,
+                            roles: filiation.assignments.map((item) => ({ name: item.roleTitle, value: item.roleId })),
+                            entityId: filiation.filiationId,
+                            isCreate: true,
+                          });
+                        }}
+                      >
+                        <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
+                      </Pressable>
+                      {filiation.assignments.map((item) => {
+                        if (showHistorical ? item : item.isActive)
+                          return (
+                            <TouchableComp
+                              key={[item.personId.toString(), item.startDate]}
+                              onPress={() => {
+                                navigation.navigate('PatreDetail', {
+                                  fatherId: item.person.personId,
+                                });
+                              }}
+                            >
+                              <View style={styles.listItem}>
+                                {/*<Text style={styles.listItemTitle}>{i18n.t('FILIAL_DETAIL.SUPERIOR')}</Text>*/}
+                                <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 10 }}>
+                                  <Image
+                                    source={{
+                                      uri: `https://schoenstatt-fathers.link${item.person.photo}`,
+                                    }}
+                                    style={{
+                                      width: 50,
+                                      height: 50,
+                                      borderRadius: 25,
+                                      marginRight: 10,
+                                      borderWidth: 1,
+                                      borderColor: item.isActive ? '#292929' : '#B6B6D9',
+                                    }}
+                                  />
 
-                                <View>
-                                  <Text
-                                    style={item.isActive ? styles.listItemBodyBlack : styles.listItemBodyBlackInactive}
+                                  <View>
+                                    <Text
+                                      style={
+                                        item.isActive ? styles.listItemBodyBlack : styles.listItemBodyBlackInactive
+                                      }
+                                    >
+                                      {item.roleTitle}
+                                    </Text>
+                                    <Text
+                                      style={item.isActive ? styles.listItemBodyBlue : styles.listItemBodyBlueInactive}
+                                    >
+                                      {item.person.fullName}
+                                    </Text>
+                                    <Text style={item.isActive ? styles.listItemBody : styles.listItemBodyInactive}>
+                                      {`${
+                                        filiation.mainAssignment.startDate
+                                          ? moment.utc(item.startDate).format(dateMask)
+                                          : ''
+                                      } - ${
+                                        filiation.mainAssignment.endDate
+                                          ? moment.utc(item.endDate).format(dateMask)
+                                          : ''
+                                      }`}
+                                    </Text>
+                                  </View>
+                                  <Pressable
+                                    style={{
+                                      position: 'absolute',
+                                      left: '90%',
+                                      padding: 5,
+                                    }}
+                                    onPress={() => {
+                                      this.props.navigation.navigate('AssigmentsForm', {
+                                        entityName: filiation.name,
+                                        entityId: filiation.filiationId,
+                                        roleTitle: item.roleTitle,
+                                        roleId: item.roleId,
+                                        fatherId: item.person.personId,
+                                        isCreate: false,
+                                        personName: item.person.fullName,
+                                      });
+                                    }}
                                   >
-                                    {item.roleTitle}
-                                  </Text>
-                                  <Text
-                                    style={item.isActive ? styles.listItemBodyBlue : styles.listItemBodyBlueInactive}
-                                  >
-                                    {item.person.fullName}
-                                  </Text>
-                                  <Text style={item.isActive ? styles.listItemBody : styles.listItemBodyInactive}>
-                                    {`${
-                                      filiation.mainAssignment.startDate
-                                        ? moment.utc(item.startDate).format(dateMask)
-                                        : ''
-                                    } - ${
-                                      filiation.mainAssignment.endDate ? moment.utc(item.endDate).format(dateMask) : ''
-                                    }`}
-                                  </Text>
+                                    <Image source={pencil} />
+                                  </Pressable>
                                 </View>
-                                <Pressable
-                                  style={{
-                                    position: 'absolute',
-                                    left: '90%',
-                                    padding: 5,
-                                  }}
-                                  onPress={() => {
-                                    this.props.navigation.navigate('AssigmentsForm', {
-                                      entityName: filiation.name,
-                                      entityId: filiation.filiationId,
-                                      roleTitle: item.roleTitle,
-                                      roleId: item.roleId,
-                                      fatherId: item.person.personId,
-                                      isCreate: false,
-                                      personName: item.person.fullName,
-                                    });
-                                  }}
-                                >
-                                  <Image source={pencil} />
-                                </Pressable>
                               </View>
-                            </View>
-                          </TouchableComp>
-                        );
-                    })}
-                  </View>
+                            </TouchableComp>
+                          );
+                      })}
+                    </View>
+                  ) : null}
                   <FiliationHouses houses={filiation.houses.filter((house) => house.isActive)} />
                   <View>
                     <Text style={styles.sectionHeader}>{i18n.t('FILIAL_DETAIL.MEMBERS')}</Text>
