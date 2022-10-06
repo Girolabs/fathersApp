@@ -24,7 +24,7 @@ import HeaderButton from '../components/HeaderButton';
 import { getGeneration, getGenerations } from '../api';
 import IdealStatement from '../components/IdealStatement';
 import GenerationCourses from '../components/GenerationCourses';
-import { getDateFormatByLocale, getDateMaskByLocale } from '../utils/date-utils';
+import { getDateFormatByLocale, getDateMaskByLocale, getDateMaskForm } from '../utils/date-utils';
 import pencil from '../../assets/editpencil.png';
 import { Ionicons } from 'expo-vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -189,6 +189,7 @@ class GenerationDetailScreen extends Component {
     return (
       <I18nContext.Consumer>
         {(value) => {
+          const dateForm = getDateMaskForm(value.lang);
           const dateFormat = getDateFormatByLocale(value.lang);
           const dateMask = getDateMaskByLocale(moment.locale());
           moment.locale(value.lang);
@@ -355,6 +356,12 @@ class GenerationDetailScreen extends Component {
                                             fatherId: asg.mainAssignment.person.personId,
                                             isCreate: false,
                                             personName: asg.mainAssignment.person.fullName,
+                                            startDate: asg.mainAssignment.startDate
+                                              ? moment.utc(asg.mainAssignment.startDate).format(dateForm)
+                                              : null,
+                                            endDate: asg.mainAssignment.endDate
+                                              ? moment.utc(asg.mainAssignment.endDate).format(dateForm)
+                                              : null,
                                           });
                                         }}
                                       >

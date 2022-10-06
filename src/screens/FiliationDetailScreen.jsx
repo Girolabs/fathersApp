@@ -25,7 +25,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { getFiliation } from '../api';
 import FiliationHouses from '../components/FiliationHouses';
-import { getDateMaskByLocale } from '../utils/date-utils';
+import { getDateMaskByLocale, getDateMaskForm } from '../utils/date-utils';
 import { Ionicons } from 'expo-vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import pencil from '../../assets/editpencil.png';
@@ -72,6 +72,7 @@ class FiliationDetailScreen extends Component {
     return (
       <I18nContext.Consumer>
         {(value) => {
+          const dateForm = getDateMaskForm(value.lang);
           const dateMask = getDateMaskByLocale(value.lang);
           moment.locale(value.lang);
           return (
@@ -248,6 +249,8 @@ class FiliationDetailScreen extends Component {
                                         fatherId: item.person.personId,
                                         isCreate: false,
                                         personName: item.person.fullName,
+                                        startDate: item.startDate ? moment.utc(item.startDate).format(dateForm) : null,
+                                        endDate: item.endDate ? moment.utc(item.endDate).format(dateForm) : null,
                                       });
                                     }}
                                   >

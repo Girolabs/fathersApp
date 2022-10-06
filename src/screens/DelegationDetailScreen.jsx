@@ -26,7 +26,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { FontAwesome5 } from '@expo/vector-icons';
 import IdealStatement from '../components/IdealStatement';
-import { getDateMaskByLocale, getDateFormatByLocale } from '../utils/date-utils';
+import { getDateMaskByLocale, getDateFormatByLocale, getDateMaskForm } from '../utils/date-utils';
 import { Ionicons } from 'expo-vector-icons';
 import pencil from '../../assets/editpencil.png';
 
@@ -226,6 +226,7 @@ class DelegationDetailScreen extends Component {
     return (
       <I18nContext.Consumer>
         {(value) => {
+          const dateForm = getDateMaskForm(value.lang);
           const dateMask = getDateMaskByLocale(value.lang);
           const dateFormat = getDateFormatByLocale(value.lang);
           moment.locale(value.lang);
@@ -367,6 +368,8 @@ class DelegationDetailScreen extends Component {
                                           fatherId: asg.person.personId,
                                           isCreate: false,
                                           personName: asg.person.fullName,
+                                          startDate: asg.startDate ? moment.utc(asg.startDate).format(dateForm) : null,
+                                          endDate: asg.endDate ? moment.utc(asg.endDate).format(dateForm) : null,
                                         });
                                       }}
                                     >

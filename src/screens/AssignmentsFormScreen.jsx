@@ -143,13 +143,15 @@ const AssigmentsFormScreen = ({ navigation }) => {
   const roleId = navigation.getParam('roleId');
   const updated = navigation.getParam('isCreate');
   const personName = navigation.getParam('personName');
+  const start = navigation.getParam('startDate');
+  const end = navigation.getParam('endDate');
   const [role, setRole] = useState(roleId ? roleId : entityRoles[0].value);
   const [persons, setPersons] = useState(null);
   const [roles, setRoles] = useState(entityRoles ? entityRoles : null);
   const [person, setPerson] = useState(fatherId ? fatherId : null);
   const [publicNotes, setPublicNotes] = useState('');
-  const [startDate, setStartDate] = useState(todayString);
-  const [endDate, setEndDate] = useState(todayString);
+  const [startDate, setStartDate] = useState(start ? start : todayString);
+  const [endDate, setEndDate] = useState(end ? end : todayString);
   const [isCreate, setIsCreate] = useState(updated);
 
   useEffect(() => {

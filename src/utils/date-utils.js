@@ -19,6 +19,13 @@ const DATE_MASK_BY_LANG = {
   pt: 'DD/MM/YYYY',
 };
 
+const DATE_MASK_FORM = {
+  es: 'YYYY-MM-DD',
+  en: 'YYYY-MM-DD',
+  de: 'YYYY-MM-DD',
+  pt: 'YYYY-MM-DD',
+};
+
 const getDateFormatByLocale = (lang) => {
   const format = DATE_FORMATS_BY_LANG[lang];
   return format || DATE_FORMATS_BY_LANG.en;
@@ -34,4 +41,9 @@ const getDateMaskByLocale = (lang) => {
   return mask || DATE_MASK_BY_LANG.en;
 };
 
-export { getDateFormatByLocale, getMonthFormatByLocale, getDateMaskByLocale };
+const getDateMaskForm = (lang) => {
+  const mask = DATE_MASK_FORM[lang];
+  return mask || DATE_MASK_FORM.en;
+};
+
+export { getDateFormatByLocale, getMonthFormatByLocale, getDateMaskByLocale, getDateMaskForm };
