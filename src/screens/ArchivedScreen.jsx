@@ -61,7 +61,7 @@ const ArchivedScreen = ({ navigation }) => {
       {!loading ? (
         <View>
           {posts.map((post) => (
-            <BulletinItem item={post} />
+            <BulletinItem item={post} key={post.postId} />
           ))}
           <Pressable
             style={{

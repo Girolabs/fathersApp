@@ -435,22 +435,28 @@ const AssigmentsFormScreen = ({ navigation }) => {
         />
       </View>
       <Button
-        onPress={() =>
-          console.log(
-            'Entidad: ',
-            entityId,
-            'Role: ',
-            role,
-            'Persona: ',
-            person,
-            'fecha ini:',
-            startDate,
-            'fecha fin: ',
-            endDate,
-            'Notas: ',
-            publicNotes,
-          )
-        }
+        onPress={() => {
+          const formatStartDate = new Date(startDate);
+          const formatEndDate = new Date(endDate);
+          if (!entityId || !role || !person || !publicNotes || formatStartDate.getTime() >= formatEndDate.getTime()) {
+            alert('Complete los campos, la fecha de inicio debe ser menor a la fecha término');
+          } else {
+            console.log(
+              'Entidad: ',
+              entityId,
+              'Role: ',
+              role,
+              'Persona: ',
+              person,
+              'fecha ini:',
+              startDate,
+              'fecha fin: ',
+              endDate,
+              'Notas: ',
+              publicNotes,
+            );
+          }
+        }}
         style={{
           width: '100%',
           flexDirection: 'row',
