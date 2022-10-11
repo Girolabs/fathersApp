@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Image, Pressable } from 'react-native';
 import { WebView } from 'react-native-webview';
 import i18n from 'i18n-js';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -10,6 +10,8 @@ import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { getBoardPost } from '../api';
+import star from '../../assets/star-outline.png';
+import starActive from '../../assets/star-active.png';
 
 const styles = StyleSheet.create({
   screen: {
@@ -22,6 +24,7 @@ const BulletinDetail = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
+  const [favorite, setFavorite] = useState(false);
 
   const loadPost = async (source) => {
     const status = await Network.getNetworkStateAsync();
@@ -92,7 +95,20 @@ const BulletinDetail = ({ navigation }) => {
         }}
       />
       {!loading ? (
-        <WebView originWhitelist={['*']} source={post} />
+        <>
+          <Pressable
+            style={{
+              position: 'absolute',
+              top: -40,
+              left: '78%',
+              zIndex: 9,
+            }}
+            onPress={() => setFavorite(!favorite)}
+          >
+            {favorite ? <Image source={starActive} /> : <Image source={star} />}
+          </Pressable>
+          <WebView originWhitelist={['*']} source={post} />
+        </>
       ) : (
         <ActivityIndicator size="large" color={Colors.primaryColor} />
       )}
@@ -105,7 +121,7 @@ const BulletinDetail = ({ navigation }) => {
 
 BulletinDetail.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: ()=> (
+  headerRight: () => (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"

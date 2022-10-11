@@ -237,5 +237,8 @@ exports.ES = {
     START_DATE: 'Fecha de inicio',
     END_DATE: 'Fecha de término',
     PUBLIC_NOTES: 'Notas públicas',
+    ERROR: 'Por favor, complete los campos',
+    ERROR_END_DATE: 'La fecha de fin no puede ser anterior a la fecha de inicio',
+    SUCCESS: 'Datos guardados exitosamente',
   },
 };

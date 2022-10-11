@@ -237,5 +237,8 @@ exports.EN = {
     START_DATE: 'Start date',
     END_DATE: 'End date',
     PUBLIC_NOTES: 'Public notes',
+    ERROR: 'Please, complete the fields',
+    ERROR_END_DATE: "End date can't be before start date",
+    SUCCESS: 'Data saved successfully',
   },
 };

@@ -20,6 +20,7 @@ import { Ionicons, Foundation } from 'expo-vector-icons';
 import bishopLogo from '../../assets/img/bishop.png';
 import person from '../../assets/img/person.png';
 import fatherIcon from '../../assets/img/fatherIcon.png';
+import star from '../../assets/star.png';
 import { CustomSlider } from '../components/CarouselSlider';
 import data from '../data/data';
 const styles = StyleSheet.create({
@@ -197,6 +198,31 @@ const HomeScreen = ({ navigation }) => {
                     ) : null*/}
               {!loading ? (
                 <>
+                  <View
+                    style={{
+                      height: 100,
+                      backgroundColor: '#F8CE46',
+                      borderRadius: 10,
+                      flexDirection: 'row',
+                      justifyContent: 'space-evenly',
+                      alignItems: 'center',
+                      padding: 20,
+                    }}
+                  >
+                    <Image source={star} />
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontFamily: 'work-sans-semibold',
+                        color: Colors.primaryColor,
+                        paddingHorizontal: 15,
+                        width: '85%',
+                      }}
+                    >
+                      Oración de la Comunidad
+                    </Text>
+                    <Ionicons name="ios-arrow-forward" size={25} color={Colors.primaryColor} />
+                  </View>
                   <RemindersHeaders
                     reminders={reminders}
                     selectedHeader={selectedReminder}

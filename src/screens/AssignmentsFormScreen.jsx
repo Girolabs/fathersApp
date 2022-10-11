@@ -115,6 +115,7 @@ const EditableDateItem = function (props) {
       <Pressable
         style={{
           marginLeft: 'auto',
+          zIndex: 9,
         }}
         onPress={() => {
           setShow(true);
@@ -153,6 +154,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
   const [startDate, setStartDate] = useState(start ? start : todayString);
   const [endDate, setEndDate] = useState(end ? end : todayString);
   const [isCreate, setIsCreate] = useState(updated);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     getPersons().then((res) => {
@@ -169,6 +171,53 @@ const AssigmentsFormScreen = ({ navigation }) => {
       console.log('roles', entityRoles);
     });
   }, []);
+
+  const validateForm = function (formValues) {
+    const formatStartDate = new Date(startDate);
+    const formatEndDate = new Date(endDate);
+    let claves = Object.keys(formValues);
+    for (let i = 0; i < claves.length; i++) {
+      let clave = claves[i];
+      //console.log(body[clave]);
+      if (formValues[clave] === '' || formValues[clave] === null) {
+        setError('Complete los todos campos');
+        return false;
+      } else if (formatStartDate.getTime() >= formatEndDate.getTime()) {
+        setError('La fecha de fin no puede ser anterior a la fecha de inicio');
+        return false;
+      }
+    }
+    setError('');
+    return true;
+  };
+
+  const handleSubmit = function () {
+    const formValues = {
+      roleId: role,
+      personId: person,
+      startDate: startDate,
+      endDate: endDate,
+      publicNotes: publicNotes,
+    };
+    if (validateForm(formValues)) {
+      alert('Datos guardados exitosamente');
+      console.log(
+        'Entidad: ',
+        entityId,
+        'Role: ',
+        role,
+        'Persona: ',
+        person,
+        'fecha ini:',
+        startDate,
+        'fecha fin: ',
+        endDate,
+        'Notas: ',
+        publicNotes,
+      );
+      navigation.goBack();
+    }
+  };
   return (
     <View
       style={{
@@ -435,7 +484,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
         />
       </View>
       <Button
-        onPress={() => {
+        /*onPress={() => {
           const formatStartDate = new Date(startDate);
           const formatEndDate = new Date(endDate);
           if (!entityId || !role || !person || !publicNotes || formatStartDate.getTime() >= formatEndDate.getTime()) {
@@ -456,7 +505,8 @@ const AssigmentsFormScreen = ({ navigation }) => {
               publicNotes,
             );
           }
-        }}
+        }}*/
+        onPress={handleSubmit}
         style={{
           width: '100%',
           flexDirection: 'row',
@@ -490,6 +540,18 @@ const AssigmentsFormScreen = ({ navigation }) => {
           </Text>
         </View>
       </Button>
+      {error && (
+        <Text
+          style={{
+            fontSize: 14,
+            width: '90%',
+            fontWeight: '600',
+            color: Colors.primaryColor,
+          }}
+        >
+          {error}
+        </Text>
+      )}
     </View>
   );
 };

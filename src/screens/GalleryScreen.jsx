@@ -158,12 +158,17 @@ const GalleryScreen = () => {
         style={{
           borderRadius: 5,
           width: '90%',
-          height: 46,
+          //height: 46,
           justifyContent: 'center',
           marginTop: photo ? 64 : 144,
+          backgroundColor: '#0104AC',
         }}
       >
-        <Button title="S u b i r  f o t o" disabled={photo && description !== '' ? false : true} color="#0104AC" />
+        <Button
+          title="S u b i r  f o t o"
+          disabled={photo && description !== '' ? false : true}
+          color={Platform.OS === 'android' ? '#0104AC' : 'white'}
+        />
       </View>
     </View>
   );
