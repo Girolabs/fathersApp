@@ -10,6 +10,7 @@ import {
   ScrollView,
   SafeAreaView,
   Pressable,
+  Alert,
 } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -200,7 +201,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
       publicNotes: publicNotes,
     };
     if (validateForm(formValues)) {
-      alert('Datos guardados exitosamente');
+      Alert.alert('Datos guardados exitosamente');
       console.log(
         'Entidad: ',
         entityId,

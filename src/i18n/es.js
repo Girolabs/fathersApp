@@ -225,6 +225,8 @@ exports.ES = {
     CAPTION: 'Pie de foto',
     UPLOAD_PHOTO: 'Subir foto',
     LIKES: 'me gusta',
+    SEE_ALL: 'Ver todo',
+    SUCCESS: 'Datos guardados exitosamente',
   },
   ASSIGNMENTS_FORM: {
     TITLE: 'Asignar cargo',
@@ -240,5 +242,11 @@ exports.ES = {
     ERROR: 'Por favor, complete los campos',
     ERROR_END_DATE: 'La fecha de fin no puede ser anterior a la fecha de inicio',
     SUCCESS: 'Datos guardados exitosamente',
+  },
+  ARCHIVE: {
+    ARCHIVE: 'Archivar',
+    UNARCHIVE: 'Desarchivar',
+    EDIT: 'Editar',
+    ARCHIVED: 'Archivados',
   },
 };

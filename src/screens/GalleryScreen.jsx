@@ -26,7 +26,7 @@ import * as ImagePicker from 'expo-image-picker';
 import imageIcon from '../../assets/imageIcon.png';
 import pencil from '../../assets/editpencil.png';
 
-const GalleryScreen = () => {
+const GalleryScreen = ({ navigation }) => {
   const [photo, setPhoto] = useState(null);
   const [description, setDescription] = useState('');
 
@@ -165,6 +165,10 @@ const GalleryScreen = () => {
         }}
       >
         <Button
+          onPress={() => {
+            Alert.alert('Datos guardados exitosamente');
+            navigation.goBack();
+          }}
           title="S u b i r  f o t o"
           disabled={photo && description !== '' ? false : true}
           color={Platform.OS === 'android' ? '#0104AC' : 'white'}

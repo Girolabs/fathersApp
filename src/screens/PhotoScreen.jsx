@@ -6,12 +6,15 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
 import { useEffect } from 'react';
-import like from '../../assets/heart.png';
+import heart from '../../assets/heart.png';
 import comments from '../../assets/message-circle.png';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { NavigationEvents } from 'react-navigation';
+import { useState } from 'react';
 
 const PhotoScreen = () => {
+  const [like, setLike] = useState(false);
+  const [totalLikes, setTotalLikes] = useState(245);
   useEffect(() => {
     async function orientationBack() {
       // Restric orientation PORTRAIT_UP screen
@@ -77,12 +80,23 @@ const PhotoScreen = () => {
             alignItems: 'center',
           }}
         >
-          <Pressable onPress={() => alert('LIKE!')}>
+          <Pressable
+            onPress={() => {
+              setLike(!like);
+              console.log(like);
+              if (like) {
+                setTotalLikes(totalLikes - 1);
+              } else {
+                setTotalLikes(totalLikes + 1);
+              }
+            }}
+          >
             <Image
-              source={like}
+              source={heart}
               style={{
                 width: 25,
                 height: 25,
+                tintColor: like ? 'red' : '#B6B6D9',
               }}
             />
           </Pressable>
@@ -91,7 +105,7 @@ const PhotoScreen = () => {
               marginRight: 130,
             }}
           >
-            245 likes
+            {totalLikes} likes
           </Text>
           <Pressable onPress={() => alert('DEJAR COMENTARIO')}>
             <Image

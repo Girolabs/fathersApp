@@ -225,6 +225,8 @@ exports.EN = {
     CAPTION: 'Caption',
     UPLOAD_PHOTO: 'Upload photo',
     LIKES: 'likes',
+    SEE_ALL: 'See all',
+    SUCCESS: 'Data saved successfully',
   },
   ASSIGNMENTS_FORM: {
     TITLE: 'Assign position',
@@ -240,5 +242,11 @@ exports.EN = {
     ERROR: 'Please, complete the fields',
     ERROR_END_DATE: "End date can't be before start date",
     SUCCESS: 'Data saved successfully',
+  },
+  ARCHIVE: {
+    ARCHIVE: 'Archive',
+    UNARCHIVE: 'Unarchive',
+    EDIT: 'Edit',
+    ARCHIVED: 'Archived',
   },
 };
