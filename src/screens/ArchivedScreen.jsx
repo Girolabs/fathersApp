@@ -20,6 +20,8 @@ import { Button } from 'react-native';
 import { Pressable } from 'react-native';
 import { ScrollView } from 'react-native';
 import BulletinItem from '../components/BulletinItem';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import HeaderButton from '../components/HeaderButton';
 
 const ArchivedScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
@@ -81,7 +83,7 @@ const ArchivedScreen = ({ navigation }) => {
                 letterSpacing: 1,
               }}
             >
-              Desarchivar
+              {i18n.t('ARCHIVE.UNARCHIVE')}
             </Text>
           </Pressable>
         </View>
@@ -94,5 +96,21 @@ const ArchivedScreen = ({ navigation }) => {
     </ScrollView>
   );
 };
+
+ArchivedScreen.navigationOptions = (navigationData) => ({
+  headerTitle: i18n.t('ARCHIVE.ARCHIVED'),
+  headerRight: () => (
+    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+      <Item
+        title="Menu"
+        iconName="md-menu"
+        onPress={() => {
+          navigationData.navigation.toggleDrawer();
+        }}
+      />
+    </HeaderButtons>
+  ),
+  headerBackTitle: i18n.t('GENERAL.BACK'),
+});
 
 export default ArchivedScreen;

@@ -179,7 +179,7 @@ const GalleryScreen = ({ navigation }) => {
 };
 
 GalleryScreen.navigationOptions = (navigationData) => ({
-  headerTitle: 'Post photo',
+  headerTitle: i18n.t('GALLERY.POST_PHOTO'),
   headerTintColor: Colors.primaryColor,
   headerRight: () => (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>

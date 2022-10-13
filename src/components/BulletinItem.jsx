@@ -59,7 +59,18 @@ const BulletinItem = ({ navigation, item }) => {
   const [checked, setChecked] = useState(false);
   return (
     <View style={styles.listItem}>
-      <View>
+      <View
+        style={{
+          height: 'auto',
+          borderRadius: 50,
+          borderWidth: Platform.OS === 'ios' ? 1 : 0,
+          width: 20,
+          height: 20,
+          borderColor: '#A4A2A2',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
         <RadioButton
           color="white"
           key={item.postId}
@@ -67,15 +78,13 @@ const BulletinItem = ({ navigation, item }) => {
           onPress={() => setChecked(!checked)}
         />
         {
-          <Pressable onPress={() => setChecked(!checked)}>
-            <Image
-              style={{
-                position: 'absolute',
-                left: 8,
-                bottom: 8,
-              }}
-              source={checked ? check : null}
-            />
+          <Pressable
+            style={{
+              position: 'absolute',
+            }}
+            onPress={() => setChecked(!checked)}
+          >
+            <Image source={checked ? check : null} />
           </Pressable>
         }
       </View>

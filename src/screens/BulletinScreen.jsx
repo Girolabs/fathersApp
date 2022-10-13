@@ -164,7 +164,7 @@ const BulletinScreen = ({ navigation }) => {
                   color: '#0104AC',
                 }}
               >
-                Archivados
+                {i18n.t('ARCHIVE.ARCHIVED')}
               </Text>
               <Image source={archive} />
             </Pressable>
@@ -182,7 +182,7 @@ const BulletinScreen = ({ navigation }) => {
                   color: '#0104AC',
                 }}
               >
-                Editar
+                {i18n.t('ARCHIVE.EDIT')}
               </Text>
             </Pressable>
           </View>

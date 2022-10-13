@@ -193,7 +193,7 @@ const PhotosScreen = ({ navigation }) => {
 };
 
 PhotosScreen.navigationOptions = (navigationData) => ({
-  headerTitle: 'Photos',
+  headerTitle: i18n.t('GALLERY.PHOTOS'),
   headerTintColor: Colors.primaryColor,
   headerRight: () => (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
