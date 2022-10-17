@@ -84,7 +84,7 @@ const GalleryScreen = ({ navigation }) => {
               fontWeight: '500',
             }}
           >
-            Choose a photo
+            {i18n.t('GALLERY.CHOOSE_PHOTO')}
           </Text>
           <Image source={imageIcon} />
         </Pressable>
@@ -115,7 +115,7 @@ const GalleryScreen = ({ navigation }) => {
                 fontWeight: '500',
               }}
             >
-              Choose another photo
+              {i18n.t('GALLERY.CHOOSE_ANOTHER_PHOTO')}
             </Text>
             <Image source={imageIcon} />
           </Pressable>
@@ -148,7 +148,7 @@ const GalleryScreen = ({ navigation }) => {
                 width: 10,
               }}
             ></View>
-            <Text>Caption</Text>
+            <Text>{i18n.t('GALLERY.CAPTION')}</Text>
           </>
         }
         required
@@ -169,7 +169,7 @@ const GalleryScreen = ({ navigation }) => {
             Alert.alert('Datos guardados exitosamente');
             navigation.goBack();
           }}
-          title="S u b i r  f o t o"
+          title={i18n.t('GALLERY.UPLOAD_PHOTO')}
           disabled={photo && description !== '' ? false : true}
           color={Platform.OS === 'android' ? '#0104AC' : 'white'}
         />

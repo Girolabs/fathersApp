@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -34,7 +34,6 @@ import Input from '../components/Input';
 import { TextInput } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
-import { useEffect } from 'react';
 
 function toIsoString(date) {
   var tzo = -date.getTimezoneOffset(),
@@ -52,20 +51,6 @@ function toIsoString(date) {
 }
 const today = new Date();
 const todayString = toIsoString(today);
-
-const entities = [
-  { name: 'Entity 1', value: 1 },
-  { name: 'Entity 2', value: 2 },
-  { name: 'Entity 3', value: 3 },
-  { name: 'Entity 4', value: 4 },
-];
-
-/*const roles = [
-  { name: 'Role 1', value: 1 },
-  { name: 'Role 2', value: 2 },
-  { name: 'Role 3', value: 3 },
-  { name: 'Role 4', value: 4 },
-];*/
 
 const EditableDateItem = function (props) {
   const [show, setShow] = useState(false);
@@ -99,7 +84,7 @@ const EditableDateItem = function (props) {
               props.onDateChange(pickedDate);
             }
           }}
-          disabled={props.disabled}
+          //disabled={props.disabled}
         />
       )}
 
@@ -181,10 +166,10 @@ const AssigmentsFormScreen = ({ navigation }) => {
       let clave = claves[i];
       //console.log(body[clave]);
       if (formValues[clave] === '' || formValues[clave] === null) {
-        setError('Complete los todos campos');
+        setError(i18n.t('ASSIGNMENTS_FORM.ERROR'));
         return false;
       } else if (formatStartDate.getTime() >= formatEndDate.getTime()) {
-        setError('La fecha de fin no puede ser anterior a la fecha de inicio');
+        setError(i18n.t('ASSIGNMENTS_FORM.ERROR_END_DATE'));
         return false;
       }
     }
@@ -201,7 +186,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
       publicNotes: publicNotes,
     };
     if (validateForm(formValues)) {
-      Alert.alert('Datos guardados exitosamente');
+      Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
       console.log(
         'Entidad: ',
         entityId,
@@ -240,7 +225,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
           //margin: 10,
         }}
       >
-        Entity: {entityName}
+        {i18n.t('ASSIGNMENTS_FORM.ENTITY')}: {entityName}
       </Text>
       {isCreate ? (
         <Text
@@ -255,7 +240,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
             padding: 20,
           }}
         >
-          Asignar cargo
+          {i18n.t('ASSIGNMENTS_FORM.TITLE')}
         </Text>
       ) : (
         <Text
@@ -270,7 +255,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
             padding: 20,
           }}
         >
-          Editar cargo
+          {i18n.t('ASSIGNMENTS_FORM.TITLE_EDIT')}
         </Text>
       )}
       {
@@ -290,7 +275,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
             }}
             required
           >
-            {isCreate ? 'Lista de Roles' : 'Rol'}
+            {isCreate ? i18n.t('ASSIGNMENTS_FORM.ROLE_LIST') : i18n.t('ASSIGNMENTS_FORM.ROLE')}
           </Text>
           {isCreate ? (
             <Select
@@ -343,7 +328,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
             }}
             required
           >
-            {isCreate ? 'Lista de Personas' : 'Persona'}
+            {isCreate ? i18n.t('ASSIGNMENTS_FORM.PERSON_LIST') : i18n.t('ASSIGNMENTS_FORM.PERSON')}
           </Text>
           {isCreate ? (
             <AutocompleteDropdown
@@ -416,7 +401,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
             color: Colors.primaryColor,
           }}
         >
-          {i18n.t('FATHER_DETAIL.START_DATE')}
+          {i18n.t('ASSIGNMENTS_FORM.START_DATE')}
         </Text>
       </View>
       <EditableDateItem
@@ -441,7 +426,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
             color: Colors.primaryColor,
           }}
         >
-          {i18n.t('FATHER_DETAIL.END_DATE')}
+          {i18n.t('ASSIGNMENTS_FORM.END_DATE')}
         </Text>
       </View>
       <EditableDateItem
@@ -466,7 +451,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
             color: Colors.primaryColor,
           }}
         >
-          {i18n.t('LIVING_SITUATION.PUBLIC_NOTES')}
+          {i18n.t('ASSIGNMENTS_FORM.PUBLIC_NOTES')}
         </Text>
         <TextInput
           style={{
@@ -537,7 +522,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
               color: Colors.primaryColor,
             }}
           >
-            {i18n.t('FATHER_EDIT.SAVE')}
+            {i18n.t('ASSIGNMENTS_FORM.SAVE')}
           </Text>
         </View>
       </Button>

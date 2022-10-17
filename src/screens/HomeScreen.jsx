@@ -264,7 +264,7 @@ const HomeScreen = ({ navigation }) => {
                       textAlign: 'center',
                     }}
                   >
-                    Photos
+                    {i18n.t('GALLERY.PHOTOS')}
                   </Text>
                   <Pressable
                     style={{
@@ -360,7 +360,7 @@ const HomeScreen = ({ navigation }) => {
                       marginRight: 20,
                     }}
                   >
-                    Ver todo
+                    {i18n.t('GALLERY.SEE_ALL')}
                   </Text>
                   <Ionicons name="ios-arrow-forward" size={23} color="#0104AC" />
                 </Pressable>
