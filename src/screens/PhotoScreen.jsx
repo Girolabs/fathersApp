@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, Pressable, Platform } from 'react-native';
 import React from 'react';
 import data from '../data/data';
 import HeaderButton from '../components/HeaderButton';
@@ -11,10 +11,14 @@ import comments from '../../assets/message-circle.png';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { NavigationEvents } from 'react-navigation';
 import { useState } from 'react';
+import { TextInput } from 'react-native-gesture-handler';
 
 const PhotoScreen = () => {
   const [like, setLike] = useState(false);
   const [totalLikes, setTotalLikes] = useState(245);
+  const [totalComments, setTotalComments] = useState([]);
+  const [openComment, setOpenComment] = useState(false);
+  const [comment, setComment] = useState('');
   useEffect(() => {
     async function orientationBack() {
       // Restric orientation PORTRAIT_UP screen
@@ -107,7 +111,7 @@ const PhotoScreen = () => {
           >
             {totalLikes} likes
           </Text>
-          <Pressable onPress={() => alert('DEJAR COMENTARIO')}>
+          <Pressable onPress={() => setOpenComment(!openComment)}>
             <Image
               source={comments}
               style={{
@@ -133,211 +137,115 @@ const PhotoScreen = () => {
             marginTop: 0,
           }}
         >
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              marginTop: 21,
-              marginVertical: 8,
-            }}
-          >
+          {openComment ? (
             <View
               style={{
-                borderRadius: 50,
-                backgroundColor: '#fff',
-                width: 30,
-                height: 30,
-                marginRight: 10,
-                overflow: 'hidden',
-                borderStyle: 'solid',
-                borderColor: '#292929',
-                borderWidth: 2,
+                marginVertical: 20,
               }}
             >
-              <Image
-                source={{ uri: data[0].source }}
+              <TextInput
                 style={{
-                  width: '100%',
-                  height: '100%',
+                  height: 50,
+                  marginVertical: 10,
+                  borderRadius: 5,
+                  backgroundColor: '#FFFFFF',
+                  padding: 10,
                 }}
+                theme={{ colors: { primary: '#0104AC', underlineColor: 'transparent' } }}
+                required
+                value={comment}
+                autoCapitalize="none"
+                placeholderTextColor={Colors.onSurfaceColorSecondary}
+                placeholder="Comment"
+                onChangeText={(value) => setComment(value)}
               />
-            </View>
-            <Text
-              style={{
-                marginRight: 10,
-                color: '#0104AC',
-                fontFamily: 'work-sans',
-                fontWeight: '700',
-                fontSize: 15,
-              }}
-            >
-              Usuario
-            </Text>
-            <Text
-              style={{
-                color: '#292929',
-                fontFamily: 'work-sans',
-                fontWeight: '500',
-                fontSize: 15,
-              }}
-            >
-              Comentario
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              marginVertical: 8,
-            }}
-          >
-            <View
-              style={{
-                borderRadius: 50,
-                backgroundColor: '#fff',
-                width: 30,
-                height: 30,
-                marginRight: 10,
-                overflow: 'hidden',
-                borderStyle: 'solid',
-                borderColor: '#292929',
-                borderWidth: 2,
-              }}
-            >
-              <Image
-                source={{ uri: data[0].source }}
+              <Pressable
+                onPress={() => {
+                  setTotalComments((ant) => [
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        marginTop: 21,
+                        marginVertical: 8,
+                      }}
+                    >
+                      <View
+                        style={{
+                          borderRadius: 50,
+                          backgroundColor: '#fff',
+                          width: 30,
+                          height: 30,
+                          marginRight: 10,
+                          overflow: 'hidden',
+                          borderStyle: 'solid',
+                          borderColor: '#292929',
+                          borderWidth: 2,
+                        }}
+                      >
+                        <Image
+                          source={{ uri: data[0].source }}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                          }}
+                        />
+                      </View>
+                      <Text
+                        style={{
+                          marginRight: 10,
+                          color: '#0104AC',
+                          fontFamily: 'work-sans',
+                          fontWeight: '700',
+                          fontSize: 15,
+                        }}
+                      >
+                        Usuario
+                      </Text>
+                      <Text
+                        style={{
+                          color: '#292929',
+                          fontFamily: 'work-sans',
+                          fontWeight: '500',
+                          fontSize: 15,
+                        }}
+                      >
+                        {comment}
+                      </Text>
+                    </View>,
+                    ...ant,
+                  ]);
+                }}
                 style={{
-                  width: '100%',
-                  height: '100%',
+                  position: 'absolute',
+                  top: '80%',
+                  left: '70%',
+                  backgroundColor: Colors.primaryColor,
+                  borderRadius: 5,
+                  paddingHorizontal: 10,
+                  paddingVertical: 10,
+                  width: '30%',
+                  height: 'auto',
+                  justifyContent: 'center',
+                  marginVertical: 10,
                 }}
-              />
+              >
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    fontSize: 12,
+                    width: '100%',
+                    fontFamily: 'work-sans-bold',
+                    color: 'white',
+                  }}
+                >
+                  Comentar
+                </Text>
+              </Pressable>
             </View>
-            <Text
-              style={{
-                marginRight: 10,
-                color: '#0104AC',
-                fontFamily: 'work-sans',
-                fontWeight: '700',
-                fontSize: 15,
-              }}
-            >
-              Usuario
-            </Text>
-            <Text
-              style={{
-                color: '#292929',
-                fontFamily: 'work-sans',
-                fontWeight: '500',
-                fontSize: 15,
-              }}
-            >
-              Comentario
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              marginVertical: 8,
-            }}
-          >
-            <View
-              style={{
-                borderRadius: 50,
-                backgroundColor: '#fff',
-                width: 30,
-                height: 30,
-                marginRight: 10,
-                overflow: 'hidden',
-                borderStyle: 'solid',
-                borderColor: '#292929',
-                borderWidth: 2,
-              }}
-            >
-              <Image
-                source={{ uri: data[0].source }}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                }}
-              />
-            </View>
-            <Text
-              style={{
-                marginRight: 10,
-                color: '#0104AC',
-                fontFamily: 'work-sans',
-                fontWeight: '700',
-                fontSize: 15,
-              }}
-            >
-              Usuario
-            </Text>
-            <Text
-              style={{
-                color: '#292929',
-                fontFamily: 'work-sans',
-                fontWeight: '500',
-                fontSize: 15,
-              }}
-            >
-              Comentario
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              marginVertical: 8,
-            }}
-          >
-            <View
-              style={{
-                borderRadius: 50,
-                backgroundColor: '#fff',
-                width: 30,
-                height: 30,
-                marginRight: 10,
-                overflow: 'hidden',
-                borderStyle: 'solid',
-                borderColor: '#292929',
-                borderWidth: 2,
-              }}
-            >
-              <Image
-                source={{ uri: data[0].source }}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                }}
-              />
-            </View>
-            <Text
-              style={{
-                marginRight: 10,
-                color: '#0104AC',
-                fontFamily: 'work-sans',
-                fontWeight: '700',
-                fontSize: 15,
-              }}
-            >
-              Usuario
-            </Text>
-            <Text
-              style={{
-                color: '#292929',
-                fontFamily: 'work-sans',
-                fontWeight: '500',
-                fontSize: 15,
-              }}
-            >
-              Comentario
-            </Text>
-          </View>
+          ) : null}
+          {totalComments}
         </View>
       </View>
     </ScrollView>
