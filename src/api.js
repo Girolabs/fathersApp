@@ -113,3 +113,19 @@ export const getCheckUnseenPosts = () => {
 export const markAllPost = () => {
   return instance.post('/api/v1/bulletin-board/mark-all-posts?action=seen');
 };
+
+export const getLastPhotos = () => {
+  return instance.get(`/api/v1/photo-gallery/?limit=3&includeComments=false&includeLikes=false`);
+};
+
+export const getPhoto = (photoGalleryId, fields) => {
+  return instance.get(`/api/v1/photo-gallery/${photoGalleryId}${fields ? `?fields=${fields}` : ''}`);
+};
+
+export const getPhotos = (fields) => {
+  return instance.get(`/api/v1/photo-gallery/${fields ? `?fields=${fields}` : ''}`);
+};
+
+export const savePhoto = (values) => {
+  return instance.post('/api/v1/photo-gallery', values);
+};

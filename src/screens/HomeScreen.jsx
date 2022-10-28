@@ -12,7 +12,7 @@ import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { I18nContext } from '../context/I18nProvider';
-import { getReminders } from '../api';
+import { getLastPhotos, getPhoto, getPhotos, getReminders } from '../api';
 import RemindersHeaders from '../components/RemindersHeaders';
 import { BulletinCheckContext } from '../context/BulletinCheckProvider';
 import { Pressable } from 'react-native';
@@ -143,6 +143,9 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
     loadReminders();
+    //getLastPhotos().then((res) => console.log('3 PHOTOS', res.data.result));
+    getPhoto(3).then((res) => console.log('PHOTO ID', res.data.result));
+    //getPhotos('all').then((res) => console.log('ALL PHOTOS', res.data.result));
   }, []);
 
   return (

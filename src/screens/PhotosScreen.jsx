@@ -24,7 +24,7 @@ const PhotosScreen = ({ navigation }) => {
         }}
       >
         <Pressable
-          onPress={() => navigation.navigate('Photo')}
+          onPress={() => navigation.navigate('Photo', { photoGalleryId: 3 })}
           style={{
             width: '90%',
             height: 444,
@@ -106,7 +106,7 @@ const PhotosScreen = ({ navigation }) => {
           </View>
         </Pressable>
         <Pressable
-          onPress={() => navigation.navigate('Photo')}
+          onPress={() => navigation.navigate('Photo', { photoGalleryId: 1 })}
           style={{
             width: '90%',
             height: 444,

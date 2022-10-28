@@ -25,6 +25,7 @@ import { TextInput } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import imageIcon from '../../assets/imageIcon.png';
 import pencil from '../../assets/editpencil.png';
+import { savePhoto } from '../api';
 
 const GalleryScreen = ({ navigation }) => {
   const [photo, setPhoto] = useState(null);
@@ -44,6 +45,25 @@ const GalleryScreen = ({ navigation }) => {
     if (!result.cancelled) {
       setPhoto(result.uri);
     }
+  };
+
+  const handleSubmit = function () {
+    const formValues = {
+      data: photo,
+      caption: description,
+    };
+    savePhoto(formValues).then(
+      (res) => {
+        console.log('RESULTADO: ', res);
+        Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
+        navigation.goBack();
+      },
+      (err) => {
+        Alert.alert('Error');
+        console.log(err);
+      },
+    );
+    navigation.goBack();
   };
 
   return (
