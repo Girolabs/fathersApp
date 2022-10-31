@@ -1,193 +1,228 @@
-import { View, Text, ScrollView, Image } from 'react-native';
-import React from 'react';
+import { View, Text, ScrollView, Image, ActivityIndicator, Pressable } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
-import PhotoScreen from './PhotoScreen';
 import data from '../data/data';
 import like from '../../assets/heart-white.png';
 import comments from '../../assets/message-circle-white.png';
 import search from '../../assets/search.png';
-import { Pressable } from 'react-native';
+import { getPhotos, url } from '../api';
 
 const PhotosScreen = ({ navigation }) => {
+  const [loading, setLoading] = useState(false);
+  const [photos, setPhotos] = useState([]);
+
+  const loadPhotos = () => {
+    setLoading(true);
+    getPhotos().then((res) => {
+      setPhotos(res.data.result);
+      setLoading(false);
+    });
+    console.log('FOTOS', photos);
+  };
+
+  useEffect(() => {
+    loadPhotos();
+  }, []);
+
   return (
     <ScrollView>
-      <View
-        style={{
-          backgroundColor: '#F2F3FF',
-          width: '100%',
-          height: '100%',
-          alignItems: 'center',
-          marginTop: 10,
-        }}
-      >
-        <Pressable
-          onPress={() => navigation.navigate('Photo', { photoGalleryId: 3 })}
+      {!loading ? (
+        <View
           style={{
-            width: '90%',
-            height: 444,
-            backgroundColor: 'red',
-            borderRadius: 10,
-            overflow: 'hidden',
-            marginVertical: 10,
+            backgroundColor: '#F2F3FF',
+            width: '100%',
+            height: '100%',
+            alignItems: 'center',
+            marginTop: 10,
           }}
         >
-          <Image
-            resizeMode="cover"
-            source={{ uri: data[0].source }}
-            style={{
-              width: '100%',
-              height: '100%',
-            }}
-          />
-          <Image
-            resizeMode="cover"
-            style={{
-              position: 'absolute',
-              left: '90%',
-              top: 17,
-              width: 20,
-              height: 20,
-            }}
-            source={search}
-          />
-          <View
-            style={{
-              width: '100%',
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              position: 'absolute',
-              top: '85%',
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 15,
-                fontFamily: 'work-sans',
-                fontWeight: '400',
-                color: '#fff',
-                paddingLeft: 17,
-              }}
-            >
-              {data[0].title}
-            </Text>
-          </View>
-          <View
-            style={{
-              width: '100%',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              position: 'absolute',
-              top: 402,
-            }}
-          >
-            <Text
-              style={{
-                color: '#fff',
-                marginHorizontal: 17,
-              }}
-            >
-              <Image source={like} /> {'  '}245 likes
-            </Text>
+          {photos.map((p) => {
+            return (
+              <Pressable
+                onPress={() => navigation.navigate('Photo', { photoGalleryId: p.photoGalleryId })}
+                style={{
+                  width: '90%',
+                  height: 444,
+                  backgroundColor: 'red',
+                  borderRadius: 10,
+                  overflow: 'hidden',
+                  marginVertical: 10,
+                }}
+              >
+                <Image
+                  resizeMode="cover"
+                  source={{ uri: url + p.url }}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                  }}
+                />
+                <Image
+                  resizeMode="cover"
+                  style={{
+                    position: 'absolute',
+                    left: '90%',
+                    top: 17,
+                    width: 20,
+                    height: 20,
+                  }}
+                  source={search}
+                />
+                <View
+                  style={{
+                    width: '100%',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    position: 'absolute',
+                    top: '85%',
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontFamily: 'work-sans',
+                      fontWeight: '400',
+                      color: '#fff',
+                      paddingLeft: 17,
+                    }}
+                  >
+                    {p.caption}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    width: '100%',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    position: 'absolute',
+                    top: 402,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: '#fff',
+                      marginHorizontal: 17,
+                    }}
+                  >
+                    <Image source={like} /> {'  ' + p.likesCount + ' ' + i18n.t('GALLERY.LIKES')}
+                  </Text>
 
-            <Text
+                  <Text
+                    style={{
+                      color: '#fff',
+                      marginHorizontal: 17,
+                    }}
+                  >
+                    <Image source={comments} />
+                    {'  ' + p.commentsCount + ' ' + i18n.t('GALLERY.COMMENTS')}
+                  </Text>
+                </View>
+              </Pressable>
+            );
+          })}
+
+          {/*
+            <Pressable
+              onPress={() => navigation.navigate('Photo', { photoGalleryId: 4 })}
               style={{
-                color: '#fff',
-                marginHorizontal: 17,
+                width: '90%',
+                height: 444,
+                backgroundColor: 'red',
+                borderRadius: 10,
+                overflow: 'hidden',
+                marginVertical: 10,
               }}
             >
-              <Image source={comments} />
-              {'  '}20 comments
-            </Text>
-          </View>
-        </Pressable>
-        <Pressable
-          onPress={() => navigation.navigate('Photo', { photoGalleryId: 1 })}
+              <Image
+                resizeMode="cover"
+                source={{ uri: data[2].source }}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+              <Image
+                resizeMode="cover"
+                style={{
+                  position: 'absolute',
+                  left: '90%',
+                  top: 17,
+                  width: 20,
+                  height: 20,
+                }}
+                source={search}
+              />
+              <View
+                style={{
+                  width: '100%',
+                  flexDirection: 'row',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                  position: 'absolute',
+                  top: '85%',
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 15,
+                    fontFamily: 'work-sans',
+                    fontWeight: '400',
+                    color: '#fff',
+                    paddingLeft: 17,
+                  }}
+                >
+                  {data[2].title}
+                </Text>
+              </View>
+              <View
+                style={{
+                  width: '100%',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  position: 'absolute',
+                  top: 402,
+                }}
+              >
+                <Text
+                  style={{
+                    color: '#fff',
+                    marginHorizontal: 17,
+                  }}
+                >
+                  <Image source={like} /> {'  '}245 {i18n.t('GALLERY.LIKES')}
+                </Text>
+
+                <Text
+                  style={{
+                    color: '#fff',
+                    marginHorizontal: 17,
+                  }}
+                >
+                  <Image source={comments} />
+                  {'  '}20 {i18n.t('GALLERY.COMMENTS')}
+                </Text>
+              </View>
+            </Pressable>
+                */}
+        </View>
+      ) : (
+        <View
           style={{
-            width: '90%',
-            height: 444,
-            backgroundColor: 'red',
-            borderRadius: 10,
-            overflow: 'hidden',
-            marginVertical: 10,
+            flex: 1,
+            padding: 15,
+            backgroundColor: Colors.surfaceColorPrimary,
+            justifyContent: 'center',
           }}
         >
-          <Image
-            resizeMode="cover"
-            source={{ uri: data[2].source }}
-            style={{
-              width: '100%',
-              height: '100%',
-            }}
-          />
-          <Image
-            resizeMode="cover"
-            style={{
-              position: 'absolute',
-              left: '90%',
-              top: 17,
-              width: 20,
-              height: 20,
-            }}
-            source={search}
-          />
-          <View
-            style={{
-              width: '100%',
-              flexDirection: 'row',
-              justifyContent: 'flex-start',
-              alignItems: 'center',
-              position: 'absolute',
-              top: '85%',
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 15,
-                fontFamily: 'work-sans',
-                fontWeight: '400',
-                color: '#fff',
-                paddingLeft: 17,
-              }}
-            >
-              {data[2].title}
-            </Text>
-          </View>
-          <View
-            style={{
-              width: '100%',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              position: 'absolute',
-              top: 402,
-            }}
-          >
-            <Text
-              style={{
-                color: '#fff',
-                marginHorizontal: 17,
-              }}
-            >
-              <Image source={like} /> {'  '}245 likes
-            </Text>
-
-            <Text
-              style={{
-                color: '#fff',
-                marginHorizontal: 17,
-              }}
-            >
-              <Image source={comments} />
-              {'  '}20 comments
-            </Text>
-          </View>
-        </Pressable>
-      </View>
+          <ActivityIndicator size="large" color={Colors.primaryColor} />
+        </View>
+      )}
     </ScrollView>
   );
 };

@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   },
   image: {
     ...StyleSheet.absoluteFillObject,
-    resizeMode: 'contain',
+    //resizeMode: 'contain',
   },
   dotContainer: {
     backgroundColor: 'rgb(230,0,0)',

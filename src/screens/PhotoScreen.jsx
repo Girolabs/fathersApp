@@ -166,7 +166,7 @@ const PhotoScreen = ({ navigation }) => {
                 <TextInput
                   style={{
                     height: 50,
-                    marginVertical: 10,
+                    marginVertical: 15,
                     borderRadius: 5,
                     backgroundColor: '#FFFFFF',
                     padding: 10,
@@ -181,61 +181,65 @@ const PhotoScreen = ({ navigation }) => {
                 />
                 <Pressable
                   onPress={() => {
-                    setTotalComments((ant) => [
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          justifyContent: 'flex-start',
-                          alignItems: 'center',
-                          marginTop: 21,
-                          marginVertical: 8,
-                        }}
-                      >
+                    if (comment) {
+                      setTotalComments((ant) => [
                         <View
                           style={{
-                            borderRadius: 50,
-                            backgroundColor: '#fff',
-                            width: 30,
-                            height: 30,
-                            marginRight: 10,
-                            overflow: 'hidden',
-                            borderStyle: 'solid',
-                            borderColor: '#292929',
-                            borderWidth: 2,
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            marginTop: 21,
+                            marginVertical: 8,
                           }}
+                          key={ant + 1}
                         >
-                          <Image
-                            source={{ uri: data[0].source }}
+                          <View
                             style={{
-                              width: '100%',
-                              height: '100%',
+                              borderRadius: 50,
+                              backgroundColor: '#fff',
+                              width: 30,
+                              height: 30,
+                              marginRight: 10,
+                              overflow: 'hidden',
+                              borderStyle: 'solid',
+                              borderColor: '#292929',
+                              borderWidth: 2,
                             }}
-                          />
-                        </View>
-                        <Text
-                          style={{
-                            marginRight: 10,
-                            color: '#0104AC',
-                            fontFamily: 'work-sans',
-                            fontWeight: '700',
-                            fontSize: 15,
-                          }}
-                        >
-                          Usuario
-                        </Text>
-                        <Text
-                          style={{
-                            color: '#292929',
-                            fontFamily: 'work-sans',
-                            fontWeight: '500',
-                            fontSize: 15,
-                          }}
-                        >
-                          {comment}
-                        </Text>
-                      </View>,
-                      ...ant,
-                    ]);
+                          >
+                            <Image
+                              source={{ uri: data[0].source }}
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                              }}
+                            />
+                          </View>
+                          <Text
+                            style={{
+                              marginRight: 10,
+                              color: '#0104AC',
+                              fontFamily: 'work-sans',
+                              fontWeight: '700',
+                              fontSize: 15,
+                            }}
+                          >
+                            Usuario
+                          </Text>
+                          <Text
+                            style={{
+                              color: '#292929',
+                              fontFamily: 'work-sans',
+                              fontWeight: '500',
+                              fontSize: 15,
+                            }}
+                          >
+                            {comment}
+                          </Text>
+                        </View>,
+                        ...ant,
+                      ]);
+                      setComment('');
+                    }
                   }}
                   style={{
                     position: 'absolute',

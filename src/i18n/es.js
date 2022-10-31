@@ -227,6 +227,7 @@ exports.ES = {
     LIKES: 'me gusta',
     SEE_ALL: 'Ver todo',
     SUCCESS: 'Datos guardados exitosamente',
+    COMMENT: 'Comentar',
   },
   ASSIGNMENTS_FORM: {
     TITLE: 'Asignar cargo',

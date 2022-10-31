@@ -115,6 +115,7 @@ const HomeScreen = ({ navigation }) => {
   const [photoModal, setPhotoModal] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [showComments, setShowComments] = useState(false);
+  const [photos, setPhotos] = useState([]);
 
   const loadReminders = async () => {
     const status = await Network.getNetworkStateAsync();
@@ -143,9 +144,9 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
     loadReminders();
-    //getLastPhotos().then((res) => console.log('3 PHOTOS', res.data.result));
-    getPhoto(3).then((res) => console.log('PHOTO ID', res.data.result));
-    //getPhotos('all').then((res) => console.log('ALL PHOTOS', res.data.result));
+    getLastPhotos().then((res) => setPhotos(res.data.result));
+    getPhoto(4).then((res) => console.log('PHOTO ID', res.data.result));
+    getPhotos().then((res) => console.log('ALL PHOTOS', res.data.result));
   }, []);
 
   return (
@@ -290,7 +291,7 @@ const HomeScreen = ({ navigation }) => {
                     overflow: 'hidden',
                   }}
                 >
-                  <CustomSlider data={data} />
+                  <CustomSlider data={photos} />
                   {/*<Pressable
                         style={{ width: '30%', height: 100, backgroundColor: '#fff', borderRadius: 8 }}
                         onPress={() => {

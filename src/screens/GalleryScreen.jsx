@@ -63,7 +63,6 @@ const GalleryScreen = ({ navigation }) => {
         console.log(err);
       },
     );
-    navigation.goBack();
   };
 
   return (
@@ -186,6 +185,7 @@ const GalleryScreen = ({ navigation }) => {
       >
         <Button
           onPress={() => {
+            //handleSubmit();
             Alert.alert('Datos guardados exitosamente');
             navigation.goBack();
           }}

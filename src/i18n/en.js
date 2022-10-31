@@ -227,6 +227,7 @@ exports.EN = {
     LIKES: 'likes',
     SEE_ALL: 'See all',
     SUCCESS: 'Data saved successfully',
+    COMMENT: 'Comment',
   },
   ASSIGNMENTS_FORM: {
     TITLE: 'Assign position',

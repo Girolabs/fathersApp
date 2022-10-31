@@ -115,15 +115,15 @@ export const markAllPost = () => {
 };
 
 export const getLastPhotos = () => {
-  return instance.get(`/api/v1/photo-gallery/?limit=3&includeComments=false&includeLikes=false`);
+  return instance.get(`/api/v1/photo-gallery?limit=3&includeComments=false&includeLikes=false`);
 };
 
 export const getPhoto = (photoGalleryId, fields) => {
   return instance.get(`/api/v1/photo-gallery/${photoGalleryId}${fields ? `?fields=${fields}` : ''}`);
 };
 
-export const getPhotos = (fields) => {
-  return instance.get(`/api/v1/photo-gallery/${fields ? `?fields=${fields}` : ''}`);
+export const getPhotos = () => {
+  return instance.get(`/api/v1/photo-gallery`);
 };
 
 export const savePhoto = (values) => {

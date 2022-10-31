@@ -4,24 +4,27 @@ import { View, Text, Pressable, SafeAreaView, Image, Modal } from 'react-native'
 import styles from '../constants/styles';
 import { Ionicons } from 'expo-vector-icons';
 import Colors from '../constants/Colors';
+import { url } from '../api';
+import { Alert } from 'react-native';
+import i18n from 'i18n-js';
 
 const CarouselItem = ({ item, index }, parallaxProps) => {
   return (
     <>
       <Pressable
         onPress={() => {
-          alert(item.title);
+          Alert.alert(i18n.t('GALLERY.CAPTION'), item.caption);
         }}
       >
         <SafeAreaView style={styles.item}>
           <ParallaxImage
-            source={{ uri: item.source }} /* the source of the image */
+            source={{ uri: url + item.url }} /* the source of the image */
             containerStyle={styles.imageContainer}
             style={styles.image}
             {...parallaxProps} /* pass in the necessary props */
           />
           <Text style={styles.title} numberOfLines={2}>
-            {item.description}
+            {item.caption}
           </Text>
         </SafeAreaView>
       </Pressable>
