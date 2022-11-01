@@ -35,15 +35,16 @@ const GalleryScreen = ({ navigation }) => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
+      //allowsEditing: true,
+      //aspect: [4, 3],
       quality: 1,
+      base64: true,
     });
 
     console.log(result);
 
     if (!result.cancelled) {
-      setPhoto(result.uri);
+      setPhoto('data:image/jpg;base64,' + result.base64);
     }
   };
 
@@ -186,6 +187,7 @@ const GalleryScreen = ({ navigation }) => {
         <Button
           onPress={() => {
             //handleSubmit();
+            console.log(photo, description);
             Alert.alert('Datos guardados exitosamente');
             navigation.goBack();
           }}

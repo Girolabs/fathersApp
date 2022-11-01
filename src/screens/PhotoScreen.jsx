@@ -239,6 +239,7 @@ const PhotoScreen = ({ navigation }) => {
                         ...ant,
                       ]);
                       setComment('');
+                      setOpenComment(false);
                     }
                   }}
                   style={{
