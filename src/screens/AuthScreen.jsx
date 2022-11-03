@@ -1,5 +1,14 @@
 import React, { Component, Fragment } from 'react';
-import { ScrollView, StyleSheet, KeyboardAvoidingView, View, Text, Image, ActivityIndicator , Platform} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  KeyboardAvoidingView,
+  View,
+  Text,
+  Image,
+  ActivityIndicator,
+  Platform,
+} from 'react-native';
 import { I18nContext } from '../context/I18nProvider';
 import { AuthContext } from '../context/AuthProvider';
 import Colors from '../constants/Colors';
@@ -80,7 +89,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.surfaceColorSecondary,
     borderRadius: 5,
     marginVertical: 5,
-    padding: Platform.OS === 'ios' ? 15 : 0
+    padding: Platform.OS === 'ios' ? 15 : 0,
   },
 });
 
@@ -169,6 +178,7 @@ class AuthScreen extends Component {
           //await AsyncStorage.setItem('token',res.data.result)
           try {
             await AsyncStorage.setItem('token', data);
+            await AsyncStorage.setItem('email', identity);
           } catch (error) {
             // Error saving data
             console.log('try', error);

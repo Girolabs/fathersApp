@@ -1,4 +1,14 @@
-import { View, Text, Image, StyleSheet, ScrollView, Pressable, Platform, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  Pressable,
+  Platform,
+  ActivityIndicator,
+  AsyncStorage,
+} from 'react-native';
 import React from 'react';
 import data from '../data/data';
 import HeaderButton from '../components/HeaderButton';
@@ -12,7 +22,8 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import { NavigationEvents } from 'react-navigation';
 import { useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
-import { getPhoto, url } from '../api';
+import { getPersonByUser, getPersons, getPhoto, url } from '../api';
+import icon from '../../assets/img/icon_app.png';
 
 const PhotoScreen = ({ navigation }) => {
   const photoID = navigation.getParam('photoGalleryId');
@@ -23,6 +34,9 @@ const PhotoScreen = ({ navigation }) => {
   const [openComment, setOpenComment] = useState(false);
   const [comment, setComment] = useState('');
   const [photo, setPhoto] = useState({});
+  const [user, setUser] = useState({});
+  const [userId, setUserId] = useState('');
+  const [email, setEmail] = useState('');
 
   const loadPhoto = () => {
     setLoading(true);
@@ -33,7 +47,35 @@ const PhotoScreen = ({ navigation }) => {
     });
   };
 
+  const getEmail = async () => {
+    const identity = await AsyncStorage.getItem('email');
+    console.log(identity);
+    setEmail(identity);
+  };
+
+  const loadPerson = () => {
+    if (email !== '') {
+      getPersons().then((res) => {
+        const data = res.data.result;
+        const dataFil = data.filter((f) => f.email === email);
+        setUserId(dataFil[0].personId);
+      });
+      console.log(userId);
+    }
+  };
+
+  const loadUser = () => {
+    if (userId)
+      getPersonByUser(userId).then((res) => {
+        setUser({
+          fullName: res.data.result.fullName,
+          photo: res.data.result.photo,
+        });
+      });
+  };
+
   useEffect(() => {
+    getEmail();
     loadPhoto();
     console.log('ID: ', photoID);
     async function orientationBack() {
@@ -44,6 +86,14 @@ const PhotoScreen = ({ navigation }) => {
       orientationBack();
     };
   }, []);
+
+  useEffect(() => {
+    loadUser();
+  }, [userId]);
+
+  useEffect(() => {
+    loadPerson();
+  }, [email]);
   return (
     <ScrollView>
       <NavigationEvents
@@ -160,7 +210,7 @@ const PhotoScreen = ({ navigation }) => {
             {openComment ? (
               <View
                 style={{
-                  marginVertical: 20,
+                  marginBottom: 20,
                 }}
               >
                 <TextInput
@@ -207,7 +257,7 @@ const PhotoScreen = ({ navigation }) => {
                             }}
                           >
                             <Image
-                              source={{ uri: data[0].source }}
+                              source={user.photo ? { uri: url + user.photo } : icon}
                               style={{
                                 width: '100%',
                                 height: '100%',
@@ -223,7 +273,7 @@ const PhotoScreen = ({ navigation }) => {
                               fontSize: 15,
                             }}
                           >
-                            Usuario
+                            {user.fullName ? user.fullName : 'Guest'}
                           </Text>
                           <Text
                             style={{
@@ -265,7 +315,7 @@ const PhotoScreen = ({ navigation }) => {
                       color: 'white',
                     }}
                   >
-                    Comentar
+                    {i18n.t('GALLERY.COMMENT')}
                   </Text>
                 </Pressable>
               </View>
