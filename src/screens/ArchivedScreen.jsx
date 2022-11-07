@@ -36,7 +36,8 @@ const ArchivedScreen = ({ navigation }) => {
         .then((res) => {
           const fetchedPosts = res.data.result;
           console.log(fetchedPosts);
-          setPosts(fetchedPosts);
+          const archived = fetchedPosts.filter((res) => res.isArchived);
+          setPosts(archived);
           setLoading(false);
         })
         .catch(() => {

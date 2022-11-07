@@ -75,7 +75,8 @@ const BulletinScreen = ({ navigation }) => {
       getBoard()
         .then((res) => {
           const fetchedPosts = res.data.result;
-          setPosts(fetchedPosts);
+          const notArchived = fetchedPosts.filter((res) => !res.isArchived);
+          setPosts(notArchived);
           markCheckUnseenCounter();
           setLoading(false);
         })

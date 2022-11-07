@@ -36,7 +36,8 @@ const ArchiveScreen = ({ navigation }) => {
         .then((res) => {
           const fetchedPosts = res.data.result;
           console.log(fetchedPosts);
-          setPosts(fetchedPosts);
+          const notArchived = fetchedPosts.filter((res) => !res.isArchived);
+          setPosts(notArchived);
           setLoading(false);
         })
         .catch(() => {

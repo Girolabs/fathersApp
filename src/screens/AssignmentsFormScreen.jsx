@@ -54,6 +54,7 @@ const todayString = toIsoString(today);
 
 const EditableDateItem = function (props) {
   const [show, setShow] = useState(false);
+  const [showOk, setShowOk] = useState(false);
 
   let editableItemStyle = StyleSheet.create({
     item: {
@@ -76,9 +77,13 @@ const EditableDateItem = function (props) {
     <View style={editableItemStyle.item}>
       {show && (
         <DateTimePicker
+          display={Platform.OS === 'android' ? 'default' : 'spinner'}
           value={new Date(props.date)}
           onChange={(event, val) => {
-            setShow(false);
+            if (Platform.OS === 'android') {
+              setShow(false);
+            }
+            setShowOk(true);
             const pickedDate = toIsoString(val);
             if (event.type === 'set') {
               props.onDateChange(pickedDate);
@@ -112,6 +117,33 @@ const EditableDateItem = function (props) {
       >
         <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
       </Pressable>
+      {Platform.OS === 'ios' && showOk ? (
+        <Pressable
+          style={{
+            position: 'absolute',
+            top: '10%',
+            left: '90%',
+            width: 50,
+            padding: 10,
+            backgroundColor: '#000000DE',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 5,
+          }}
+          onPress={() => {
+            setShow(false);
+            setShowOk(false);
+          }}
+        >
+          <Text
+            style={{
+              color: 'white',
+            }}
+          >
+            OK
+          </Text>
+        </Pressable>
+      ) : null}
       <View />
     </View>
   );
