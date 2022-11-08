@@ -28,6 +28,7 @@ const ArchiveScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
+  const [checked, setChecked] = useState(false);
 
   const loadPosts = async () => {
     const status = await Network.getNetworkStateAsync();
@@ -64,7 +65,7 @@ const ArchiveScreen = ({ navigation }) => {
       {!loading ? (
         <View>
           {posts.map((post) => (
-            <BulletinItem item={post} key={post.postId} />
+            <BulletinItem item={post} key={post.postId} checked={checked} setChecked={() => setChecked(!checked)} />
           ))}
           <Pressable
             style={{

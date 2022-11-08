@@ -55,8 +55,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const BulletinItem = ({ navigation, item }) => {
-  const [checked, setChecked] = useState(false);
+const BulletinItem = ({ navigation, item, checked, setChecked }) => {
   return (
     <View style={styles.listItem}>
       <View
@@ -75,14 +74,18 @@ const BulletinItem = ({ navigation, item }) => {
           color="white"
           key={item.postId}
           status={checked ? 'checked' : 'unchecked'}
-          onPress={() => setChecked(!checked)}
+          onPress={() => {
+            setChecked();
+          }}
         />
         {
           <Pressable
             style={{
               position: 'absolute',
             }}
-            onPress={() => setChecked(!checked)}
+            onPress={() => {
+              setChecked();
+            }}
           >
             <Image source={checked ? check : null} />
           </Pressable>
@@ -91,7 +94,7 @@ const BulletinItem = ({ navigation, item }) => {
 
       <View style={styles.leftSideListItem}>
         <Text numberOfLines={2} style={item.isSeen ? styles.listItemTitleSeen : styles.listItemTitle}>
-          {item.title}
+          {item.title /*+ ' ' + checked*/}
         </Text>
       </View>
     </View>

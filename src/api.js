@@ -114,6 +114,14 @@ export const markAllPost = () => {
   return instance.post('/api/v1/bulletin-board/mark-all-posts?action=seen');
 };
 
+export const archivePost = (postId) => {
+  return instance.post(`/api/v1/bulletin-board/${postId}/mark-post?action=archived`);
+};
+
+export const unarchivePost = (postId) => {
+  return instance.post(`/api/v1/bulletin-board/${postId}/mark-post?action=unarchived`);
+};
+
 export const getLastPhotos = () => {
   return instance.get(`/api/v1/photo-gallery?limit=3&includeComments=false&includeLikes=false`);
 };
