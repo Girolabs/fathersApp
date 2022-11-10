@@ -35,8 +35,9 @@ const ArchivedScreen = ({ navigation }) => {
       getBoard()
         .then((res) => {
           const fetchedPosts = res.data.result;
-          console.log(fetchedPosts);
+          console.log('BOARD', fetchedPosts);
           const archived = fetchedPosts.filter((res) => res.isArchived);
+          console.log('Archivados', archived);
           setPosts(archived);
           setLoading(false);
         })

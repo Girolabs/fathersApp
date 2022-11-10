@@ -1,21 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  TouchableNativeFeedback,
-  Platform,
-  Image,
-  Pressable,
-} from 'react-native';
+import { Text, View, StyleSheet, Platform, Image, Pressable } from 'react-native';
 import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
 import { RadioButton } from 'react-native-paper';
-import { getBoard } from '../api';
-import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
-import { Ionicons } from 'expo-vector-icons';
 import check from '../../assets/checked.png';
 
 const styles = StyleSheet.create({
@@ -55,7 +43,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const BulletinItem = ({ navigation, item, checked, setChecked }) => {
+const BulletinItem = ({ navigation, item, postToUpdate }) => {
+  const [checked, setChecked] = useState(false);
   return (
     <View style={styles.listItem}>
       <View
@@ -75,7 +64,8 @@ const BulletinItem = ({ navigation, item, checked, setChecked }) => {
           key={item.postId}
           status={checked ? 'checked' : 'unchecked'}
           onPress={() => {
-            setChecked();
+            setChecked(!checked);
+            postToUpdate();
           }}
         />
         {
@@ -84,7 +74,8 @@ const BulletinItem = ({ navigation, item, checked, setChecked }) => {
               position: 'absolute',
             }}
             onPress={() => {
-              setChecked();
+              setChecked(!checked);
+              postToUpdate();
             }}
           >
             <Image source={checked ? check : null} />

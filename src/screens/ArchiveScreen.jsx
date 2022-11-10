@@ -1,22 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  TouchableNativeFeedback,
-  Platform,
-  ActivityIndicator,
-} from 'react-native';
-import { Ionicons } from 'expo-vector-icons';
-import { getBoard } from '../api';
+import { View, Text, ActivityIndicator, Alert } from 'react-native';
+import { archivePost, getBoard } from '../api';
 import Colors from '../constants/Colors';
 import i18n from 'i18n-js';
 import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
-import { RadioButton } from 'react-native-paper';
-import { Button } from 'react-native';
 import { Pressable } from 'react-native';
 import { ScrollView } from 'react-native';
 import BulletinItem from '../components/BulletinItem';
@@ -28,7 +16,7 @@ const ArchiveScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
-  const [checked, setChecked] = useState(false);
+  const [postToUpdate, setPostToUpdate] = useState([]);
 
   const loadPosts = async () => {
     const status = await Network.getNetworkStateAsync();
@@ -56,6 +44,22 @@ const ArchiveScreen = ({ navigation }) => {
     loadPosts();
   }, []);
 
+  const sendToArchive = () => {
+    postToUpdate.map((postId) => {
+      archivePost(postId).then(
+        (res) => {
+          console.log('RESPUESTA: ', res);
+        },
+        (err) => {
+          console.log('ERROR: ', err);
+          alert(err);
+          return;
+        },
+      );
+    });
+    Alert.alert('Datos guardados exitosamente!');
+  };
+
   return (
     <ScrollView
       style={{
@@ -65,13 +69,28 @@ const ArchiveScreen = ({ navigation }) => {
       {!loading ? (
         <View>
           {posts.map((post) => (
-            <BulletinItem item={post} key={post.postId} checked={checked} setChecked={() => setChecked(!checked)} />
+            <BulletinItem
+              item={post}
+              key={post.postId}
+              postToUpdate={() => {
+                if (!postToUpdate.includes(post.postId)) {
+                  setPostToUpdate((prev) => [post.postId, ...prev]);
+                } else {
+                  setPostToUpdate((prev) => prev.filter((id) => id !== post.postId));
+                }
+              }}
+            />
           ))}
           <Pressable
             style={{
               flexDirection: 'row',
               justifyContent: 'center',
               margin: 45,
+            }}
+            onPress={() => {
+              //sendToArchive();
+              Alert.alert('POST TO UPDATE: ', postToUpdate.toString());
+              navigation.goBack();
             }}
           >
             <Text
