@@ -5,12 +5,11 @@ import {
   StyleSheet,
   ScrollView,
   Pressable,
-  Platform,
   ActivityIndicator,
   AsyncStorage,
+  useWindowDimensions,
 } from 'react-native';
 import React from 'react';
-import data from '../data/data';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import i18n from 'i18n-js';
@@ -33,6 +32,7 @@ const PhotoScreen = ({ navigation }) => {
   const [totalComments, setTotalComments] = useState([]);
   const [openComment, setOpenComment] = useState(false);
   const [comment, setComment] = useState('');
+  const [showComments, setShowComments] = useState(true);
   const [photo, setPhoto] = useState({});
   const [user, setUser] = useState({});
   const [userId, setUserId] = useState('');
@@ -94,6 +94,9 @@ const PhotoScreen = ({ navigation }) => {
   useEffect(() => {
     loadPerson();
   }, [email]);
+
+  const windowHeight = useWindowDimensions().height;
+
   return (
     <ScrollView>
       <NavigationEvents
@@ -187,7 +190,7 @@ const PhotoScreen = ({ navigation }) => {
                 }}
               />
             </Pressable>
-            <Text>
+            <Text onPress={() => setShowComments(!showComments)}>
               {/*20 comments*/}
               {photo.commentsCount + ' ' + i18n.t('GALLERY.COMMENTS')}
             </Text>
@@ -290,6 +293,7 @@ const PhotoScreen = ({ navigation }) => {
                       ]);
                       setComment('');
                       setOpenComment(false);
+                      setShowComments(true);
                     }
                   }}
                   style={{
@@ -320,7 +324,7 @@ const PhotoScreen = ({ navigation }) => {
                 </Pressable>
               </View>
             ) : null}
-            {totalComments}
+            {showComments ? totalComments : null}
           </View>
         </View>
       ) : (
@@ -332,7 +336,13 @@ const PhotoScreen = ({ navigation }) => {
             justifyContent: 'center',
           }}
         >
-          <ActivityIndicator size="large" color={Colors.primaryColor} />
+          <ActivityIndicator
+            style={{
+              height: windowHeight,
+            }}
+            size="large"
+            color={Colors.primaryColor}
+          />
         </View>
       )}
     </ScrollView>

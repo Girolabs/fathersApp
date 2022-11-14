@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, ActivityIndicator, Pressable } from 'react-native';
+import { View, Text, ScrollView, Image, ActivityIndicator, Pressable, useWindowDimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -26,6 +26,8 @@ const PhotosScreen = ({ navigation }) => {
   useEffect(() => {
     loadPhotos();
   }, []);
+
+  const windowHeight = useWindowDimensions().height;
 
   return (
     <ScrollView>
@@ -221,7 +223,13 @@ const PhotosScreen = ({ navigation }) => {
             justifyContent: 'center',
           }}
         >
-          <ActivityIndicator size="large" color={Colors.primaryColor} />
+          <ActivityIndicator
+            style={{
+              height: windowHeight,
+            }}
+            size="large"
+            color={Colors.primaryColor}
+          />
         </View>
       )}
     </ScrollView>

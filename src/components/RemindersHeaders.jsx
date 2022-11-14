@@ -130,7 +130,7 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
 
 RemindersHeaders.propTypes = {
   onChangeSelectedHeader: PropTypes.func.isRequired,
-  selectedHeader: PropTypes.number.isRequired,
+  //selectedHeader: PropTypes.number.isRequired,
   reminders: PropTypes.arrayOf(PropTypes.array).isRequired,
 };
 

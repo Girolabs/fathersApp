@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, StyleSheet, ActivityIndicator, Text, ScrollView, Image, Modal } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Text, Image, FlatList, useWindowDimensions } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import i18n from 'i18n-js';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import * as Network from 'expo-network';
 import 'moment/min/locales';
-import { NavigationEvents, navigation } from 'react-navigation';
+import { NavigationEvents } from 'react-navigation';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
@@ -16,13 +16,9 @@ import { getLastPhotos, getPhoto, getPhotos, getReminders } from '../api';
 import RemindersHeaders from '../components/RemindersHeaders';
 import { BulletinCheckContext } from '../context/BulletinCheckProvider';
 import { Pressable } from 'react-native';
-import { Ionicons, Foundation } from 'expo-vector-icons';
-import bishopLogo from '../../assets/img/bishop.png';
-import person from '../../assets/img/person.png';
-import fatherIcon from '../../assets/img/fatherIcon.png';
+import { Ionicons } from 'expo-vector-icons';
 import star from '../../assets/star.png';
 import { CustomSlider } from '../components/CarouselSlider';
-import data from '../data/data';
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -112,9 +108,6 @@ const HomeScreen = ({ navigation }) => {
   const [visible, setVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
   const { unseenPostsCount, markCheckUnseenCounter, checkOnly } = useContext(BulletinCheckContext);
-  const [photoModal, setPhotoModal] = useState(false);
-  const [selectedPhoto, setSelectedPhoto] = useState(null);
-  const [showComments, setShowComments] = useState(false);
   const [photos, setPhotos] = useState([]);
 
   const loadReminders = async () => {
@@ -152,6 +145,8 @@ const HomeScreen = ({ navigation }) => {
     getPhotos().then((res) => console.log('ALL PHOTOS', res.data.result));
   }, []);
 
+  const windowHeight = useWindowDimensions().height;
+
   return (
     <I18nContext.Consumer>
       {(value) => {
@@ -159,298 +154,161 @@ const HomeScreen = ({ navigation }) => {
         console.log(moment.locale());
 
         return (
-          <ScrollView nestedScrollEnabled={true}>
-            <View style={styles.screen}>
-              <NavigationEvents
-                onDidFocus={() => {
-                  loadReminders();
-                  checkOnly();
-                }}
-              />
-              {/*photoModal ? (
-                <Modal>
-                  <Pressable
-                    style={{
-                      margin: 10,
-                      width: 25,
-                      flexDirection: 'row',
-                      justifyContent: 'center',
+          <FlatList
+            ListHeaderComponent={
+              <>
+                <View style={styles.screen}>
+                  <NavigationEvents
+                    onDidFocus={() => {
+                      loadReminders();
+                      checkOnly();
                     }}
-                    onPress={() => setPhotoModal(false)}
-                  >
-                    <Ionicons name="ios-arrow-back" size={24} />
-                  </Pressable>
+                  />
+                  {!loading ? (
+                    <Pressable
+                      onPress={() =>
+                        navigation.navigate('BulletinDetail', {
+                          postId: 5,
+                          favorite: true,
+                        })
+                      }
+                    >
+                      <View
+                        style={{
+                          height: 100,
+                          backgroundColor: '#F8CE46',
+                          borderRadius: 10,
+                          flexDirection: 'row',
+                          justifyContent: 'space-evenly',
+                          alignItems: 'center',
+                          padding: 20,
+                        }}
+                      >
+                        <Image source={star} />
+                        <Text
+                          style={{
+                            fontSize: 18,
+                            fontFamily: 'work-sans-semibold',
+                            color: Colors.primaryColor,
+                            paddingHorizontal: 15,
+                            width: '85%',
+                          }}
+                        >
+                          Oración de la Comunidad
+                        </Text>
+                        <Ionicons name="ios-arrow-forward" size={25} color={Colors.primaryColor} />
+                      </View>
+                      <RemindersHeaders
+                        reminders={reminders}
+                        selectedHeader={selectedReminder}
+                        onChangeSelectedHeader={(index) => setSelectedReminder(index)}
+                      />
+                    </Pressable>
+                  ) : (
+                    <View style={styles.screenLoading}>
+                      <ActivityIndicator
+                        style={{
+                          height: windowHeight,
+                        }}
+                        size="large"
+                        color={Colors.primaryColor}
+                      />
+                    </View>
+                  )}
+                  <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
+                    {snackMsg}
+                  </SnackBar>
+                </View>
+              </>
+            }
+            ListFooterComponent={
+              <>
+                {!loading ? (
                   <View
                     style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      //backgroundColor: Colors.onSurfaceColorPrimary,
+                      backgroundColor: '#fff',
+                      marginTop: 20,
                       width: '100%',
                       height: '100%',
                     }}
                   >
-                    <Image
-                      style={{
-                        backgroundColor: Colors.onSurfaceColorSecondary,
-                        width: 350,
-                        height: 350,
-                        borderRadius: 8,
-                      }}
-                      source={selectedPhoto}
-                    />
-                  </View>
-                </Modal>
-                    ) : null*/}
-              {!loading ? (
-                <>
-                  <View
-                    style={{
-                      height: 100,
-                      backgroundColor: '#F8CE46',
-                      borderRadius: 10,
-                      flexDirection: 'row',
-                      justifyContent: 'space-evenly',
-                      alignItems: 'center',
-                      padding: 20,
-                    }}
-                  >
-                    <Image source={star} />
-                    <Text
-                      style={{
-                        fontSize: 18,
-                        fontFamily: 'work-sans-semibold',
-                        color: Colors.primaryColor,
-                        paddingHorizontal: 15,
-                        width: '85%',
-                      }}
-                    >
-                      Oración de la Comunidad
-                    </Text>
-                    <Ionicons name="ios-arrow-forward" size={25} color={Colors.primaryColor} />
-                  </View>
-                  <RemindersHeaders
-                    reminders={reminders}
-                    selectedHeader={selectedReminder}
-                    onChangeSelectedHeader={(index) => setSelectedReminder(index)}
-                  />
-                </>
-              ) : (
-                <View style={styles.screenLoading}>
-                  <ActivityIndicator size="large" color={Colors.primaryColor} />
-                </View>
-              )}
-              <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
-                {snackMsg}
-              </SnackBar>
-            </View>
-            {!loading ? (
-              <View
-                style={{
-                  backgroundColor: '#fff',
-                  marginTop: 20,
-                  width: '100%',
-                  height: '100%',
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    margin: 30,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontFamily: 'work-sans-semibold',
-                      fontWeight: '600',
-                      color: Colors.primaryColor,
-                      fontSize: 27,
-                      textAlign: 'center',
-                    }}
-                  >
-                    {i18n.t('GALLERY.PHOTOS')}
-                  </Text>
-                  <Pressable
-                    style={{
-                      width: 30,
-                      height: 30,
-                      alignItems: 'center',
-                    }}
-                    onPress={() => {
-                      navigation.navigate('Gallery');
-                    }}
-                  >
-                    <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
-                  </Pressable>
-                </View>
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <CustomSlider data={photos} />
-                  {/*<Pressable
-                        style={{ width: '30%', height: 100, backgroundColor: '#fff', borderRadius: 8 }}
-                        onPress={() => {
-                          setPhotoModal(!photoModal);
-                          setSelectedPhoto(bishopLogo);
-                        }}
-                      >
-                        <Image source={bishopLogo} style={{ width: '100%', height: '100%' }} />
-                      </Pressable>
-                      <Pressable
-                        style={{ width: '30%', height: 100, backgroundColor: '#fff', borderRadius: 8 }}
-                        onPress={() => {
-                          setPhotoModal(!photoModal);
-                          setSelectedPhoto(person);
-                        }}
-                      >
-                        <Image source={person} style={{ width: '100%', height: '100%' }} />
-                      </Pressable>
-                      <Pressable
-                        style={{
-                          width: '30%',
-                          height: 100,
-                          backgroundColor: Colors.onSurfaceColorPrimary,
-                          borderRadius: 8,
-                        }}
-                        onPress={() => {
-                          setPhotoModal(!photoModal);
-                          setSelectedPhoto(fatherIcon);
-                        }}
-                      >
-                        <Image source={fatherIcon} style={{ width: '100%', height: '100%' }} />
-                      </Pressable>*/}
-                </View>
-                {/*<Pressable
+                    <View
                       style={{
                         flexDirection: 'row',
-                        justifyContent: 'flex-end',
-                        margin: 20,
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        margin: 30,
                       }}
-                      onPress={() => setShowComments(!showComments)}
                     >
                       <Text
                         style={{
-                          fontSize: 15,
+                          fontFamily: 'work-sans-semibold',
+                          fontWeight: '600',
                           color: Colors.primaryColor,
-                          fontWeight: 'bold',
-                          marginRight: 10,
+                          fontSize: 27,
+                          textAlign: 'center',
                         }}
                       >
-                        Comments
+                        {i18n.t('GALLERY.PHOTOS')}
                       </Text>
-                      <Foundation name="comments" size={25} color={Colors.primaryColor} />
-                      </Pressable>*/}
-                <Pressable
-                  onPress={() => navigation.navigate('Photos')}
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginTop: 28,
-                    marginBottom: 25,
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontFamily: 'work-sans-semibold',
-                      fontWeight: '600',
-                      fontSize: 15,
-                      color: '#0104AC',
-                      marginRight: 20,
-                    }}
-                  >
-                    {i18n.t('GALLERY.SEE_ALL')}
-                  </Text>
-                  <Ionicons name="ios-arrow-forward" size={23} color="#0104AC" />
-                </Pressable>
-                <View
-                  style={{
-                    borderBottomColor: '#F2F3FF',
-                    borderBottomWidth: StyleSheet.hairlineWidth,
-                    width: '90%',
-                  }}
-                />
-                {showComments ? (
-                  <View style={{ marginBottom: 20 }}>
+                      <Pressable
+                        style={{
+                          width: 30,
+                          height: 30,
+                          alignItems: 'center',
+                        }}
+                        onPress={() => {
+                          navigation.navigate('Gallery');
+                        }}
+                      >
+                        <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
+                      </Pressable>
+                    </View>
                     <View
                       style={{
-                        width: '90%',
-                        height: 'auto',
-                        backgroundColor: '#F2F3FF',
-                        borderRadius: 8,
-                        marginBottom: 5,
-                        marginLeft: 'auto',
-                        marginRight: 'auto',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      <CustomSlider data={photos} />
+                    </View>
+                    <Pressable
+                      onPress={() => navigation.navigate('Photos')}
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginTop: 28,
+                        marginBottom: 25,
                       }}
                     >
                       <Text
                         style={{
+                          fontFamily: 'work-sans-semibold',
+                          fontWeight: '600',
                           fontSize: 15,
-                          color: '#292929',
-                          paddingVertical: 10,
-                          paddingHorizontal: 20,
+                          color: '#0104AC',
+                          marginRight: 20,
                         }}
                       >
-                        Comentario
+                        {i18n.t('GALLERY.SEE_ALL')}
                       </Text>
-                    </View>
+                      <Ionicons name="ios-arrow-forward" size={23} color="#0104AC" />
+                    </Pressable>
                     <View
                       style={{
+                        borderBottomColor: '#F2F3FF',
+                        borderBottomWidth: StyleSheet.hairlineWidth,
                         width: '90%',
-                        height: 'auto',
-                        backgroundColor: '#F2F3FF',
-                        borderRadius: 8,
-                        marginVertical: 5,
-                        marginLeft: 'auto',
-                        marginRight: 'auto',
                       }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          color: '#292929',
-                          paddingVertical: 10,
-                          paddingHorizontal: 20,
-                        }}
-                      >
-                        ComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentarioComentario
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        width: '90%',
-                        height: 'auto',
-                        backgroundColor: '#F2F3FF',
-                        borderRadius: 8,
-                        marginVertical: 5,
-                        marginLeft: 'auto',
-                        marginRight: 'auto',
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 15,
-                          color: '#292929',
-                          paddingVertical: 10,
-                          paddingHorizontal: 20,
-                        }}
-                      >
-                        ComentarioComentarioComentarioComentarioComentarioComentarioComentario
-                      </Text>
-                    </View>
+                    />
                   </View>
                 ) : null}
-              </View>
-            ) : null}
-          </ScrollView>
+              </>
+            }
+          ></FlatList>
         );
       }}
     </I18nContext.Consumer>

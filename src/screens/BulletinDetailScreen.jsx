@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ActivityIndicator, Image, Pressable } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Image, Pressable, useWindowDimensions } from 'react-native';
 import { WebView } from 'react-native-webview';
 import i18n from 'i18n-js';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -20,11 +20,12 @@ const styles = StyleSheet.create({
 });
 
 const BulletinDetail = ({ navigation }) => {
+  const isFavorite = navigation.getParam('favorite');
   const [post, setPost] = useState({});
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
-  const [favorite, setFavorite] = useState(false);
+  const [favorite, setFavorite] = useState(isFavorite ? isFavorite : false);
 
   const loadPost = async (source) => {
     const status = await Network.getNetworkStateAsync();
@@ -81,6 +82,8 @@ const BulletinDetail = ({ navigation }) => {
     loadPost(source);
   }, []);
 
+  const windowHeight = useWindowDimensions().height;
+
   return (
     <View style={styles.screen}>
       <NavigationEvents
@@ -110,7 +113,13 @@ const BulletinDetail = ({ navigation }) => {
           <WebView originWhitelist={['*']} source={post} />
         </>
       ) : (
-        <ActivityIndicator size="large" color={Colors.primaryColor} />
+        <ActivityIndicator
+          style={{
+            height: windowHeight,
+          }}
+          size="large"
+          color={Colors.primaryColor}
+        />
       )}
       <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
         {snackMsg}

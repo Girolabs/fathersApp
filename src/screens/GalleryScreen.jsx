@@ -1,26 +1,10 @@
-import React, { Component, Fragment, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  AsyncStorage,
-  Platform,
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  ScrollView,
-  SafeAreaView,
-  Image,
-  Pressable,
-  Alert,
-  Button,
-} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Platform, Image, Pressable, Alert, Button } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
-//import Button from '../components/Button';
 import * as _ from 'lodash';
-import { Ionicons } from 'expo-vector-icons';
 import { TextInput } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import imageIcon from '../../assets/imageIcon.png';
@@ -35,7 +19,7 @@ const GalleryScreen = ({ navigation }) => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      //allowsEditing: true,
+      allowsEditing: true,
       //aspect: [4, 3],
       quality: 1,
       base64: true,

@@ -1,22 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  TouchableNativeFeedback,
-  Platform,
-  ActivityIndicator,
-} from 'react-native';
-import { Ionicons } from 'expo-vector-icons';
-import { getBoard } from '../api';
+import { View, Text, ActivityIndicator, Alert, useWindowDimensions } from 'react-native';
+import { getBoard, unarchivePost } from '../api';
 import Colors from '../constants/Colors';
 import i18n from 'i18n-js';
 import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
-import { RadioButton } from 'react-native-paper';
-import { Button } from 'react-native';
 import { Pressable } from 'react-native';
 import { ScrollView } from 'react-native';
 import BulletinItem from '../components/BulletinItem';
@@ -28,6 +16,7 @@ const ArchivedScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
+  const [postToUpdate, setPostToUpdate] = useState([]);
 
   const loadPosts = async () => {
     const status = await Network.getNetworkStateAsync();
@@ -56,6 +45,24 @@ const ArchivedScreen = ({ navigation }) => {
     loadPosts();
   }, []);
 
+  const sendToUnarchive = () => {
+    postToUpdate.map((postId) => {
+      unarchivePost(postId).then(
+        (res) => {
+          console.log('RESPUESTA: ', res);
+        },
+        (err) => {
+          console.log('ERROR: ', err);
+          alert(err);
+          return;
+        },
+      );
+    });
+    Alert.alert('Datos guardados exitosamente!');
+  };
+
+  const windowHeight = useWindowDimensions().height;
+
   return (
     <ScrollView
       style={{
@@ -65,32 +72,80 @@ const ArchivedScreen = ({ navigation }) => {
       {!loading ? (
         <View>
           {posts.map((post) => (
-            <BulletinItem item={post} key={post.postId} />
+            <BulletinItem
+              item={post}
+              key={post.postId}
+              postToUpdate={() => {
+                if (!postToUpdate.includes(post.postId)) {
+                  setPostToUpdate((prev) => [post.postId, ...prev]);
+                } else {
+                  setPostToUpdate((prev) => prev.filter((id) => id !== post.postId));
+                }
+              }}
+            />
           ))}
-          <Pressable
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              margin: 45,
-            }}
-          >
-            <Text
+          {posts.length === 0 ? (
+            <View
               style={{
-                fontFamily: 'work-sans',
-                fontStyle: 'normal',
-                fontWeight: '700',
-                fontSize: 14,
-                textTransform: 'uppercase',
-                color: 'rgba(0, 0, 0, 0.37)',
-                letterSpacing: 1,
+                height: windowHeight,
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
-              {i18n.t('ARCHIVE.UNARCHIVE')}
-            </Text>
-          </Pressable>
+              <Text
+                style={{
+                  fontFamily: 'work-sans',
+                  fontStyle: 'normal',
+                  fontWeight: '700',
+                  fontSize: 16,
+                  color: 'rgba(0, 0, 0, 0.37)',
+                  letterSpacing: 1,
+                }}
+              >
+                No hay posts archivados actualmente
+              </Text>
+            </View>
+          ) : (
+            <Pressable
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                margin: 45,
+              }}
+              onPress={() => {
+                if (postToUpdate.length > 0) {
+                  //sendToArchive();
+                  Alert.alert('POST TO UPDATE: ', postToUpdate.toString());
+                  navigation.goBack();
+                } else {
+                  Alert.alert('Error', 'Seleccione al menos un post por favor');
+                }
+              }}
+            >
+              <Text
+                style={{
+                  fontFamily: 'work-sans',
+                  fontStyle: 'normal',
+                  fontWeight: '700',
+                  fontSize: 14,
+                  textTransform: 'uppercase',
+                  color: 'rgba(0, 0, 0, 0.37)',
+                  letterSpacing: 1,
+                }}
+              >
+                {i18n.t('ARCHIVE.UNARCHIVE')}
+              </Text>
+            </Pressable>
+          )}
         </View>
       ) : (
-        <ActivityIndicator size="large" color={Colors.primaryColor} />
+        <ActivityIndicator
+          style={{
+            height: windowHeight,
+          }}
+          size="large"
+          color={Colors.primaryColor}
+        />
       )}
       <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
         {snackMsg}

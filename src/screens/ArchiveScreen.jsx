@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, ActivityIndicator, Alert, useWindowDimensions } from 'react-native';
 import { archivePost, getBoard } from '../api';
 import Colors from '../constants/Colors';
 import i18n from 'i18n-js';
@@ -60,6 +60,8 @@ const ArchiveScreen = ({ navigation }) => {
     Alert.alert('Datos guardados exitosamente!');
   };
 
+  const windowHeight = useWindowDimensions().height;
+
   return (
     <ScrollView
       style={{
@@ -88,9 +90,13 @@ const ArchiveScreen = ({ navigation }) => {
               margin: 45,
             }}
             onPress={() => {
-              //sendToArchive();
-              Alert.alert('POST TO UPDATE: ', postToUpdate.toString());
-              navigation.goBack();
+              if (postToUpdate.length > 0) {
+                //sendToArchive();
+                Alert.alert('POST TO UPDATE: ', postToUpdate.toString());
+                navigation.goBack();
+              } else {
+                Alert.alert('Error', 'Seleccione al menos un post por favor');
+              }
             }}
           >
             <Text
@@ -109,7 +115,13 @@ const ArchiveScreen = ({ navigation }) => {
           </Pressable>
         </View>
       ) : (
-        <ActivityIndicator size="large" color={Colors.primaryColor} />
+        <ActivityIndicator
+          style={{
+            height: windowHeight,
+          }}
+          size="large"
+          color={Colors.primaryColor}
+        />
       )}
       <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
         {snackMsg}
