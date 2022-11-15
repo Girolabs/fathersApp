@@ -95,7 +95,7 @@ const ArchiveScreen = ({ navigation }) => {
                 Alert.alert('POST TO UPDATE: ', postToUpdate.toString());
                 navigation.goBack();
               } else {
-                Alert.alert('Error', 'Seleccione al menos un post por favor');
+                Alert.alert('Error', i18n.t('ARCHIVE.ERROR'));
               }
             }}
           >

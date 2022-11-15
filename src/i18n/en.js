@@ -250,5 +250,7 @@ exports.EN = {
     UNARCHIVE: 'Unarchive',
     EDIT: 'Edit',
     ARCHIVED: 'Archived',
+    ERROR: 'Please select at least one post',
+    NO_POSTS: 'There are no currently archived posts',
   },
 };

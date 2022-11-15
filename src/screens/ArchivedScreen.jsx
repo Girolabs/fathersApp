@@ -102,7 +102,7 @@ const ArchivedScreen = ({ navigation }) => {
                   letterSpacing: 1,
                 }}
               >
-                No hay posts archivados actualmente
+                {i18n.t('ARCHIVE.NO_POSTS')}
               </Text>
             </View>
           ) : (
@@ -114,11 +114,11 @@ const ArchivedScreen = ({ navigation }) => {
               }}
               onPress={() => {
                 if (postToUpdate.length > 0) {
-                  //sendToArchive();
+                  //sendToUnarchive();
                   Alert.alert('POST TO UPDATE: ', postToUpdate.toString());
                   navigation.goBack();
                 } else {
-                  Alert.alert('Error', 'Seleccione al menos un post por favor');
+                  Alert.alert('Error', i18n.t('ARCHIVE.ERROR'));
                 }
               }}
             >

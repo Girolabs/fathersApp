@@ -250,5 +250,7 @@ exports.ES = {
     UNARCHIVE: 'Desarchivar',
     EDIT: 'Editar',
     ARCHIVED: 'Archivados',
+    ERROR: 'Seleccione al menos un post por favor',
+    NO_POSTS: 'No hay posts archivados actualmente',
   },
 };
