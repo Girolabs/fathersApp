@@ -1,0 +1,23 @@
+_id: req_af53362abddc4a689cd8d3270e1659cb
+type: Request
+parentId: fld_a85899a4b70a4f55af6857d4ef17c1b9
+modified: 1668638035190
+created: 1668638032664
+url: "{{ _.host }}/en/api/v1/bulletin-board/2000"
+name: bulletin board stipends post
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  token: "{{ _.jwt }}"
+metaSortKey: -1666160763433.7578
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

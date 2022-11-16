@@ -1,0 +1,10 @@
+_id: ut_60aba1df77ab4ec68ade60f777dcb03e
+type: UnitTest
+parentId: uts_99f3df50f60d4de28500083e7f1d5594
+modified: 1668637340377
+created: 1668637308216
+requestId: req_24e86cda58ac4f44be72c44e9ffcee7b
+name: Bulletin board 1 Returns 200
+code: |-
+  const response1 = await insomnia.send();
+  expect(response1.status).to.equal(200);

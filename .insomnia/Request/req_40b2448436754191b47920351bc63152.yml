@@ -1,0 +1,26 @@
+_id: req_40b2448436754191b47920351bc63152
+type: Request
+parentId: fld_a85899a4b70a4f55af6857d4ef17c1b9
+modified: 1668637955252
+created: 1668637949370
+url: "{{ _.host }}/en/api/v1/bulletin-board/mark-all-posts"
+name: bulletin board mark all posts unpinned
+description: ""
+method: POST
+body: {}
+parameters:
+  - name: action
+    value: unpinned
+    id: pair_b18537fdf5994e44b0706d9ae9f6cf10
+headers: []
+authentication:
+  type: bearer
+  token: "{{ _.jwt }}"
+metaSortKey: -1666160743394.5898
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
