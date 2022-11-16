@@ -1,10 +1,10 @@
-_id: req_b2dc0790a17c4d8aa23b5782e314d729
+_id: req_d0a90ae0ee1d41359b57f1db260cbdb9
 type: Request
-parentId: fld_17a5928cd3f44d938754895e7367236f
-modified: 1668630950153
-created: 1668626744276
-url: "{{ _.host }}/en/api/v1/generations/9"
-name: a generation
+parentId: fld_a85899a4b70a4f55af6857d4ef17c1b9
+modified: 1668631102081
+created: 1668631095414
+url: "{{ _.host }}/en/api/v1/bulletin-board/5"
+name: bulletin board dynamic post
 description: ""
 method: GET
 body: {}
@@ -13,7 +13,7 @@ headers: []
 authentication:
   type: bearer
   token: "{{ _.jwt }}"
-metaSortKey: -1666160826414
+metaSortKey: -1666160734806.375
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

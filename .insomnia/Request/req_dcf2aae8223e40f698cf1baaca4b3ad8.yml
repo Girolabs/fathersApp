@@ -1,0 +1,27 @@
+_id: req_dcf2aae8223e40f698cf1baaca4b3ad8
+type: Request
+parentId: fld_a85899a4b70a4f55af6857d4ef17c1b9
+modified: 1668633797382
+created: 1668633460639
+url: "{{ _.host }}/en/api/v1/bulletin-board/10/mark-post"
+name: bulletin board mark a post archived
+description: ""
+method: POST
+body: {}
+parameters:
+  - id: pair_d6c84f5ccf5d47b28354b364552bf1d6
+    name: action
+    value: archived
+    description: ""
+headers: []
+authentication:
+  type: bearer
+  token: "{{ _.jwt }}"
+metaSortKey: -1666160758662.5273
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

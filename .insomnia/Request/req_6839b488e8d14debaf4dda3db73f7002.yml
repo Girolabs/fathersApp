@@ -1,10 +1,10 @@
-_id: req_b2dc0790a17c4d8aa23b5782e314d729
+_id: req_6839b488e8d14debaf4dda3db73f7002
 type: Request
-parentId: fld_17a5928cd3f44d938754895e7367236f
-modified: 1668630950153
-created: 1668626744276
-url: "{{ _.host }}/en/api/v1/generations/9"
-name: a generation
+parentId: fld_f1ff7c4a8ced4aa18e441cfaa0ad6416
+modified: 1668630022573
+created: 1668629991569
+url: "{{ _.host }}/en/api/v1/filiations/48"
+name: a filiation
 description: ""
 method: GET
 body: {}
@@ -13,7 +13,7 @@ headers: []
 authentication:
   type: bearer
   token: "{{ _.jwt }}"
-metaSortKey: -1666160826414
+metaSortKey: -1666160948557.5
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true
