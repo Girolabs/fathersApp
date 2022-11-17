@@ -149,13 +149,13 @@ class GenerationDetailScreen extends Component {
     getGeneration(generationId, fields)
       .then((res) => {
         const generation = res.data.result;
-        //console.log('generacion', generation);
+        console.log('generacion', generation);
         this.setState({ generation: generation, loading: false });
       })
       .catch(() => {
         this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
       });
-    getGenerations('all').then((resGenerations) => {
+    /*getGenerations('all').then((resGenerations) => {
       let generations = resGenerations.data.result;
       let generationsAssignment = generations.map((asg) => {
         if (asg.name === this.state.generation.name && asg.mainAssignment.person.fullName !== undefined) {
@@ -166,7 +166,7 @@ class GenerationDetailScreen extends Component {
       });
       console.log('aca', generationsAssignment);
       this.setState({ generations: generations, hasAssignment: generationsAssignment });
-    });
+    });*/
   };
   async componentDidMount() {
     const { navigation } = this.props;
@@ -226,7 +226,7 @@ class GenerationDetailScreen extends Component {
                         navigation={navigation}
                         entity={generation}
                       />
-                      {hasAssignment ? (
+                      {generation.assignments.length > 0 ? (
                         <View>
                           <Text style={styles.sectionHeader}>{i18n.t('GENERAL.ASSIGNMENTS')}</Text>
                           <Pressable
@@ -265,9 +265,9 @@ class GenerationDetailScreen extends Component {
                             onPress={() => {
                               navigation.navigate('AssigmentsForm', {
                                 entityName: generation.name,
-                                roles: generations.map((item) => ({
-                                  name: item.mainAssignment?.roleTitle,
-                                  value: item.mainAssignment?.roleId,
+                                roles: generation.assignments.map((item) => ({
+                                  name: item.roleTitle,
+                                  value: item.roleId,
                                 })),
                                 entityId: generation.generationId,
                                 isCreate: true,
@@ -277,18 +277,14 @@ class GenerationDetailScreen extends Component {
                             <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
                           </Pressable>
 
-                          {generations.map((asg) => {
-                            if (
-                              asg.name === generation.name && showHistorical
-                                ? asg
-                                : asg.assignments.isActive && asg.mainAssignment.roleTitle
-                            )
+                          {generation.assignments.map((asg) => {
+                            if (showHistorical ? asg : asg.isActive)
                               return (
                                 <TouchableComp
-                                  key={[asg.mainAssignment?.personId.toString(), asg.mainAssignment?.startDate]}
+                                  key={[asg.personId.toString(), asg.startDate]}
                                   onPress={() => {
                                     navigation.navigate('PatreDetail', {
-                                      fatherId: asg.mainAssignment.person.personId,
+                                      fatherId: asg.person.personId,
                                     });
                                   }}
                                 >
@@ -297,7 +293,7 @@ class GenerationDetailScreen extends Component {
                                     <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 10 }}>
                                       <Image
                                         source={{
-                                          uri: `https://schoenstatt-fathers.link${asg.mainAssignment?.person.photo}`,
+                                          uri: `https://schoenstatt-fathers.link${asg.person.photo}`,
                                         }}
                                         style={{
                                           width: 50,
@@ -305,39 +301,29 @@ class GenerationDetailScreen extends Component {
                                           borderRadius: 25,
                                           marginRight: 10,
                                           borderWidth: 1,
-                                          borderColor: asg.assignments?.isActive ? '#292929' : '#B6B6D9',
+                                          borderColor: asg.isActive ? '#292929' : '#B6B6D9',
                                         }}
                                       />
 
                                       <View>
                                         <Text
                                           style={
-                                            asg.assignments?.isActive
-                                              ? styles.listItemBodyBlack
-                                              : styles.listItemBodyBlackInactive
+                                            asg.isActive ? styles.listItemBodyBlack : styles.listItemBodyBlackInactive
                                           }
                                         >
-                                          {asg.mainAssignment?.roleTitle}
+                                          {asg.roleTitle}
                                         </Text>
                                         <Text
                                           style={
-                                            asg.assignments?.isActive
-                                              ? styles.listItemBodyBlue
-                                              : styles.listItemBodyBlueInactive
+                                            asg.isActive ? styles.listItemBodyBlue : styles.listItemBodyBlueInactive
                                           }
                                         >
-                                          {asg.mainAssignment?.person.fullName}
+                                          {asg.person.fullName}
                                         </Text>
-                                        <Text
-                                          style={
-                                            asg.assignments?.isActive
-                                              ? styles.listItemBody
-                                              : styles.listItemBodyInactive
-                                          }
-                                        >
+                                        <Text style={asg.isActive ? styles.listItemBody : styles.listItemBodyInactive}>
                                           {/*`${moment.utc(asg.startDate).format(dateMask)}`*/}
-                                          {`${moment.utc(asg.mainAssignment?.startDate).format(dateMask)} - ${moment
-                                            .utc(asg.mainAssignment?.endDate)
+                                          {`${moment.utc(asg.startDate).format(dateMask)} - ${moment
+                                            .utc(asg.endDate)
                                             .format(dateMask)}`}
                                         </Text>
                                       </View>
@@ -351,17 +337,15 @@ class GenerationDetailScreen extends Component {
                                           this.props.navigation.navigate('AssigmentsForm', {
                                             entityName: generation.name,
                                             entityId: generation.generationId,
-                                            roleTitle: asg.mainAssignment.roleTitle,
-                                            roleId: asg.mainAssignment.roleId,
-                                            fatherId: asg.mainAssignment.person.personId,
+                                            roleTitle: asg.roleTitle,
+                                            roleId: asg.roleId,
+                                            fatherId: asg.person.personId,
                                             isCreate: false,
-                                            personName: asg.mainAssignment.person.fullName,
-                                            startDate: asg.mainAssignment.startDate
-                                              ? moment.utc(asg.mainAssignment.startDate).format(dateForm)
+                                            personName: asg.person.fullName,
+                                            startDate: asg.startDate
+                                              ? moment.utc(asg.startDate).format(dateForm)
                                               : null,
-                                            endDate: asg.mainAssignment.endDate
-                                              ? moment.utc(asg.mainAssignment.endDate).format(dateForm)
-                                              : null,
+                                            endDate: asg.endDate ? moment.utc(asg.endDate).format(dateForm) : null,
                                           });
                                         }}
                                       >

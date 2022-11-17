@@ -23,12 +23,14 @@ import { useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
 import { getPersonByUser, getPersons, getPhoto, url } from '../api';
 import icon from '../../assets/img/icon_app.png';
+import { Ionicons } from 'expo-vector-icons';
 
 const PhotoScreen = ({ navigation }) => {
   const photoID = navigation.getParam('photoGalleryId');
   const [loading, setLoading] = useState(false);
   const [like, setLike] = useState(false);
   const [totalLikes, setTotalLikes] = useState(245);
+  const [commentsCount, setCommentsCount] = useState(0);
   const [totalComments, setTotalComments] = useState([]);
   const [openComment, setOpenComment] = useState(false);
   const [comment, setComment] = useState('');
@@ -44,6 +46,8 @@ const PhotoScreen = ({ navigation }) => {
       setPhoto(res.data.result);
       setLoading(false);
       console.log(photo);
+      setTotalLikes(res.data.result.likesCount);
+      setCommentsCount(res.data.result.commentsCount);
     });
   };
 
@@ -77,6 +81,7 @@ const PhotoScreen = ({ navigation }) => {
   useEffect(() => {
     getEmail();
     loadPhoto();
+    console.log(photo);
     console.log('ID: ', photoID);
     async function orientationBack() {
       // Restric orientation PORTRAIT_UP screen
@@ -179,7 +184,7 @@ const PhotoScreen = ({ navigation }) => {
                 marginRight: 130,
               }}
             >
-              {/*totalLikes + " likes"*/ photo.likesCount + ' ' + i18n.t('GALLERY.LIKES')}
+              {/*totalLikes + " likes"*/ totalLikes + ' ' + i18n.t('GALLERY.LIKES')}
             </Text>
             <Pressable onPress={() => setOpenComment(!openComment)}>
               <Image
@@ -192,7 +197,7 @@ const PhotoScreen = ({ navigation }) => {
             </Pressable>
             <Text onPress={() => setShowComments(!showComments)}>
               {/*20 comments*/}
-              {photo.commentsCount + ' ' + i18n.t('GALLERY.COMMENTS')}
+              {commentsCount + ' ' + i18n.t('GALLERY.COMMENTS')}
             </Text>
           </View>
           <View
@@ -246,6 +251,14 @@ const PhotoScreen = ({ navigation }) => {
                           }}
                           key={ant + 1}
                         >
+                          {/*<Pressable
+                            style={{
+                              position: 'absolute',
+                              left: '95%',
+                            }}
+                          >
+                            <Ionicons name="md-close" size={20} color={Colors.primaryColor} />
+                          </Pressable>*/}
                           <View
                             style={{
                               borderRadius: 50,
@@ -294,6 +307,7 @@ const PhotoScreen = ({ navigation }) => {
                       setComment('');
                       setOpenComment(false);
                       setShowComments(true);
+                      setCommentsCount((ant) => ant + 1);
                     }
                   }}
                   style={{

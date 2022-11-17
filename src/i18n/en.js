@@ -252,5 +252,6 @@ exports.EN = {
     ARCHIVED: 'Archived',
     ERROR: 'Please select at least one post',
     NO_POSTS: 'There are no currently archived posts',
+    SUCCESS: 'Datos guardados exitosamente',
   },
 };

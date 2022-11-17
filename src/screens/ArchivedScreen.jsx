@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, Alert, useWindowDimensions } from 'react-native';
-import { getBoard, unarchivePost } from '../api';
+import { getArchivedPosts, getBoard, unarchivePost } from '../api';
 import Colors from '../constants/Colors';
 import i18n from 'i18n-js';
 import * as Network from 'expo-network';
@@ -21,13 +21,11 @@ const ArchivedScreen = ({ navigation }) => {
   const loadPosts = async () => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      getBoard()
+      getArchivedPosts()
         .then((res) => {
           const fetchedPosts = res.data.result;
-          console.log('BOARD', fetchedPosts);
-          const archived = fetchedPosts.filter((res) => res.isArchived);
-          console.log('Archivados', archived);
-          setPosts(archived);
+          console.log('Archivados', fetchedPosts);
+          setPosts(fetchedPosts);
           setLoading(false);
         })
         .catch(() => {
@@ -58,7 +56,7 @@ const ArchivedScreen = ({ navigation }) => {
         },
       );
     });
-    Alert.alert('Datos guardados exitosamente!');
+    Alert.alert(i18n.t('ARCHIVE.SUCCESS'));
   };
 
   const windowHeight = useWindowDimensions().height;
@@ -114,8 +112,8 @@ const ArchivedScreen = ({ navigation }) => {
               }}
               onPress={() => {
                 if (postToUpdate.length > 0) {
-                  //sendToUnarchive();
-                  Alert.alert('POST TO UPDATE: ', postToUpdate.toString());
+                  sendToUnarchive();
+                  //Alert.alert('POST TO UPDATE: ', postToUpdate.toString());
                   navigation.goBack();
                 } else {
                   Alert.alert('Error', i18n.t('ARCHIVE.ERROR'));

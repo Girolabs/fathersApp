@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ActivityIndicator, Image, Pressable, useWindowDimensions } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Image, Pressable, useWindowDimensions, Alert } from 'react-native';
 import { WebView } from 'react-native-webview';
 import i18n from 'i18n-js';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -9,7 +9,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
-import { getBoardPost } from '../api';
+import { getBoardPost, savePinnedPost, saveUnpinnedPost } from '../api';
 import star from '../../assets/star-outline.png';
 import starActive from '../../assets/star-active.png';
 
@@ -26,6 +26,9 @@ const BulletinDetail = ({ navigation }) => {
   const [visible, setVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
   const [favorite, setFavorite] = useState(isFavorite ? isFavorite : false);
+
+  const postId = navigation.getParam('postId');
+  const navigationUrl = navigation.getParam('url');
 
   const loadPost = async (source) => {
     const status = await Network.getNetworkStateAsync();
@@ -65,9 +68,37 @@ const BulletinDetail = ({ navigation }) => {
     }
   };
 
+  const savePin = () => {
+    setLoading(true);
+    savePinnedPost(postId).then(
+      (res) => {
+        console.log('funciono!', res);
+        Alert.alert(i18n.t('ARCHIVE.SUCCESS'));
+      },
+      (err) => {
+        console.log('ERROR: ', err);
+        alert(err);
+      },
+    );
+    setLoading(false);
+  };
+
+  const saveUnpin = () => {
+    setLoading(true);
+    saveUnpinnedPost(postId).then(
+      (res) => {
+        console.log('funciono!', res);
+        Alert.alert(i18n.t('ARCHIVE.SUCCESS'));
+      },
+      (err) => {
+        console.log('ERROR: ', err);
+        alert(err);
+      },
+    );
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const postId = navigation.getParam('postId');
-    const navigationUrl = navigation.getParam('url');
     let source = null;
     if (post) {
       source = {
@@ -106,7 +137,14 @@ const BulletinDetail = ({ navigation }) => {
               left: '78%',
               zIndex: 9,
             }}
-            onPress={() => setFavorite(!favorite)}
+            onPress={() => {
+              if (!favorite) {
+                savePin();
+              } else {
+                saveUnpin();
+              }
+              setFavorite(!favorite);
+            }}
           >
             {favorite ? <Image source={starActive} /> : <Image source={star} />}
           </Pressable>

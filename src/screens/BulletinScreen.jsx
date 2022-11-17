@@ -117,6 +117,21 @@ const BulletinScreen = ({ navigation }) => {
     };
   }, []);
 
+  useEffect(() => {
+    getBoard()
+      .then((res) => {
+        const fetchedPosts = res.data.result;
+        const notArchived = fetchedPosts.filter((res) => !res.isArchived);
+        setPosts(notArchived);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+        setVisible(true);
+        setSnackMsg(i18n.t('GENERAL.ERROR'));
+      });
+  }, [posts]);
+
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableComp = TouchableNativeFeedback;

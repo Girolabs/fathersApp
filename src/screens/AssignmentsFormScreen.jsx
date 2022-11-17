@@ -152,9 +152,7 @@ const EditableDateItem = function (props) {
 const AssigmentsFormScreen = ({ navigation }) => {
   const rolesRep = navigation.getParam('roles');
   let hash = {};
-  const entityRoles = rolesRep?.filter(
-    (o) => (hash[o.name] && hash[o.name] ? false : (hash[o.name] = true)) && hash[o.value] === undefined,
-  );
+  const entityRoles = rolesRep?.filter((o) => (hash[o.value] ? false : (hash[o.value] = true)));
   const entityId = navigation.getParam('entityId');
   const entityName = navigation.getParam('entityName');
   const fatherId = navigation.getParam('fatherId');
@@ -169,8 +167,8 @@ const AssigmentsFormScreen = ({ navigation }) => {
   const [roles, setRoles] = useState(entityRoles ? entityRoles : null);
   const [person, setPerson] = useState(fatherId ? fatherId : null);
   const [publicNotes, setPublicNotes] = useState('');
-  const [startDate, setStartDate] = useState(start ? start : todayString);
-  const [endDate, setEndDate] = useState(end ? end : todayString);
+  const [startDate, setStartDate] = useState(start ? start : null);
+  const [endDate, setEndDate] = useState(end ? end : null);
   const [isCreate, setIsCreate] = useState(updated);
   const [error, setError] = useState('');
 
@@ -197,10 +195,10 @@ const AssigmentsFormScreen = ({ navigation }) => {
     for (let i = 0; i < claves.length; i++) {
       let clave = claves[i];
       //console.log(body[clave]);
-      if (formValues[clave] === '' || formValues[clave] === null) {
+      if (role === null || person === null || entityId === null) {
         setError(i18n.t('ASSIGNMENTS_FORM.ERROR'));
         return false;
-      } else if (formatStartDate.getTime() >= formatEndDate.getTime()) {
+      } else if (startDate && endDate && formatStartDate.getTime() >= formatEndDate.getTime()) {
         setError(i18n.t('ASSIGNMENTS_FORM.ERROR_END_DATE'));
         return false;
       }

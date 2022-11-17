@@ -118,8 +118,24 @@ export const archivePost = (postId) => {
   return instance.post(`/api/v1/bulletin-board/${postId}/mark-post?action=archived`);
 };
 
+export const getArchivedPosts = () => {
+  return instance.get(`/api/v1/bulletin-board?isArchived=true`);
+};
+
 export const unarchivePost = (postId) => {
   return instance.post(`/api/v1/bulletin-board/${postId}/mark-post?action=unarchived`);
+};
+
+export const getPinnedPosts = () => {
+  return instance.get(`/api/v1/bulletin-board/pinned-post`);
+};
+
+export const savePinnedPost = (postId) => {
+  return instance.post(`/api/v1/bulletin-board/${postId}/mark-post?action=pinned`);
+};
+
+export const saveUnpinnedPost = (postId) => {
+  return instance.post(`/api/v1/bulletin-board/${postId}/mark-post?action=unpinned`);
 };
 
 export const getLastPhotos = () => {

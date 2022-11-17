@@ -12,7 +12,7 @@ import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { I18nContext } from '../context/I18nProvider';
-import { getLastPhotos, getPhoto, getPhotos, getReminders } from '../api';
+import { getLastPhotos, getPhoto, getPhotos, getPinnedPosts, getReminders } from '../api';
 import RemindersHeaders from '../components/RemindersHeaders';
 import { BulletinCheckContext } from '../context/BulletinCheckProvider';
 import { Pressable } from 'react-native';
@@ -109,6 +109,7 @@ const HomeScreen = ({ navigation }) => {
   const [snackMsg, setSnackMsg] = useState('');
   const { unseenPostsCount, markCheckUnseenCounter, checkOnly } = useContext(BulletinCheckContext);
   const [photos, setPhotos] = useState([]);
+  const [favorite, setFavorite] = useState({});
 
   const loadReminders = async () => {
     const status = await Network.getNetworkStateAsync();
@@ -134,6 +135,10 @@ const HomeScreen = ({ navigation }) => {
     }
   };
 
+  const loadPinPost = async () => {
+    await getPinnedPosts().then((res) => setFavorite(res.data.result));
+  };
+
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
     loadReminders();
@@ -141,8 +146,9 @@ const HomeScreen = ({ navigation }) => {
       setPhotos(res.data.result);
       console.log('LAST 3', res.data.result);
     });
-    getPhoto(4).then((res) => console.log('PHOTO ID', res.data.result));
-    getPhotos().then((res) => console.log('ALL PHOTOS', res.data.result));
+    //getPhoto(4).then((res) => console.log('PHOTO ID', res.data.result));
+    //getPhotos().then((res) => console.log('ALL PHOTOS', res.data.result));
+    loadPinPost();
   }, []);
 
   const windowHeight = useWindowDimensions().height;
@@ -165,45 +171,49 @@ const HomeScreen = ({ navigation }) => {
                     }}
                   />
                   {!loading ? (
-                    <Pressable
-                      onPress={() =>
-                        navigation.navigate('BulletinDetail', {
-                          postId: 5,
-                          favorite: true,
-                        })
-                      }
-                    >
-                      <View
-                        style={{
-                          height: 100,
-                          backgroundColor: '#F8CE46',
-                          borderRadius: 10,
-                          flexDirection: 'row',
-                          justifyContent: 'space-evenly',
-                          alignItems: 'center',
-                          padding: 20,
-                        }}
-                      >
-                        <Image source={star} />
-                        <Text
-                          style={{
-                            fontSize: 18,
-                            fontFamily: 'work-sans-semibold',
-                            color: Colors.primaryColor,
-                            paddingHorizontal: 15,
-                            width: '85%',
-                          }}
+                    <>
+                      {Object.entries(favorite).length > 0 && (
+                        <Pressable
+                          onPress={() =>
+                            navigation.navigate('BulletinDetail', {
+                              postId: favorite.postId,
+                              favorite: true,
+                            })
+                          }
                         >
-                          Oración de la Comunidad
-                        </Text>
-                        <Ionicons name="ios-arrow-forward" size={25} color={Colors.primaryColor} />
-                      </View>
+                          <View
+                            style={{
+                              height: 100,
+                              backgroundColor: '#F8CE46',
+                              borderRadius: 10,
+                              flexDirection: 'row',
+                              justifyContent: 'space-evenly',
+                              alignItems: 'center',
+                              padding: 20,
+                            }}
+                          >
+                            <Image source={star} />
+                            <Text
+                              style={{
+                                fontSize: 18,
+                                fontFamily: 'work-sans-semibold',
+                                color: Colors.primaryColor,
+                                paddingHorizontal: 15,
+                                width: '85%',
+                              }}
+                            >
+                              {favorite.title}
+                            </Text>
+                            <Ionicons name="ios-arrow-forward" size={25} color={Colors.primaryColor} />
+                          </View>
+                        </Pressable>
+                      )}
                       <RemindersHeaders
                         reminders={reminders}
                         selectedHeader={selectedReminder}
                         onChangeSelectedHeader={(index) => setSelectedReminder(index)}
                       />
-                    </Pressable>
+                    </>
                   ) : (
                     <View style={styles.screenLoading}>
                       <ActivityIndicator

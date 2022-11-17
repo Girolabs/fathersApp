@@ -57,7 +57,7 @@ const ArchiveScreen = ({ navigation }) => {
         },
       );
     });
-    Alert.alert('Datos guardados exitosamente!');
+    Alert.alert(i18n.t('ARCHIVE.SUCCESS'));
   };
 
   const windowHeight = useWindowDimensions().height;
@@ -91,8 +91,8 @@ const ArchiveScreen = ({ navigation }) => {
             }}
             onPress={() => {
               if (postToUpdate.length > 0) {
-                //sendToArchive();
-                Alert.alert('POST TO UPDATE: ', postToUpdate.toString());
+                sendToArchive();
+                //Alert.alert('POST TO UPDATE: ', postToUpdate.toString());
                 navigation.goBack();
               } else {
                 Alert.alert('Error', i18n.t('ARCHIVE.ERROR'));
