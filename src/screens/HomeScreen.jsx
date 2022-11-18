@@ -136,7 +136,13 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const loadPinPost = async () => {
-    await getPinnedPosts().then((res) => setFavorite(res.data.result));
+    await getPinnedPosts()
+      .then((res) => {
+        setFavorite(res.data.result);
+      })
+      .catch((err) => {
+        setFavorite({});
+      });
   };
 
   useEffect(() => {
@@ -148,8 +154,11 @@ const HomeScreen = ({ navigation }) => {
     });
     //getPhoto(4).then((res) => console.log('PHOTO ID', res.data.result));
     //getPhotos().then((res) => console.log('ALL PHOTOS', res.data.result));
-    loadPinPost();
   }, []);
+
+  useEffect(() => {
+    loadPinPost();
+  }, [favorite && loading]);
 
   const windowHeight = useWindowDimensions().height;
 
@@ -177,7 +186,6 @@ const HomeScreen = ({ navigation }) => {
                           onPress={() =>
                             navigation.navigate('BulletinDetail', {
                               postId: favorite.postId,
-                              favorite: true,
                             })
                           }
                         >

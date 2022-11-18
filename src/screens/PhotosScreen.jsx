@@ -44,8 +44,8 @@ const PhotosScreen = ({ navigation }) => {
           {photos.map((p) => {
             return (
               <Pressable
-                key={p.photoGalleryId}
-                onPress={() => navigation.navigate('Photo', { photoGalleryId: p.photoGalleryId })}
+                key={p.galleryPhotoId}
+                onPress={() => navigation.navigate('Photo', { galleryPhotoId: p.galleryPhotoId })}
                 style={{
                   width: '90%',
                   height: 444,

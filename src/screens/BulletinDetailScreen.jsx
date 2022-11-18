@@ -9,7 +9,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
-import { getBoardPost, savePinnedPost, saveUnpinnedPost } from '../api';
+import { getBoardPost, savePinnedPost, saveUnpinnedPost, getPinnedPosts } from '../api';
 import star from '../../assets/star-outline.png';
 import starActive from '../../assets/star-active.png';
 
@@ -20,12 +20,12 @@ const styles = StyleSheet.create({
 });
 
 const BulletinDetail = ({ navigation }) => {
-  const isFavorite = navigation.getParam('favorite');
   const [post, setPost] = useState({});
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
-  const [favorite, setFavorite] = useState(isFavorite ? isFavorite : false);
+  const [favorite, setFavorite] = useState(false);
+  const [id, setId] = useState(null);
 
   const postId = navigation.getParam('postId');
   const navigationUrl = navigation.getParam('url');
@@ -47,7 +47,7 @@ const BulletinDetail = ({ navigation }) => {
               ...res.data.result,
               content: { html: body },
             };
-
+            setId(fetchedPost.postId);
             setPost(fetchedPost.content);
             setLoading(false);
           })
@@ -66,6 +66,18 @@ const BulletinDetail = ({ navigation }) => {
       setVisible(true);
       setSnackMsg(i18n.t('GENERAL.NO_INTERNET'));
     }
+  };
+
+  const loadPinPost = async () => {
+    await getPinnedPosts()
+      .then((res) => {
+        if (res.data.result.postId === id) {
+          setFavorite(true);
+        }
+      })
+      .catch((err) => {
+        setFavorite(false);
+      });
   };
 
   const savePin = () => {
@@ -112,6 +124,10 @@ const BulletinDetail = ({ navigation }) => {
     }
     loadPost(source);
   }, []);
+
+  useEffect(() => {
+    loadPinPost();
+  }, [favorite, post]);
 
   const windowHeight = useWindowDimensions().height;
 

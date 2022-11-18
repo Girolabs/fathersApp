@@ -26,7 +26,7 @@ import icon from '../../assets/img/icon_app.png';
 import { Ionicons } from 'expo-vector-icons';
 
 const PhotoScreen = ({ navigation }) => {
-  const photoID = navigation.getParam('photoGalleryId');
+  const photoID = navigation.getParam('galleryPhotoId');
   const [loading, setLoading] = useState(false);
   const [like, setLike] = useState(false);
   const [totalLikes, setTotalLikes] = useState(245);
