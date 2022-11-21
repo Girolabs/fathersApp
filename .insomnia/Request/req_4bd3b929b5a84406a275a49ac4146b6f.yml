@@ -1,0 +1,23 @@
+_id: req_4bd3b929b5a84406a275a49ac4146b6f
+type: Request
+parentId: fld_17a5928cd3f44d938754895e7367236f
+modified: 1668629908447
+created: 1668629905327
+url: "{{ _.host }}/en/api/v1/generations"
+name: generations
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  token: "{{ _.jwt }}"
+metaSortKey: -1666160704270.5
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

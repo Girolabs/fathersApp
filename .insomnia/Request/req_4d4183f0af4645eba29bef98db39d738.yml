@@ -1,0 +1,23 @@
+_id: req_4d4183f0af4645eba29bef98db39d738
+type: Request
+parentId: fld_a85899a4b70a4f55af6857d4ef17c1b9
+modified: 1668635622324
+created: 1668635608222
+url: "{{ _.host }}/en/api/v1/bulletin-board/pinned-post"
+name: bulletin board get pinned post
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  token: "{{ _.jwt }}"
+metaSortKey: -1666160738623.3594
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,23 @@
+_id: req_24e86cda58ac4f44be72c44e9ffcee7b
+type: Request
+parentId: fld_a85899a4b70a4f55af6857d4ef17c1b9
+modified: 1668631057457
+created: 1668631051059
+url: "{{ _.host }}/en/api/v1/bulletin-board"
+name: bulletin board
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  token: "{{ _.jwt }}"
+metaSortKey: -1666160765342.25
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

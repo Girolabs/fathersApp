@@ -1,0 +1,27 @@
+_id: req_20e11d5afd434ff781f004e9e1aaf493
+type: Request
+parentId: fld_a85899a4b70a4f55af6857d4ef17c1b9
+modified: 1668632774970
+created: 1668632371182
+url: "{{ _.host }}/en/api/v1/bulletin-board"
+name: bulletin board with archived
+description: ""
+method: GET
+body: {}
+parameters:
+  - id: pair_4abfb3a447584424882b79e65114c766
+    name: isArchived
+    value: "null"
+    description: ""
+headers: []
+authentication:
+  type: bearer
+  token: "{{ _.jwt }}"
+metaSortKey: -1666160761525.2656
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,26 @@
+_id: req_feb775fa40c7465a8fa3e2e23b2b14c9
+type: Request
+parentId: fld_a85899a4b70a4f55af6857d4ef17c1b9
+modified: 1668632257899
+created: 1668632253897
+url: "{{ _.host }}/en/api/v1/bulletin-board/mark-all-posts"
+name: bulletin board mark all posts unarchived
+description: ""
+method: POST
+body: {}
+parameters:
+  - name: action
+    value: unarchived
+    id: pair_b18537fdf5994e44b0706d9ae9f6cf10
+headers: []
+authentication:
+  type: bearer
+  token: "{{ _.jwt }}"
+metaSortKey: -1666160744348.836
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

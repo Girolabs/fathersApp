@@ -1,0 +1,10 @@
+_id: ut_3c18be13ebce4f698fe62466cfe4c2cc
+type: UnitTest
+parentId: uts_99f3df50f60d4de28500083e7f1d5594
+modified: 1668631342907
+created: 1668629773630
+requestId: req_833e42d1882d454695acfec1334981be
+name: Filiations Returns 200
+code: |-
+  const response1 = await insomnia.send();
+  expect(response1.status).to.equal(200);

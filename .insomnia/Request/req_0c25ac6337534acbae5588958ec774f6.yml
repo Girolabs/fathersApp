@@ -1,0 +1,31 @@
+_id: req_0c25ac6337534acbae5588958ec774f6
+type: Request
+parentId: fld_10efaa98f6bd4913b1a9a7f447c6ce3f
+modified: 1668629452408
+created: 1666161722890
+url: "{{ _.host }}/en/api/v1/photo-gallery"
+name: list gallery
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - id: pair_f2b2292db9d34ee6878ab8c20bade44d
+    name: Content-Type
+    value: application/json
+    description: ""
+  - id: pair_56626de2be4e4184b511ff86636a381b
+    name: ""
+    value: ""
+    description: ""
+authentication:
+  type: bearer
+  token: "{{ _.jwt }}"
+metaSortKey: -1666161722890
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

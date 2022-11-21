@@ -1,0 +1,31 @@
+_id: req_208cb0b1765147d4af09e3b54045b8e2
+type: Request
+parentId: fld_2093203c5e814a058c298efe62553a78
+modified: 1668629432351
+created: 1666160582127
+url: https://schoenstatt.link/en/api/v1/users/login
+name: login
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"identity": "{{ _.identity }}",
+    	"credential": "{{ _.credential }}"
+    }
+parameters: []
+headers:
+  - id: pair_69247a1a06bd4cbba7a821e167d439a9
+    name: Content-Type
+    value: application/json
+    description: ""
+authentication: {}
+metaSortKey: -1666160582127
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

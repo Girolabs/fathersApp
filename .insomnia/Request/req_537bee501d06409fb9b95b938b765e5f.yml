@@ -1,0 +1,27 @@
+_id: req_537bee501d06409fb9b95b938b765e5f
+type: Request
+parentId: fld_a85899a4b70a4f55af6857d4ef17c1b9
+modified: 1668632265158
+created: 1668631495017
+url: "{{ _.host }}/en/api/v1/bulletin-board/mark-all-posts"
+name: bulletin board mark all posts unseen
+description: ""
+method: POST
+body: {}
+parameters:
+  - id: pair_d6c84f5ccf5d47b28354b364552bf1d6
+    name: action
+    value: unseen
+    description: ""
+headers: []
+authentication:
+  type: bearer
+  token: "{{ _.jwt }}"
+metaSortKey: -1666160750074.3125
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

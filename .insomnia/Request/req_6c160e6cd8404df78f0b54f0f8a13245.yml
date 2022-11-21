@@ -1,0 +1,32 @@
+_id: req_6c160e6cd8404df78f0b54f0f8a13245
+type: Request
+parentId: fld_10efaa98f6bd4913b1a9a7f447c6ce3f
+modified: 1669014175780
+created: 1668901948981
+url: "{{ _.host }}/en/api/v1/photo-gallery"
+name: new photo JPG
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"caption": "This is a caption",
+    	"photoBase64Encoded": "{{ _.sampleJpg }}"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_fb3b7acc550f4439b200cf9030a4968c
+authentication:
+  type: bearer
+  token: "{{ _.jwt }}"
+metaSortKey: -1666188591727.5
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

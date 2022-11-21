@@ -1,0 +1,23 @@
+_id: req_d0a90ae0ee1d41359b57f1db260cbdb9
+type: Request
+parentId: fld_a85899a4b70a4f55af6857d4ef17c1b9
+modified: 1668631102081
+created: 1668631095414
+url: "{{ _.host }}/en/api/v1/bulletin-board/5"
+name: bulletin board dynamic post
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  token: "{{ _.jwt }}"
+metaSortKey: -1666160734806.375
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

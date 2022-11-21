@@ -1,0 +1,23 @@
+_id: req_d915446cb6db40ad97570cf64822c148
+type: Request
+parentId: fld_a85899a4b70a4f55af6857d4ef17c1b9
+modified: 1668638101501
+created: 1668638089421
+url: "{{ _.host }}/en/api/v1/bulletin-board/5"
+name: bulletin board community prayer
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  token: "{{ _.jwt }}"
+metaSortKey: -1666160764388.004
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

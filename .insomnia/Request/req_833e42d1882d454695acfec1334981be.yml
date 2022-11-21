@@ -1,0 +1,23 @@
+_id: req_833e42d1882d454695acfec1334981be
+type: Request
+parentId: fld_f1ff7c4a8ced4aa18e441cfaa0ad6416
+modified: 1668629458619
+created: 1666161070701
+url: "{{ _.host }}/en/api/v1/filiations"
+name: filiations
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  token: "{{ _.jwt }}"
+metaSortKey: -1666161070701
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,23 @@
+_id: req_527b8f9932384ed0bacdc50081b59940
+type: Request
+parentId: fld_a85899a4b70a4f55af6857d4ef17c1b9
+modified: 1668631527395
+created: 1668631524035
+url: "{{ _.host }}/en/api/v1/bulletin-board/check-for-unseen-posts"
+name: bulletin board check for unseen posts
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  token: "{{ _.jwt }}"
+metaSortKey: -1666160742440.3438
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

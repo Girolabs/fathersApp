@@ -1,0 +1,27 @@
+_id: req_091fa0dd2a914eab9a1942f6e8afe235
+type: Request
+parentId: fld_fa9612af33d14003ab13d06adff04f78
+modified: 1668629440339
+created: 1666162878966
+url: "{{ _.host }}/en/api/v1/persons"
+name: persons
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - id: pair_f2b2292db9d34ee6878ab8c20bade44d
+    name: Content-Type
+    value: application/json
+    description: ""
+authentication:
+  type: bearer
+  token: "{{ _.jwt }}"
+metaSortKey: -1666161396795.5
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
