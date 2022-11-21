@@ -28,19 +28,19 @@ const GalleryScreen = ({ navigation }) => {
     console.log(result);
 
     if (!result.cancelled) {
-      setPhoto('data:image/jpg;base64,' + result.base64);
+      setPhoto(result.base64);
     }
   };
 
-  const handleSubmit = function () {
+  const handleSubmit = () => {
     const formValues = {
-      data: photo,
       caption: description,
+      photoBase64Encoded: photo,
     };
     savePhoto(formValues).then(
       (res) => {
         console.log('RESULTADO: ', res);
-        Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
+        Alert.alert(i18n.t('GALLERY.SUCCESS'));
         navigation.goBack();
       },
       (err) => {
@@ -124,7 +124,7 @@ const GalleryScreen = ({ navigation }) => {
             <Image source={imageIcon} />
           </Pressable>
           <Pressable style={{ width: '100%', height: 258 }}>
-            <Image source={{ uri: photo }} style={{ width: '100%', height: '100%' }} />
+            <Image source={{ uri: 'data:image/jpg;base64,' + photo }} style={{ width: '100%', height: '100%' }} />
           </Pressable>
         </>
       )}
@@ -170,10 +170,10 @@ const GalleryScreen = ({ navigation }) => {
       >
         <Button
           onPress={() => {
-            //handleSubmit();
+            handleSubmit();
             console.log(photo, description);
-            Alert.alert('Datos guardados exitosamente');
-            navigation.goBack();
+            //Alert.alert('Datos guardados exitosamente');
+            //navigation.goBack();
           }}
           title={i18n.t('GALLERY.UPLOAD_PHOTO')}
           disabled={photo && description !== '' ? false : true}

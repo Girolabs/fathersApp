@@ -49,7 +49,7 @@ const PhotosScreen = ({ navigation }) => {
                 style={{
                   width: '90%',
                   height: 444,
-                  backgroundColor: 'red',
+                  backgroundColor: 'white',
                   borderRadius: 10,
                   overflow: 'hidden',
                   marginVertical: 10,
@@ -57,7 +57,7 @@ const PhotosScreen = ({ navigation }) => {
               >
                 <Image
                   resizeMode="cover"
-                  source={{ uri: url + p.url }}
+                  source={{ uri: url + p.pathThumbnail2048 }}
                   style={{
                     width: '100%',
                     height: '100%',

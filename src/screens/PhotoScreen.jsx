@@ -45,7 +45,6 @@ const PhotoScreen = ({ navigation }) => {
     getPhoto(photoID).then((res) => {
       setPhoto(res.data.result);
       setLoading(false);
-      console.log(photo);
       setTotalLikes(res.data.result.likesCount);
       setCommentsCount(res.data.result.commentsCount);
     });
@@ -126,7 +125,7 @@ const PhotoScreen = ({ navigation }) => {
           >
             <Image
               resizeMode="cover"
-              source={{ uri: /*data[0].source*/ url + photo.url }}
+              source={{ uri: /*data[0].source*/ url + photo.pathThumbnail2048 }}
               style={{
                 width: '100%',
                 height: '100%',

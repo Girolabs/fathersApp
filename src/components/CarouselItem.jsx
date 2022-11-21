@@ -18,7 +18,7 @@ const CarouselItem = ({ item, index }, parallaxProps) => {
       >
         <SafeAreaView style={styles.item}>
           <ParallaxImage
-            source={{ uri: url + item.url }} /* the source of the image */
+            source={{ uri: url + item.pathThumbnail800 }} /* the source of the image */
             containerStyle={styles.imageContainer}
             style={styles.image}
             {...parallaxProps} /* pass in the necessary props */

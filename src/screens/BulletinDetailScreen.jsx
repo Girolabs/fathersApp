@@ -85,7 +85,8 @@ const BulletinDetail = ({ navigation }) => {
     savePinnedPost(postId).then(
       (res) => {
         console.log('funciono!', res);
-        Alert.alert(i18n.t('ARCHIVE.SUCCESS'));
+        //Alert.alert(i18n.t('ARCHIVE.SUCCESS'));
+        setFavorite(!favorite);
       },
       (err) => {
         console.log('ERROR: ', err);
@@ -100,7 +101,8 @@ const BulletinDetail = ({ navigation }) => {
     saveUnpinnedPost(postId).then(
       (res) => {
         console.log('funciono!', res);
-        Alert.alert(i18n.t('ARCHIVE.SUCCESS'));
+        //Alert.alert(i18n.t('ARCHIVE.SUCCESS'));
+        setFavorite(!favorite);
       },
       (err) => {
         console.log('ERROR: ', err);
@@ -159,7 +161,6 @@ const BulletinDetail = ({ navigation }) => {
               } else {
                 saveUnpin();
               }
-              setFavorite(!favorite);
             }}
           >
             {favorite ? <Image source={starActive} /> : <Image source={star} />}
