@@ -85,12 +85,18 @@ const PhotosScreen = ({ navigation }) => {
                   }}
                 >
                   <Text
+                    ellipsizeMode="tail"
+                    numberOfLines={1}
                     style={{
                       fontSize: 15,
                       fontFamily: 'work-sans',
                       fontWeight: '400',
                       color: '#fff',
-                      paddingLeft: 17,
+                      marginLeft: 17,
+                      marginRight: 17,
+                      backgroundColor: 'rgba(0,0,0,0.5)',
+                      padding: 1,
+                      borderRadius: 3,
                     }}
                   >
                     {p.caption}
@@ -103,116 +109,44 @@ const PhotosScreen = ({ navigation }) => {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     position: 'absolute',
-                    top: 402,
+                    top: 405,
+                    backgroundColor: 'rgba(0,0,0,0.5)',
+                    paddingVertical: 5,
+                    paddingHorizontal: 17,
                   }}
                 >
+                  <Image source={like} />
                   <Text
                     style={{
+                      position: 'absolute',
+                      left: '13%',
                       color: '#fff',
-                      marginHorizontal: 17,
+                      //marginHorizontal: 17,
                     }}
                   >
-                    <Image source={like} /> {'  ' + p.likesCount + ' ' + i18n.t('GALLERY.LIKES')}
+                    {'  ' + p.likesCount + ' ' + i18n.t('GALLERY.LIKES')}
                   </Text>
-
+                  <Image
+                    source={comments}
+                    style={{
+                      position: 'absolute',
+                      left: '63%',
+                    }}
+                  />
                   <Text
                     style={{
+                      position: 'absolute',
+                      left: '70%',
                       color: '#fff',
-                      marginHorizontal: 17,
+                      //marginHorizontal: 17,
                     }}
                   >
-                    <Image source={comments} />
                     {'  ' + p.commentsCount + ' ' + i18n.t('GALLERY.COMMENTS')}
                   </Text>
                 </View>
               </Pressable>
             );
           })}
-
-          {/*
-            <Pressable
-              onPress={() => navigation.navigate('Photo', { photoGalleryId: 4 })}
-              style={{
-                width: '90%',
-                height: 444,
-                backgroundColor: 'red',
-                borderRadius: 10,
-                overflow: 'hidden',
-                marginVertical: 10,
-              }}
-            >
-              <Image
-                resizeMode="cover"
-                source={{ uri: data[2].source }}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                }}
-              />
-              <Image
-                resizeMode="cover"
-                style={{
-                  position: 'absolute',
-                  left: '90%',
-                  top: 17,
-                  width: 20,
-                  height: 20,
-                }}
-                source={search}
-              />
-              <View
-                style={{
-                  width: '100%',
-                  flexDirection: 'row',
-                  justifyContent: 'flex-start',
-                  alignItems: 'center',
-                  position: 'absolute',
-                  top: '85%',
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 15,
-                    fontFamily: 'work-sans',
-                    fontWeight: '400',
-                    color: '#fff',
-                    paddingLeft: 17,
-                  }}
-                >
-                  {data[2].title}
-                </Text>
-              </View>
-              <View
-                style={{
-                  width: '100%',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  position: 'absolute',
-                  top: 402,
-                }}
-              >
-                <Text
-                  style={{
-                    color: '#fff',
-                    marginHorizontal: 17,
-                  }}
-                >
-                  <Image source={like} /> {'  '}245 {i18n.t('GALLERY.LIKES')}
-                </Text>
-
-                <Text
-                  style={{
-                    color: '#fff',
-                    marginHorizontal: 17,
-                  }}
-                >
-                  <Image source={comments} />
-                  {'  '}20 {i18n.t('GALLERY.COMMENTS')}
-                </Text>
-              </View>
-            </Pressable>
-                */}
         </View>
       ) : (
         <View
