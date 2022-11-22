@@ -1,0 +1,23 @@
+_id: req_2370a90d943148ea9e762db180beb531
+type: Request
+parentId: fld_10efaa98f6bd4913b1a9a7f447c6ce3f
+modified: 1669150603047
+created: 1669150603047
+url: "{{ _.host }}/en/api/v1/photo-gallery/9/unlike"
+name: unlike photo
+description: ""
+method: POST
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  token: "{{ _.jwt }}"
+metaSortKey: -1666168440099.375
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
