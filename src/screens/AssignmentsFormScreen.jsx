@@ -70,6 +70,7 @@ const EditableDateItem = function (props) {
       marginTop: 10,
       marginBottom: 7,
       backgroundColor: '#FFFFFF',
+      zIndex:11
     },
   });
 
@@ -90,6 +91,7 @@ const EditableDateItem = function (props) {
             }
           }}
           //disabled={props.disabled}
+          style={{width: 320, backgroundColor: "white"}}
         />
       )}
 
@@ -110,9 +112,9 @@ const EditableDateItem = function (props) {
         }}
         onPress={() => {
           setShow(true);
-          if (!props.disabled) {
+          /*if (!props.disabled) {
             setShow(false);
-          }
+          }*/
         }}
       >
         <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
@@ -122,13 +124,14 @@ const EditableDateItem = function (props) {
           style={{
             position: 'absolute',
             top: '10%',
-            left: '90%',
+            left: '95%',
             width: 50,
             padding: 10,
             backgroundColor: '#000000DE',
             justifyContent: 'center',
             alignItems: 'center',
             borderRadius: 5,
+            zIndex:12
           }}
           onPress={() => {
             setShow(false);
@@ -344,7 +347,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
         <View
           style={{
             width: '90%',
-            zIndex: 9,
+            zIndex: 12,
           }}
         >
           <Text
@@ -439,7 +442,6 @@ const AssigmentsFormScreen = ({ navigation }) => {
         onDateChange={(value) => {
           setStartDate(value);
         }}
-        disabled={true}
       />
       <View
         style={{
@@ -464,7 +466,6 @@ const AssigmentsFormScreen = ({ navigation }) => {
         onDateChange={(value) => {
           setEndDate(value);
         }}
-        disabled={true}
       />
       <View
         style={{

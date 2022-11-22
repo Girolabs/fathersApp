@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ActivityIndicator, Image, Pressable, useWindowDimensions, Alert } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Image, Pressable, useWindowDimensions, Alert, Platform } from 'react-native';
 import { WebView } from 'react-native-webview';
 import i18n from 'i18n-js';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -151,8 +151,8 @@ const BulletinDetail = ({ navigation }) => {
           <Pressable
             style={{
               position: 'absolute',
-              top: -40,
-              left: '78%',
+              top: Platform === 'android'? -40: 10,
+              left: Platform === 'android'?'78%': '90%',
               zIndex: 9,
             }}
             onPress={() => {

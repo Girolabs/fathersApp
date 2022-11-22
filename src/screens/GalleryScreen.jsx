@@ -165,7 +165,7 @@ const GalleryScreen = ({ navigation }) => {
           //height: 46,
           justifyContent: 'center',
           marginTop: photo ? 64 : 144,
-          backgroundColor: '#0104AC',
+          backgroundColor: photo && description !== ''?'#0104AC':"gray",
         }}
       >
         <Button
