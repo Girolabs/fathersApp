@@ -146,10 +146,26 @@ export const getPhoto = (photoGalleryId, fields) => {
   return instance.get(`/api/v1/photo-gallery/${photoGalleryId}${fields ? `?fields=${fields}` : ''}`);
 };
 
+export const deletePhoto = (photoGalleryId) => {
+  return instance.delete(`/api/v1/photo-gallery/${photoGalleryId}`);
+};
+
 export const getPhotos = () => {
   return instance.get(`/api/v1/photo-gallery`);
 };
 
 export const savePhoto = (values) => {
   return instance.post('/api/v1/photo-gallery', values);
+};
+
+export const likePhoto = (photoGalleryId) => {
+  return instance.post(`/api/v1/photo-gallery/${photoGalleryId}/like`);
+};
+
+export const unlikePhoto = (photoGalleryId) => {
+  return instance.post(`/api/v1/photo-gallery/${photoGalleryId}/unlike`);
+};
+
+export const commentPhoto = (photoGalleryId, values) => {
+  return instance.post(`/api/v1/photo-gallery/${photoGalleryId}/comments`, values);
 };

@@ -228,6 +228,7 @@ exports.ES = {
     SEE_ALL: 'Ver todo',
     SUCCESS: 'Datos guardados exitosamente',
     COMMENT: 'Comentar',
+    WARNING: 'Estás seguro de eliminar esta foto?',
   },
   ASSIGNMENTS_FORM: {
     TITLE: 'Asignar cargo',

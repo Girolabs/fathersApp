@@ -11,21 +11,40 @@ import search from '../../assets/search.png';
 import { getPhotos, url } from '../api';
 
 const PhotosScreen = ({ navigation }) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [photos, setPhotos] = useState([]);
-
   const loadPhotos = () => {
     setLoading(true);
-    getPhotos().then((res) => {
-      setPhotos(res.data.result);
-      setLoading(false);
-    });
+    getPhotos().then(
+      (res) => {
+        setPhotos(res.data.result);
+        setLoading(false);
+      },
+      (err) => {
+        console.log(err);
+        alert(err);
+      },
+    );
     console.log('FOTOS', photos);
+    setLoading(false);
   };
 
   useEffect(() => {
     loadPhotos();
   }, []);
+
+  /*useEffect(() => {
+    getPhotos().then(
+      (res) => {
+        setPhotos(res.data.result);
+        setLoading(false);
+      },
+      (err) => {
+        console.log(err);
+        alert(err);
+      },
+    );
+  }, [photos]);*/
 
   const windowHeight = useWindowDimensions().height;
 

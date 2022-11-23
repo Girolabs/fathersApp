@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   AsyncStorage,
   useWindowDimensions,
+  Alert,
 } from 'react-native';
 import React from 'react';
 import HeaderButton from '../components/HeaderButton';
@@ -21,13 +22,13 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import { NavigationEvents } from 'react-navigation';
 import { useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
-import { getPersonByUser, getPersons, getPhoto, url } from '../api';
+import { getPersonByUser, getPersons, getPhoto, url, likePhoto, unlikePhoto, commentPhoto, deletePhoto } from '../api';
 import icon from '../../assets/img/icon_app.png';
 import { Ionicons } from 'expo-vector-icons';
 
 const PhotoScreen = ({ navigation }) => {
   const photoID = navigation.getParam('galleryPhotoId');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [like, setLike] = useState(false);
   const [totalLikes, setTotalLikes] = useState(245);
   const [commentsCount, setCommentsCount] = useState(0);
@@ -39,14 +40,16 @@ const PhotoScreen = ({ navigation }) => {
   const [user, setUser] = useState({});
   const [userId, setUserId] = useState('');
   const [email, setEmail] = useState('');
+  const [warning, setWarning] = useState(false);
 
   const loadPhoto = () => {
     setLoading(true);
     getPhoto(photoID).then((res) => {
       setPhoto(res.data.result);
       setLoading(false);
-      setTotalLikes(res.data.result.likesCount);
-      setCommentsCount(res.data.result.commentsCount);
+      console.log('foto', photo);
+      //setTotalLikes(res.data.result.likesCount);
+      //setCommentsCount(res.data.result.commentsCount);
     });
   };
 
@@ -77,10 +80,64 @@ const PhotoScreen = ({ navigation }) => {
       });
   };
 
+  const saveLike = async () => {
+    await likePhoto(photoID).then(
+      (res) => {
+        console.log('works! like!', res);
+        setLike(true);
+      },
+      (err) => {
+        console.log('ERROR: ', err);
+        alert(err);
+      },
+    );
+  };
+
+  const saveUnlike = async () => {
+    await unlikePhoto(photoID).then(
+      (res) => {
+        console.log('works! unlike!', res);
+        setLike(false);
+      },
+      (err) => {
+        console.log('ERROR: ', err);
+        alert(err);
+      },
+    );
+  };
+
+  const saveComment = () => {
+    const commentValue = {
+      comment: comment,
+    };
+    commentPhoto(photoID, commentValue).then(
+      (res) => {
+        console.log('works comment!', res);
+        setComment('');
+      },
+      (err) => {
+        console.log(err);
+        alert(err);
+      },
+    );
+  };
+
+  const saveDeletePhoto = () => {
+    deletePhoto(photoID).then(
+      (res) => {
+        console.log('works delete photo!', res);
+        navigation.goBack();
+      },
+      (err) => {
+        console.log(err);
+        alert(err);
+      },
+    );
+  };
+
   useEffect(() => {
     getEmail();
     loadPhoto();
-    console.log(photo);
     console.log('ID: ', photoID);
     async function orientationBack() {
       // Restric orientation PORTRAIT_UP screen
@@ -98,6 +155,10 @@ const PhotoScreen = ({ navigation }) => {
   useEffect(() => {
     loadPerson();
   }, [email]);
+
+  /*useEffect(() => {
+    loadPhoto();
+  }, [like]);*/
 
   const windowHeight = useWindowDimensions().height;
 
@@ -131,6 +192,39 @@ const PhotoScreen = ({ navigation }) => {
                 height: '100%',
               }}
             />
+            <View
+              style={{
+                position: 'absolute',
+                top: 10,
+                left: '90%',
+              }}
+            >
+              {photo.createdByPersonId == userId ? (
+                <Pressable onPress={() => setWarning(true)}>
+                  <Ionicons name="md-close-circle" size={28} color={Colors.primaryColor} />
+                </Pressable>
+              ) : null}
+
+              {warning
+                ? Alert.alert('Warning', i18n.t('GALLERY.WARNING'), [
+                    {
+                      text: 'Cancel',
+                      onPress: () => {
+                        console.log('Cancel Pressed');
+                        setWarning(false);
+                      },
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'OK',
+                      onPress: () => {
+                        saveDeletePhoto();
+                        console.log('OK Pressed');
+                      },
+                    },
+                  ])
+                : null}
+            </View>
           </View>
           <View
             style={{
@@ -160,12 +254,10 @@ const PhotoScreen = ({ navigation }) => {
           >
             <Pressable
               onPress={() => {
-                setLike(!like);
-                console.log(like);
-                if (like) {
-                  setTotalLikes(totalLikes - 1);
+                if (!like) {
+                  saveLike();
                 } else {
-                  setTotalLikes(totalLikes + 1);
+                  saveUnlike();
                 }
               }}
             >
@@ -183,7 +275,7 @@ const PhotoScreen = ({ navigation }) => {
                 marginRight: 130,
               }}
             >
-              {/*totalLikes + " likes"*/ totalLikes + ' ' + i18n.t('GALLERY.LIKES')}
+              {/*totalLikes + " likes"*/ photo.likesCount + ' ' + i18n.t('GALLERY.LIKES')}
             </Text>
             <Pressable onPress={() => setOpenComment(!openComment)}>
               <Image
@@ -196,7 +288,7 @@ const PhotoScreen = ({ navigation }) => {
             </Pressable>
             <Text onPress={() => setShowComments(!showComments)}>
               {/*20 comments*/}
-              {commentsCount + ' ' + i18n.t('GALLERY.COMMENTS')}
+              {photo.commentsCount + ' ' + i18n.t('GALLERY.COMMENTS')}
             </Text>
           </View>
           <View
@@ -239,74 +331,8 @@ const PhotoScreen = ({ navigation }) => {
                 <Pressable
                   onPress={() => {
                     if (comment) {
-                      setTotalComments((ant) => [
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'flex-start',
-                            alignItems: 'center',
-                            marginTop: 21,
-                            marginVertical: 8,
-                          }}
-                          key={ant + 1}
-                        >
-                          {/*<Pressable
-                            style={{
-                              position: 'absolute',
-                              left: '95%',
-                            }}
-                          >
-                            <Ionicons name="md-close" size={20} color={Colors.primaryColor} />
-                          </Pressable>*/}
-                          <View
-                            style={{
-                              borderRadius: 50,
-                              backgroundColor: '#fff',
-                              width: 30,
-                              height: 30,
-                              marginRight: 10,
-                              overflow: 'hidden',
-                              borderStyle: 'solid',
-                              borderColor: '#292929',
-                              borderWidth: 2,
-                            }}
-                          >
-                            <Image
-                              source={user.photo ? { uri: url + user.photo } : icon}
-                              style={{
-                                width: '100%',
-                                height: '100%',
-                              }}
-                            />
-                          </View>
-                          <Text
-                            style={{
-                              marginRight: 10,
-                              color: '#0104AC',
-                              fontFamily: 'work-sans',
-                              fontWeight: '700',
-                              fontSize: 15,
-                            }}
-                          >
-                            {user.fullName ? user.fullName : 'Guest'}
-                          </Text>
-                          <Text
-                            style={{
-                              color: '#292929',
-                              fontFamily: 'work-sans',
-                              fontWeight: '500',
-                              fontSize: 15,
-                            }}
-                          >
-                            {comment}
-                          </Text>
-                        </View>,
-                        ...ant,
-                      ]);
-                      setComment('');
-                      setOpenComment(false);
+                      saveComment();
                       setShowComments(true);
-                      setCommentsCount((ant) => ant + 1);
                     }
                   }}
                   style={{
@@ -337,7 +363,7 @@ const PhotoScreen = ({ navigation }) => {
                 </Pressable>
               </View>
             ) : null}
-            {showComments ? totalComments : null}
+            {showComments ? photo.comments : null}
           </View>
         </View>
       ) : (

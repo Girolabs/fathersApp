@@ -228,6 +228,7 @@ exports.EN = {
     SEE_ALL: 'See all',
     SUCCESS: 'Data saved successfully',
     COMMENT: 'Comment',
+    WARNING: 'Are you sure to delete this photo?',
   },
   ASSIGNMENTS_FORM: {
     TITLE: 'Assign position',

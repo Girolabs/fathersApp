@@ -160,6 +160,13 @@ const HomeScreen = ({ navigation }) => {
     loadPinPost();
   }, [favorite && loading]);
 
+  useEffect(() => {
+    getLastPhotos().then((res) => {
+      setPhotos(res.data.result);
+      console.log('LAST 3', res.data.result);
+    });
+  }, [photos && loading]);
+
   const windowHeight = useWindowDimensions().height;
 
   return (
