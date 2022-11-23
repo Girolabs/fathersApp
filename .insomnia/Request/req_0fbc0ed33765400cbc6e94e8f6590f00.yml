@@ -1,10 +1,10 @@
-_id: req_86535f2f9ddb4c248973bdbd5a113e35
+_id: req_0fbc0ed33765400cbc6e94e8f6590f00
 type: Request
 parentId: fld_10efaa98f6bd4913b1a9a7f447c6ce3f
-modified: 1669189547951
-created: 1669066164220
-url: "{{ _.host }}/en/api/v1/photo-gallery/10"
-name: delete a gallery photo
+modified: 1669190195170
+created: 1669190184810
+url: "{{ _.host }}/en/api/v1/photo-gallery/10/comments/4"
+name: delete a gallery photo comment
 description: ""
 method: DELETE
 body: {}
@@ -21,7 +21,7 @@ headers:
 authentication:
   type: bearer
   token: "{{ _.jwt }}"
-metaSortKey: -1666161478319.125
+metaSortKey: -1666161437557.3125
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true
