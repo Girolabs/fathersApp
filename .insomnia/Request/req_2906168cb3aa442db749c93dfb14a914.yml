@@ -1,13 +1,18 @@
-_id: req_86535f2f9ddb4c248973bdbd5a113e35
+_id: req_2906168cb3aa442db749c93dfb14a914
 type: Request
 parentId: fld_10efaa98f6bd4913b1a9a7f447c6ce3f
-modified: 1669245218178
-created: 1669066164220
-url: "{{ _.host }}/en/api/v1/photo-gallery/10"
-name: delete a gallery photo
+modified: 1669245426228
+created: 1669245202777
+url: "{{ _.host }}/en/api/v1/photo-gallery/1/comments/5"
+name: update a gallery photo comment
 description: ""
-method: DELETE
-body: {}
+method: PUT
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"comment": "We're changing to a new comment"
+    }
 parameters: []
 headers:
   - id: pair_f2b2292db9d34ee6878ab8c20bade44d
@@ -21,7 +26,7 @@ headers:
 authentication:
   type: bearer
   token: "{{ _.jwt }}"
-metaSortKey: -1666161508890.4844
+metaSortKey: -1666161457938.2188
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

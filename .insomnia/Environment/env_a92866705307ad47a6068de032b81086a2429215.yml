@@ -5,6 +5,7 @@ modified: 1669238650980
 created: 1666160582113
 name: Base Environment
 data:
+  base_url: "{{ scheme }}://{{ host }}{{ base_path }}"
   host: https://schoenstatt-fathers.link
   identity: test
   credential: monkey123
