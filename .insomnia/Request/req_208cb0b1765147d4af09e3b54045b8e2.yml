@@ -1,10 +1,10 @@
 _id: req_208cb0b1765147d4af09e3b54045b8e2
 type: Request
 parentId: fld_2093203c5e814a058c298efe62553a78
-modified: 1668629432351
+modified: 1669238546859
 created: 1666160582127
 url: https://schoenstatt.link/en/api/v1/users/login
-name: login
+name: login with password
 description: ""
 method: POST
 body:

@@ -1,0 +1,29 @@
+_id: req_1b0388c97e104420b92706b4afc21bd8
+type: Request
+parentId: fld_2093203c5e814a058c298efe62553a78
+modified: 1669239133798
+created: 1669239066606
+url: "{{ _.host }}/en/api/v1/users/login-with-verification-token"
+name: login with verification token
+description: ""
+method: POST
+body: {}
+parameters:
+  - id: pair_5cf5aee63db1474d81fbbb05976dd983
+    name: identity
+    value: "{{ _.identity }}"
+    description: ""
+  - id: pair_6c7f29d8b20e425782cdab48c19bb498
+    name: token
+    value: "{{ _.loginToken }}"
+    description: ""
+headers: []
+authentication: {}
+metaSortKey: -1666160582027
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

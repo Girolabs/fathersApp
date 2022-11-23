@@ -1,0 +1,25 @@
+_id: req_83248507d1bc4a8ca84569323c53ac2b
+type: Request
+parentId: fld_2093203c5e814a058c298efe62553a78
+modified: 1669238923163
+created: 1669238565182
+url: '{{ _.host }}/en/api/v1/users/request-verification-token"T'
+name: request login code
+description: ""
+method: POST
+body: {}
+parameters:
+  - id: pair_5cf5aee63db1474d81fbbb05976dd983
+    name: identity
+    value: "{{ _.identity }}"
+    description: ""
+headers: []
+authentication: {}
+metaSortKey: -1666160582077
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

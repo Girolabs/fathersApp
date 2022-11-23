@@ -1,9 +1,9 @@
 _id: req_0fbc0ed33765400cbc6e94e8f6590f00
 type: Request
 parentId: fld_10efaa98f6bd4913b1a9a7f447c6ce3f
-modified: 1669190195170
+modified: 1669191697822
 created: 1669190184810
-url: "{{ _.host }}/en/api/v1/photo-gallery/10/comments/4"
+url: "{{ _.host }}/en/api/v1/photo-gallery/10/comments/3"
 name: delete a gallery photo comment
 description: ""
 method: DELETE
