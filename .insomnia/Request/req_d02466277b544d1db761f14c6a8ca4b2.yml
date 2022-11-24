@@ -1,9 +1,9 @@
 _id: req_d02466277b544d1db761f14c6a8ca4b2
 type: Request
 parentId: fld_10efaa98f6bd4913b1a9a7f447c6ce3f
-modified: 1669190755716
+modified: 1669319996506
 created: 1669070504735
-url: "{{ _.host }}/en/api/v1/photo-gallery/4/like"
+url: "{{ _.host }}/en/api/v1/photo-gallery/2/like"
 name: like photo
 description: ""
 method: POST

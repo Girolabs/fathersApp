@@ -1,0 +1,10 @@
+_id: ut_39913d3aaa46498d8f8e1b7a22ec0faf
+type: UnitTest
+parentId: uts_99f3df50f60d4de28500083e7f1d5594
+modified: 1669320147379
+created: 1669320128436
+requestId: req_0c25ac6337534acbae5588958ec774f6
+name: gallery list Returns 200
+code: |-
+  const response1 = await insomnia.send();
+  expect(response1.status).to.equal(200);
