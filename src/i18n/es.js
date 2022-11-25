@@ -229,6 +229,7 @@ exports.ES = {
     SUCCESS: 'Datos guardados exitosamente',
     COMMENT: 'Comentar',
     WARNING: 'Estás seguro de eliminar esta foto?',
+    EDIT: 'Editar',
   },
   ASSIGNMENTS_FORM: {
     TITLE: 'Asignar cargo',

@@ -15,6 +15,7 @@ const CarouselItem = ({ item, index }, parallaxProps) => {
         onPress={() => {
           Alert.alert(i18n.t('GALLERY.CAPTION'), item.caption);
         }}
+        key={item.galleryPhotoId}
       >
         <SafeAreaView style={styles.item}>
           <ParallaxImage

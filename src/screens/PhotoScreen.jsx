@@ -22,16 +22,29 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import { NavigationEvents } from 'react-navigation';
 import { useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
-import { getPersonByUser, getPersons, getPhoto, url, likePhoto, unlikePhoto, commentPhoto, deletePhoto } from '../api';
+import {
+  getPersonByUser,
+  getPersons,
+  getPhoto,
+  url,
+  likePhoto,
+  unlikePhoto,
+  commentPhoto,
+  deletePhoto,
+  deleteComment,
+  updateComment,
+  updateCaption,
+} from '../api';
 import icon from '../../assets/img/icon_app.png';
 import { Ionicons } from 'expo-vector-icons';
+import pencil from '../../assets/editpencil.png';
 
 const PhotoScreen = ({ navigation }) => {
   const photoID = navigation.getParam('galleryPhotoId');
   const [loading, setLoading] = useState(true);
   const [like, setLike] = useState(false);
-  const [totalLikes, setTotalLikes] = useState(245);
-  const [commentsCount, setCommentsCount] = useState(0);
+  //const [totalLikes, setTotalLikes] = useState(245);
+  //const [commentsCount, setCommentsCount] = useState(0);
   const [totalComments, setTotalComments] = useState([]);
   const [openComment, setOpenComment] = useState(false);
   const [comment, setComment] = useState('');
@@ -41,16 +54,24 @@ const PhotoScreen = ({ navigation }) => {
   const [userId, setUserId] = useState('');
   const [email, setEmail] = useState('');
   const [warning, setWarning] = useState(false);
+  const [editComment, setEditComment] = useState(false);
+  const [commentId, setCommentId] = useState(null);
+  const [caption, setCaption] = useState(null);
+  const [editCaption, setEditCaption] = useState(false);
 
   const loadPhoto = () => {
     setLoading(true);
     getPhoto(photoID).then((res) => {
       setPhoto(res.data.result);
-      setLoading(false);
-      console.log('foto', photo);
+      setLike(res.data.result.hasCurrentUserLiked ? true : false);
       //setTotalLikes(res.data.result.likesCount);
-      //setCommentsCount(res.data.result.commentsCount);
+      const commentsArray = res.data.result.comments;
+      setTotalComments(commentsArray);
+      setCaption(res.data.result.caption);
+      console.log(totalComments);
+      setLoading(false);
     });
+    console.log(photo);
   };
 
   const getEmail = async () => {
@@ -85,6 +106,7 @@ const PhotoScreen = ({ navigation }) => {
       (res) => {
         console.log('works! like!', res);
         setLike(true);
+        loadPhoto();
       },
       (err) => {
         console.log('ERROR: ', err);
@@ -98,6 +120,7 @@ const PhotoScreen = ({ navigation }) => {
       (res) => {
         console.log('works! unlike!', res);
         setLike(false);
+        loadPhoto();
       },
       (err) => {
         console.log('ERROR: ', err);
@@ -114,6 +137,7 @@ const PhotoScreen = ({ navigation }) => {
       (res) => {
         console.log('works comment!', res);
         setComment('');
+        loadPhoto();
       },
       (err) => {
         console.log(err);
@@ -133,6 +157,25 @@ const PhotoScreen = ({ navigation }) => {
         alert(err);
       },
     );
+  };
+
+  const saveUpdateCaption = () => {
+    const captionValue = {
+      caption: caption,
+    };
+    if (caption) {
+      updateCaption(photoID, captionValue).then(
+        (res) => {
+          console.log('works update caption!', res);
+          loadPhoto();
+          setEditCaption(false);
+        },
+        (err) => {
+          console.log(err);
+          alert(err);
+        },
+      );
+    }
   };
 
   useEffect(() => {
@@ -158,7 +201,7 @@ const PhotoScreen = ({ navigation }) => {
 
   /*useEffect(() => {
     loadPhoto();
-  }, [like]);*/
+  }, [loading]);*/
 
   const windowHeight = useWindowDimensions().height;
 
@@ -199,7 +242,7 @@ const PhotoScreen = ({ navigation }) => {
                 left: '90%',
               }}
             >
-              {photo.createdByPersonId == userId ? (
+              {photo.canUserDeletePhoto ? (
                 <Pressable onPress={() => setWarning(true)}>
                   <Ionicons name="md-close-circle" size={28} color={Colors.primaryColor} />
                 </Pressable>
@@ -238,10 +281,64 @@ const PhotoScreen = ({ navigation }) => {
                 fontFamily: 'work-sans',
                 fontWeight: '500',
                 color: '#292929',
+                paddingRight: 30,
               }}
             >
               {/*data[0].title*/ photo.caption}
             </Text>
+            {photo.canUserUpdatePhoto ? (
+              <Pressable
+                onPress={() => setEditCaption(true)}
+                style={{
+                  position: 'absolute',
+                  left: '93%',
+                  padding: 5,
+                }}
+              >
+                <Image source={pencil} />
+              </Pressable>
+            ) : null}
+
+            <View
+              style={{
+                display: editCaption ? 'flex' : 'none',
+                position: 'absolute',
+                top: '-100%',
+                width: '100%',
+                zIndex: 10,
+              }}
+            >
+              <TextInput
+                style={{
+                  height: 'auto',
+                  marginVertical: 15,
+                  borderRadius: 5,
+                  backgroundColor: '#FFFFFF',
+                  padding: 10,
+                  paddingRight: '12%',
+                }}
+                theme={{ colors: { primary: '#0104AC', underlineColor: 'transparent' } }}
+                required
+                value={caption}
+                autoCapitalize="none"
+                placeholderTextColor={Colors.onSurfaceColorSecondary}
+                placeholder="Caption"
+                onChangeText={(value) => setCaption(value)}
+              />
+              <Pressable
+                onPress={() => {
+                  saveUpdateCaption();
+                }}
+                style={{
+                  position: 'absolute',
+                  top: '30%',
+                  left: '90%',
+                  padding: 5,
+                }}
+              >
+                <Ionicons name="md-send" size={25} color={Colors.primaryColor} />
+              </Pressable>
+            </View>
           </View>
           <View
             style={{
@@ -277,7 +374,12 @@ const PhotoScreen = ({ navigation }) => {
             >
               {/*totalLikes + " likes"*/ photo.likesCount + ' ' + i18n.t('GALLERY.LIKES')}
             </Text>
-            <Pressable onPress={() => setOpenComment(!openComment)}>
+            <Pressable
+              onPress={() => {
+                setComment('');
+                setOpenComment(!openComment);
+              }}
+            >
               <Image
                 source={comments}
                 style={{
@@ -330,9 +432,27 @@ const PhotoScreen = ({ navigation }) => {
                 />
                 <Pressable
                   onPress={() => {
-                    if (comment) {
+                    if (comment && !editComment) {
                       saveComment();
+                      setOpenComment(false);
                       setShowComments(true);
+                    } else if (comment) {
+                      const commentValue = {
+                        comment: comment,
+                      };
+                      updateComment(photo.galleryPhotoId, commentId, commentValue).then(
+                        (res) => {
+                          console.log('works edit comment!', res);
+                          loadPhoto();
+                          setLoading(false);
+                          setOpenComment(false);
+                        },
+                        (err) => {
+                          console.log(err);
+                          setLoading(false);
+                          alert(err);
+                        },
+                      );
                     }
                   }}
                   style={{
@@ -363,7 +483,117 @@ const PhotoScreen = ({ navigation }) => {
                 </Pressable>
               </View>
             ) : null}
-            {showComments ? photo.comments : null}
+            {showComments
+              ? totalComments.map((c) => (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'flex-start',
+                      alignItems: 'center',
+                      marginTop: 21,
+                      marginVertical: 15,
+                      height: 'auto',
+                    }}
+                    key={c.commentId}
+                  >
+                    {c.canUserDeleteComment ? (
+                      <Pressable
+                        onPress={() => {
+                          setLoading(true);
+                          deleteComment(photo.galleryPhotoId, c.commentId).then(
+                            (res) => {
+                              console.log('works delete comment!', res);
+                              loadPhoto();
+                              setLoading(false);
+                            },
+                            (err) => {
+                              console.log(err);
+                              setLoading(false);
+                              alert(err);
+                            },
+                          );
+                        }}
+                        style={{
+                          position: 'absolute',
+                          left: '95%',
+                        }}
+                      >
+                        <Ionicons name="md-close" size={20} color={Colors.primaryColor} />
+                      </Pressable>
+                    ) : null}
+                    <View
+                      style={{
+                        borderRadius: 50,
+                        backgroundColor: '#fff',
+                        width: 30,
+                        height: 30,
+                        marginRight: 10,
+                        overflow: 'hidden',
+                        borderStyle: 'solid',
+                        borderColor: '#292929',
+                        borderWidth: 2,
+                      }}
+                    >
+                      <Image
+                        source={c.createdByPersonPhotoPath ? { uri: url + c.createdByPersonPhotoPath } : icon}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                        }}
+                      />
+                    </View>
+                    <Text
+                      style={{
+                        marginRight: 10,
+                        color: '#0104AC',
+                        fontFamily: 'work-sans',
+                        fontWeight: '700',
+                        fontSize: 15,
+                      }}
+                    >
+                      {c.createdByPersonFullFriendlyName ? c.createdByPersonFullFriendlyName : 'Guest'}
+                    </Text>
+                    <Text
+                      style={{
+                        color: '#292929',
+                        fontFamily: 'work-sans',
+                        fontWeight: '500',
+                        fontSize: 15,
+                        width: '45%',
+                        height: 'auto',
+                      }}
+                    >
+                      {c.comment}
+                    </Text>
+                    {c.canUserUpdateComment ? (
+                      <Pressable
+                        onPress={() => {
+                          setOpenComment(true);
+                          setEditComment(true);
+                          setComment(c.comment);
+                          setCommentId(c.commentId);
+                        }}
+                        style={{
+                          position: 'absolute',
+                          top: '95%',
+                          left: '11.5%',
+                        }}
+                      >
+                        <Text
+                          style={{
+                            color: Colors.primaryColor,
+                            fontFamily: 'work-sans',
+                            fontWeight: '500',
+                            fontSize: 15,
+                          }}
+                        >
+                          {i18n.t('GALLERY.EDIT')}
+                        </Text>
+                      </Pressable>
+                    ) : null}
+                  </View>
+                ))
+              : null}
           </View>
         </View>
       ) : (

@@ -22,11 +22,11 @@ const PhotosScreen = ({ navigation }) => {
       },
       (err) => {
         console.log(err);
+        setLoading(false);
         alert(err);
       },
     );
     console.log('FOTOS', photos);
-    setLoading(false);
   };
 
   useEffect(() => {

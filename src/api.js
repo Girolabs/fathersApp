@@ -169,3 +169,15 @@ export const unlikePhoto = (photoGalleryId) => {
 export const commentPhoto = (photoGalleryId, values) => {
   return instance.post(`/api/v1/photo-gallery/${photoGalleryId}/comments`, values);
 };
+
+export const updateCaption = (photoGalleryId, values) => {
+  return instance.put(`/api/v1/photo-gallery/${photoGalleryId}`, values);
+};
+
+export const updateComment = (photoGalleryId, commentId, values) => {
+  return instance.put(`/api/v1/photo-gallery/${photoGalleryId}/comments/${commentId}`, values);
+};
+
+export const deleteComment = (photoGalleryId, commentId) => {
+  return instance.delete(`/api/v1/photo-gallery/${photoGalleryId}/comments/${commentId}`);
+};

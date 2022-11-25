@@ -229,6 +229,7 @@ exports.EN = {
     SUCCESS: 'Data saved successfully',
     COMMENT: 'Comment',
     WARNING: 'Are you sure to delete this photo?',
+    EDIT: 'Edit',
   },
   ASSIGNMENTS_FORM: {
     TITLE: 'Assign position',
