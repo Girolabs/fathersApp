@@ -1,14 +1,22 @@
-_id: req_bd1e3fd1294640aa9319a0d87f1f2fa6
+_id: req_3c918265077f4b7ca0e5b697a5bb0a22
 type: Request
-parentId: fld_10efaa98f6bd4913b1a9a7f447c6ce3f
-modified: 1669320349808
-created: 1669013750655
-url: "{{ _.host }}/en/api/v1/photo-gallery/3"
-name: get a gallery photo
+parentId: wrk_ca7ed526c23e4b838356ae878a46b379
+modified: 1669461134344
+created: 1669461053259
+url: "{{ _.host }}/en/api/v2/date-tiles"
+name: birthdays and other dates
 description: ""
 method: GET
 body: {}
-parameters: []
+parameters:
+  - id: pair_6415d444205c478c8903f5bb900661eb
+    name: startDate
+    value: 2022-11-25
+    description: ""
+  - id: pair_4a6dfffe047f4128820013b3df80c0e0
+    name: daysInAdvance
+    value: "9"
+    description: ""
 headers:
   - id: pair_f2b2292db9d34ee6878ab8c20bade44d
     name: Content-Type
@@ -21,7 +29,7 @@ headers:
 authentication:
   type: bearer
   token: "{{ _.jwt }}"
-metaSortKey: -1666161559842.75
+metaSortKey: 1137.5
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

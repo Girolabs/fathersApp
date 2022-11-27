@@ -1,0 +1,10 @@
+_id: fld_wrk_ca7ed526c23e4b838356ae878a46b379ced5bcd2
+type: RequestGroup
+parentId: wrk_ca7ed526c23e4b838356ae878a46b379
+modified: 1669435953703
+created: 1669431830921
+name: roles and assignments
+description: internal community jobs
+environment: {}
+environmentPropertyOrder: null
+metaSortKey: 0

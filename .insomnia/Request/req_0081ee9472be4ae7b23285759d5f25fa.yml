@@ -1,10 +1,10 @@
-_id: req_bd1e3fd1294640aa9319a0d87f1f2fa6
+_id: req_0081ee9472be4ae7b23285759d5f25fa
 type: Request
-parentId: fld_10efaa98f6bd4913b1a9a7f447c6ce3f
-modified: 1669320349808
-created: 1669013750655
-url: "{{ _.host }}/en/api/v1/photo-gallery/3"
-name: get a gallery photo
+parentId: wrk_ca7ed526c23e4b838356ae878a46b379
+modified: 1669460955892
+created: 1669460930042
+url: "{{ _.host }}/en/api/v1/association-kinds"
+name: list association kinds
 description: ""
 method: GET
 body: {}
@@ -21,7 +21,7 @@ headers:
 authentication:
   type: bearer
   token: "{{ _.jwt }}"
-metaSortKey: -1666161559842.75
+metaSortKey: 1125
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

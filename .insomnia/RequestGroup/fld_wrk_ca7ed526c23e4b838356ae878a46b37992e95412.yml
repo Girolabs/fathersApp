@@ -1,0 +1,10 @@
+_id: fld_wrk_ca7ed526c23e4b838356ae878a46b37992e95412
+type: RequestGroup
+parentId: wrk_ca7ed526c23e4b838356ae878a46b379
+modified: 1669435953703
+created: 1669247671507
+name: bulletin board
+description: a place to post links and information for general use
+environment: {}
+environmentPropertyOrder: null
+metaSortKey: 300

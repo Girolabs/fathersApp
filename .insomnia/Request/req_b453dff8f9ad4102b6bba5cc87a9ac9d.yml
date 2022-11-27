@@ -1,10 +1,10 @@
-_id: req_6839b488e8d14debaf4dda3db73f7002
+_id: req_b453dff8f9ad4102b6bba5cc87a9ac9d
 type: Request
-parentId: fld_wrk_ca7ed526c23e4b838356ae878a46b379c1d2ab33
-modified: 1669435984909
-created: 1668629991569
-url: "{{ _.host }}/en/api/v1/filiations/48"
-name: a filiation
+parentId: fld_wrk_ca7ed526c23e4b838356ae878a46b379ced5bcd2
+modified: 1669510826920
+created: 1669510818547
+url: "{{ _.host }}/en/api/v1/assignments/user-permissions"
+name: check user assignment permissions
 description: ""
 method: GET
 body: {}
@@ -13,7 +13,7 @@ headers: []
 authentication:
   type: bearer
   token: "{{ _.jwt }}"
-metaSortKey: 100
+metaSortKey: -1669408813017
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

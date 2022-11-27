@@ -1,28 +1,29 @@
-_id: req_0fe28bb20d664ab2bdba14c0a7001043
+_id: req_3cbefd172a694e44b152e19d6779c427
 type: Request
-parentId: fld_10efaa98f6bd4913b1a9a7f447c6ce3f
-modified: 1669460640497
-created: 1666215460565
-url: "{{ _.host }}/en/api/v1/photo-gallery"
-name: new photo PNG
+parentId: fld_wrk_ca7ed526c23e4b838356ae878a46b379ced5bcd2
+modified: 1669510351748
+created: 1669435038876
+url: "{{ _.host }}/en/api/v1/assignments"
+name: create an assignment
 description: ""
 method: POST
 body:
   mimeType: application/json
   text: |-
     {
-    	"caption": "This is a caption",
-    	"photoBase64Encoded": "{{ _.samplePng }}"
+    	"roleId": 185,
+    	"personId": 449,
+    	"startDate": "2022-11-28",
+    	"endDate": null
     }
 parameters: []
 headers:
   - name: Content-Type
     value: application/json
-    id: pair_fb3b7acc550f4439b200cf9030a4968c
 authentication:
   type: bearer
   token: "{{ _.jwt }}"
-metaSortKey: -1666215460565
+metaSortKey: -1669270691721
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

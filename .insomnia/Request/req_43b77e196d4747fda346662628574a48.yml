@@ -1,19 +1,19 @@
-_id: req_6839b488e8d14debaf4dda3db73f7002
+_id: req_43b77e196d4747fda346662628574a48
 type: Request
-parentId: fld_wrk_ca7ed526c23e4b838356ae878a46b379c1d2ab33
-modified: 1669435984909
-created: 1668629991569
-url: "{{ _.host }}/en/api/v1/filiations/48"
-name: a filiation
+parentId: fld_wrk_ca7ed526c23e4b838356ae878a46b379ced5bcd2
+modified: 1669510425777
+created: 1669478555455
+url: "{{ _.host }}/en/api/v1/assignments/562"
+name: delete an assignment
 description: ""
-method: GET
+method: DELETE
 body: {}
 parameters: []
 headers: []
 authentication:
   type: bearer
   token: "{{ _.jwt }}"
-metaSortKey: 100
+metaSortKey: -1669259181613
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true

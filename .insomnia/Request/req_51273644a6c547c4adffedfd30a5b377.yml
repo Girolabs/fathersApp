@@ -1,10 +1,10 @@
-_id: req_6839b488e8d14debaf4dda3db73f7002
+_id: req_51273644a6c547c4adffedfd30a5b377
 type: Request
-parentId: fld_wrk_ca7ed526c23e4b838356ae878a46b379c1d2ab33
-modified: 1669435984909
-created: 1668629991569
-url: "{{ _.host }}/en/api/v1/filiations/48"
-name: a filiation
+parentId: fld_wrk_ca7ed526c23e4b838356ae878a46b379ced5bcd2
+modified: 1669432855065
+created: 1669432795819
+url: "{{ _.host }}/en/api/v1/assignments"
+name: list assignments
 description: ""
 method: GET
 body: {}
@@ -13,7 +13,7 @@ headers: []
 authentication:
   type: bearer
   token: "{{ _.jwt }}"
-metaSortKey: 100
+metaSortKey: -1669339752369
 isPrivate: false
 settingStoreCookies: true
 settingSendCookies: true
