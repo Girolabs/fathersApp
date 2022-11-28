@@ -281,7 +281,7 @@ class GenerationDetailScreen extends Component {
                             if (showHistorical ? asg : asg.isActive)
                               return (
                                 <TouchableComp
-                                  key={[asg.personId.toString(), asg.startDate]}
+                                  key={asg.assignmentId}
                                   onPress={() => {
                                     navigation.navigate('PatreDetail', {
                                       fatherId: asg.person.personId,
@@ -335,6 +335,7 @@ class GenerationDetailScreen extends Component {
                                         }}
                                         onPress={() => {
                                           this.props.navigation.navigate('AssigmentsForm', {
+                                            assignmentId: asg.assignmentId,
                                             entityName: generation.name,
                                             entityId: generation.generationId,
                                             roleTitle: asg.roleTitle,
@@ -346,6 +347,7 @@ class GenerationDetailScreen extends Component {
                                               ? moment.utc(asg.startDate).format(dateForm)
                                               : null,
                                             endDate: asg.endDate ? moment.utc(asg.endDate).format(dateForm) : null,
+                                            publicNotes: asg.publicNotes,
                                           });
                                         }}
                                       >

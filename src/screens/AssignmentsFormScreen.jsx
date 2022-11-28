@@ -22,7 +22,7 @@ import i18n from 'i18n-js';
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import { NavigationEvents } from 'react-navigation';
-import { getPersons } from '../api';
+import { createAssignment, deleteAssignment, getPersons, saveAssignment, updateAssignment } from '../api';
 import Button from '../components/Button';
 import SwitchWithFormik from '../components/SwitchWithFormik';
 import Select from '../components/Select';
@@ -70,7 +70,7 @@ const EditableDateItem = function (props) {
       marginTop: 10,
       marginBottom: 7,
       backgroundColor: '#FFFFFF',
-      zIndex:11
+      zIndex: 11,
     },
   });
 
@@ -91,7 +91,7 @@ const EditableDateItem = function (props) {
             }
           }}
           //disabled={props.disabled}
-          style={{width: 320, backgroundColor: "white"}}
+          style={{ width: 320, backgroundColor: 'white' }}
         />
       )}
 
@@ -131,7 +131,7 @@ const EditableDateItem = function (props) {
             justifyContent: 'center',
             alignItems: 'center',
             borderRadius: 5,
-            zIndex:12
+            zIndex: 12,
           }}
           onPress={() => {
             setShow(false);
@@ -155,6 +155,7 @@ const EditableDateItem = function (props) {
 const AssigmentsFormScreen = ({ navigation }) => {
   const rolesRep = navigation.getParam('roles');
   let hash = {};
+  const _assignmentId = navigation.getParam('assignmentId');
   const entityRoles = rolesRep?.filter((o) => (hash[o.value] ? false : (hash[o.value] = true)));
   const entityId = navigation.getParam('entityId');
   const entityName = navigation.getParam('entityName');
@@ -165,14 +166,16 @@ const AssigmentsFormScreen = ({ navigation }) => {
   const personName = navigation.getParam('personName');
   const start = navigation.getParam('startDate');
   const end = navigation.getParam('endDate');
+  const notes = navigation.getParam('publicNotes');
   const [role, setRole] = useState(roleId ? roleId : entityRoles[0].value);
   const [persons, setPersons] = useState(null);
   const [roles, setRoles] = useState(entityRoles ? entityRoles : null);
   const [person, setPerson] = useState(fatherId ? fatherId : null);
-  const [publicNotes, setPublicNotes] = useState('');
+  const [publicNotes, setPublicNotes] = useState(notes ? notes : '');
   const [startDate, setStartDate] = useState(start ? start : null);
   const [endDate, setEndDate] = useState(end ? end : null);
   const [isCreate, setIsCreate] = useState(updated);
+  const [assignmentId, setAssignmentId] = useState(_assignmentId ? _assignmentId : null);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -188,6 +191,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
       //console.log('Personas activas', resDataFilter);
       console.log('id de la entidad', entityId);
       console.log('roles', entityRoles);
+      console.log('id asg: ', assignmentId);
     });
   }, []);
 
@@ -218,8 +222,10 @@ const AssigmentsFormScreen = ({ navigation }) => {
       endDate: endDate,
       publicNotes: publicNotes,
     };
-    if (validateForm(formValues)) {
-      Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
+    if (!isCreate) {
+      formValues.assignmentId = assignmentId;
+    }
+    if (validateForm(formValues) && isCreate) {
       console.log(
         'Entidad: ',
         entityId,
@@ -234,8 +240,58 @@ const AssigmentsFormScreen = ({ navigation }) => {
         'Notas: ',
         publicNotes,
       );
-      navigation.goBack();
+      saveAssignment(formValues).then(
+        (res) => {
+          console.log('RESULTADO: ', res);
+          Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
+          navigation.goBack();
+        },
+        (err) => {
+          Alert.alert(err);
+          console.log(err);
+        },
+      );
+    } else if (validateForm(formValues) && !isCreate) {
+      updateAssignment(assignmentId).then(
+        (res) => {
+          console.log('RESULTADO: ', res);
+          Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
+          navigation.goBack();
+        },
+        (err) => {
+          Alert.alert(err);
+          console.log(err);
+        },
+      );
+      console.log(
+        'Entidad: ',
+        entityId,
+        'Role: ',
+        role,
+        'Persona: ',
+        person,
+        'fecha ini:',
+        startDate,
+        'fecha fin: ',
+        endDate,
+        'Notas: ',
+        publicNotes,
+        'AsgId:',
+        formValues.assignmentId,
+      );
     }
+  };
+
+  const handleDelete = () => {
+    deleteAssignment(assignmentId).then(
+      (res) => {
+        console.log(res);
+        Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
+      },
+      (err) => {
+        Alert.alert(err);
+      },
+    );
   };
   return (
     <View
@@ -501,29 +557,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
         />
       </View>
       <Button
-        /*onPress={() => {
-          const formatStartDate = new Date(startDate);
-          const formatEndDate = new Date(endDate);
-          if (!entityId || !role || !person || !publicNotes || formatStartDate.getTime() >= formatEndDate.getTime()) {
-            alert('Complete los campos, la fecha de inicio debe ser menor a la fecha término');
-          } else {
-            console.log(
-              'Entidad: ',
-              entityId,
-              'Role: ',
-              role,
-              'Persona: ',
-              person,
-              'fecha ini:',
-              startDate,
-              'fecha fin: ',
-              endDate,
-              'Notas: ',
-              publicNotes,
-            );
-          }
-        }}*/
-        onPress={handleSubmit}
+        //onPress={handleSubmit}
         style={{
           width: '100%',
           flexDirection: 'row',
@@ -557,6 +591,47 @@ const AssigmentsFormScreen = ({ navigation }) => {
           </Text>
         </View>
       </Button>
+      {!isCreate ? (
+        <Button
+          onPress={() => {
+            Alert.alert('eliminar cargo');
+            //handleDelete();
+          }}
+          style={{
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: 'white',
+              borderColor: 'red',
+              borderRadius: 5,
+              borderWidth: 2,
+              paddingHorizontal: 10,
+              width: '90%',
+              height: 50,
+              justifyContent: 'center',
+              marginVertical: 10,
+            }}
+          >
+            <Text
+              style={{
+                textAlign: 'center',
+                fontSize: 12,
+                width: '100%',
+                fontFamily: 'work-sans-bold',
+                textTransform: 'uppercase',
+                color: 'red',
+              }}
+            >
+              {i18n.t('ASSIGNMENTS_FORM.DELETE')}
+            </Text>
+          </View>
+        </Button>
+      ) : null}
+
       {error && (
         <Text
           style={{

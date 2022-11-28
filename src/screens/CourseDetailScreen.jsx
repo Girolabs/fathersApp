@@ -613,7 +613,7 @@ class CourseDetailScreen extends Component {
                           if (showHistorical ? asg : asg.isActive)
                             return (
                               <TouchableComp
-                                key={[asg.personId.toString(), asg.startDate]}
+                                key={asg.assignmentId}
                                 onPress={() => {
                                   navigation.navigate('PatreDetail', {
                                     fatherId: asg.person.personId,
@@ -665,6 +665,7 @@ class CourseDetailScreen extends Component {
                                       }}
                                       onPress={() => {
                                         this.props.navigation.navigate('AssigmentsForm', {
+                                          assignmentId: asg.assignmentId,
                                           entityName: course.name,
                                           entityId: course.courseId,
                                           roleTitle: asg.roleTitle,
@@ -674,6 +675,7 @@ class CourseDetailScreen extends Component {
                                           personName: asg.person.fullName,
                                           startDate: asg.startDate ? moment.utc(asg.startDate).format(dateForm) : null,
                                           endDate: asg.endDate ? moment.utc(asg.endDate).format(dateForm) : null,
+                                          publicNotes: asg.publicNotes,
                                         });
                                       }}
                                     >

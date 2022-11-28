@@ -150,8 +150,8 @@ export const deletePhoto = (photoGalleryId) => {
   return instance.delete(`/api/v1/photo-gallery/${photoGalleryId}`);
 };
 
-export const getPhotos = () => {
-  return instance.get(`/api/v1/photo-gallery`);
+export const getPhotos = (fields) => {
+  return instance.get(`/api/v1/photo-gallery${fields ? `?limit=${fields}` : ''}`);
 };
 
 export const savePhoto = (values) => {
@@ -180,4 +180,24 @@ export const updateComment = (photoGalleryId, commentId, values) => {
 
 export const deleteComment = (photoGalleryId, commentId) => {
   return instance.delete(`/api/v1/photo-gallery/${photoGalleryId}/comments/${commentId}`);
+};
+
+export const getAssignments = () => {
+  return instance.get(`/api/v1/assignments`);
+};
+
+export const getAssignment = (assignmentId) => {
+  return instance.get(`/api/v1/assignments/${assignmentId}`);
+};
+
+export const saveAssignment = (values) => {
+  return instance.post(`/api/v1/assignments`, values);
+};
+
+export const updateAssignment = (assignmentId) => {
+  return instance.put(`/api/v1/assignments/${assignmentId}`);
+};
+
+export const deleteAssignment = (assignmentId) => {
+  return instance.delete(`/api/v1/assignments/${assignmentId}`);
 };

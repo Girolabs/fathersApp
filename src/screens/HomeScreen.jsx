@@ -162,7 +162,10 @@ const HomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     getLastPhotos().then((res) => {
-      setPhotos(res.data.result);
+      const dataSort = res.data.result.sort(function (a, b) {
+        return b.galleryPhotoId - a.galleryPhotoId; /* Modificar si se desea otra propiedad */
+      });
+      setPhotos(dataSort);
       console.log('LAST 3', res.data.result);
     });
   }, [photos && loading]);

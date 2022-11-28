@@ -17,6 +17,7 @@ import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
 import { useEffect } from 'react';
 import heart from '../../assets/heart.png';
+import heartActive from '../../assets/heartActive.png';
 import comments from '../../assets/message-circle.png';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { NavigationEvents } from 'react-navigation';
@@ -269,42 +270,46 @@ const PhotoScreen = ({ navigation }) => {
                 : null}
             </View>
           </View>
-          <View
-            style={{
-              marginHorizontal: 20,
-              marginVertical: 10,
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 15,
-                fontFamily: 'work-sans',
-                fontWeight: '500',
-                color: '#292929',
-                paddingRight: 30,
-              }}
-            >
-              {/*data[0].title*/ photo.caption}
-            </Text>
-            {photo.canUserUpdatePhoto ? (
-              <Pressable
-                onPress={() => setEditCaption(true)}
-                style={{
-                  position: 'absolute',
-                  left: '93%',
-                  padding: 5,
-                }}
-              >
-                <Image source={pencil} />
-              </Pressable>
-            ) : null}
-
+          {!editCaption ? (
             <View
               style={{
-                display: editCaption ? 'flex' : 'none',
-                position: 'absolute',
-                top: '-100%',
-                width: '100%',
+                marginHorizontal: 20,
+                marginVertical: 10,
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 15,
+                  fontFamily: 'work-sans',
+                  fontWeight: '500',
+                  color: '#292929',
+                  paddingRight: 30,
+                }}
+              >
+                {/*data[0].title*/ photo.caption}
+              </Text>
+              {photo.canUserUpdatePhoto ? (
+                <Pressable
+                  onPress={() => setEditCaption(true)}
+                  style={{
+                    position: 'absolute',
+                    left: '93%',
+                    padding: 5,
+                  }}
+                >
+                  <Image source={pencil} />
+                </Pressable>
+              ) : null}
+            </View>
+          ) : (
+            <View
+              style={{
+                //display: editCaption ? 'flex' : 'none',
+                //position: 'absolute',
+                //top: '-100%',
+                width: '90%',
+                marginLeft: 'auto',
+                marginRight: 'auto',
                 zIndex: 10,
               }}
             >
@@ -339,7 +344,8 @@ const PhotoScreen = ({ navigation }) => {
                 <Ionicons name="md-send" size={25} color={Colors.primaryColor} />
               </Pressable>
             </View>
-          </View>
+          )}
+
           <View
             style={{
               flexDirection: 'row',
@@ -358,14 +364,7 @@ const PhotoScreen = ({ navigation }) => {
                 }
               }}
             >
-              <Image
-                source={heart}
-                style={{
-                  width: 25,
-                  height: 25,
-                  tintColor: like ? 'red' : '#B6B6D9',
-                }}
-              />
+              {like ? <Image source={heartActive} /> : <Image source={heart} />}
             </Pressable>
             <Text
               style={{
@@ -380,13 +379,7 @@ const PhotoScreen = ({ navigation }) => {
                 setOpenComment(!openComment);
               }}
             >
-              <Image
-                source={comments}
-                style={{
-                  width: 25,
-                  height: 25,
-                }}
-              />
+              <Image source={comments} />
             </Pressable>
             <Text onPress={() => setShowComments(!showComments)}>
               {/*20 comments*/}
@@ -499,19 +492,34 @@ const PhotoScreen = ({ navigation }) => {
                     {c.canUserDeleteComment ? (
                       <Pressable
                         onPress={() => {
-                          setLoading(true);
-                          deleteComment(photo.galleryPhotoId, c.commentId).then(
-                            (res) => {
-                              console.log('works delete comment!', res);
-                              loadPhoto();
-                              setLoading(false);
+                          Alert.alert('Warning', i18n.t('GALLERY.WARNING_COMMENT'), [
+                            {
+                              text: 'Cancel',
+                              onPress: () => {
+                                console.log('Cancel Pressed');
+                              },
+                              style: 'cancel',
                             },
-                            (err) => {
-                              console.log(err);
-                              setLoading(false);
-                              alert(err);
+                            {
+                              text: 'OK',
+                              onPress: () => {
+                                setLoading(true);
+                                deleteComment(photo.galleryPhotoId, c.commentId).then(
+                                  (res) => {
+                                    console.log('works delete comment!', res);
+                                    loadPhoto();
+                                    setLoading(false);
+                                  },
+                                  (err) => {
+                                    console.log(err);
+                                    setLoading(false);
+                                    alert(err);
+                                  },
+                                );
+                                console.log('OK Pressed');
+                              },
                             },
-                          );
+                          ]);
                         }}
                         style={{
                           position: 'absolute',

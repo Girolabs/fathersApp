@@ -317,7 +317,7 @@ class DelegationDetailScreen extends Component {
                             {assignments.map((asg) => {
                               return (
                                 <TouchableComp
-                                  key={[asg.person.personId, asg.startDate]}
+                                  key={asg.assignmentId}
                                   onPress={() => {
                                     navigation.navigate('PatreDetail', { fatherId: asg.person.personId });
                                   }}
@@ -361,6 +361,7 @@ class DelegationDetailScreen extends Component {
                                       }}
                                       onPress={() => {
                                         navigation.navigate('AssigmentsForm', {
+                                          assignmentId: asg.assignmentId,
                                           entityName: territory.name,
                                           entityId: territory.territoryId,
                                           roleTitle: asg.roleTitle,
@@ -370,6 +371,7 @@ class DelegationDetailScreen extends Component {
                                           personName: asg.person.fullName,
                                           startDate: asg.startDate ? moment.utc(asg.startDate).format(dateForm) : null,
                                           endDate: asg.endDate ? moment.utc(asg.endDate).format(dateForm) : null,
+                                          publicNotes: asg.publicNotes,
                                         });
                                       }}
                                     >

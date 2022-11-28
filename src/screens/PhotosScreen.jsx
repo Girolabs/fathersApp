@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, ActivityIndicator, Pressable, useWindowDimensions } from 'react-native';
+import { View, Text, ScrollView, Image, ActivityIndicator, Pressable, useWindowDimensions, Alert } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -9,15 +9,20 @@ import like from '../../assets/heart-white.png';
 import comments from '../../assets/message-circle-white.png';
 import search from '../../assets/search.png';
 import { getPhotos, url } from '../api';
+import { Ionicons } from 'expo-vector-icons';
 
 const PhotosScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [photos, setPhotos] = useState([]);
+  const [limit, setLimit] = useState(5);
   const loadPhotos = () => {
     setLoading(true);
-    getPhotos().then(
+    getPhotos(limit).then(
       (res) => {
-        setPhotos(res.data.result);
+        const dataSort = res.data.result.sort(function (a, b) {
+          return b.galleryPhotoId - a.galleryPhotoId; /* Modificar si se desea otra propiedad */
+        });
+        setPhotos(dataSort);
         setLoading(false);
       },
       (err) => {
@@ -32,6 +37,10 @@ const PhotosScreen = ({ navigation }) => {
   useEffect(() => {
     loadPhotos();
   }, []);
+
+  useEffect(() => {
+    loadPhotos();
+  }, [limit]);
 
   /*useEffect(() => {
     getPhotos().then(
@@ -166,6 +175,31 @@ const PhotosScreen = ({ navigation }) => {
               </Pressable>
             );
           })}
+          <Pressable
+            onPress={() => {
+              setLimit((ant) => ant + 5);
+            }}
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 28,
+              marginBottom: 25,
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: 'work-sans-semibold',
+                fontWeight: '600',
+                fontSize: 15,
+                color: '#0104AC',
+                marginRight: 20,
+              }}
+            >
+              {i18n.t('GALLERY.SEE_MORE')}
+            </Text>
+            <Ionicons name="ios-arrow-forward" size={23} color="#0104AC" />
+          </Pressable>
         </View>
       ) : (
         <View
