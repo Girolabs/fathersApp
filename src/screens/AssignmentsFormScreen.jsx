@@ -22,7 +22,14 @@ import i18n from 'i18n-js';
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import { NavigationEvents } from 'react-navigation';
-import { createAssignment, deleteAssignment, getPersons, saveAssignment, updateAssignment } from '../api';
+import {
+  createAssignment,
+  deleteAssignment,
+  getAssignment,
+  getPersons,
+  saveAssignment,
+  updateAssignment,
+} from '../api';
 import Button from '../components/Button';
 import SwitchWithFormik from '../components/SwitchWithFormik';
 import Select from '../components/Select';
@@ -78,6 +85,7 @@ const EditableDateItem = function (props) {
     <View style={editableItemStyle.item}>
       {show && (
         <DateTimePicker
+          timeZoneOffsetInMinutes={60}
           display={Platform.OS === 'android' ? 'default' : 'spinner'}
           value={new Date(props.date)}
           onChange={(event, val) => {
@@ -222,9 +230,11 @@ const AssigmentsFormScreen = ({ navigation }) => {
       endDate: endDate,
       publicNotes: publicNotes,
     };
-    if (!isCreate) {
-      formValues.assignmentId = assignmentId;
-    }
+    const formValuesEdit = {
+      startDate: startDate,
+      endDate: endDate,
+      publicNotes: publicNotes,
+    };
     if (validateForm(formValues) && isCreate) {
       console.log(
         'Entidad: ',
@@ -244,7 +254,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
         (res) => {
           console.log('RESULTADO: ', res);
           Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
-          navigation.goBack();
+          navigation.popToTop();
         },
         (err) => {
           Alert.alert(err);
@@ -252,11 +262,11 @@ const AssigmentsFormScreen = ({ navigation }) => {
         },
       );
     } else if (validateForm(formValues) && !isCreate) {
-      updateAssignment(assignmentId).then(
+      updateAssignment(assignmentId, formValuesEdit).then(
         (res) => {
           console.log('RESULTADO: ', res);
           Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
-          navigation.goBack();
+          navigation.popToTop();
         },
         (err) => {
           Alert.alert(err);
@@ -277,21 +287,37 @@ const AssigmentsFormScreen = ({ navigation }) => {
         'Notas: ',
         publicNotes,
         'AsgId:',
-        formValues.assignmentId,
+        assignmentId,
       );
     }
   };
 
   const handleDelete = () => {
-    deleteAssignment(assignmentId).then(
-      (res) => {
-        console.log(res);
-        Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
+    Alert.alert('Warning', i18n.t('ASSIGNMENTS_FORM.WARNING_ASG'), [
+      {
+        text: 'Cancel',
+        onPress: () => {
+          console.log('Cancel Pressed');
+        },
+        style: 'cancel',
       },
-      (err) => {
-        Alert.alert(err);
+      {
+        text: 'OK',
+        onPress: () => {
+          deleteAssignment(assignmentId).then(
+            (res) => {
+              console.log(res);
+              Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
+              navigation.popToTop();
+            },
+            (err) => {
+              Alert.alert(err);
+            },
+          );
+          console.log('OK Pressed');
+        },
       },
-    );
+    ]);
   };
   return (
     <View
@@ -557,7 +583,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
         />
       </View>
       <Button
-        //onPress={handleSubmit}
+        onPress={handleSubmit}
         style={{
           width: '100%',
           flexDirection: 'row',
@@ -594,8 +620,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
       {!isCreate ? (
         <Button
           onPress={() => {
-            Alert.alert('eliminar cargo');
-            //handleDelete();
+            handleDelete();
           }}
           style={{
             width: '100%',

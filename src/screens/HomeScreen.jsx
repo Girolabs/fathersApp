@@ -148,12 +148,6 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
     loadReminders();
-    getLastPhotos().then((res) => {
-      setPhotos(res.data.result);
-      console.log('LAST 3', res.data.result);
-    });
-    //getPhoto(4).then((res) => console.log('PHOTO ID', res.data.result));
-    //getPhotos().then((res) => console.log('ALL PHOTOS', res.data.result));
   }, []);
 
   useEffect(() => {

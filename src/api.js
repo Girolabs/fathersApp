@@ -194,8 +194,8 @@ export const saveAssignment = (values) => {
   return instance.post(`/api/v1/assignments`, values);
 };
 
-export const updateAssignment = (assignmentId) => {
-  return instance.put(`/api/v1/assignments/${assignmentId}`);
+export const updateAssignment = (assignmentId, values) => {
+  return instance.put(`/api/v1/assignments/${assignmentId}`, values);
 };
 
 export const deleteAssignment = (assignmentId) => {

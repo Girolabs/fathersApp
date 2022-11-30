@@ -151,7 +151,7 @@ const PhotoScreen = ({ navigation }) => {
     deletePhoto(photoID).then(
       (res) => {
         console.log('works delete photo!', res);
-        navigation.goBack();
+        navigation.popToTop();
       },
       (err) => {
         console.log(err);
@@ -304,9 +304,6 @@ const PhotoScreen = ({ navigation }) => {
           ) : (
             <View
               style={{
-                //display: editCaption ? 'flex' : 'none',
-                //position: 'absolute',
-                //top: '-100%',
                 width: '90%',
                 marginLeft: 'auto',
                 marginRight: 'auto',
@@ -321,6 +318,7 @@ const PhotoScreen = ({ navigation }) => {
                   backgroundColor: '#FFFFFF',
                   padding: 10,
                   paddingRight: '12%',
+                  paddingLeft: '12%',
                 }}
                 theme={{ colors: { primary: '#0104AC', underlineColor: 'transparent' } }}
                 required
@@ -336,12 +334,24 @@ const PhotoScreen = ({ navigation }) => {
                 }}
                 style={{
                   position: 'absolute',
-                  top: '30%',
+                  top: '28%',
                   left: '90%',
                   padding: 5,
                 }}
               >
                 <Ionicons name="md-send" size={25} color={Colors.primaryColor} />
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  setEditCaption(false);
+                }}
+                style={{
+                  position: 'absolute',
+                  top: '35%',
+                  left: '3%',
+                }}
+              >
+                <Ionicons name="md-arrow-back" size={25} color={Colors.primaryColor} />
               </Pressable>
             </View>
           )}

@@ -250,6 +250,7 @@ exports.ES = {
     ERROR: 'Por favor, complete los campos',
     ERROR_END_DATE: 'La fecha de fin no puede ser anterior a la fecha de inicio',
     SUCCESS: 'Datos guardados exitosamente',
+    WARNING_ASG: 'Estás seguro de eliminar esta asignación?',
   },
   ARCHIVE: {
     ARCHIVE: 'Archivar',

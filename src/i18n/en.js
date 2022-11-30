@@ -250,6 +250,7 @@ exports.EN = {
     ERROR: 'Please, complete the fields',
     ERROR_END_DATE: "End date can't be before start date",
     SUCCESS: 'Data saved successfully',
+    WARNING_ASG: 'Are you sure to remove this assignment?',
   },
   ARCHIVE: {
     ARCHIVE: 'Archive',
