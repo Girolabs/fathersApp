@@ -85,7 +85,7 @@ const EditableDateItem = function (props) {
     <View style={editableItemStyle.item}>
       {show && (
         <DateTimePicker
-          timeZoneOffsetInMinutes={60}
+          minimumDate={new Date(2020, 0, 1)}
           display={Platform.OS === 'android' ? 'default' : 'spinner'}
           value={new Date(props.date)}
           onChange={(event, val) => {
@@ -93,7 +93,7 @@ const EditableDateItem = function (props) {
               setShow(false);
             }
             setShowOk(true);
-            const pickedDate = toIsoString(val);
+            const pickedDate = Platform.OS === 'android' ? toIsoString(val) : val.toLocaleDateString();
             if (event.type === 'set') {
               props.onDateChange(pickedDate);
             }
