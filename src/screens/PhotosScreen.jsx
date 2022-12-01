@@ -175,31 +175,33 @@ const PhotosScreen = ({ navigation }) => {
               </Pressable>
             );
           })}
-          <Pressable
-            onPress={() => {
-              setLimit((ant) => ant + 5);
-            }}
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 28,
-              marginBottom: 25,
-            }}
-          >
-            <Text
+          {limit <= photos.length ? (
+            <Pressable
+              onPress={() => {
+                setLimit((ant) => ant + 5);
+              }}
               style={{
-                fontFamily: 'work-sans-semibold',
-                fontWeight: '600',
-                fontSize: 15,
-                color: '#0104AC',
-                marginRight: 20,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: 28,
+                marginBottom: 25,
               }}
             >
-              {i18n.t('GALLERY.SEE_MORE')}
-            </Text>
-            <Ionicons name="ios-arrow-forward" size={23} color="#0104AC" />
-          </Pressable>
+              <Text
+                style={{
+                  fontFamily: 'work-sans-semibold',
+                  fontWeight: '600',
+                  fontSize: 15,
+                  color: '#0104AC',
+                  marginRight: 20,
+                }}
+              >
+                {i18n.t('GALLERY.SEE_MORE')}
+              </Text>
+              <Ionicons name="ios-arrow-forward" size={23} color="#0104AC" />
+            </Pressable>
+          ) : null}
         </View>
       ) : (
         <View

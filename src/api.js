@@ -139,7 +139,7 @@ export const saveUnpinnedPost = (postId) => {
 };
 
 export const getLastPhotos = () => {
-  return instance.get(`/api/v1/photo-gallery?limit=3&includeComments=false&includeLikes=false`);
+  return instance.get(`/api/v1/photo-gallery?limit=3`);
 };
 
 export const getPhoto = (photoGalleryId, fields) => {

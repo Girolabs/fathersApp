@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, Platform, Image, Pressable, Alert, Button } from 'react-native';
+import {
+  View,
+  Text,
+  Platform,
+  Image,
+  Pressable,
+  Alert,
+  Button,
+  ActivityIndicator,
+  useWindowDimensions,
+} from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import i18n from 'i18n-js';
@@ -14,6 +24,9 @@ import { savePhoto } from '../api';
 const GalleryScreen = ({ navigation }) => {
   const [photo, setPhoto] = useState(null);
   const [description, setDescription] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const windowHeight = useWindowDimensions().height;
 
   const handleChoosePhoto = async () => {
     // No permissions request is necessary for launching the image library
@@ -33,6 +46,7 @@ const GalleryScreen = ({ navigation }) => {
   };
 
   const handleSubmit = () => {
+    setLoading(true);
     const formValues = {
       caption: description,
       photoBase64Encoded: photo,
@@ -40,10 +54,12 @@ const GalleryScreen = ({ navigation }) => {
     savePhoto(formValues).then(
       (res) => {
         console.log('RESULTADO: ', res);
+        setLoading(false);
         Alert.alert(i18n.t('GALLERY.SUCCESS'));
         navigation.goBack();
       },
       (err) => {
+        setLoading(false);
         Alert.alert('Error');
         console.log(err);
       },
@@ -60,6 +76,7 @@ const GalleryScreen = ({ navigation }) => {
         //marginVertical: 20,
       }}
     >
+      {loading ? <ActivityIndicator style={{ height: windowHeight }} size="large" color={Colors.primaryColor} /> : null}
       {!photo ? (
         <Pressable
           style={{
@@ -165,7 +182,7 @@ const GalleryScreen = ({ navigation }) => {
           //height: 46,
           justifyContent: 'center',
           marginTop: photo ? 64 : 144,
-          backgroundColor: photo && description !== ''?'#0104AC':"gray",
+          backgroundColor: photo && description !== '' ? '#0104AC' : 'gray',
         }}
       >
         <Button
