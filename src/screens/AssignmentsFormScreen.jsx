@@ -11,6 +11,7 @@ import {
   SafeAreaView,
   Pressable,
   Alert,
+  useWindowDimensions,
 } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -85,7 +86,7 @@ const EditableDateItem = function (props) {
     <View style={editableItemStyle.item}>
       {show && (
         <DateTimePicker
-          minimumDate={new Date(2020, 0, 1)}
+          minimumDate={new Date(2010, 0, 1)}
           display={Platform.OS === 'android' ? 'default' : 'spinner'}
           value={new Date(props.date)}
           onChange={(event, val) => {
@@ -174,17 +175,18 @@ const AssigmentsFormScreen = ({ navigation }) => {
   const personName = navigation.getParam('personName');
   const start = navigation.getParam('startDate');
   const end = navigation.getParam('endDate');
-  const notes = navigation.getParam('publicNotes');
   const [role, setRole] = useState(roleId ? roleId : entityRoles[0].value);
   const [persons, setPersons] = useState(null);
   const [roles, setRoles] = useState(entityRoles ? entityRoles : null);
   const [person, setPerson] = useState(fatherId ? fatherId : null);
-  const [publicNotes, setPublicNotes] = useState(notes ? notes : '');
   const [startDate, setStartDate] = useState(start ? start : null);
   const [endDate, setEndDate] = useState(end ? end : null);
   const [isCreate, setIsCreate] = useState(updated);
   const [assignmentId, setAssignmentId] = useState(_assignmentId ? _assignmentId : null);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const windowHeight = useWindowDimensions().height;
 
   useEffect(() => {
     getPersons().then((res) => {
@@ -223,17 +225,16 @@ const AssigmentsFormScreen = ({ navigation }) => {
   };
 
   const handleSubmit = function () {
+    setLoading(true);
     const formValues = {
       roleId: role,
       personId: person,
       startDate: startDate,
       endDate: endDate,
-      publicNotes: publicNotes,
     };
     const formValuesEdit = {
       startDate: startDate,
       endDate: endDate,
-      publicNotes: publicNotes,
     };
     if (validateForm(formValues) && isCreate) {
       console.log(
@@ -247,16 +248,16 @@ const AssigmentsFormScreen = ({ navigation }) => {
         startDate,
         'fecha fin: ',
         endDate,
-        'Notas: ',
-        publicNotes,
       );
       saveAssignment(formValues).then(
         (res) => {
           console.log('RESULTADO: ', res);
+          setLoading(false);
           Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
           navigation.popToTop();
         },
         (err) => {
+          setLoading(false);
           Alert.alert(err);
           console.log(err);
         },
@@ -265,10 +266,12 @@ const AssigmentsFormScreen = ({ navigation }) => {
       updateAssignment(assignmentId, formValuesEdit).then(
         (res) => {
           console.log('RESULTADO: ', res);
+          setLoading(false);
           Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
           navigation.popToTop();
         },
         (err) => {
+          setLoading(false);
           Alert.alert(err);
           console.log(err);
         },
@@ -284,8 +287,6 @@ const AssigmentsFormScreen = ({ navigation }) => {
         startDate,
         'fecha fin: ',
         endDate,
-        'Notas: ',
-        publicNotes,
         'AsgId:',
         assignmentId,
       );
@@ -304,13 +305,16 @@ const AssigmentsFormScreen = ({ navigation }) => {
       {
         text: 'OK',
         onPress: () => {
+          setLoading(true);
           deleteAssignment(assignmentId).then(
             (res) => {
               console.log(res);
+              setLoading(false);
               Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
               navigation.popToTop();
             },
             (err) => {
+              setLoading(false);
               Alert.alert(err);
             },
           );
@@ -329,155 +333,174 @@ const AssigmentsFormScreen = ({ navigation }) => {
         backgroundColor: '#F2F3FF',
       }}
     >
-      <Text
-        style={{
-          fontFamily: 'work-sans-semibold',
-          color: Colors.primaryColor,
-          fontSize: 20,
-          textAlign: 'left',
-          letterSpacing: 2.5,
-          //textTransform: 'uppercase',
-          //margin: 10,
-        }}
-      >
-        {i18n.t('ASSIGNMENTS_FORM.ENTITY')}: {entityName}
-      </Text>
-      {isCreate ? (
-        <Text
-          style={{
-            fontFamily: 'work-sans-semibold',
-            color: Colors.primaryColor,
-            fontSize: 20,
-            textAlign: 'left',
-            letterSpacing: 2.5,
-            //textTransform: 'uppercase',
-            //margin: 10,
-            padding: 20,
-          }}
-        >
-          {i18n.t('ASSIGNMENTS_FORM.TITLE')}
-        </Text>
-      ) : (
-        <Text
-          style={{
-            fontFamily: 'work-sans-semibold',
-            color: Colors.primaryColor,
-            fontSize: 20,
-            textAlign: 'left',
-            letterSpacing: 2.5,
-            //textTransform: 'uppercase',
-            //margin: 10,
-            padding: 20,
-          }}
-        >
-          {i18n.t('ASSIGNMENTS_FORM.TITLE_EDIT')}
-        </Text>
-      )}
-      {
+      {loading ? (
         <View
           style={{
-            width: '90%',
+            flex: 1,
+            padding: 15,
+            backgroundColor: Colors.surfaceColorPrimary,
+            justifyContent: 'center',
           }}
         >
-          <Text
+          <ActivityIndicator
             style={{
-              //color: Colors.onSurfaceColorSecondary,
-              //color: Colors.onSurfaceColorPrimary,
-              fontWeight: 'bold',
-              //textAlign: 'center',
-              fontFamily: 'work-sans-semibold',
-              color: Colors.primaryColor,
+              height: windowHeight,
             }}
-            required
-          >
-            {isCreate ? i18n.t('ASSIGNMENTS_FORM.ROLE_LIST') : i18n.t('ASSIGNMENTS_FORM.ROLE')}
-          </Text>
-          {isCreate ? (
-            <Select
-              style={{
-                backgroundColor: Colors.surfaceColorSecondary,
-                height: 50,
-                marginVertical: 10,
-                borderRadius: 5,
-                padding: Platform.OS === 'ios' ? 8 : 0,
-              }}
-              elements={roles}
-              value={role}
-              valueChange={(value) => setRole(value)}
-            />
-          ) : (
-            <TextInput
-              style={{
-                height: 50,
-                marginVertical: 10,
-                borderRadius: 5,
-                backgroundColor: '#FFFFFF',
-              }}
-              theme={{ colors: { primary: '#0104AC', underlineColor: 'transparent' } }}
-              required
-              value={role}
-              autoCapitalize="none"
-              placeholderTextColor={Colors.onSurfaceColorSecondary}
-              placeholder={roleTitle}
-              onChangeText={(value) => setRole(value)}
-              disabled={true}
-            />
-          )}
+            size="large"
+            color={Colors.primaryColor}
+          />
         </View>
-      }
-      {
-        <View
-          style={{
-            width: '90%',
-            zIndex: 12,
-          }}
-        >
+      ) : (
+        <>
           <Text
             style={{
-              //color: Colors.onSurfaceColorSecondary,
-              //color: Colors.onSurfaceColorPrimary,
-              fontWeight: 'bold',
-              //textAlign: 'center',
               fontFamily: 'work-sans-semibold',
               color: Colors.primaryColor,
+              fontSize: 20,
+              textAlign: 'left',
+              letterSpacing: 2.5,
+              //textTransform: 'uppercase',
+              //margin: 10,
             }}
-            required
           >
-            {isCreate ? i18n.t('ASSIGNMENTS_FORM.PERSON_LIST') : i18n.t('ASSIGNMENTS_FORM.PERSON')}
+            {i18n.t('ASSIGNMENTS_FORM.ENTITY')}: {entityName}
           </Text>
           {isCreate ? (
-            <AutocompleteDropdown
-              key={person?.personId}
-              containerStyle={{ marginVertical: 10 }}
-              clearOnFocus={false}
-              closeOnSubmit={false}
-              //initialValue={{ id: person }}
-              onSelectItem={(item) => {
-                item && setPerson(item.id);
-                console.log('aca', person);
-              }}
-              dataSet={persons}
-            />
-          ) : (
-            <TextInput
+            <Text
               style={{
-                height: 50,
-                marginVertical: 10,
-                borderRadius: 5,
-                backgroundColor: '#FFFFFF',
+                fontFamily: 'work-sans-semibold',
+                color: Colors.primaryColor,
+                fontSize: 20,
+                textAlign: 'left',
+                letterSpacing: 2.5,
+                //textTransform: 'uppercase',
+                //margin: 10,
+                padding: 20,
               }}
-              theme={{ colors: { primary: '#0104AC', underlineColor: 'transparent' } }}
-              required
-              value={person}
-              autoCapitalize="none"
-              placeholderTextColor={Colors.onSurfaceColorSecondary}
-              placeholder={personName}
-              onChangeText={(value) => setPerson(value)}
-              disabled={true}
-            />
+            >
+              {i18n.t('ASSIGNMENTS_FORM.TITLE')}
+            </Text>
+          ) : (
+            <Text
+              style={{
+                fontFamily: 'work-sans-semibold',
+                color: Colors.primaryColor,
+                fontSize: 20,
+                textAlign: 'left',
+                letterSpacing: 2.5,
+                //textTransform: 'uppercase',
+                //margin: 10,
+                padding: 20,
+              }}
+            >
+              {i18n.t('ASSIGNMENTS_FORM.TITLE_EDIT')}
+            </Text>
           )}
+          {
+            <View
+              style={{
+                width: '90%',
+              }}
+            >
+              <Text
+                style={{
+                  //color: Colors.onSurfaceColorSecondary,
+                  //color: Colors.onSurfaceColorPrimary,
+                  fontWeight: 'bold',
+                  //textAlign: 'center',
+                  fontFamily: 'work-sans-semibold',
+                  color: Colors.primaryColor,
+                }}
+                required
+              >
+                {isCreate ? i18n.t('ASSIGNMENTS_FORM.ROLE_LIST') : i18n.t('ASSIGNMENTS_FORM.ROLE')}
+              </Text>
+              {isCreate ? (
+                <Select
+                  style={{
+                    backgroundColor: Colors.surfaceColorSecondary,
+                    height: 50,
+                    marginVertical: 10,
+                    borderRadius: 5,
+                    padding: Platform.OS === 'ios' ? 8 : 0,
+                  }}
+                  elements={roles}
+                  value={role}
+                  valueChange={(value) => setRole(value)}
+                />
+              ) : (
+                <TextInput
+                  style={{
+                    height: 50,
+                    marginVertical: 10,
+                    borderRadius: 5,
+                    backgroundColor: '#FFFFFF',
+                  }}
+                  theme={{ colors: { primary: '#0104AC', underlineColor: 'transparent' } }}
+                  required
+                  value={role}
+                  autoCapitalize="none"
+                  placeholderTextColor={Colors.onSurfaceColorSecondary}
+                  placeholder={roleTitle}
+                  onChangeText={(value) => setRole(value)}
+                  disabled={true}
+                />
+              )}
+            </View>
+          }
+          {
+            <View
+              style={{
+                width: '90%',
+                zIndex: 12,
+              }}
+            >
+              <Text
+                style={{
+                  //color: Colors.onSurfaceColorSecondary,
+                  //color: Colors.onSurfaceColorPrimary,
+                  fontWeight: 'bold',
+                  //textAlign: 'center',
+                  fontFamily: 'work-sans-semibold',
+                  color: Colors.primaryColor,
+                }}
+                required
+              >
+                {isCreate ? i18n.t('ASSIGNMENTS_FORM.PERSON_LIST') : i18n.t('ASSIGNMENTS_FORM.PERSON')}
+              </Text>
+              {isCreate ? (
+                <AutocompleteDropdown
+                  key={person?.personId}
+                  containerStyle={{ marginVertical: 10 }}
+                  clearOnFocus={false}
+                  closeOnSubmit={false}
+                  //initialValue={{ id: person }}
+                  onSelectItem={(item) => {
+                    item && setPerson(item.id);
+                    console.log('aca', person);
+                  }}
+                  dataSet={persons}
+                />
+              ) : (
+                <TextInput
+                  style={{
+                    height: 50,
+                    marginVertical: 10,
+                    borderRadius: 5,
+                    backgroundColor: '#FFFFFF',
+                  }}
+                  theme={{ colors: { primary: '#0104AC', underlineColor: 'transparent' } }}
+                  required
+                  value={person}
+                  autoCapitalize="none"
+                  placeholderTextColor={Colors.onSurfaceColorSecondary}
+                  placeholder={personName}
+                  onChangeText={(value) => setPerson(value)}
+                  disabled={true}
+                />
+              )}
 
-          {/*<Text
+              {/*<Text
               style={{
                 color: Colors.onSurfaceColorSecondary,
                 //color: Colors.onSurfaceColorPrimary,
@@ -499,175 +522,144 @@ const AssigmentsFormScreen = ({ navigation }) => {
               value={person}
               valueChange={(value) => setPerson(value)}
             />*/}
-        </View>
-      }
-      <View
-        style={{
-          width: '90%',
-        }}
-      >
-        <Text
-          style={{
-            //color: Colors.onSurfaceColorSecondary,
-            //color: Colors.onSurfaceColorPrimary,
-            fontWeight: 'bold',
-            //textAlign: 'center',
-            fontFamily: 'work-sans-semibold',
-            color: Colors.primaryColor,
-          }}
-        >
-          {i18n.t('ASSIGNMENTS_FORM.START_DATE')}
-        </Text>
-      </View>
-      <EditableDateItem
-        date={startDate}
-        onDateChange={(value) => {
-          setStartDate(value);
-        }}
-      />
-      <View
-        style={{
-          width: '90%',
-        }}
-      >
-        <Text
-          style={{
-            //color: Colors.onSurfaceColorSecondary,
-            //color: Colors.onSurfaceColorPrimary,
-            fontWeight: 'bold',
-            //textAlign: 'center',
-            fontFamily: 'work-sans-semibold',
-            color: Colors.primaryColor,
-          }}
-        >
-          {i18n.t('ASSIGNMENTS_FORM.END_DATE')}
-        </Text>
-      </View>
-      <EditableDateItem
-        date={endDate}
-        onDateChange={(value) => {
-          setEndDate(value);
-        }}
-      />
-      <View
-        style={{
-          width: '90%',
-        }}
-      >
-        <Text
-          style={{
-            //color: Colors.onSurfaceColorSecondary,
-            //color: Colors.onSurfaceColorPrimary,
-            fontWeight: 'bold',
-            //textAlign: 'center',
-            fontFamily: 'work-sans-semibold',
-            color: Colors.primaryColor,
-          }}
-        >
-          {i18n.t('ASSIGNMENTS_FORM.PUBLIC_NOTES')}
-        </Text>
-        <TextInput
-          style={{
-            height: 50,
-            marginVertical: 10,
-            borderRadius: 5,
-            backgroundColor: '#FFFFFF',
-          }}
-          theme={{ colors: { primary: '#0104AC', underlineColor: 'transparent' } }}
-          //label={i18n.t('LIVING_SITUATION.PUBLIC_NOTES')}
-          required
-          autoCapitalize="none"
-          placeholderTextColor={Colors.onSurfaceColorSecondary}
-          value={publicNotes}
-          onChangeText={(value) => setPublicNotes(value)}
-        />
-      </View>
-      <Button
-        onPress={handleSubmit}
-        style={{
-          width: '100%',
-          flexDirection: 'row',
-          justifyContent: 'center',
-        }}
-      >
-        <View
-          style={{
-            backgroundColor: 'white',
-            borderColor: Colors.primaryColor,
-            borderRadius: 5,
-            borderWidth: 2,
-            paddingHorizontal: 10,
-            width: '90%',
-            height: 50,
-            justifyContent: 'center',
-            marginVertical: 10,
-          }}
-        >
-          <Text
-            style={{
-              textAlign: 'center',
-              fontSize: 12,
-              width: '100%',
-              fontFamily: 'work-sans-bold',
-              textTransform: 'uppercase',
-              color: Colors.primaryColor,
-            }}
-          >
-            {i18n.t('ASSIGNMENTS_FORM.SAVE')}
-          </Text>
-        </View>
-      </Button>
-      {!isCreate ? (
-        <Button
-          onPress={() => {
-            handleDelete();
-          }}
-          style={{
-            width: '100%',
-            flexDirection: 'row',
-            justifyContent: 'center',
-          }}
-        >
+            </View>
+          }
           <View
             style={{
-              backgroundColor: 'white',
-              borderColor: 'red',
-              borderRadius: 5,
-              borderWidth: 2,
-              paddingHorizontal: 10,
               width: '90%',
-              height: 50,
-              justifyContent: 'center',
-              marginVertical: 10,
             }}
           >
             <Text
               style={{
-                textAlign: 'center',
-                fontSize: 12,
-                width: '100%',
-                fontFamily: 'work-sans-bold',
-                textTransform: 'uppercase',
-                color: 'red',
+                //color: Colors.onSurfaceColorSecondary,
+                //color: Colors.onSurfaceColorPrimary,
+                fontWeight: 'bold',
+                //textAlign: 'center',
+                fontFamily: 'work-sans-semibold',
+                color: Colors.primaryColor,
               }}
             >
-              {i18n.t('ASSIGNMENTS_FORM.DELETE')}
+              {i18n.t('ASSIGNMENTS_FORM.START_DATE')}
             </Text>
           </View>
-        </Button>
-      ) : null}
+          <EditableDateItem
+            date={startDate}
+            onDateChange={(value) => {
+              setStartDate(value);
+            }}
+          />
+          <View
+            style={{
+              width: '90%',
+            }}
+          >
+            <Text
+              style={{
+                //color: Colors.onSurfaceColorSecondary,
+                //color: Colors.onSurfaceColorPrimary,
+                fontWeight: 'bold',
+                //textAlign: 'center',
+                fontFamily: 'work-sans-semibold',
+                color: Colors.primaryColor,
+              }}
+            >
+              {i18n.t('ASSIGNMENTS_FORM.END_DATE')}
+            </Text>
+          </View>
+          <EditableDateItem
+            date={endDate}
+            onDateChange={(value) => {
+              setEndDate(value);
+            }}
+          />
+          <Button
+            onPress={handleSubmit}
+            style={{
+              width: '100%',
+              flexDirection: 'row',
+              justifyContent: 'center',
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: 'white',
+                borderColor: Colors.primaryColor,
+                borderRadius: 5,
+                borderWidth: 2,
+                paddingHorizontal: 10,
+                width: '90%',
+                height: 50,
+                justifyContent: 'center',
+                marginVertical: 10,
+              }}
+            >
+              <Text
+                style={{
+                  textAlign: 'center',
+                  fontSize: 12,
+                  width: '100%',
+                  fontFamily: 'work-sans-bold',
+                  textTransform: 'uppercase',
+                  color: Colors.primaryColor,
+                }}
+              >
+                {i18n.t('ASSIGNMENTS_FORM.SAVE')}
+              </Text>
+            </View>
+          </Button>
+          {!isCreate ? (
+            <Button
+              onPress={() => {
+                handleDelete();
+              }}
+              style={{
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}
+            >
+              <View
+                style={{
+                  backgroundColor: 'white',
+                  borderColor: 'red',
+                  borderRadius: 5,
+                  borderWidth: 2,
+                  paddingHorizontal: 10,
+                  width: '90%',
+                  height: 50,
+                  justifyContent: 'center',
+                  marginVertical: 10,
+                }}
+              >
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    fontSize: 12,
+                    width: '100%',
+                    fontFamily: 'work-sans-bold',
+                    textTransform: 'uppercase',
+                    color: 'red',
+                  }}
+                >
+                  {i18n.t('ASSIGNMENTS_FORM.DELETE')}
+                </Text>
+              </View>
+            </Button>
+          ) : null}
 
-      {error && (
-        <Text
-          style={{
-            fontSize: 14,
-            width: '90%',
-            fontWeight: '600',
-            color: Colors.primaryColor,
-          }}
-        >
-          {error}
-        </Text>
+          {error && (
+            <Text
+              style={{
+                fontSize: 14,
+                width: '90%',
+                fontWeight: '600',
+                color: Colors.primaryColor,
+              }}
+            >
+              {error}
+            </Text>
+          )}
+        </>
       )}
     </View>
   );

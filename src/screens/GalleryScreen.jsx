@@ -38,7 +38,7 @@ const GalleryScreen = ({ navigation }) => {
       base64: true,
     });
 
-    console.log(result);
+    console.log('foto', result.uri);
 
     if (!result.cancelled) {
       setPhoto(result.base64);
@@ -60,7 +60,7 @@ const GalleryScreen = ({ navigation }) => {
       },
       (err) => {
         setLoading(false);
-        Alert.alert('Error');
+        Alert.alert(err.toString());
         console.log(err);
       },
     );
@@ -141,7 +141,7 @@ const GalleryScreen = ({ navigation }) => {
             <Image source={imageIcon} />
           </Pressable>
           <Pressable style={{ width: '100%', height: 258 }}>
-            <Image source={{ uri: 'data:image/jpg;base64,' + photo }} style={{ width: '100%', height: '100%' }} />
+            <Image source={{ uri: 'data:image/jpeg;base64,' + photo }} style={{ width: '100%', height: '100%' }} />
           </Pressable>
         </>
       )}

@@ -252,7 +252,6 @@ class FiliationDetailScreen extends Component {
                                         personName: item.person.fullName,
                                         startDate: item.startDate ? moment.utc(item.startDate).format(dateForm) : null,
                                         endDate: item.endDate ? moment.utc(item.endDate).format(dateForm) : null,
-                                        publicNotes: item.publicNotes,
                                       });
                                     }}
                                   >

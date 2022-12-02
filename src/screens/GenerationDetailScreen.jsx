@@ -347,7 +347,6 @@ class GenerationDetailScreen extends Component {
                                               ? moment.utc(asg.startDate).format(dateForm)
                                               : null,
                                             endDate: asg.endDate ? moment.utc(asg.endDate).format(dateForm) : null,
-                                            publicNotes: asg.publicNotes,
                                           });
                                         }}
                                       >

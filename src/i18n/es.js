@@ -243,7 +243,6 @@ exports.ES = {
     PERSON: 'Persona',
     START_DATE: 'Fecha de inicio',
     END_DATE: 'Fecha de término',
-    PUBLIC_NOTES: 'Notas públicas',
     SAVE: 'Guardar',
     DELETE: 'Eliminar',
     WARNING: 'Estás seguro de eliminar este asignación?',

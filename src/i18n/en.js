@@ -243,7 +243,6 @@ exports.EN = {
     PERSON: 'Person',
     START_DATE: 'Start date',
     END_DATE: 'End date',
-    PUBLIC_NOTES: 'Public notes',
     SAVE: 'Save',
     DELETE: 'Delete',
     WARNING: 'Are you sure to remove this assignment?',
