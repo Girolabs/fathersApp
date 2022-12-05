@@ -79,12 +79,16 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
             return keyC.toString();
           }}
           renderItem={({ item, index }) => {
-            const date = moment.utc(item[0].date).format(dateFormatByLocale);
-            const importantReminder = item[0].isImportant;
+            const date = moment.utc(item.date).format(dateFormatByLocale);
+            const importantReminder = item.memorialEvents[0]?.isImportant;
             const importantTitle =
-              importantReminder && item[0].importantText
-                ? `${item[0].text} ${item[0].importantText.replace('%s', item[0].yearsAgo)}`
+              importantReminder && item.memorialEvents[0]?.importantText
+                ? `${item.memorialEvents[0]?.text} ${item.memorialEvents[0]?.importantText.replace(
+                    '%s',
+                    item.memorialEvents[0]?.yearsAgo,
+                  )}`
                 : null;
+
             return (
               <View>
                 <Button style={styles.buttonContainer} onPress={() => handleShowReminders(index)}>
@@ -118,7 +122,7 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
                     </View>
                   )}
                 </Button>
-                {selectedHeader === index && <Reminders reminders={item} />}
+                {selectedHeader === index && <Reminders reminders={item.memorialEvents} />}
               </View>
             );
           }}
@@ -131,7 +135,7 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
 RemindersHeaders.propTypes = {
   onChangeSelectedHeader: PropTypes.func.isRequired,
   //selectedHeader: PropTypes.number.isRequired,
-  reminders: PropTypes.arrayOf(PropTypes.array).isRequired,
+  reminders: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default RemindersHeaders;

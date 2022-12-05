@@ -26,7 +26,7 @@ instance.interceptors.request.use(async (config) => {
 export default instance;
 
 export const getReminders = (startDate) => {
-  return instance.get(`/api/v1/date-tiles${!!startDate ? `?startDate=${startDate}` : ''}`);
+  return instance.get(`/api/v2/date-tiles${!!startDate ? `?startDate=${startDate}` : ''}`);
 };
 
 export const getBoard = () => {
