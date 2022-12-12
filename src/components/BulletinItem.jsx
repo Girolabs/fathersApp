@@ -50,17 +50,18 @@ const BulletinItem = ({ navigation, item, postToUpdate }) => {
       <View
         style={{
           height: 'auto',
-          borderRadius: 50,
+          //borderRadius: 50,
           borderWidth: Platform.OS === 'ios' ? 1 : 0,
           width: 20,
           height: 20,
           borderColor: '#A4A2A2',
           justifyContent: 'center',
           alignItems: 'center',
+          backgroundColor: 'black',
         }}
       >
         <RadioButton
-          color="white"
+          color="black"
           key={item.postId}
           status={checked ? 'checked' : 'unchecked'}
           onPress={() => {

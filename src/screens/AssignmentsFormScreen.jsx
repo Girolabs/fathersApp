@@ -23,14 +23,7 @@ import i18n from 'i18n-js';
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import { NavigationEvents } from 'react-navigation';
-import {
-  createAssignment,
-  deleteAssignment,
-  getAssignment,
-  getPersons,
-  saveAssignment,
-  updateAssignment,
-} from '../api';
+import { createAssignment, deleteAssignment, getPersons, saveAssignment, updateAssignment } from '../api';
 import Button from '../components/Button';
 import SwitchWithFormik from '../components/SwitchWithFormik';
 import Select from '../components/Select';

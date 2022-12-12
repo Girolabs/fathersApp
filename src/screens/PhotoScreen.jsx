@@ -44,15 +44,13 @@ const PhotoScreen = ({ navigation }) => {
   const photoID = navigation.getParam('galleryPhotoId');
   const [loading, setLoading] = useState(true);
   const [like, setLike] = useState(false);
-  //const [totalLikes, setTotalLikes] = useState(245);
-  //const [commentsCount, setCommentsCount] = useState(0);
   const [totalComments, setTotalComments] = useState([]);
   const [openComment, setOpenComment] = useState(false);
   const [comment, setComment] = useState('');
   const [showComments, setShowComments] = useState(true);
   const [photo, setPhoto] = useState({});
-  const [user, setUser] = useState({});
-  const [userId, setUserId] = useState('');
+  //const [user, setUser] = useState({});
+  //const [userId, setUserId] = useState('');
   const [email, setEmail] = useState('');
   const [warning, setWarning] = useState(false);
   const [editComment, setEditComment] = useState(false);
@@ -65,7 +63,6 @@ const PhotoScreen = ({ navigation }) => {
     getPhoto(photoID).then((res) => {
       setPhoto(res.data.result);
       setLike(res.data.result.hasCurrentUserLiked ? true : false);
-      //setTotalLikes(res.data.result.likesCount);
       const commentsArray = res.data.result.comments;
       setTotalComments(commentsArray);
       setCaption(res.data.result.caption);
@@ -75,13 +72,13 @@ const PhotoScreen = ({ navigation }) => {
     console.log(photo);
   };
 
-  const getEmail = async () => {
+  /*const getEmail = async () => {
     const identity = await AsyncStorage.getItem('email');
     console.log(identity);
     setEmail(identity);
-  };
+  };*/
 
-  const loadPerson = () => {
+  /*const loadPerson = () => {
     if (email !== '') {
       getPersons().then((res) => {
         const data = res.data.result;
@@ -90,9 +87,9 @@ const PhotoScreen = ({ navigation }) => {
       });
       console.log(userId);
     }
-  };
+  };*/
 
-  const loadUser = () => {
+  /*const loadUser = () => {
     if (userId)
       getPersonByUser(userId).then((res) => {
         setUser({
@@ -100,7 +97,7 @@ const PhotoScreen = ({ navigation }) => {
           photo: res.data.result.photo,
         });
       });
-  };
+  };*/
 
   const saveLike = async () => {
     await likePhoto(photoID).then(
@@ -180,7 +177,7 @@ const PhotoScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    getEmail();
+    //getEmail();
     loadPhoto();
     console.log('ID: ', photoID);
     async function orientationBack() {
@@ -192,17 +189,13 @@ const PhotoScreen = ({ navigation }) => {
     };
   }, []);
 
-  useEffect(() => {
+  /*useEffect(() => {
     loadUser();
-  }, [userId]);
-
-  useEffect(() => {
-    loadPerson();
-  }, [email]);
+  }, [userId]);*/
 
   /*useEffect(() => {
-    loadPhoto();
-  }, [loading]);*/
+    loadPerson();
+  }, [email]);*/
 
   const windowHeight = useWindowDimensions().height;
 
@@ -334,7 +327,7 @@ const PhotoScreen = ({ navigation }) => {
                 }}
                 style={{
                   position: 'absolute',
-                  top: '28%',
+                  top: '29%',
                   left: '90%',
                   padding: 5,
                 }}

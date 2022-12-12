@@ -14,7 +14,7 @@ import { Ionicons } from 'expo-vector-icons';
 const PhotosScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [photos, setPhotos] = useState([]);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(4);
   const loadPhotos = () => {
     setLoading(true);
     getPhotos(limit).then(
