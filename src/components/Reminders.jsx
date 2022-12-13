@@ -136,7 +136,7 @@ const Reminders = ({ navigation, reminders }) => {
   return (
     <FlatList
       data={reminders}
-      keyExtractor={(item) => item.entityId.toString()}
+      keyExtractor={(item) => item.entityId.toString()+ item.dateType}
       renderItem={({ item }) => {
         const IconComp = getIcon(item.dateType);
         const path = getPath(item.kind);

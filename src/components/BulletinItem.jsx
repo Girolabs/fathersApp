@@ -57,7 +57,7 @@ const BulletinItem = ({ navigation, item, postToUpdate }) => {
           borderColor: '#A4A2A2',
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: 'black',
+          backgroundColor: Platform.OS == 'android'? 'black': 'white',
         }}
       >
         <RadioButton
