@@ -38,7 +38,7 @@ const GalleryScreen = ({ navigation }) => {
       base64: true,
     });
 
-    console.log('foto', result.uri);
+    //console.log('foto', result.uri);
 
     if (!result.cancelled) {
       setPhoto(result.base64);
@@ -61,7 +61,7 @@ const GalleryScreen = ({ navigation }) => {
       (err) => {
         setLoading(false);
         Alert.alert(err.toString());
-        console.log(err);
+        console.log(err.response.data);
       },
     );
   };

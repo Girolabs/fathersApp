@@ -23,7 +23,15 @@ import i18n from 'i18n-js';
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import { NavigationEvents } from 'react-navigation';
-import { createAssignment, deleteAssignment, getPersons, saveAssignment, updateAssignment } from '../api';
+import {
+  createAssignment,
+  deleteAssignment,
+  errorHandler,
+  getAssignments,
+  getPersons,
+  saveAssignment,
+  updateAssignment,
+} from '../api';
 import Button from '../components/Button';
 import SwitchWithFormik from '../components/SwitchWithFormik';
 import Select from '../components/Select';
@@ -182,6 +190,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
   const windowHeight = useWindowDimensions().height;
 
   useEffect(() => {
+    getAssignments().then((res) => console.log('acaaaa', res.data.result));
     getPersons().then((res) => {
       const resData = res.data.result;
       const resDataFilter = resData.filter((p) => p.isActive === true);
@@ -230,18 +239,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
       endDate: endDate,
     };
     if (validateForm(formValues) && isCreate) {
-      console.log(
-        'Entidad: ',
-        entityId,
-        'Role: ',
-        role,
-        'Persona: ',
-        person,
-        'fecha ini:',
-        startDate,
-        'fecha fin: ',
-        endDate,
-      );
+      console.log(formValues);
       saveAssignment(formValues).then(
         (res) => {
           console.log('RESULTADO: ', res);
@@ -250,9 +248,9 @@ const AssigmentsFormScreen = ({ navigation }) => {
           navigation.popToTop();
         },
         (err) => {
+          console.log(err.response.status);
           setLoading(false);
-          Alert.alert(err);
-          console.log(err);
+          errorHandler(err);
         },
       );
     } else if (validateForm(formValues) && !isCreate) {
@@ -492,29 +490,6 @@ const AssigmentsFormScreen = ({ navigation }) => {
                   disabled={true}
                 />
               )}
-
-              {/*<Text
-              style={{
-                color: Colors.onSurfaceColorSecondary,
-                //color: Colors.onSurfaceColorPrimary,
-                fontWeight: 'bold',
-                //textAlign: 'center',
-              }}
-              required
-            >
-              Lista de Personas
-            </Text>
-            <Select
-              style={{
-                backgroundColor: Colors.surfaceColorSecondary,
-                height: 50,
-                marginVertical: 10,
-                borderRadius: 5,
-              }}
-              elements={persons}
-              value={person}
-              valueChange={(value) => setPerson(value)}
-            />*/}
             </View>
           }
           <View

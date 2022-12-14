@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AsyncStorage } from 'react-native';
+import { Alert, AsyncStorage } from 'react-native';
 import i18n from 'i18n-js';
 
 export const url = 'https://schoenstatt-fathers.link/';
@@ -24,6 +24,19 @@ instance.interceptors.request.use(async (config) => {
 });
 
 export default instance;
+
+export const errorHandler = (err) => {
+  if (err.response?.status == 400) {
+    Alert.alert(i18n.t('GENERAL.ERROR_400'));
+  } else if (err.response?.status == 401) {
+    //logout
+    return;
+  } else if (err.response?.status == 403) {
+    Alert.alert(i18n.t('GENERAL.ERROR_403'));
+  } else {
+    Alert.alert(i18n.t('GENERAL.ERROR_500'));
+  }
+};
 
 export const getReminders = (startDate) => {
   return instance.get(`/api/v2/date-tiles${!!startDate ? `?startDate=${startDate}` : ''}`);
@@ -150,8 +163,8 @@ export const deletePhoto = (photoGalleryId) => {
   return instance.delete(`/api/v1/photo-gallery/${photoGalleryId}`);
 };
 
-export const getPhotos = (fields) => {
-  return instance.get(`/api/v1/photo-gallery${fields ? `?limit=${fields}` : ''}`);
+export const getPhotos = (limit = 10, offset = 0) => {
+  return instance.get(`/api/v1/photo-gallery`, { params: { offset, limit } });
 };
 
 export const savePhoto = (values) => {

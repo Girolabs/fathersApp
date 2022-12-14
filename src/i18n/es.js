@@ -17,6 +17,9 @@ exports.ES = {
     COPY_CLIPBOARD: 'Copiado al portapapeles',
     IDEAL: 'Explicación del ideal de curso',
     BACK: 'Volver',
+    ERROR_403: 'No tienes permiso para realizar esta acción.',
+    ERROR_500: 'Error desconocido.',
+    ERROR_400: 'Datos inválidos.',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'Correo o usuario',

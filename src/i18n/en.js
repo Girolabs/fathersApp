@@ -17,6 +17,9 @@ exports.EN = {
     COPY_CLIPBOARD: 'Copied to clipboard',
     IDEAL: 'Ideal statement',
     BACK: 'Back',
+    ERROR_403: 'You do not have permission to perform this action.',
+    ERROR_500: 'Unknown bug.',
+    ERROR_400: 'Invalid data.',
   },
   AUTH_SCREEN: {
     IDENTITY_PLACEHOLDER: 'Email or username',

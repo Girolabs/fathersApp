@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Platform, Image, Pressable } from 'react-native';
 import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
-import { RadioButton } from 'react-native-paper';
+import { Checkbox } from 'react-native-paper';
 import Colors from '../constants/Colors';
 import check from '../../assets/checked.png';
 
@@ -57,11 +57,11 @@ const BulletinItem = ({ navigation, item, postToUpdate }) => {
           borderColor: '#A4A2A2',
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: Platform.OS == 'android'? 'black': 'white',
+          //backgroundColor: Platform.OS == 'android' ? 'black' : 'white',
         }}
       >
-        <RadioButton
-          color="black"
+        <Checkbox
+          color="#0104AC"
           key={item.postId}
           status={checked ? 'checked' : 'unchecked'}
           onPress={() => {
@@ -78,9 +78,7 @@ const BulletinItem = ({ navigation, item, postToUpdate }) => {
               setChecked(!checked);
               postToUpdate();
             }}
-          >
-            <Image source={checked ? check : null} />
-          </Pressable>
+          ></Pressable>
         }
       </View>
 

@@ -14,24 +14,21 @@ import { Ionicons } from 'expo-vector-icons';
 const PhotosScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [photos, setPhotos] = useState([]);
-  const [limit, setLimit] = useState(4);
+  const [limit, setLimit] = useState(20);
+  const [offset, setOffset] = useState(0);
   const loadPhotos = () => {
     setLoading(true);
-    getPhotos(limit).then(
+    console.log(limit, offset);
+    getPhotos(limit, offset).then(
       (res) => {
-        const dataSort = res.data.result.sort(function (a, b) {
-          return b.galleryPhotoId - a.galleryPhotoId; /* Modificar si se desea otra propiedad */
-        });
-        setPhotos(dataSort);
+        setPhotos([...photos, ...res.data.result]);
         setLoading(false);
       },
       (err) => {
-        console.log(err);
         setLoading(false);
         alert(err);
       },
     );
-    console.log('FOTOS', photos);
   };
 
   useEffect(() => {
@@ -40,26 +37,17 @@ const PhotosScreen = ({ navigation }) => {
 
   useEffect(() => {
     loadPhotos();
-  }, [limit]);
+  }, [limit, offset]);
 
-  /*useEffect(() => {
-    getPhotos().then(
-      (res) => {
-        setPhotos(res.data.result);
-        setLoading(false);
-      },
-      (err) => {
-        console.log(err);
-        alert(err);
-      },
-    );
-  }, [photos]);*/
+  const loadMore = () => {
+    setOffset(offset + limit);
+  };
 
   const windowHeight = useWindowDimensions().height;
 
   return (
     <ScrollView>
-      {!loading ? (
+      {true && (
         <View
           style={{
             backgroundColor: '#F2F3FF',
@@ -175,11 +163,9 @@ const PhotosScreen = ({ navigation }) => {
               </Pressable>
             );
           })}
-          {limit <= photos.length ? (
+          {!loading ? (
             <Pressable
-              onPress={() => {
-                setLimit((ant) => ant + 5);
-              }}
+              onPress={loadMore}
               style={{
                 flexDirection: 'row',
                 justifyContent: 'center',
@@ -199,26 +185,19 @@ const PhotosScreen = ({ navigation }) => {
               >
                 {i18n.t('GALLERY.SEE_MORE')}
               </Text>
-              <Ionicons name="ios-arrow-forward" size={23} color="#0104AC" />
             </Pressable>
-          ) : null}
-        </View>
-      ) : (
-        <View
-          style={{
-            flex: 1,
-            padding: 15,
-            backgroundColor: Colors.surfaceColorPrimary,
-            justifyContent: 'center',
-          }}
-        >
-          <ActivityIndicator
-            style={{
-              height: windowHeight,
-            }}
-            size="large"
-            color={Colors.primaryColor}
-          />
+          ) : (
+            <View
+              style={{
+                flex: 1,
+                padding: 15,
+                backgroundColor: Colors.surfaceColorPrimary,
+                justifyContent: 'center',
+              }}
+            >
+              <ActivityIndicator size="large" color={Colors.primaryColor} />
+            </View>
+          )}
         </View>
       )}
     </ScrollView>
