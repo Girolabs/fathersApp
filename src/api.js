@@ -25,11 +25,17 @@ instance.interceptors.request.use(async (config) => {
 
 export default instance;
 
-export const errorHandler = (err) => {
+export const errorHandler = async (err) => {
   if (err.response?.status == 400) {
     Alert.alert(i18n.t('GENERAL.ERROR_400'));
   } else if (err.response?.status == 401) {
     //logout
+    try {
+      await AsyncStorage.removeItem('token');
+      props.navigation.navigate('Auth');
+    } catch (e) {
+      console.log(e);
+    }
     return;
   } else if (err.response?.status == 403) {
     Alert.alert(i18n.t('GENERAL.ERROR_403'));
@@ -213,4 +219,8 @@ export const updateAssignment = (assignmentId, values) => {
 
 export const deleteAssignment = (assignmentId) => {
   return instance.delete(`/api/v1/assignments/${assignmentId}`);
+};
+
+export const assigmentsUserPermissions = () => {
+  return instance.get(`/api/v1/assignments/user-permissions`);
 };

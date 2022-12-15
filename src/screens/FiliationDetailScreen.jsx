@@ -23,7 +23,7 @@ import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
-import { getFiliation } from '../api';
+import { assigmentsUserPermissions, getFiliation } from '../api';
 import FiliationHouses from '../components/FiliationHouses';
 import { getDateMaskByLocale, getDateMaskForm } from '../utils/date-utils';
 import { Ionicons } from 'expo-vector-icons';
@@ -34,9 +34,10 @@ class FiliationDetailScreen extends Component {
   state = {
     filiation: null,
     showHistorical: false,
+    permission: {},
   };
-
   loadFiliation = (filiationId, fields) => {
+    assigmentsUserPermissions().then((res) => this.setState({ permission: res.data.result }));
     getFiliation(filiationId, fields)
       .then((res) => {
         console.log(res.data.result);
@@ -64,7 +65,7 @@ class FiliationDetailScreen extends Component {
 
   render() {
     const { navigation } = this.props;
-    const { filiation, showHistorical } = this.state;
+    const { filiation, showHistorical, permission } = this.state;
     let TouchableComp = TouchableOpacity;
     if (Platform.OS === 'android' && Platform.Version >= 21) {
       TouchableComp = TouchableNativeFeedback;
@@ -146,7 +147,7 @@ class FiliationDetailScreen extends Component {
                           justifyContent: 'center',
                           alignItems: 'center',
                           position: 'absolute',
-                          left: '75%',
+                          left: permission.userCanCreateAssignments ? '75%' : '88%',
                           top: 8,
                         }}
                         onPress={() => {
@@ -161,6 +162,7 @@ class FiliationDetailScreen extends Component {
                       </Pressable>
                       <Pressable
                         style={{
+                          display: permission.userCanCreateAssignments ? 'flex' : 'none',
                           width: 30,
                           height: 30,
                           flexDirection: 'row',
@@ -236,6 +238,7 @@ class FiliationDetailScreen extends Component {
                                   </View>
                                   <Pressable
                                     style={{
+                                      display: permission.userCanEditAssignments ? 'flex' : 'none',
                                       position: 'absolute',
                                       left: '90%',
                                       padding: 5,

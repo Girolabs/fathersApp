@@ -18,7 +18,6 @@ const PhotosScreen = ({ navigation }) => {
   const [offset, setOffset] = useState(0);
   const loadPhotos = () => {
     setLoading(true);
-    console.log(limit, offset);
     getPhotos(limit, offset).then(
       (res) => {
         setPhotos([...photos, ...res.data.result]);

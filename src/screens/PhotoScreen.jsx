@@ -243,11 +243,10 @@ const PhotoScreen = ({ navigation }) => {
               ) : null}
 
               {warning
-                ? Alert.alert('Warning', i18n.t('GALLERY.WARNING'), [
+                ? Alert.alert(i18n.t('GALLERY.DELETE_PHOTO_TITLE'), i18n.t('GALLERY.DELETE_PHOTO_BODY'), [
                     {
                       text: 'Cancel',
                       onPress: () => {
-                        console.log('Cancel Pressed');
                         setWarning(false);
                       },
                       style: 'cancel',
@@ -256,7 +255,6 @@ const PhotoScreen = ({ navigation }) => {
                       text: 'OK',
                       onPress: () => {
                         saveDeletePhoto();
-                        console.log('OK Pressed');
                       },
                     },
                   ])
@@ -495,7 +493,7 @@ const PhotoScreen = ({ navigation }) => {
                     {c.canUserDeleteComment ? (
                       <Pressable
                         onPress={() => {
-                          Alert.alert('Warning', i18n.t('GALLERY.WARNING_COMMENT'), [
+                          Alert.alert(i18n.t('GALLERY.DELETE_COMMENT_TITLE'), i18n.t('GALLERY.DELETE_COMMENT_BODY'), [
                             {
                               text: 'Cancel',
                               onPress: () => {

@@ -56,7 +56,6 @@ const ArchivedScreen = ({ navigation }) => {
         },
       );
     });
-    Alert.alert(i18n.t('ARCHIVE.SUCCESS'));
   };
 
   const windowHeight = useWindowDimensions().height;

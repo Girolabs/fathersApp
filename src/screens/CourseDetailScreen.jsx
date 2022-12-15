@@ -24,7 +24,7 @@ import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
-import { getCourse, getPerson } from '../api';
+import { getCourse, getPerson, assigmentsUserPermissions } from '../api';
 import IdealStatement from '../components/IdealStatement';
 import { getDateMaskByLocale, getDateFormatByLocale, getDateMaskForm } from '../utils/date-utils';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -118,9 +118,11 @@ class CourseDetailScreen extends Component {
   state = {
     course: null,
     showHistorical: false,
+    permission: {},
   };
 
   loadCourse = (courseId, fields) => {
+    assigmentsUserPermissions().then((res) => this.setState({ permission: res.data.result }));
     getCourse(courseId, fields)
       .then((res) => {
         let course = res.data.result;
@@ -165,7 +167,7 @@ class CourseDetailScreen extends Component {
     if (Platform.OS === 'android' && Platform.Version >= 21) {
       TouchableComp = TouchableNativeFeedback;
     }
-    const { course, showHistorical } = this.state;
+    const { course, showHistorical, permission } = this.state;
     const { navigation } = this.props;
     if (course) console.log('Course -> ', course);
     return (
@@ -572,7 +574,7 @@ class CourseDetailScreen extends Component {
                             justifyContent: 'center',
                             alignItems: 'center',
                             position: 'absolute',
-                            left: '75%',
+                            left: permission.userCanCreateAssignments ? '75%' : '88%',
                             top: 8,
                           }}
                           onPress={() => {
@@ -588,6 +590,7 @@ class CourseDetailScreen extends Component {
 
                         <Pressable
                           style={{
+                            display: permission.userCanCreateAssignments ? 'flex' : 'none',
                             width: 30,
                             height: 30,
                             flexDirection: 'row',
@@ -659,6 +662,7 @@ class CourseDetailScreen extends Component {
                                     </View>
                                     <Pressable
                                       style={{
+                                        display: permission.userCanEditAssignments ? 'flex' : 'none',
                                         position: 'absolute',
                                         left: '90%',
                                         padding: 5,

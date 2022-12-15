@@ -55,12 +55,11 @@ const GalleryScreen = ({ navigation }) => {
       (res) => {
         console.log('RESULTADO: ', res);
         setLoading(false);
-        Alert.alert(i18n.t('GALLERY.SUCCESS'));
-        navigation.goBack();
+        navigation.navigate('Photos');
       },
       (err) => {
         setLoading(false);
-        Alert.alert(err.toString());
+        errorHandler(err);
         console.log(err.response.data);
       },
     );

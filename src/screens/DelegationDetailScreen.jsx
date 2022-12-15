@@ -21,7 +21,7 @@ import 'moment/min/locales';
 import { I18nContext } from '../context/I18nProvider';
 import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
-import { getTerritory } from '../api';
+import { getTerritory, assigmentsUserPermissions } from '../api';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../components/HeaderButton';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -165,9 +165,11 @@ class DelegationDetailScreen extends Component {
     showHistorical: false,
     assignments: [],
     filiations: [],
+    permission: {},
   };
 
   loadTerritory = (territoryId, fields) => {
+    assigmentsUserPermissions().then((res) => this.setState({ permission: res.data.result }));
     getTerritory(territoryId, fields)
       .then((res) => {
         const fetchedDelegation = {
@@ -222,7 +224,7 @@ class DelegationDetailScreen extends Component {
       TouchableComp = TouchableNativeFeedback;
     }
     const { navigation } = this.props;
-    const { territory, showHistorical, assignments, filiations } = this.state;
+    const { territory, showHistorical, assignments, filiations, permission } = this.state;
     return (
       <I18nContext.Consumer>
         {(value) => {
@@ -280,7 +282,7 @@ class DelegationDetailScreen extends Component {
                               <View
                                 style={{
                                   flexDirection: 'row',
-                                  justifyContent: 'space-between',
+                                  justifyContent: permission.userCanCreateAssignments ? 'space-between' : 'flex-end',
                                   alignItems: 'center',
                                   width: 70,
                                   marginRight: '3%',
@@ -298,6 +300,9 @@ class DelegationDetailScreen extends Component {
                                   />
                                 </TouchableComp>
                                 <Pressable
+                                  style={{
+                                    display: permission.userCanCreateAssignments ? 'flex' : 'none',
+                                  }}
                                   onPress={() => {
                                     navigation.navigate('AssigmentsForm', {
                                       entityName: territory.name,
@@ -355,6 +360,7 @@ class DelegationDetailScreen extends Component {
                                     </View>
                                     <Pressable
                                       style={{
+                                        display: permission.userCanEditAssignments ? 'flex' : 'none',
                                         position: 'absolute',
                                         left: '90%',
                                         padding: 5,

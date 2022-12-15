@@ -24,6 +24,7 @@ import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import { NavigationEvents } from 'react-navigation';
 import {
+  assigmentsUserPermissions,
   createAssignment,
   deleteAssignment,
   errorHandler,
@@ -186,10 +187,12 @@ const AssigmentsFormScreen = ({ navigation }) => {
   const [assignmentId, setAssignmentId] = useState(_assignmentId ? _assignmentId : null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [permission, setPermission] = useState({});
 
   const windowHeight = useWindowDimensions().height;
 
   useEffect(() => {
+    assigmentsUserPermissions().then((res) => setPermission(res.data.result));
     getAssignments().then((res) => console.log('acaaaa', res.data.result));
     getPersons().then((res) => {
       const resData = res.data.result;
@@ -285,7 +288,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
   };
 
   const handleDelete = () => {
-    Alert.alert('Warning', i18n.t('ASSIGNMENTS_FORM.WARNING_ASG'), [
+    Alert.alert(i18n.t('ASSIGNMENTS_FORM.DELETE_TITLE'), i18n.t('ASSIGNMENTS_FORM.DELETE_BODY'), [
       {
         text: 'Cancel',
         onPress: () => {
@@ -354,7 +357,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
               //margin: 10,
             }}
           >
-            {i18n.t('ASSIGNMENTS_FORM.ENTITY')}: {entityName}
+            {entityName}
           </Text>
           {isCreate ? (
             <Text
@@ -404,7 +407,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
                 }}
                 required
               >
-                {isCreate ? i18n.t('ASSIGNMENTS_FORM.ROLE_LIST') : i18n.t('ASSIGNMENTS_FORM.ROLE')}
+                {i18n.t('ASSIGNMENTS_FORM.ROLE')}
               </Text>
               {isCreate ? (
                 <Select
@@ -457,7 +460,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
                 }}
                 required
               >
-                {isCreate ? i18n.t('ASSIGNMENTS_FORM.PERSON_LIST') : i18n.t('ASSIGNMENTS_FORM.PERSON')}
+                {i18n.t('ASSIGNMENTS_FORM.PERSON')}
               </Text>
               {isCreate ? (
                 <AutocompleteDropdown
@@ -575,7 +578,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
               </Text>
             </View>
           </Button>
-          {!isCreate ? (
+          {!isCreate && permission.userCanDeleteAssignments ? (
             <Button
               onPress={() => {
                 handleDelete();
