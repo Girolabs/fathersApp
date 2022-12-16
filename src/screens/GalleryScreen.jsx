@@ -152,6 +152,7 @@ const GalleryScreen = ({ navigation }) => {
         multiline={true}
         textAlignVertical="top"
         style={{
+          padding: Platform.OS === 'android' ? 0 : 10,
           width: '90%',
           height: 92,
           marginVertical: 10,
@@ -168,7 +169,19 @@ const GalleryScreen = ({ navigation }) => {
                 width: 10,
               }}
             ></View>
-            <Text>{i18n.t('GALLERY.CAPTION')}</Text>
+            {Platform.OS == 'android' ? (
+              <Text>{i18n.t('GALLERY.CAPTION')}</Text>
+            ) : (
+              <View>
+                <Text
+                  style={{
+                    color: '#A4A2A2',
+                  }}
+                >
+                  {i18n.t('GALLERY.CAPTION')}
+                </Text>
+              </View>
+            )}
           </>
         }
         required

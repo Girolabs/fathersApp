@@ -51,7 +51,6 @@ const BulletinItem = ({ navigation, item, postToUpdate }) => {
         style={{
           height: 'auto',
           //borderRadius: 50,
-          borderWidth: Platform.OS === 'ios' ? 1 : 0,
           width: 20,
           height: 20,
           borderColor: '#A4A2A2',
@@ -60,7 +59,7 @@ const BulletinItem = ({ navigation, item, postToUpdate }) => {
           //backgroundColor: Platform.OS == 'android' ? 'black' : 'white',
         }}
       >
-        <Checkbox
+        <Checkbox.Android
           color="#0104AC"
           key={item.postId}
           status={checked ? 'checked' : 'unchecked'}
