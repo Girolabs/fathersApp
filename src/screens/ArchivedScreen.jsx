@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, Alert, useWindowDimensions } from 'react-native';
-import { getArchivedPosts, getBoard, unarchivePost } from '../api';
+import { errorHandler, getArchivedPosts, getBoard, unarchivePost } from '../api';
 import Colors from '../constants/Colors';
 import i18n from 'i18n-js';
 import * as Network from 'expo-network';
@@ -51,7 +51,7 @@ const ArchivedScreen = ({ navigation }) => {
         },
         (err) => {
           console.log('ERROR: ', err);
-          alert(err);
+          errorHandler(err);
           return;
         },
       );

@@ -151,24 +151,11 @@ class GenerationDetailScreen extends Component {
     getGeneration(generationId, fields)
       .then((res) => {
         const generation = res.data.result;
-        console.log('generacion', generation);
         this.setState({ generation: generation, loading: false });
       })
       .catch(() => {
         this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
       });
-    /*getGenerations('all').then((resGenerations) => {
-      let generations = resGenerations.data.result;
-      let generationsAssignment = generations.map((asg) => {
-        if (asg.name === this.state.generation.name && asg.mainAssignment.person.fullName !== undefined) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-      console.log('aca', generationsAssignment);
-      this.setState({ generations: generations, hasAssignment: generationsAssignment });
-    });*/
   };
   async componentDidMount() {
     const { navigation } = this.props;

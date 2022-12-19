@@ -12,7 +12,7 @@ import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
 import { I18nContext } from '../context/I18nProvider';
-import { getLastPhotos, getPhoto, getPhotos, getPinnedPosts, getReminders } from '../api';
+import { getLastPhotos, getPinnedPosts, getReminders } from '../api';
 import RemindersHeaders from '../components/RemindersHeaders';
 import { BulletinCheckContext } from '../context/BulletinCheckProvider';
 import { Pressable } from 'react-native';
@@ -160,7 +160,6 @@ const HomeScreen = ({ navigation }) => {
         return b.galleryPhotoId - a.galleryPhotoId; /* Modificar si se desea otra propiedad */
       });
       setPhotos(dataSort);
-      console.log('LAST 3', res.data.result);
     });
   }, [photos && loading]);
 

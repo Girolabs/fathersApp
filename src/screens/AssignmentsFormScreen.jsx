@@ -193,7 +193,6 @@ const AssigmentsFormScreen = ({ navigation }) => {
 
   useEffect(() => {
     assigmentsUserPermissions().then((res) => setPermission(res.data.result));
-    getAssignments().then((res) => console.log('acaaaa', res.data.result));
     getPersons().then((res) => {
       const resData = res.data.result;
       const resDataFilter = resData.filter((p) => p.isActive === true);
@@ -203,10 +202,6 @@ const AssigmentsFormScreen = ({ navigation }) => {
           title: p.fullName,
         })),
       );
-      //console.log('Personas activas', resDataFilter);
-      console.log('id de la entidad', entityId);
-      console.log('roles', entityRoles);
-      console.log('id asg: ', assignmentId);
     });
   }, []);
 
@@ -216,7 +211,6 @@ const AssigmentsFormScreen = ({ navigation }) => {
     let claves = Object.keys(formValues);
     for (let i = 0; i < claves.length; i++) {
       let clave = claves[i];
-      //console.log(body[clave]);
       if (role === null || person === null || entityId === null) {
         setError(i18n.t('ASSIGNMENTS_FORM.ERROR'));
         return false;
@@ -245,7 +239,6 @@ const AssigmentsFormScreen = ({ navigation }) => {
       console.log(formValues);
       saveAssignment(formValues).then(
         (res) => {
-          console.log('RESULTADO: ', res);
           setLoading(false);
           Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
           navigation.popToTop();
@@ -259,30 +252,14 @@ const AssigmentsFormScreen = ({ navigation }) => {
     } else if (validateForm(formValues) && !isCreate) {
       updateAssignment(assignmentId, formValuesEdit).then(
         (res) => {
-          console.log('RESULTADO: ', res);
           setLoading(false);
           Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
           navigation.popToTop();
         },
         (err) => {
           setLoading(false);
-          Alert.alert(err);
-          console.log(err);
+          errorHandler(err);
         },
-      );
-      console.log(
-        'Entidad: ',
-        entityId,
-        'Role: ',
-        role,
-        'Persona: ',
-        person,
-        'fecha ini:',
-        startDate,
-        'fecha fin: ',
-        endDate,
-        'AsgId:',
-        assignmentId,
       );
     }
   };
@@ -302,7 +279,6 @@ const AssigmentsFormScreen = ({ navigation }) => {
           setLoading(true);
           deleteAssignment(assignmentId).then(
             (res) => {
-              console.log(res);
               setLoading(false);
               Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
               navigation.popToTop();
@@ -471,7 +447,6 @@ const AssigmentsFormScreen = ({ navigation }) => {
                   //initialValue={{ id: person }}
                   onSelectItem={(item) => {
                     item && setPerson(item.id);
-                    console.log('aca', person);
                   }}
                   dataSet={persons}
                 />

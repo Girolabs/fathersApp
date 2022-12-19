@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, Alert, useWindowDimensions } from 'react-native';
-import { archivePost, getBoard } from '../api';
+import { archivePost, errorHandler, getBoard } from '../api';
 import Colors from '../constants/Colors';
 import i18n from 'i18n-js';
 import * as Network from 'expo-network';
@@ -24,7 +24,6 @@ const ArchiveScreen = ({ navigation }) => {
       getBoard()
         .then((res) => {
           const fetchedPosts = res.data.result;
-          console.log(fetchedPosts);
           const notArchived = fetchedPosts.filter((res) => !res.isArchived);
           setPosts(notArchived);
           setLoading(false);
@@ -51,8 +50,7 @@ const ArchiveScreen = ({ navigation }) => {
           console.log('RESPUESTA: ', res);
         },
         (err) => {
-          console.log('ERROR: ', err);
-          alert(err);
+          errorHandler(err);
           return;
         },
       );

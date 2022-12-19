@@ -1,15 +1,13 @@
-import { View, Text, ScrollView, Image, ActivityIndicator, Pressable, useWindowDimensions, Alert } from 'react-native';
+import { View, Text, ScrollView, Image, ActivityIndicator, Pressable, useWindowDimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
-import data from '../data/data';
 import like from '../../assets/heart-white.png';
 import comments from '../../assets/message-circle-white.png';
 import search from '../../assets/search.png';
-import { getPhotos, url } from '../api';
-import { Ionicons } from 'expo-vector-icons';
+import { errorHandler, getPhotos, url } from '../api';
 
 const PhotosScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
@@ -25,7 +23,7 @@ const PhotosScreen = ({ navigation }) => {
       },
       (err) => {
         setLoading(false);
-        alert(err);
+        errorHandler(err);
       },
     );
   };
@@ -162,7 +160,7 @@ const PhotosScreen = ({ navigation }) => {
               </Pressable>
             );
           })}
-          {!loading ? (
+          {!loading && offset <= photos.length ? (
             <Pressable
               onPress={loadMore}
               style={{
@@ -194,7 +192,7 @@ const PhotosScreen = ({ navigation }) => {
                 justifyContent: 'center',
               }}
             >
-              <ActivityIndicator size="large" color={Colors.primaryColor} />
+              {offset <= photos.length ? <ActivityIndicator size="large" color={Colors.primaryColor} /> : null}
             </View>
           )}
         </View>

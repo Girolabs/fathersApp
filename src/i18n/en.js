@@ -245,7 +245,7 @@ exports.EN = {
     TITLE_EDIT: 'Edit position',
     ENTITY: 'Entity',
     ROLE_LIST: 'Role list',
-    ROLE: 'Rol',
+    ROLE: 'Role',
     PERSON_LIST: 'Person list',
     PERSON: 'Person',
     START_DATE: 'Start date',
@@ -267,6 +267,6 @@ exports.EN = {
     ARCHIVED: 'Archived',
     ERROR: 'Please select at least one post',
     NO_POSTS: 'No archived posts',
-    SUCCESS: 'Datos guardados exitosamente',
+    SUCCESS: 'Data saved successfully',
   },
 };

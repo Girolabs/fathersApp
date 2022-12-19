@@ -35,6 +35,7 @@ import {
   deleteComment,
   updateComment,
   updateCaption,
+  errorHandler,
 } from '../api';
 import icon from '../../assets/img/icon_app.png';
 import { Ionicons } from 'expo-vector-icons';
@@ -66,15 +67,12 @@ const PhotoScreen = ({ navigation }) => {
       const commentsArray = res.data.result.comments;
       setTotalComments(commentsArray);
       setCaption(res.data.result.caption);
-      console.log(totalComments);
       setLoading(false);
     });
-    console.log(photo);
   };
 
   /*const getEmail = async () => {
     const identity = await AsyncStorage.getItem('email');
-    console.log(identity);
     setEmail(identity);
   };*/
 
@@ -102,13 +100,11 @@ const PhotoScreen = ({ navigation }) => {
   const saveLike = async () => {
     await likePhoto(photoID).then(
       (res) => {
-        console.log('works! like!', res);
         setLike(true);
         loadPhoto();
       },
       (err) => {
-        console.log('ERROR: ', err);
-        alert(err);
+        errorHandler(err);
       },
     );
   };
@@ -116,13 +112,11 @@ const PhotoScreen = ({ navigation }) => {
   const saveUnlike = async () => {
     await unlikePhoto(photoID).then(
       (res) => {
-        console.log('works! unlike!', res);
         setLike(false);
         loadPhoto();
       },
       (err) => {
-        console.log('ERROR: ', err);
-        alert(err);
+        errorHandler(err);
       },
     );
   };
@@ -133,13 +127,11 @@ const PhotoScreen = ({ navigation }) => {
     };
     commentPhoto(photoID, commentValue).then(
       (res) => {
-        console.log('works comment!', res);
         setComment('');
         loadPhoto();
       },
       (err) => {
-        console.log(err);
-        alert(err);
+        errorHandler(err);
       },
     );
   };
@@ -147,12 +139,10 @@ const PhotoScreen = ({ navigation }) => {
   const saveDeletePhoto = () => {
     deletePhoto(photoID).then(
       (res) => {
-        console.log('works delete photo!', res);
         navigation.popToTop();
       },
       (err) => {
-        console.log(err);
-        alert(err);
+        errorHandler(err);
       },
     );
   };
@@ -164,13 +154,11 @@ const PhotoScreen = ({ navigation }) => {
     if (caption) {
       updateCaption(photoID, captionValue).then(
         (res) => {
-          console.log('works update caption!', res);
           loadPhoto();
           setEditCaption(false);
         },
         (err) => {
-          console.log(err);
-          alert(err);
+          errorHandler(err);
         },
       );
     }
@@ -179,7 +167,6 @@ const PhotoScreen = ({ navigation }) => {
   useEffect(() => {
     //getEmail();
     loadPhoto();
-    console.log('ID: ', photoID);
     async function orientationBack() {
       // Restric orientation PORTRAIT_UP screen
       await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
@@ -436,15 +423,13 @@ const PhotoScreen = ({ navigation }) => {
                       };
                       updateComment(photo.galleryPhotoId, commentId, commentValue).then(
                         (res) => {
-                          console.log('works edit comment!', res);
                           loadPhoto();
                           setLoading(false);
                           setOpenComment(false);
                         },
                         (err) => {
-                          console.log(err);
                           setLoading(false);
-                          alert(err);
+                          errorHandler(err);
                         },
                       );
                     }
@@ -507,14 +492,12 @@ const PhotoScreen = ({ navigation }) => {
                                 setLoading(true);
                                 deleteComment(photo.galleryPhotoId, c.commentId).then(
                                   (res) => {
-                                    console.log('works delete comment!', res);
                                     loadPhoto();
                                     setLoading(false);
                                   },
                                   (err) => {
-                                    console.log(err);
                                     setLoading(false);
-                                    alert(err);
+                                    errorHandler(err);
                                   },
                                 );
                                 console.log('OK Pressed');
