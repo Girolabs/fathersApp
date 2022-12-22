@@ -19,7 +19,7 @@ import { TextInput } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import imageIcon from '../../assets/imageIcon.png';
 import pencil from '../../assets/editpencil.png';
-import { savePhoto } from '../api';
+import { savePhoto, errorHandler } from '../api';
 
 const GalleryScreen = ({ navigation }) => {
   const [photo, setPhoto] = useState(null);
