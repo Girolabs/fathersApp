@@ -353,9 +353,9 @@ class DelegationDetailScreen extends Component {
                                         {asg.person.fullName}
                                       </Text>
                                       <Text style={asg.isActive ? styles.listItemBody : styles.listItemBodyInactive}>
-                                        {`${moment.utc(asg.startDate).format(dateMask)} - ${moment
-                                          .utc(asg.endDate)
-                                          .format(dateMask)}`}
+                                        {`${asg.startDate ? moment.utc(asg.startDate).format(dateMask) : ''} - ${
+                                          asg.endDate ? moment.utc(asg.endDate).format(dateMask) : ''
+                                        }`}
                                       </Text>
                                     </View>
                                     <Pressable

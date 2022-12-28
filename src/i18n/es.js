@@ -219,6 +219,8 @@ exports.ES = {
     ERROR_END_DATE: 'La fecha de fin no puede ser anterior a la fecha de inicio',
   },
   GALLERY: {
+    TITLE: 'Galería de fotos',
+    NEW: 'Postear una foto',
     PHOTOS: 'Fotos',
     PHOTO: 'Foto',
     POST_PHOTO: 'Publicar una foto',
@@ -250,6 +252,8 @@ exports.ES = {
     PERSON: 'Persona',
     START_DATE: 'Fecha de inicio',
     END_DATE: 'Fecha de término',
+    MARK_NULL: 'Marcar como indefinido',
+    NULL: 'Indefinido',
     SAVE: 'Guardar',
     DELETE: 'Eliminar',
     WARNING: '¿Estás seguro de eliminar esta asignación?',

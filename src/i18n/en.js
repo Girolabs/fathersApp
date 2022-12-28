@@ -219,6 +219,8 @@ exports.EN = {
     ERROR_END_DATE: "End date can't be before start date",
   },
   GALLERY: {
+    TITLE: 'Photo gallery',
+    NEW: 'Post new photo',
     PHOTOS: 'Photos',
     PHOTO: 'Photo',
     POST_PHOTO: 'Post photo',
@@ -250,6 +252,8 @@ exports.EN = {
     PERSON: 'Person',
     START_DATE: 'Start date',
     END_DATE: 'End date',
+    MARK_NULL: 'Mark as undefined',
+    NULL: 'Undefined',
     SAVE: 'Save',
     DELETE: 'Delete',
     WARNING: 'Are you sure to remove this assignment?',

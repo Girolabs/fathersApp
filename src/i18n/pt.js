@@ -219,6 +219,8 @@ exports.PT = {
     ERROR_END_DATE: 'A data final não pode ser anterior à data de início',
   },
   GALLERY: {
+    TITLE: 'Galeria de fotos',
+    NEW: 'Postar uma foto',
     PHOTOS: 'Fotos',
     PHOTO: 'Foto',
     POST_PHOTO: 'Postar uma foto',
@@ -250,6 +252,8 @@ exports.PT = {
     PERSON: 'Pessoa',
     START_DATE: 'Data de início',
     END_DATE: 'Data final',
+    MARK_NULL: 'Marcar como indefinido',
+    NULL: 'Indefinido',
     SAVE: 'Salvar',
     DELETE: 'Excluir',
     WARNING: '',

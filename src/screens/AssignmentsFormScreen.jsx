@@ -86,40 +86,15 @@ const EditableDateItem = function (props) {
 
   return (
     <View style={editableItemStyle.item}>
-      {show && (
-        <DateTimePicker
-          minimumDate={new Date(2010, 0, 1)}
-          display={Platform.OS === 'android' ? 'default' : 'spinner'}
-          value={new Date(props.date)}
-          onChange={(event, val) => {
-            if (Platform.OS === 'android') {
-              setShow(false);
-            }
-            setShowOk(true);
-            const pickedDate = Platform.OS === 'android' ? toIsoString(val) : val.toLocaleDateString();
-            if (event.type === 'set') {
-              props.onDateChange(pickedDate);
-            }
-          }}
-          //disabled={props.disabled}
-          style={{ width: 320, backgroundColor: 'white' }}
-        />
-      )}
-
-      <Text>{props.label}</Text>
-      <Text
-        style={{
-          color: Colors.onSurfaceColorPrimary,
-          fontSize: 16,
-        }}
-      >
-        {props.date}
-      </Text>
-
       <Pressable
         style={{
           marginLeft: 'auto',
           zIndex: 9,
+          width: '100%',
+          height: '100%',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
         onPress={() => {
           setShow(true);
@@ -128,6 +103,34 @@ const EditableDateItem = function (props) {
           }*/
         }}
       >
+        {show && (
+          <DateTimePicker
+            minimumDate={new Date(1965, 0, 1)}
+            display={Platform.OS === 'android' ? 'default' : 'spinner'}
+            value={new Date(props.date)}
+            onChange={(event, val) => {
+              if (Platform.OS === 'android') {
+                setShow(false);
+              }
+              setShowOk(true);
+              const pickedDate = Platform.OS === 'android' ? toIsoString(val) : val.toLocaleDateString();
+              if (event.type === 'set') {
+                props.onDateChange(pickedDate);
+              }
+            }}
+            //disabled={props.disabled}
+            style={{ width: 320, backgroundColor: 'white' }}
+          />
+        )}
+        <Text
+          style={{
+            color: Colors.onSurfaceColorPrimary,
+            fontSize: 16,
+          }}
+        >
+          {props.date}
+        </Text>
+
         <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
       </Pressable>
       {Platform.OS === 'ios' && showOk ? (
@@ -177,7 +180,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
   const personName = navigation.getParam('personName');
   const start = navigation.getParam('startDate');
   const end = navigation.getParam('endDate');
-  const [role, setRole] = useState(roleId ? roleId : entityRoles[0].value);
+  const [role, setRole] = useState(roleId ? roleId : entityRoles[0]?.value);
   const [persons, setPersons] = useState(null);
   const [roles, setRoles] = useState(entityRoles ? entityRoles : null);
   const [person, setPerson] = useState(fatherId ? fatherId : null);
@@ -188,6 +191,8 @@ const AssigmentsFormScreen = ({ navigation }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [permission, setPermission] = useState({});
+  const [startDateNull, setStartDateNull] = useState(false);
+  const [endDateNull, setEndDateNull] = useState(false);
 
   const windowHeight = useWindowDimensions().height;
 
@@ -294,270 +299,281 @@ const AssigmentsFormScreen = ({ navigation }) => {
     ]);
   };
   return (
-    <View
-      style={{
-        width: '100%',
-        height: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F2F3FF',
-      }}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={40}
+      style={{ flex: 1 }}
     >
-      {loading ? (
-        <View
-          style={{
-            flex: 1,
-            padding: 15,
-            backgroundColor: Colors.surfaceColorPrimary,
-            justifyContent: 'center',
-          }}
-        >
-          <ActivityIndicator
-            style={{
-              height: windowHeight,
-            }}
-            size="large"
-            color={Colors.primaryColor}
-          />
-        </View>
-      ) : (
-        <>
-          <Text
-            style={{
-              fontFamily: 'work-sans-semibold',
-              color: Colors.primaryColor,
-              fontSize: 20,
-              textAlign: 'left',
-              letterSpacing: 2.5,
-              //textTransform: 'uppercase',
-              //margin: 10,
-            }}
-          >
-            {entityName}
-          </Text>
-          {isCreate ? (
-            <Text
-              style={{
-                fontFamily: 'work-sans-semibold',
-                color: Colors.primaryColor,
-                fontSize: 20,
-                textAlign: 'left',
-                letterSpacing: 2.5,
-                //textTransform: 'uppercase',
-                //margin: 10,
-                padding: 20,
-              }}
-            >
-              {i18n.t('ASSIGNMENTS_FORM.TITLE')}
-            </Text>
-          ) : (
-            <Text
-              style={{
-                fontFamily: 'work-sans-semibold',
-                color: Colors.primaryColor,
-                fontSize: 20,
-                textAlign: 'left',
-                letterSpacing: 2.5,
-                //textTransform: 'uppercase',
-                //margin: 10,
-                padding: 20,
-              }}
-            >
-              {i18n.t('ASSIGNMENTS_FORM.TITLE_EDIT')}
-            </Text>
-          )}
-          {
-            <View
-              style={{
-                width: '90%',
-              }}
-            >
-              <Text
-                style={{
-                  //color: Colors.onSurfaceColorSecondary,
-                  //color: Colors.onSurfaceColorPrimary,
-                  fontWeight: 'bold',
-                  //textAlign: 'center',
-                  fontFamily: 'work-sans-semibold',
-                  color: Colors.primaryColor,
-                }}
-                required
-              >
-                {i18n.t('ASSIGNMENTS_FORM.ROLE')}
-              </Text>
-              {isCreate ? (
-                <Select
-                  style={{
-                    backgroundColor: Colors.surfaceColorSecondary,
-                    height: 50,
-                    marginVertical: 10,
-                    borderRadius: 5,
-                    padding: Platform.OS === 'ios' ? 8 : 0,
-                  }}
-                  elements={roles}
-                  value={role}
-                  valueChange={(value) => setRole(value)}
-                />
-              ) : (
-                <TextInput
-                  style={{
-                    height: 50,
-                    marginVertical: 10,
-                    borderRadius: 5,
-                    backgroundColor: '#FFFFFF',
-                  }}
-                  theme={{ colors: { primary: '#0104AC', underlineColor: 'transparent' } }}
-                  required
-                  value={role}
-                  autoCapitalize="none"
-                  placeholderTextColor={Colors.onSurfaceColorSecondary}
-                  placeholder={roleTitle}
-                  onChangeText={(value) => setRole(value)}
-                  disabled={true}
-                />
-              )}
-            </View>
-          }
-          {
-            <View
-              style={{
-                width: '90%',
-                zIndex: 12,
-              }}
-            >
-              <Text
-                style={{
-                  //color: Colors.onSurfaceColorSecondary,
-                  //color: Colors.onSurfaceColorPrimary,
-                  fontWeight: 'bold',
-                  //textAlign: 'center',
-                  fontFamily: 'work-sans-semibold',
-                  color: Colors.primaryColor,
-                }}
-                required
-              >
-                {i18n.t('ASSIGNMENTS_FORM.PERSON')}
-              </Text>
-              {isCreate ? (
-                <AutocompleteDropdown
-                  key={person?.personId}
-                  containerStyle={{ marginVertical: 10 }}
-                  clearOnFocus={false}
-                  closeOnSubmit={false}
-                  //initialValue={{ id: person }}
-                  onSelectItem={(item) => {
-                    item && setPerson(item.id);
-                  }}
-                  dataSet={persons}
-                />
-              ) : (
-                <TextInput
-                  style={{
-                    height: 50,
-                    marginVertical: 10,
-                    borderRadius: 5,
-                    backgroundColor: '#FFFFFF',
-                  }}
-                  theme={{ colors: { primary: '#0104AC', underlineColor: 'transparent' } }}
-                  required
-                  value={person}
-                  autoCapitalize="none"
-                  placeholderTextColor={Colors.onSurfaceColorSecondary}
-                  placeholder={personName}
-                  onChangeText={(value) => setPerson(value)}
-                  disabled={true}
-                />
-              )}
-            </View>
-          }
+      <View
+        style={{
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#F2F3FF',
+        }}
+      >
+        {loading ? (
           <View
             style={{
-              width: '90%',
-            }}
-          >
-            <Text
-              style={{
-                //color: Colors.onSurfaceColorSecondary,
-                //color: Colors.onSurfaceColorPrimary,
-                fontWeight: 'bold',
-                //textAlign: 'center',
-                fontFamily: 'work-sans-semibold',
-                color: Colors.primaryColor,
-              }}
-            >
-              {i18n.t('ASSIGNMENTS_FORM.START_DATE')}
-            </Text>
-          </View>
-          <EditableDateItem
-            date={startDate}
-            onDateChange={(value) => {
-              setStartDate(value);
-            }}
-          />
-          <View
-            style={{
-              width: '90%',
-            }}
-          >
-            <Text
-              style={{
-                //color: Colors.onSurfaceColorSecondary,
-                //color: Colors.onSurfaceColorPrimary,
-                fontWeight: 'bold',
-                //textAlign: 'center',
-                fontFamily: 'work-sans-semibold',
-                color: Colors.primaryColor,
-              }}
-            >
-              {i18n.t('ASSIGNMENTS_FORM.END_DATE')}
-            </Text>
-          </View>
-          <EditableDateItem
-            date={endDate}
-            onDateChange={(value) => {
-              setEndDate(value);
-            }}
-          />
-          <Button
-            onPress={handleSubmit}
-            style={{
-              width: '100%',
-              flexDirection: 'row',
+              flex: 1,
+              padding: 15,
+              backgroundColor: Colors.surfaceColorPrimary,
               justifyContent: 'center',
             }}
           >
+            <ActivityIndicator
+              style={{
+                height: windowHeight,
+              }}
+              size="large"
+              color={Colors.primaryColor}
+            />
+          </View>
+        ) : (
+          <>
+            <Text
+              style={{
+                fontFamily: 'work-sans-semibold',
+                color: Colors.primaryColor,
+                fontSize: 20,
+                textAlign: 'left',
+                letterSpacing: 2.5,
+                //textTransform: 'uppercase',
+                //margin: 10,
+              }}
+            >
+              {entityName}
+            </Text>
+            {isCreate ? (
+              <Text
+                style={{
+                  fontFamily: 'work-sans-semibold',
+                  color: Colors.primaryColor,
+                  fontSize: 20,
+                  textAlign: 'left',
+                  letterSpacing: 2.5,
+                  //textTransform: 'uppercase',
+                  //margin: 10,
+                  padding: 20,
+                }}
+              >
+                {i18n.t('ASSIGNMENTS_FORM.TITLE')}
+              </Text>
+            ) : (
+              <Text
+                style={{
+                  fontFamily: 'work-sans-semibold',
+                  color: Colors.primaryColor,
+                  fontSize: 20,
+                  textAlign: 'left',
+                  letterSpacing: 2.5,
+                  //textTransform: 'uppercase',
+                  //margin: 10,
+                  padding: 20,
+                }}
+              >
+                {i18n.t('ASSIGNMENTS_FORM.TITLE_EDIT')}
+              </Text>
+            )}
+            {
+              <View
+                style={{
+                  width: '90%',
+                }}
+              >
+                <Text
+                  style={{
+                    //color: Colors.onSurfaceColorSecondary,
+                    //color: Colors.onSurfaceColorPrimary,
+                    fontWeight: 'bold',
+                    //textAlign: 'center',
+                    fontFamily: 'work-sans-semibold',
+                    color: Colors.primaryColor,
+                  }}
+                  required
+                >
+                  {i18n.t('ASSIGNMENTS_FORM.ROLE')}
+                </Text>
+                {isCreate ? (
+                  <Select
+                    style={{
+                      backgroundColor: Colors.surfaceColorSecondary,
+                      height: 50,
+                      marginVertical: 10,
+                      borderRadius: 5,
+                      padding: Platform.OS === 'ios' ? 8 : 0,
+                    }}
+                    elements={roles}
+                    value={role}
+                    valueChange={(value) => setRole(value)}
+                  />
+                ) : (
+                  <TextInput
+                    style={{
+                      height: 50,
+                      marginVertical: 10,
+                      borderRadius: 5,
+                      backgroundColor: '#FFFFFF',
+                    }}
+                    theme={{ colors: { primary: '#0104AC', underlineColor: 'transparent' } }}
+                    required
+                    value={role}
+                    autoCapitalize="none"
+                    placeholderTextColor={Colors.onSurfaceColorSecondary}
+                    placeholder={roleTitle}
+                    onChangeText={(value) => setRole(value)}
+                    disabled={true}
+                  />
+                )}
+              </View>
+            }
+            {
+              <View
+                style={{
+                  width: '90%',
+                  zIndex: 12,
+                }}
+              >
+                <Text
+                  style={{
+                    //color: Colors.onSurfaceColorSecondary,
+                    //color: Colors.onSurfaceColorPrimary,
+                    fontWeight: 'bold',
+                    //textAlign: 'center',
+                    fontFamily: 'work-sans-semibold',
+                    color: Colors.primaryColor,
+                  }}
+                  required
+                >
+                  {i18n.t('ASSIGNMENTS_FORM.PERSON')}
+                </Text>
+                {isCreate ? (
+                  <AutocompleteDropdown
+                    key={person?.personId}
+                    containerStyle={{ marginVertical: 10 }}
+                    clearOnFocus={false}
+                    closeOnSubmit={false}
+                    //initialValue={{ id: person }}
+                    onSelectItem={(item) => {
+                      item && setPerson(item.id);
+                    }}
+                    dataSet={persons}
+                  />
+                ) : (
+                  <TextInput
+                    style={{
+                      height: 50,
+                      marginVertical: 10,
+                      borderRadius: 5,
+                      backgroundColor: '#FFFFFF',
+                    }}
+                    theme={{ colors: { primary: '#0104AC', underlineColor: 'transparent' } }}
+                    required
+                    value={person}
+                    autoCapitalize="none"
+                    placeholderTextColor={Colors.onSurfaceColorSecondary}
+                    placeholder={personName}
+                    onChangeText={(value) => setPerson(value)}
+                    disabled={true}
+                  />
+                )}
+              </View>
+            }
             <View
               style={{
-                backgroundColor: 'white',
-                borderColor: Colors.primaryColor,
-                borderRadius: 5,
-                borderWidth: 2,
-                paddingHorizontal: 10,
                 width: '90%',
-                height: 50,
-                justifyContent: 'center',
-                marginVertical: 10,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
               }}
             >
               <Text
                 style={{
-                  textAlign: 'center',
-                  fontSize: 12,
-                  width: '100%',
-                  fontFamily: 'work-sans-bold',
-                  textTransform: 'uppercase',
+                  //color: Colors.onSurfaceColorSecondary,
+                  //color: Colors.onSurfaceColorPrimary,
+                  fontWeight: 'bold',
+                  //textAlign: 'center',
+                  fontFamily: 'work-sans-semibold',
                   color: Colors.primaryColor,
                 }}
               >
-                {i18n.t('ASSIGNMENTS_FORM.SAVE')}
+                {i18n.t('ASSIGNMENTS_FORM.START_DATE')}
               </Text>
+              <Pressable
+                style={{
+                  flexDirection: 'row',
+                  backgroundColor: Colors.primaryColor,
+                  padding: 3,
+                  borderRadius: 5,
+                }}
+                onPress={() => {
+                  setStartDate(null);
+                  setStartDateNull(true);
+                }}
+              >
+                <Text
+                  style={{
+                    color: 'white',
+                  }}
+                >
+                  {!startDate && startDateNull ? i18n.t('ASSIGNMENTS_FORM.NULL') : i18n.t('ASSIGNMENTS_FORM.MARK_NULL')}
+                </Text>
+              </Pressable>
             </View>
-          </Button>
-          {!isCreate && permission.userCanDeleteAssignments ? (
-            <Button
-              onPress={() => {
-                handleDelete();
+            <EditableDateItem
+              date={startDate ? startDate : startDateNull ? null : todayString}
+              onDateChange={(value) => {
+                setStartDate(value);
               }}
+            />
+            <View
+              style={{
+                width: '90%',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}
+            >
+              <Text
+                style={{
+                  //color: Colors.onSurfaceColorSecondary,
+                  //color: Colors.onSurfaceColorPrimary,
+                  fontWeight: 'bold',
+                  //textAlign: 'center',
+                  fontFamily: 'work-sans-semibold',
+                  color: Colors.primaryColor,
+                }}
+              >
+                {i18n.t('ASSIGNMENTS_FORM.END_DATE')}
+              </Text>
+              <Pressable
+                style={{
+                  flexDirection: 'row',
+                  backgroundColor: Colors.primaryColor,
+                  padding: 3,
+                  borderRadius: 5,
+                }}
+                onPress={() => {
+                  setEndDate(null);
+                  setEndDateNull(true);
+                }}
+              >
+                <Text
+                  style={{
+                    color: 'white',
+                  }}
+                >
+                  {!endDate && endDateNull ? i18n.t('ASSIGNMENTS_FORM.NULL') : i18n.t('ASSIGNMENTS_FORM.MARK_NULL')}
+                </Text>
+              </Pressable>
+            </View>
+            <EditableDateItem
+              date={endDate ? endDate : endDateNull ? null : todayString}
+              onDateChange={(value) => {
+                setEndDate(value);
+              }}
+            />
+            <Button
+              onPress={handleSubmit}
               style={{
                 width: '100%',
                 flexDirection: 'row',
@@ -567,7 +583,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
               <View
                 style={{
                   backgroundColor: 'white',
-                  borderColor: 'red',
+                  borderColor: Colors.primaryColor,
                   borderRadius: 5,
                   borderWidth: 2,
                   paddingHorizontal: 10,
@@ -584,30 +600,69 @@ const AssigmentsFormScreen = ({ navigation }) => {
                     width: '100%',
                     fontFamily: 'work-sans-bold',
                     textTransform: 'uppercase',
-                    color: 'red',
+                    color: Colors.primaryColor,
                   }}
                 >
-                  {i18n.t('ASSIGNMENTS_FORM.DELETE')}
+                  {i18n.t('ASSIGNMENTS_FORM.SAVE')}
                 </Text>
               </View>
             </Button>
-          ) : null}
+            {!isCreate && permission.userCanDeleteAssignments ? (
+              <Button
+                onPress={() => {
+                  handleDelete();
+                }}
+                style={{
+                  width: '100%',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                }}
+              >
+                <View
+                  style={{
+                    backgroundColor: 'white',
+                    borderColor: 'red',
+                    borderRadius: 5,
+                    borderWidth: 2,
+                    paddingHorizontal: 10,
+                    width: '90%',
+                    height: 50,
+                    justifyContent: 'center',
+                    marginVertical: 10,
+                  }}
+                >
+                  <Text
+                    style={{
+                      textAlign: 'center',
+                      fontSize: 12,
+                      width: '100%',
+                      fontFamily: 'work-sans-bold',
+                      textTransform: 'uppercase',
+                      color: 'red',
+                    }}
+                  >
+                    {i18n.t('ASSIGNMENTS_FORM.DELETE')}
+                  </Text>
+                </View>
+              </Button>
+            ) : null}
 
-          {error && (
-            <Text
-              style={{
-                fontSize: 14,
-                width: '90%',
-                fontWeight: '600',
-                color: Colors.primaryColor,
-              }}
-            >
-              {error}
-            </Text>
-          )}
-        </>
-      )}
-    </View>
+            {error && (
+              <Text
+                style={{
+                  fontSize: 14,
+                  width: '90%',
+                  fontWeight: '600',
+                  color: Colors.primaryColor,
+                }}
+              >
+                {error}
+              </Text>
+            )}
+          </>
+        )}
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 AssigmentsFormScreen.navigationOptions = (navigationData) => ({

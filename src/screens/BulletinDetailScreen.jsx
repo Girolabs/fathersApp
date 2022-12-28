@@ -18,7 +18,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import HeaderButton from '../components/HeaderButton';
-import { getBoardPost, savePinnedPost, saveUnpinnedPost, getPinnedPosts } from '../api';
+import { getBoardPost, savePinnedPost, saveUnpinnedPost, getPinnedPosts, errorHandler } from '../api';
 import star from '../../assets/star-outline.png';
 import starActive from '../../assets/star-active.png';
 
@@ -45,6 +45,7 @@ const BulletinDetail = ({ navigation }) => {
       if (source.html) {
         getBoardPost(source.html)
           .then((res) => {
+            console.log('aca!', res.data.result);
             const { content } = res.data.result;
             const head =
               '<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style type="text/css"> body {-webkit-user-select:none;-webkit-touch-callout:none; font-family: "Arial"; background-color:#FFFFFF;font-size:1.2em} div { color : black};*{ user-select: none; };</style></head>';
@@ -93,13 +94,11 @@ const BulletinDetail = ({ navigation }) => {
     setLoading(true);
     savePinnedPost(postId).then(
       (res) => {
-        console.log('funciono!', res);
         //Alert.alert(i18n.t('ARCHIVE.SUCCESS'));
         setFavorite(!favorite);
       },
       (err) => {
-        console.log('ERROR: ', err);
-        alert(err);
+        errorHandler(err);
       },
     );
     setLoading(false);
@@ -109,13 +108,11 @@ const BulletinDetail = ({ navigation }) => {
     setLoading(true);
     saveUnpinnedPost(postId).then(
       (res) => {
-        console.log('funciono!', res);
         //Alert.alert(i18n.t('ARCHIVE.SUCCESS'));
         setFavorite(!favorite);
       },
       (err) => {
-        console.log('ERROR: ', err);
-        alert(err);
+        errorHandler(err);
       },
     );
     setLoading(false);
@@ -134,6 +131,7 @@ const BulletinDetail = ({ navigation }) => {
       };
     }
     loadPost(source);
+    console.log('a', id);
   }, []);
 
   useEffect(() => {

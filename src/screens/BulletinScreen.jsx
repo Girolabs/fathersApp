@@ -77,6 +77,7 @@ const BulletinScreen = ({ navigation }) => {
           const fetchedPosts = res.data.result;
           const notArchived = fetchedPosts.filter((res) => !res.isArchived);
           setPosts(notArchived);
+          console.log('posts', res.data.result);
           markCheckUnseenCounter();
           setLoading(false);
         })
@@ -97,6 +98,7 @@ const BulletinScreen = ({ navigation }) => {
     } else if (item.redirectUrl && !item.isRedirectUrlExternal) {
       navigation.navigate('BulletinDetail', {
         url: item.redirectUrl,
+        postId: item.postId,
       });
     } else {
       navigation.navigate('BulletinDetail', {

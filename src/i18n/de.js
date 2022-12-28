@@ -219,6 +219,8 @@ exports.DE = {
     ERROR_END_DATE: 'Das Enddatum kann nicht vor dem Anfangsdatum liegen',
   },
   GALLERY: {
+    TITLE: 'Fotogalerie',
+    NEW: 'Neues Foto posten',
     PHOTOS: 'Fotos',
     PHOTO: 'Foto',
     POST_PHOTO: 'Ein Foto veröffentlichen',
@@ -250,6 +252,8 @@ exports.DE = {
     PERSON: 'Person',
     START_DATE: 'Startdatum',
     END_DATE: 'Enddatum',
+    MARK_NULL: 'Als undefiniert markieren',
+    NULL: 'Nicht definiert',
     SAVE: 'Speichern',
     DELETE: 'Löschen',
     WARNING: '',

@@ -27,7 +27,6 @@ import Select from '../components/Select';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import * as _ from 'lodash';
 import { Ionicons } from 'expo-vector-icons';
-import RNPickerSelect from 'react-native-picker-select';
 
 const widthBtn = Platform.OS == 'android' ? '45%' : '100%';
 const styles = StyleSheet.create({
@@ -186,11 +185,11 @@ class FatherFormScreen extends Component {
         let index = updateRoles.indexOf(updatePermRole);
         const updateFields = accumulatedFieldsPerRol[index];
         let temp = Object.entries(personPhoneLabels);
-        let arrayOfPhonesLabels = temp.map((e) => ({ label: e[1], value: e[0] }));
+        let arrayOfPhonesLabels = temp.map((e) => ({ name: e[1], value: e[0] }));
 
         temp = Object.entries(personEmergencyOptions);
         console.log('arrayOfPhonesLabels  ', arrayOfPhonesLabels);
-        let arrayOfPersonEmergencyOptions = temp.map((e) => ({ label: e[1], value: e[0] }));
+        let arrayOfPersonEmergencyOptions = temp.map((e) => ({ name: e[1], value: e[0] }));
         console.log('arrayOfPersonEmergencyOptions ', arrayOfPersonEmergencyOptions);
         // Object.keys(c).map((key) => {
         //   arrayOfPersonEmergencyOptions.push({ name: personEmergencyOptions[key], value: personEmergencyOptions[key] });
@@ -548,14 +547,25 @@ class FatherFormScreen extends Component {
                           keyboardType="phone-pad"
                           selectionColor={Colors.primaryColor}
                         />
-                        <RNPickerSelect
+                        <Select
                           useNativeAndroidPickerStyle={false}
-                          style={stylePicker}
-                          onValueChange={(value) => {
+                          style={{
+                            width: '92%',
+                            height: 50,
+                            backgroundColor: '#f6f6f6',
+                            borderColor: '#313142',
+                            borderWidth: 1,
+                            marginLeft: 15,
+                            borderRadius: 5,
+                          }}
+                          containerStyle={{
+                            color: 'black',
+                          }}
+                          valueChange={(value) => {
                             console.log('value', value);
                             setFieldValue('phone1Label', value);
                           }}
-                          items={this.state.phoneLabels}
+                          elements={this.state.phoneLabels}
                           value={values.phone1Label}
                           Icon={() => <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />}
                         />
@@ -568,13 +578,21 @@ class FatherFormScreen extends Component {
                           keyboardType="phone-pad"
                           underlineColor={Colors.primaryColor}
                         />
-                        <RNPickerSelect
+                        <Select
                           useNativeAndroidPickerStyle={false}
-                          style={stylePicker}
-                          onValueChange={(value) => {
+                          style={{
+                            width: '92%',
+                            height: 50,
+                            backgroundColor: '#f6f6f6',
+                            borderColor: '#313142',
+                            borderWidth: 1,
+                            marginLeft: 15,
+                            borderRadius: 5,
+                          }}
+                          valueChange={(value) => {
                             setFieldValue('phone2Label', value);
                           }}
-                          items={this.state.phoneLabels}
+                          elements={this.state.phoneLabels}
                           value={values.phone2Label}
                           Icon={() => <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />}
                         />
@@ -587,13 +605,21 @@ class FatherFormScreen extends Component {
                           keyboardType="phone-pad"
                           underlineColor={Colors.primaryColor}
                         />
-                        <RNPickerSelect
+                        <Select
                           useNativeAndroidPickerStyle={false}
-                          style={stylePicker}
-                          onValueChange={(value) => {
+                          style={{
+                            width: '92%',
+                            height: 50,
+                            backgroundColor: '#f6f6f6',
+                            borderColor: '#313142',
+                            borderWidth: 1,
+                            marginLeft: 15,
+                            borderRadius: 5,
+                          }}
+                          valueChange={(value) => {
                             setFieldValue('phone3Label', value);
                           }}
-                          items={this.state.phoneLabels}
+                          elements={this.state.phoneLabels}
                           value={values.phone3Label}
                           Icon={() => <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />}
                         />
@@ -783,13 +809,22 @@ class FatherFormScreen extends Component {
                           mode="outlined"
                           underlineColor={Colors.primaryColor}
                         />
-                        <RNPickerSelect
+                        <Select
                           useNativeAndroidPickerStyle={false}
-                          style={stylePicker}
-                          onValueChange={(value) => {
+                          style={{
+                            width: '92%',
+                            height: 50,
+                            backgroundColor: '#f6f6f6',
+                            borderColor: '#313142',
+                            borderWidth: 1,
+                            marginLeft: 15,
+                            borderRadius: 5,
+                            margin: 20,
+                          }}
+                          valueChange={(value) => {
                             setFieldValue('emergencyContact1Relation', value);
                           }}
-                          items={this.state.personEmergencyOptions}
+                          elements={this.state.personEmergencyOptions}
                           value={values.emergencyContact1Relation}
                           Icon={() => <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />}
                         />
@@ -810,13 +845,21 @@ class FatherFormScreen extends Component {
                           mode="outlined"
                           underlineColor={Colors.primaryColor}
                         />
-                        <RNPickerSelect
+                        <Select
                           useNativeAndroidPickerStyle={false}
-                          style={stylePicker}
-                          onValueChange={(value) => {
+                          style={{
+                            width: '92%',
+                            height: 50,
+                            backgroundColor: '#f6f6f6',
+                            borderColor: '#313142',
+                            borderWidth: 1,
+                            marginLeft: 15,
+                            borderRadius: 5,
+                          }}
+                          valueChange={(value) => {
                             setFieldValue('emergencyContact2Relation', value);
                           }}
-                          items={this.state.personEmergencyOptions}
+                          elements={this.state.personEmergencyOptions}
                           value={values.emergencyContact2Relation}
                           Icon={() => <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />}
                         />
