@@ -191,7 +191,7 @@ const PhotoScreen = ({ navigation }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={30}
+      keyboardVerticalOffset={Platform.OS == 'android' ? 30 : 100}
       style={{ flex: 1 }}
     >
       <ScrollView>
