@@ -162,7 +162,7 @@ class FiliationDetailScreen extends Component {
                       </Pressable>
                       <Pressable
                         style={{
-                          //display: permission.userCanCreateAssignments ? 'flex' : 'none',
+                          display: permission.userCanCreateAssignments ? 'flex' : 'none',
                           width: 30,
                           height: 30,
                           flexDirection: 'row',
@@ -238,7 +238,7 @@ class FiliationDetailScreen extends Component {
                                   </View>
                                   <Pressable
                                     style={{
-                                      //display: permission.userCanEditAssignments ? 'flex' : 'none',
+                                      display: permission.userCanEditAssignments ? 'flex' : 'none',
                                       position: 'absolute',
                                       left: '90%',
                                       padding: 5,
