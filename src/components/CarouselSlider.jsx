@@ -4,13 +4,15 @@ import CarouselItem from './CarouselItem';
 import styles from '../constants/styles';
 
 const { width } = Dimensions.get('window');
-export const CustomSlider = ({ data }) => {
+export const CustomSlider = ({ data, navigation }) => {
   const settings = {
     sliderWidth: width,
     sliderHeight: width,
     itemWidth: width - 230,
     data: data,
-    renderItem: CarouselItem,
+    renderItem: ({ item }, parallaxProps) => {
+      return <CarouselItem item={item} navigation={navigation} parallaxProps={parallaxProps} />;
+    },
     hasParallaxImages: true,
   };
   return (

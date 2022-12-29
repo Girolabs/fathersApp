@@ -8,12 +8,13 @@ import { url } from '../api';
 import { Alert } from 'react-native';
 import i18n from 'i18n-js';
 
-const CarouselItem = ({ item, index }, parallaxProps) => {
+const CarouselItem = ({ item, navigation, parallaxProps }) => {
   return (
     <>
       <Pressable
         onPress={() => {
-          Alert.alert(i18n.t('GALLERY.CAPTION'), item.caption);
+          //Alert.alert(i18n.t('GALLERY.CAPTION'), item.caption);
+          navigation.navigate('Photo', { galleryPhotoId: item.galleryPhotoId });
         }}
         key={item.galleryPhotoId}
       >

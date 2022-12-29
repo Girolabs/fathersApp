@@ -293,7 +293,7 @@ const HomeScreen = ({ navigation }) => {
                         overflow: 'hidden',
                       }}
                     >
-                      <CustomSlider data={photos} />
+                      <CustomSlider data={photos} navigation={navigation} />
                     </View>
                     <Pressable
                       onPress={() => navigation.navigate('Photos')}

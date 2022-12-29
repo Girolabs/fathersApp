@@ -105,15 +105,23 @@ const EditableDateItem = function (props) {
       >
         {show && (
           <DateTimePicker
+            timeZoneOffsetInMinutes={0}
             minimumDate={new Date(1965, 0, 1)}
             display={Platform.OS === 'android' ? 'default' : 'spinner'}
             value={new Date(props.date)}
             onChange={(event, val) => {
+              const formatDateUTC = (val) => {
+                let fecha = new Date(val);
+                const dia = fecha.getUTCDate().toString().padStart(2, '0');
+                const mes = (fecha.getUTCMonth() + 1).toString().padStart(2, '0');
+                const year = fecha.getUTCFullYear().toString();
+                return `${year}-${mes}-${dia}`;
+              };
               if (Platform.OS === 'android') {
                 setShow(false);
               }
               setShowOk(true);
-              const pickedDate = Platform.OS === 'android' ? toIsoString(val) : val.toLocaleDateString();
+              const pickedDate = Platform.OS === 'android' ? formatDateUTC(val) : formatDateUTC(val);
               if (event.type === 'set') {
                 props.onDateChange(pickedDate);
               }
