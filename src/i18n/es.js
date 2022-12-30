@@ -253,6 +253,7 @@ exports.ES = {
     START_DATE: 'Fecha de inicio',
     END_DATE: 'Fecha de término',
     MARK_NULL: 'Marcar como indefinido',
+    MARK_TODAY: 'Marcar como hoy',
     NULL: 'Indefinido',
     SAVE: 'Guardar',
     DELETE: 'Eliminar',

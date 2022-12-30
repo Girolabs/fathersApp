@@ -253,6 +253,7 @@ exports.EN = {
     START_DATE: 'Start date',
     END_DATE: 'End date',
     MARK_NULL: 'Mark as undefined',
+    MARK_TODAY: 'Mark as today',
     NULL: 'Undefined',
     SAVE: 'Save',
     DELETE: 'Delete',

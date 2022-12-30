@@ -253,6 +253,7 @@ exports.DE = {
     START_DATE: 'Startdatum',
     END_DATE: 'Enddatum',
     MARK_NULL: 'Als undefiniert markieren',
+    MARK_TODAY: 'Als heute markieren',
     NULL: 'Nicht definiert',
     SAVE: 'Speichern',
     DELETE: 'Löschen',

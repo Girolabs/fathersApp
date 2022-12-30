@@ -550,7 +550,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
                       color: 'white',
                     }}
                   >
-                    Mark as today
+                    {i18n.t('ASSIGNMENTS_FORM.MARK_TODAY')}
                   </Text>
                 </Pressable>
               ) : null}
