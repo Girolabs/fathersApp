@@ -29,7 +29,7 @@
     "assetBundlePatterns": ["**/*"],
     "android": {
       "package": "com.schoenstatt.fathersApp",
-      "versionCode": 25,
+      "versionCode": 26,
       "permissions": ["CAMERA", "WRITE_EXTERNAL_STORAGE", "WRITE_CONTACTS", "CAMERA_ROLL", "READ_CONTACTS"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/img/icon.png",
