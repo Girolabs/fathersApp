@@ -102,7 +102,7 @@ const DefaultDrawer = (props) => {
       label: i18n.t('GENERAL.ASSIGNMENTS'),
     },
     {
-      path: 'Gallery',
+      path: 'Photos',
       label: i18n.t('GALLERY.TITLE'),
     },
     {

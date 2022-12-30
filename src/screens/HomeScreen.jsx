@@ -117,7 +117,7 @@ const HomeScreen = ({ navigation }) => {
       setLoading(true);
       //pasar fecha de hoy como parametro en getReminders
       const startDate = new Date().toISOString().split('T')[0];
-      getReminders(startDate)
+      getReminders(6, startDate)
         .then((res) => {
           const fetchedReminders = res.data.result.slice(0, 6);
           setReminders(fetchedReminders);
@@ -189,6 +189,7 @@ const HomeScreen = ({ navigation }) => {
                           onPress={() =>
                             navigation.navigate('BulletinDetail', {
                               postId: favorite.postId,
+                              url: favorite.redirectUrl,
                             })
                           }
                         >

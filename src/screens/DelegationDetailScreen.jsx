@@ -187,7 +187,7 @@ class DelegationDetailScreen extends Component {
           assignments: fetchedAssignments,
           filiations: fetchedActiveFiliations,
         });
-        console.log('ACA', fetchedDelegation);
+        //console.log('ACA', fetchedDelegation);
       })
       .catch((err) => {
         this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
@@ -273,7 +273,7 @@ class DelegationDetailScreen extends Component {
                           navigation={navigation}
                           entity={territory}
                         />
-                        {territory.assignments.length > 0 ? (
+                        {territory.roles.length > 0 ? (
                           <View style={[styles.listItem]}>
                             <View
                               style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
@@ -306,7 +306,7 @@ class DelegationDetailScreen extends Component {
                                   onPress={() => {
                                     navigation.navigate('AssigmentsForm', {
                                       entityName: territory.name,
-                                      roles: territory.assignments.map((item) => ({
+                                      roles: territory.roles.map((item) => ({
                                         name: item.roleTitle,
                                         value: item.roleId,
                                       })),

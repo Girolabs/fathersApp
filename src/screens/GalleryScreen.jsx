@@ -9,6 +9,7 @@ import {
   Button,
   ActivityIndicator,
   useWindowDimensions,
+  KeyboardAvoidingView,
 } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -66,50 +67,24 @@ const GalleryScreen = ({ navigation }) => {
   };
 
   return (
-    <View
-      style={{
-        width: '100%',
-        height: '100%',
-        alignItems: 'center',
-        backgroundColor: '#F2F3FF',
-        //marginVertical: 20,
-      }}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      //keyboardVerticalOffset={Platform.OS == 'android' ? 30 : 100}
+      style={{ flex: 1 }}
     >
-      {loading ? <ActivityIndicator style={{ height: windowHeight }} size="large" color={Colors.primaryColor} /> : null}
-      {!photo ? (
-        <Pressable
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '100%',
-            height: 258,
-            marginVertical: 10,
-            borderRadius: 8,
-            backgroundColor: '#eeeeee',
-            paddingHorizontal: 10,
-            paddingVertical: 10,
-            backgroundColor: '#FFFFFF',
-          }}
-          onPress={handleChoosePhoto}
-        >
-          <Text
-            style={{
-              fontSize: 15,
-              color: Colors.onSurfaceColorPrimary,
-              marginRight: 10,
-              fontFamily: 'work-sans',
-              fontStyle: 'normal',
-              fontWeight: '500',
-            }}
-          >
-            {i18n.t('GALLERY.CHOOSE_PHOTO')}
-          </Text>
-          <Image source={imageIcon} />
-        </Pressable>
-      ) : (
-        <>
+      <View
+        style={{
+          width: '100%',
+          height: '100%',
+          alignItems: 'center',
+          backgroundColor: '#F2F3FF',
+          //marginVertical: 20,
+        }}
+      >
+        {loading ? (
+          <ActivityIndicator style={{ height: windowHeight }} size="large" color={Colors.primaryColor} />
+        ) : null}
+        {!photo ? (
           <Pressable
             style={{
               display: 'flex',
@@ -117,11 +92,13 @@ const GalleryScreen = ({ navigation }) => {
               justifyContent: 'center',
               alignItems: 'center',
               width: '100%',
-              height: '10%',
+              height: 258,
               marginVertical: 10,
               borderRadius: 8,
+              backgroundColor: '#eeeeee',
               paddingHorizontal: 10,
               paddingVertical: 10,
+              backgroundColor: '#FFFFFF',
             }}
             onPress={handleChoosePhoto}
           >
@@ -135,81 +112,113 @@ const GalleryScreen = ({ navigation }) => {
                 fontWeight: '500',
               }}
             >
-              {i18n.t('GALLERY.CHOOSE_ANOTHER_PHOTO')}
+              {i18n.t('GALLERY.CHOOSE_PHOTO')}
             </Text>
             <Image source={imageIcon} />
           </Pressable>
-          <Pressable style={{ width: '100%', height: 258 }}>
-            <Image source={{ uri: 'data:image/jpeg;base64,' + photo }} style={{ width: '100%', height: '100%' }} />
-          </Pressable>
-        </>
-      )}
-
-      <TextInput
-        value={description}
-        onChangeText={(value) => setDescription(value)}
-        maxLength={120}
-        multiline={true}
-        textAlignVertical="top"
-        style={{
-          padding: Platform.OS === 'android' ? 0 : 10,
-          width: '90%',
-          height: 92,
-          marginVertical: 10,
-          borderRadius: 8,
-          backgroundColor: '#FFFFFF',
-        }}
-        theme={{ colors: { primary: Colors.primaryColor, underlineColor: 'transparent' } }}
-        placeholderTextColor="gray"
-        label={
+        ) : (
           <>
-            <Image source={pencil} />
-            <View
+            <Pressable
               style={{
-                width: 10,
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+                height: '10%',
+                marginVertical: 10,
+                borderRadius: 8,
+                paddingHorizontal: 10,
+                paddingVertical: 10,
               }}
-            ></View>
-            {Platform.OS == 'android' ? (
-              <Text>{i18n.t('GALLERY.CAPTION')}</Text>
-            ) : (
-              <View>
-                <Text
-                  style={{
-                    color: '#A4A2A2',
-                  }}
-                >
-                  {i18n.t('GALLERY.CAPTION')}
-                </Text>
-              </View>
-            )}
+              onPress={handleChoosePhoto}
+            >
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: Colors.onSurfaceColorPrimary,
+                  marginRight: 10,
+                  fontFamily: 'work-sans',
+                  fontStyle: 'normal',
+                  fontWeight: '500',
+                }}
+              >
+                {i18n.t('GALLERY.CHOOSE_ANOTHER_PHOTO')}
+              </Text>
+              <Image source={imageIcon} />
+            </Pressable>
+            <Pressable style={{ width: '100%', height: 258 }}>
+              <Image source={{ uri: 'data:image/jpeg;base64,' + photo }} style={{ width: '100%', height: '100%' }} />
+            </Pressable>
           </>
-        }
-        required
-        autoCapitalize="none"
-      />
-      <View
-        style={{
-          borderRadius: 5,
-          width: '90%',
-          //height: 46,
-          justifyContent: 'center',
-          marginTop: photo ? 64 : 144,
-          backgroundColor: photo && description !== '' ? '#0104AC' : 'gray',
-        }}
-      >
-        <Button
-          onPress={() => {
-            handleSubmit();
-            console.log(photo, description);
-            //Alert.alert('Datos guardados exitosamente');
-            //navigation.goBack();
+        )}
+
+        <TextInput
+          value={description}
+          onChangeText={(value) => setDescription(value)}
+          maxLength={120}
+          //multiline={true}
+          textAlignVertical="top"
+          style={{
+            padding: Platform.OS === 'android' ? 0 : 10,
+            width: '90%',
+            height: 92,
+            marginVertical: 10,
+            borderRadius: 8,
+            backgroundColor: '#FFFFFF',
           }}
-          title={i18n.t('GALLERY.UPLOAD_PHOTO')}
-          disabled={photo && description !== '' ? false : true}
-          color={Platform.OS === 'android' ? '#0104AC' : 'white'}
+          theme={{ colors: { primary: Colors.primaryColor, underlineColor: 'transparent' } }}
+          placeholderTextColor="gray"
+          label={
+            <>
+              <Image source={pencil} />
+              <View
+                style={{
+                  width: 10,
+                }}
+              ></View>
+              {Platform.OS == 'android' ? (
+                <Text>{i18n.t('GALLERY.CAPTION')}</Text>
+              ) : (
+                <View>
+                  <Text
+                    style={{
+                      color: '#A4A2A2',
+                    }}
+                  >
+                    {i18n.t('GALLERY.CAPTION')}
+                  </Text>
+                </View>
+              )}
+            </>
+          }
+          required
+          autoCapitalize="none"
         />
+        <View
+          style={{
+            borderRadius: 5,
+            width: '90%',
+            //height: 46,
+            justifyContent: 'center',
+            marginTop: photo ? 64 : 144,
+            backgroundColor: photo && description !== '' ? '#0104AC' : 'gray',
+          }}
+        >
+          <Button
+            onPress={() => {
+              handleSubmit();
+              console.log(photo, description);
+              //Alert.alert('Datos guardados exitosamente');
+              //navigation.goBack();
+            }}
+            title={i18n.t('GALLERY.UPLOAD_PHOTO')}
+            disabled={photo && description !== '' ? false : true}
+            color={Platform.OS === 'android' ? '#0104AC' : 'white'}
+          />
+        </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 

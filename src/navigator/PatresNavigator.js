@@ -109,6 +109,9 @@ const HomeNavigator = createStackNavigator(
     Photo: {
       screen: PhotoScreen,
     },
+    AssigmentsForm: {
+      screen: AssignmentsFormScreen,
+    },
   },
   {
     defaultNavigationOptions: defaultStackNavOptions,
@@ -146,6 +149,9 @@ const SearchNavigator = createStackNavigator(
     },
     IdealStatementDetail: {
       screen: IdealStatementDetail,
+    },
+    AssigmentsForm: {
+      screen: AssignmentsFormScreen,
     },
   },
   {
@@ -260,6 +266,9 @@ const AssignmentsNavigator = createStackNavigator({
   FiliationDetail: {
     screen: FiliationDetailScreen,
   },
+  AssigmentsForm: {
+    screen: AssignmentsFormScreen,
+  },
 });
 
 const SettingsNavigator = createStackNavigator(
@@ -336,13 +345,13 @@ const DrawerNavigator = createDrawerNavigator(
     AssigmentsForm: {
       screen: AssigmentsFormScreenNavigator,
       navigationOptions: {
-        drawerLabel: i18n.t('GENERAL.SETTINGS'),
+        drawerLabel: i18n.t('ASSIGNMENTS_FORM.TITLE'),
       },
     },
     Gallery: {
       screen: GalleryNavigator,
       navigationOptions: {
-        drawerLabel: i18n.t('GENERAL.SETTINGS'),
+        drawerLabel: i18n.t('GALLERY.TITLE'),
       },
     },
     Settings: {

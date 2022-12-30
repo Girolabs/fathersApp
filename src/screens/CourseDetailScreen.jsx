@@ -563,7 +563,7 @@ class CourseDetailScreen extends Component {
                         </View>
                       </Fragment>
                     )}
-                    {course.assignments.length > 0 ? (
+                    {course.roles.length > 0 ? (
                       <View>
                         <Text style={styles.sectionHeader}>{i18n.t('GENERAL.ASSIGNMENTS')}</Text>
                         <Pressable
@@ -603,7 +603,7 @@ class CourseDetailScreen extends Component {
                           onPress={() => {
                             navigation.navigate('AssigmentsForm', {
                               entityName: course.name,
-                              roles: course.assignments.map((item) => ({ name: item.roleTitle, value: item.roleId })),
+                              roles: course.roles.map((item) => ({ name: item.roleTitle, value: item.roleId })),
                               entityId: course.courseId,
                               isCreate: true,
                             });
@@ -624,7 +624,7 @@ class CourseDetailScreen extends Component {
                                 }}
                               >
                                 <View style={styles.listItem}>
-                                  <Text style={styles.listItemTitle}>{i18n.t('FILIAL_DETAIL.SUPERIOR')}</Text>
+                                  {/*<Text style={styles.listItemTitle}>{i18n.t('FILIAL_DETAIL.SUPERIOR')}</Text>*/}
                                   <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 10 }}>
                                     <Image
                                       source={{

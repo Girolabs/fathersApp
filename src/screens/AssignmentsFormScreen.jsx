@@ -105,6 +105,7 @@ const EditableDateItem = function (props) {
       >
         {show && (
           <DateTimePicker
+            textColor="black"
             timeZoneOffsetInMinutes={0}
             minimumDate={new Date(1965, 0, 1)}
             display={Platform.OS === 'android' ? 'default' : 'spinner'}
@@ -127,7 +128,7 @@ const EditableDateItem = function (props) {
               }
             }}
             //disabled={props.disabled}
-            style={{ width: 320, backgroundColor: 'white' }}
+            style={{ width: 320, backgroundColor: 'white', position: 'absolute', zIndex: 8 }}
           />
         )}
         <Text
@@ -237,7 +238,6 @@ const AssigmentsFormScreen = ({ navigation }) => {
   };
 
   const handleSubmit = function () {
-    setLoading(true);
     const formValues = {
       roleId: role,
       personId: person,
@@ -249,6 +249,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
       endDate: endDate,
     };
     if (validateForm(formValues) && isCreate) {
+      setLoading(true);
       console.log(formValues);
       saveAssignment(formValues).then(
         (res) => {
@@ -262,7 +263,8 @@ const AssigmentsFormScreen = ({ navigation }) => {
           errorHandler(err);
         },
       );
-    } else if (validateForm(formValues) && !isCreate) {
+    } else if (validateForm(formValuesEdit) && !isCreate) {
+      setLoading(true);
       updateAssignment(assignmentId, formValuesEdit).then(
         (res) => {
           setLoading(false);
@@ -308,8 +310,8 @@ const AssigmentsFormScreen = ({ navigation }) => {
   };
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={40}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'null'}
+      keyboardVerticalOffset={100}
       style={{ flex: 1 }}
     >
       <View
@@ -507,29 +509,54 @@ const AssigmentsFormScreen = ({ navigation }) => {
               >
                 {i18n.t('ASSIGNMENTS_FORM.START_DATE')}
               </Text>
-              <Pressable
-                style={{
-                  flexDirection: 'row',
-                  backgroundColor: Colors.primaryColor,
-                  padding: 3,
-                  borderRadius: 5,
-                }}
-                onPress={() => {
-                  setStartDate(null);
-                  setStartDateNull(true);
-                }}
-              >
-                <Text
+              {startDate ? (
+                <Pressable
                   style={{
-                    color: 'white',
+                    flexDirection: 'row',
+                    backgroundColor: Colors.primaryColor,
+                    padding: 3,
+                    borderRadius: 5,
+                  }}
+                  onPress={() => {
+                    setStartDate(null);
+                    setStartDateNull(true);
                   }}
                 >
-                  {!startDate && startDateNull ? i18n.t('ASSIGNMENTS_FORM.NULL') : i18n.t('ASSIGNMENTS_FORM.MARK_NULL')}
-                </Text>
-              </Pressable>
+                  <Text
+                    style={{
+                      color: 'white',
+                    }}
+                  >
+                    {!startDate && startDateNull
+                      ? i18n.t('ASSIGNMENTS_FORM.NULL')
+                      : i18n.t('ASSIGNMENTS_FORM.MARK_NULL')}
+                  </Text>
+                </Pressable>
+              ) : null}
+              {!startDate ? (
+                <Pressable
+                  style={{
+                    flexDirection: 'row',
+                    backgroundColor: Colors.primaryColor,
+                    padding: 3,
+                    borderRadius: 5,
+                  }}
+                  onPress={() => {
+                    setStartDate(todayString);
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: 'white',
+                    }}
+                  >
+                    Mark as today
+                  </Text>
+                </Pressable>
+              ) : null}
             </View>
             <EditableDateItem
-              date={startDate ? startDate : startDateNull ? null : todayString}
+              date={startDate}
               onDateChange={(value) => {
                 setStartDate(value);
               }}
@@ -553,29 +580,52 @@ const AssigmentsFormScreen = ({ navigation }) => {
               >
                 {i18n.t('ASSIGNMENTS_FORM.END_DATE')}
               </Text>
-              <Pressable
-                style={{
-                  flexDirection: 'row',
-                  backgroundColor: Colors.primaryColor,
-                  padding: 3,
-                  borderRadius: 5,
-                }}
-                onPress={() => {
-                  setEndDate(null);
-                  setEndDateNull(true);
-                }}
-              >
-                <Text
+              {endDate ? (
+                <Pressable
                   style={{
-                    color: 'white',
+                    flexDirection: 'row',
+                    backgroundColor: Colors.primaryColor,
+                    padding: 3,
+                    borderRadius: 5,
+                  }}
+                  onPress={() => {
+                    setEndDate(null);
+                    setEndDateNull(true);
                   }}
                 >
-                  {!endDate && endDateNull ? i18n.t('ASSIGNMENTS_FORM.NULL') : i18n.t('ASSIGNMENTS_FORM.MARK_NULL')}
-                </Text>
-              </Pressable>
+                  <Text
+                    style={{
+                      color: 'white',
+                    }}
+                  >
+                    {!endDate && endDateNull ? i18n.t('ASSIGNMENTS_FORM.NULL') : i18n.t('ASSIGNMENTS_FORM.MARK_NULL')}
+                  </Text>
+                </Pressable>
+              ) : null}
+              {!endDate ? (
+                <Pressable
+                  style={{
+                    flexDirection: 'row',
+                    backgroundColor: Colors.primaryColor,
+                    padding: 3,
+                    borderRadius: 5,
+                  }}
+                  onPress={() => {
+                    setEndDate(todayString);
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: 'white',
+                    }}
+                  >
+                    Mark as today
+                  </Text>
+                </Pressable>
+              ) : null}
             </View>
             <EditableDateItem
-              date={endDate ? endDate : endDateNull ? null : todayString}
+              date={endDate}
               onDateChange={(value) => {
                 setEndDate(value);
               }}

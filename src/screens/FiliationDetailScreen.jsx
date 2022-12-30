@@ -136,7 +136,7 @@ class FiliationDetailScreen extends Component {
                               )*/}
                   </View>
                   {/*Nueva seccion*/}
-                  {filiation.assignments.length > 0 ? (
+                  {filiation.roles.length > 0 ? (
                     <View>
                       <Text style={styles.sectionHeader}>{i18n.t('TERRITORY_DETAIL.ASSIGNMENTS')} </Text>
                       <Pressable
@@ -175,7 +175,7 @@ class FiliationDetailScreen extends Component {
                         onPress={() => {
                           navigation.navigate('AssigmentsForm', {
                             entityName: filiation.name,
-                            roles: filiation.assignments.map((item) => ({ name: item.roleTitle, value: item.roleId })),
+                            roles: filiation.roles.map((item) => ({ name: item.roleTitle, value: item.roleId })),
                             entityId: filiation.filiationId,
                             isCreate: true,
                           });

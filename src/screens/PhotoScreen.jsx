@@ -190,7 +190,7 @@ const PhotoScreen = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
       keyboardVerticalOffset={Platform.OS == 'android' ? 30 : 100}
       style={{ flex: 1 }}
     >
@@ -216,11 +216,12 @@ const PhotoScreen = ({ navigation }) => {
               }}
             >
               <Image
-                resizeMode="cover"
+                resizeMode="contain"
                 source={{ uri: /*data[0].source*/ url + photo.pathThumbnail2048 }}
                 style={{
                   width: '100%',
                   height: '100%',
+                  backgroundColor: 'rgba(0,0,0,0.5)',
                 }}
               />
               <View

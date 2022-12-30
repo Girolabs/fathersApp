@@ -23,6 +23,20 @@ instance.interceptors.request.use(async (config) => {
   return config;
 });
 
+instance.interceptors.response.use(async (response) => {
+  if (response.status == 401) {
+    //logout
+    try {
+      await AsyncStorage.removeItem('token');
+      props.navigation.navigate('Auth');
+    } catch (e) {
+      console.error(e);
+    }
+    return response;
+  }
+  return response;
+});
+
 export default instance;
 
 export const errorHandler = async (err) => {
@@ -44,8 +58,8 @@ export const errorHandler = async (err) => {
   }
 };
 
-export const getReminders = (startDate) => {
-  return instance.get(`/api/v2/date-tiles${!!startDate ? `?startDate=${startDate}` : ''}`);
+export const getReminders = (daysInAdvance, startDate) => {
+  return instance.get(`/api/v2/date-tiles`, { params: { daysInAdvance, startDate } });
 };
 
 export const getBoard = () => {

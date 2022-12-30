@@ -215,7 +215,7 @@ class GenerationDetailScreen extends Component {
                         navigation={navigation}
                         entity={generation}
                       />
-                      {generation.assignments.length > 0 ? (
+                      {generation.roles.length > 0 ? (
                         <View>
                           <Text style={styles.sectionHeader}>{i18n.t('GENERAL.ASSIGNMENTS')}</Text>
                           <Pressable
@@ -255,7 +255,7 @@ class GenerationDetailScreen extends Component {
                             onPress={() => {
                               navigation.navigate('AssigmentsForm', {
                                 entityName: generation.name,
-                                roles: generation.assignments.map((item) => ({
+                                roles: generation.roles.map((item) => ({
                                   name: item.roleTitle,
                                   value: item.roleId,
                                 })),
