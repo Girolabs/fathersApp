@@ -111,18 +111,18 @@ const EditableDateItem = function (props) {
             display={Platform.OS === 'android' ? 'default' : 'spinner'}
             value={new Date(props.date)}
             onChange={(event, val) => {
-              const formatDateUTC = (val) => {
+              const formatDate = (val) => {
                 let fecha = new Date(val);
-                const dia = fecha.getUTCDate().toString().padStart(2, '0');
-                const mes = (fecha.getUTCMonth() + 1).toString().padStart(2, '0');
-                const year = fecha.getUTCFullYear().toString();
+                const dia = fecha.getDate().toString().padStart(2, '0');
+                const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
+                const year = fecha.getFullYear().toString();
                 return `${year}-${mes}-${dia}`;
               };
               if (Platform.OS === 'android') {
                 setShow(false);
               }
               setShowOk(true);
-              const pickedDate = Platform.OS === 'android' ? formatDateUTC(val) : formatDateUTC(val);
+              const pickedDate = Platform.OS === 'android' ? formatDate(val) : formatDate(val);
               if (event.type === 'set') {
                 props.onDateChange(pickedDate);
               }

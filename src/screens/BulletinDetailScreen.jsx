@@ -45,7 +45,7 @@ const BulletinDetail = ({ navigation }) => {
       if (source.html) {
         getBoardPost(source.html)
           .then((res) => {
-            console.log('aca!', res.data.result);
+            console.log(res.data.result);
             const { content } = res.data.result;
             const head =
               '<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style type="text/css"> body {-webkit-user-select:none;-webkit-touch-callout:none; font-family: "Arial"; background-color:#FFFFFF;font-size:1.2em} div { color : black};*{ user-select: none; };</style></head>';
@@ -131,7 +131,7 @@ const BulletinDetail = ({ navigation }) => {
       };
     }
     loadPost(source);
-    console.log('a', id);
+    console.log('id: ', id);
   }, []);
 
   useEffect(() => {

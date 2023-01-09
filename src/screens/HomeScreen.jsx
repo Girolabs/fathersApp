@@ -116,7 +116,11 @@ const HomeScreen = ({ navigation }) => {
     if (status.isConnected) {
       setLoading(true);
       //pasar fecha de hoy como parametro en getReminders
-      const startDate = new Date().toISOString().split('T')[0];
+      var d = new Date();
+      const day = d.getDate().toString().padStart(2, '0');
+      const month = (d.getMonth() + 1).toString().padStart(2, '0');
+      const year = d.getFullYear().toString();
+      const startDate = year + '-' + month + '-' + day; //(US)
       getReminders(6, startDate)
         .then((res) => {
           const fetchedReminders = res.data.result.slice(0, 6);
