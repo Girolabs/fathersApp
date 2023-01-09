@@ -121,7 +121,6 @@ const PhotosScreen = ({ navigation }) => {
                 }}
               >
                 <Image
-                  resizeMode="stretch"
                   source={{ uri: url + p.pathThumbnail2048 }}
                   style={{
                     width: '100%',

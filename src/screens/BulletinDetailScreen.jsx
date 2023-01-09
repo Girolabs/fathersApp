@@ -81,7 +81,7 @@ const BulletinDetail = ({ navigation }) => {
   const loadPinPost = async () => {
     await getPinnedPosts()
       .then((res) => {
-        if (res.data.result.postId === id) {
+        if (res.data.result.postId === id || res.data.result.redirectUrl === navigationUrl) {
           setFavorite(true);
         }
       })

@@ -74,10 +74,7 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
       {reminders && reminders.length > 0 ? (
         <FlatList
           data={reminders}
-          keyExtractor={(item) => {
-            keyC += 1;
-            return keyC.toString();
-          }}
+          key={(item) => item.memorialEvents[0]?.entityObject.eventId}
           renderItem={({ item, index }) => {
             const date = moment.utc(item.date).format(dateFormatByLocale);
             const importantReminder = item.memorialEvents[0]?.isImportant;

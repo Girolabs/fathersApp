@@ -42,6 +42,7 @@ import {
 import icon from '../../assets/img/icon_app.png';
 import { Ionicons } from 'expo-vector-icons';
 import pencil from '../../assets/editpencil.png';
+import { ImageZoom } from '@likashefqet/react-native-image-zoom';
 
 const PhotoScreen = ({ navigation }) => {
   const photoID = navigation.getParam('galleryPhotoId');
@@ -215,14 +216,13 @@ const PhotoScreen = ({ navigation }) => {
                 height: 400,
               }}
             >
-              <Image
-                resizeMode="contain"
-                source={{ uri: /*data[0].source*/ url + photo.pathThumbnail2048 }}
+              <ImageZoom
                 style={{
                   width: '100%',
                   height: '100%',
-                  backgroundColor: 'rgba(0,0,0,0.5)',
+                  backgroundColor: 'black',
                 }}
+                uri={url + photo.pathThumbnail2048}
               />
               <View
                 style={{
@@ -233,7 +233,7 @@ const PhotoScreen = ({ navigation }) => {
               >
                 {photo.canUserDeletePhoto ? (
                   <Pressable onPress={() => setWarning(true)}>
-                    <Ionicons name="md-close-circle" size={28} color={Colors.primaryColor} />
+                    <Ionicons name="md-close-circle" size={28} color="#CD5C5C" />
                   </Pressable>
                 ) : null}
 
