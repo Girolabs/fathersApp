@@ -2,7 +2,10 @@
   "expo": {
     "name": "Schoenstatt Fathers",
     "slug": "schoenstatt-fathers",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "version": "1.6",
     "orientation": "portrait",
     "icon": "./assets/img/icon_app.png",
@@ -26,11 +29,20 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "android": {
       "package": "com.schoenstatt.fathersApp",
       "versionCode": 26,
-      "permissions": ["CAMERA", "WRITE_EXTERNAL_STORAGE", "WRITE_CONTACTS", "CAMERA_ROLL", "READ_CONTACTS"],
+      "permissions": [
+        "CAMERA",
+        "WRITE_EXTERNAL_STORAGE",
+        "WRITE_CONTACTS",
+        "CAMERA_ROLL",
+        "READ_CONTACTS",
+        "android.permission.RECORD_AUDIO"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/img/icon.png",
         "backgroundColor": "#ffffff"
@@ -43,7 +55,10 @@
       "requireFullScreen": true
     },
     "extra": {
-      "secretKey": ""
+      "secretKey": "",
+      "eas": {
+        "projectId": "708c0b82-d128-4143-a56c-8a91a7666130"
+      }
     },
     "description": "",
     "plugins": [
