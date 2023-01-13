@@ -109,7 +109,7 @@ const EditableDateItem = function (props) {
             timeZoneOffsetInMinutes={0}
             minimumDate={new Date(1965, 0, 1)}
             display={Platform.OS === 'android' ? 'default' : 'spinner'}
-            value={new Date(props.date)}
+            value={props.date ? new Date(props.date) : new Date(todayString)}
             onChange={(event, val) => {
               const formatDate = (val) => {
                 let fecha = new Date(val);
@@ -310,8 +310,8 @@ const AssigmentsFormScreen = ({ navigation }) => {
   };
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'null'}
-      keyboardVerticalOffset={100}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      keyboardVerticalOffset={150}
       style={{ flex: 1 }}
     >
       <View
