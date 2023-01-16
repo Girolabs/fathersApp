@@ -68,8 +68,8 @@ const GalleryScreen = ({ navigation }) => {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
-      //keyboardVerticalOffset={Platform.OS == 'android' ? 30 : 100}
+      behavior={Platform.OS === 'ios' ? 'position' : null}
+      keyboardVerticalOffset={Platform.OS == 'android' ? 30 : 100}
       style={{ flex: 1 }}
     >
       <View

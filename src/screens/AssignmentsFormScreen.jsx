@@ -310,8 +310,8 @@ const AssigmentsFormScreen = ({ navigation }) => {
   };
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
-      keyboardVerticalOffset={150}
+      behavior={Platform.OS === 'ios' ? 'position' : null}
+      //keyboardVerticalOffset={150}
       style={{ flex: 1 }}
     >
       <View
