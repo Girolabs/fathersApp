@@ -2,7 +2,10 @@
   "expo": {
     "name": "Schoenstatt Fathers",
     "slug": "schoenstatt-fathers",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "version": "1.6.3",
     "orientation": "portrait",
     "icon": "./assets/img/icon_app.png",
@@ -26,16 +29,18 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "android": {
       "package": "com.schoenstatt.fathersApp",
       "versionCode": 27,
       "permissions": [
-        "CAMERA",
-        "WRITE_EXTERNAL_STORAGE",
-        "WRITE_CONTACTS",
-        "CAMERA_ROLL",
-        "READ_CONTACTS",
+        "android.permission.CAMERA",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.WRITE_CONTACTS",
+        "android.permission.CAMERA_ROLL",
+        "android.permission.READ_CONTACTS",
         "android.permission.RECORD_AUDIO"
       ],
       "adaptiveIcon": {
@@ -52,7 +57,7 @@
     "extra": {
       "secretKey": "",
       "eas": {
-        "projectId": "708c0b82-d128-4143-a56c-8a91a7666130"
+        "projectId": "59d43aca-4c96-4d0d-b20c-9a6bf5a8752b"
       }
     },
     "description": "",
@@ -64,6 +69,7 @@
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ]
-    ]
+    ],
+    "owner": "girolabs"
   }
 }
