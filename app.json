@@ -2,10 +2,7 @@
   "expo": {
     "name": "Schoenstatt Fathers",
     "slug": "schoenstatt-fathers",
-    "platforms": [
-      "ios",
-      "android"
-    ],
+    "platforms": ["ios", "android"],
     "version": "1.6.3",
     "orientation": "portrait",
     "icon": "./assets/img/icon_app.png",
@@ -17,7 +14,6 @@
     "hooks": {
       "postPublish": [
         {
-          "file": "sentry-expo/upload-sourcemaps",
           "config": {
             "organization": "Girolabs",
             "project": "girolabs",
@@ -29,9 +25,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "android": {
       "package": "com.schoenstatt.fathersApp",
       "versionCode": 27,
@@ -62,7 +56,6 @@
     },
     "description": "",
     "plugins": [
-      "sentry-expo",
       [
         "expo-image-picker",
         {
