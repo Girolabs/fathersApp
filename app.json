@@ -6,7 +6,7 @@
       "ios",
       "android"
     ],
-    "version": "1.6.3",
+    "version": "1.6.4",
     "orientation": "portrait",
     "icon": "./assets/img/icon_app.png",
     "primaryColor": "#ffffff",
@@ -49,7 +49,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.schoenstatt.fathersApp",
-      "buildNumber": "9",
+      "buildNumber": "13",
       "supportsTablet": false,
       "requireFullScreen": true
     },
