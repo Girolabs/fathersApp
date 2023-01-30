@@ -56,7 +56,9 @@ const GalleryScreen = ({ navigation }) => {
       (res) => {
         console.log('RESULTADO: ', res);
         setLoading(false);
-        navigation.navigate('Photos');
+        navigation.push('Photos');
+        setPhoto(null);
+        setDescription('');
       },
       (err) => {
         setLoading(false);
@@ -209,8 +211,6 @@ const GalleryScreen = ({ navigation }) => {
             onPress={() => {
               handleSubmit();
               console.log(photo, description);
-              //Alert.alert('Datos guardados exitosamente');
-              //navigation.goBack();
             }}
             title={i18n.t('GALLERY.UPLOAD_PHOTO')}
             disabled={photo && description !== '' ? false : true}
