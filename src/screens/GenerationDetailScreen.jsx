@@ -28,6 +28,7 @@ import { getDateFormatByLocale, getDateMaskByLocale, getDateMaskForm } from '../
 import pencil from '../../assets/editpencil.png';
 import { Ionicons } from 'expo-vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { withNavigation } from 'react-navigation';
 
 const styles = StyleSheet.create({
   screen: {
@@ -162,11 +163,19 @@ class GenerationDetailScreen extends Component {
     const generationId = navigation.getParam('generationId');
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      this.loadGeneration(generationId, false);
+      this.focusListener = navigation.addListener('didFocus', () => {
+        this.loadGeneration(generationId, false);
+        console.log('refresh!');
+      });
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
   }
+
+  componentWillUnmount() {
+    this.focusListener.remove();
+  }
+
   render() {
     const { generation, generations, showHistorical, hasAssignment, permission } = this.state;
     const { navigation } = this.props;
@@ -384,4 +393,4 @@ GenerationDetailScreen.navigationOptions = (navigationData) => ({
   headerBackTitle: i18n.t('GENERAL.BACK'),
 });
 
-export default GenerationDetailScreen;
+export default withNavigation(GenerationDetailScreen);

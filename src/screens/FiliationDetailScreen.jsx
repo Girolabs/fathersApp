@@ -29,7 +29,7 @@ import { getDateMaskByLocale, getDateMaskForm } from '../utils/date-utils';
 import { Ionicons } from 'expo-vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import pencil from '../../assets/editpencil.png';
-
+import { withNavigation } from 'react-navigation';
 class FiliationDetailScreen extends Component {
   state = {
     filiation: null,
@@ -57,10 +57,17 @@ class FiliationDetailScreen extends Component {
     const filiationId = navigation.getParam('filiationId');
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      this.loadFiliation(filiationId, false);
+      this.focusListener = navigation.addListener('didFocus', () => {
+        this.loadFiliation(filiationId, false);
+        console.log('refresh!');
+      });
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
+  }
+
+  componentWillUnmount() {
+    this.focusListener.remove();
   }
 
   render() {
@@ -443,4 +450,4 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondaryColor,
   },
 });
-export default FiliationDetailScreen;
+export default withNavigation(FiliationDetailScreen);

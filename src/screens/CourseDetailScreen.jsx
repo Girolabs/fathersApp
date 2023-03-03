@@ -31,6 +31,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from 'expo-vector-icons';
 import pencil from '../../assets/editpencil.png';
 import { Ionicons } from 'expo-vector-icons';
+import { withNavigation } from 'react-navigation';
 
 const styles = StyleSheet.create({
   screen: {
@@ -157,11 +158,19 @@ class CourseDetailScreen extends Component {
     const courseId = navigation.getParam('courseId');
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
-      this.loadCourse(courseId, false, i18n.locale);
+      this.focusListener = navigation.addListener('didFocus', () => {
+        this.loadCourse(courseId, false, i18n.locale);
+        console.log('refresh!');
+      });
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
   }
+
+  componentWillUnmount() {
+    this.focusListener.remove();
+  }
+
   render() {
     let TouchableComp = TouchableOpacity;
     if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -759,4 +768,4 @@ CourseDetailScreen.navigationOptions = (navigationData) => ({
   headerBackTitle: i18n.t('GENERAL.BACK'),
 });
 
-export default CourseDetailScreen;
+export default withNavigation(CourseDetailScreen);

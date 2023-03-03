@@ -255,7 +255,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
         (res) => {
           setLoading(false);
           Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
-          navigation.popToTop();
+          navigation.goBack();
         },
         (err) => {
           console.log(err.response.status);
@@ -269,7 +269,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
         (res) => {
           setLoading(false);
           Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
-          navigation.popToTop();
+          navigation.goBack();
         },
         (err) => {
           setLoading(false);
@@ -296,7 +296,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
             (res) => {
               setLoading(false);
               Alert.alert(i18n.t('ASSIGNMENTS_FORM.SUCCESS'));
-              navigation.popToTop();
+              navigation.goBack();
             },
             (err) => {
               setLoading(false);

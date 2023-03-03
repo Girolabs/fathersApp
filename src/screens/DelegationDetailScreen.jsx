@@ -29,6 +29,7 @@ import IdealStatement from '../components/IdealStatement';
 import { getDateMaskByLocale, getDateFormatByLocale, getDateMaskForm } from '../utils/date-utils';
 import { Ionicons } from 'expo-vector-icons';
 import pencil from '../../assets/editpencil.png';
+import { withNavigation } from 'react-navigation';
 
 const styles = StyleSheet.create({
   screen: {
@@ -199,7 +200,10 @@ class DelegationDetailScreen extends Component {
     const territoryId = navigation.getParam('delegationId');
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
-      this.loadTerritory(territoryId, 'all');
+      this.focusListener = navigation.addListener('didFocus', () => {
+        this.loadTerritory(territoryId, 'all');
+        console.log('refresh!');
+      });
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
@@ -216,6 +220,10 @@ class DelegationDetailScreen extends Component {
         }
       }
     }
+  }
+
+  componentWillUnmount() {
+    this.focusListener.remove();
   }
 
   render() {
@@ -486,4 +494,4 @@ DelegationDetailScreen.navigationOptions = (navigationData) => ({
   headerBackTitle: i18n.t('GENERAL.BACK'),
 });
 
-export default DelegationDetailScreen;
+export default withNavigation(DelegationDetailScreen);
