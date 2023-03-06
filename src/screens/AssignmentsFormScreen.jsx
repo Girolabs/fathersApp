@@ -64,7 +64,7 @@ const todayString = toIsoString(today);
 
 const EditableDateItem = function (props) {
   const [show, setShow] = useState(false);
-  const [showOk, setShowOk] = useState(false);
+  const [showOk, setShowOk] = useState(true);
 
   let editableItemStyle = StyleSheet.create({
     item: {
@@ -113,9 +113,9 @@ const EditableDateItem = function (props) {
             onChange={(event, val) => {
               const formatDate = (val) => {
                 let fecha = new Date(val);
-                const dia = fecha.getDate().toString().padStart(2, '0');
-                const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
-                const year = fecha.getFullYear().toString();
+                const dia = fecha.getUTCDate().toString().padStart(2, '0');
+                const mes = (fecha.getUTCMonth() + 1).toString().padStart(2, '0');
+                const year = fecha.getUTCFullYear().toString();
                 return `${year}-${mes}-${dia}`;
               };
               if (Platform.OS === 'android') {
@@ -145,6 +145,7 @@ const EditableDateItem = function (props) {
       {Platform.OS === 'ios' && showOk ? (
         <Pressable
           style={{
+            display: show ? "flex" : "none",
             position: 'absolute',
             top: '10%',
             left: '95%',
@@ -158,7 +159,8 @@ const EditableDateItem = function (props) {
           }}
           onPress={() => {
             setShow(false);
-            setShowOk(false);
+            props.onClose();
+            //setShowOk(false);
           }}
         >
           <Text
@@ -560,6 +562,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
               onDateChange={(value) => {
                 setStartDate(value);
               }}
+              onClose={() => !startDate ? setStartDate((new Date()).toISOString().split('T')[0]): null}
             />
             <View
               style={{
@@ -629,6 +632,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
               onDateChange={(value) => {
                 setEndDate(value);
               }}
+              onClose={() => !endDate ? setEndDate((new Date()).toISOString().split('T')[0]): null}
             />
             <Button
               onPress={handleSubmit}

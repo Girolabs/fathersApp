@@ -28,7 +28,7 @@ const PhotosScreen = ({ navigation }) => {
   const [offset, setOffset] = useState(0);
   const [changeLike, setChangelike] = useState(false);
 
-  const [refreshing, setRefreshing] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const loadPhotos = () => {
     setLoading(true);
