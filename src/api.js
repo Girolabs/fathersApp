@@ -23,19 +23,9 @@ instance.interceptors.request.use(async (config) => {
   return config;
 });
 
-instance.interceptors.response.use(async (response) => {
-  if (response.status == 401) {
-    //logout
-    try {
-      await AsyncStorage.removeItem('token');
-      props.navigation.navigate('Auth');
-    } catch (e) {
-      console.error(e);
-    }
-    return response;
-  }
-  return response;
-});
+export function addResponseInterceptor(fn) {
+  instance.interceptors.response.use(fn);
+}
 
 export default instance;
 
