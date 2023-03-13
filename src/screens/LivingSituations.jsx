@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   ActivityIndicator,
+  Pressable
 } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import i18n from 'i18n-js';
@@ -295,8 +296,9 @@ const LivingSituationsFormScreen = ({ navigation }) => {
           updated: true,
         });
       },
-      () => {
+      (error) => {
         setSnackMsg(i18n.t('GENERAL.ERROR'));
+        //console.log(error.response.data)
         setVisible(true);
       },
     );
@@ -380,7 +382,7 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                   endDate: livingSituation && livingSituation.endDate,
                   status: livingSituation.status,
                   statusLabel: livingSituation.status && livingSituation.statusLabel,
-                  publicNotes: livingSituation && livingSituation.publicNotes,
+                  publicNotes: livingSituation && livingSituation.publicNotes ? livingSituation.publicNotes : null,
                   adminNotes: '',
                   filiationId: livingSituation && livingSituation.filiationId,
                   houseId: livingSituation && livingSituation.houseId,
@@ -562,6 +564,28 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                     </View>
                     <View>
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.START_DATE')}</Text>
+                        <Pressable
+                            style={{
+                                position: 'absolute',
+                                left: '58%',
+                                flexDirection: 'row',
+                                backgroundColor: Colors.primaryColor,
+                                padding: 3,
+                                borderRadius: 5,
+                                marginTop:10
+                            }}
+                            onPress={() => {
+                                setFieldValue('startDate', null);
+                            }}
+                        >
+                        <Text
+                            style={{
+                            color: 'white',
+                            }}
+                        >
+                            {i18n.t('ASSIGNMENTS_FORM.MARK_NULL')}
+                        </Text>
+                        </Pressable>
                       <Button onPress={() => setOpenStartDate(true)}>
                         <View style={styles.inputContainer}>
                           <Text style={styles.inputDatePicker}>{_.get(values, 'startDate') || ''}</Text>
@@ -571,6 +595,28 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                     </View>
                     <View>
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.END_DATE')}</Text>
+                        <Pressable
+                            style={{
+                                position: 'absolute',
+                                left: '58%',
+                                flexDirection: 'row',
+                                padding: 3,
+                                backgroundColor: Colors.primaryColor,
+                                borderRadius: 5,
+                                marginTop:10
+                            }}
+                            onPress={() => {
+                                setFieldValue('endDate', null);
+                            }}
+                            >
+                            <Text
+                                style={{
+                                color: 'white',
+                                }}
+                            >
+                                {i18n.t('ASSIGNMENTS_FORM.MARK_NULL')}
+                            </Text>
+                            </Pressable>
                       <Button onPress={() => setOpenEndDate(true)}>
                         <View style={styles.inputContainer}>
                           <Text style={styles.inputDatePicker}>{_.get(values, 'endDate') || ''}</Text>
