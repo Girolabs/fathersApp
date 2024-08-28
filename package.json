@@ -21,6 +21,7 @@
     "expo": "^46.0.7",
     "expo-app-loading": "~2.1.0",
     "expo-application": "~4.2.2",
+    "expo-cli": "^6.3.10",
     "expo-constants": "~13.2.4",
     "expo-contacts": "~10.3.0",
     "expo-device": "~4.3.0",
