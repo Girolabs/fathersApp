@@ -37,6 +37,8 @@ exports.EN = {
     REMINDERS: 'Reminders',
     COMMUNITY_PRAYER: 'Community prayer',
     MISC: 'Miscellaneous',
+    SELECT_DATE: 'Select a date',
+    NO_REMINDERS_FOR_DATE: 'No reminders for this date',
   },
   FATHER_DETAIL: {
     DEATHDATE: 'Passed away on',
@@ -141,6 +143,7 @@ exports.EN = {
     SION_TIME_MASTER: 'Sion Time coordinator',
     STATEMENT: 'Course ideal statement',
     MEMBERS: 'Course members',
+    EXMEMBERS: 'Ex-members',
     START_DATE: 'Start date',
     END_DATE: 'End date',
   },

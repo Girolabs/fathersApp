@@ -22,7 +22,7 @@ import { CustomSlider } from '../components/CarouselSlider';
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    padding: 15,
+    //padding: 15,
     backgroundColor: Colors.surfaceColorPrimary,
     marginBottom: 15,
   },
@@ -190,6 +190,7 @@ const HomeScreen = ({ navigation }) => {
                     <>
                       {Object.entries(favorite).length > 0 && (
                         <Pressable
+                          style={{ padding: 15 }}
                           onPress={() =>
                             navigation.navigate('BulletinDetail', {
                               postId: favorite.postId,
@@ -224,6 +225,87 @@ const HomeScreen = ({ navigation }) => {
                           </View>
                         </Pressable>
                       )}
+                      <View
+                        style={{
+                          backgroundColor: '#fff',
+                          //marginTop: 20,
+                          width: '100%',
+                          //height: '100%',
+                        }}
+                      >
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            margin: 30,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: 'work-sans-semibold',
+                              fontWeight: '600',
+                              color: Colors.primaryColor,
+                              fontSize: 27,
+                              textAlign: 'center',
+                            }}
+                          >
+                            {i18n.t('GALLERY.PHOTOS')}
+                          </Text>
+                          <Pressable
+                            style={{
+                              width: 30,
+                              height: 30,
+                              alignItems: 'center',
+                            }}
+                            onPress={() => {
+                              navigation.navigate('Gallery');
+                            }}
+                          >
+                            <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
+                          </Pressable>
+                        </View>
+                        <View
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            overflow: 'hidden',
+                          }}
+                        >
+                          <CustomSlider data={photos} navigation={navigation} />
+                        </View>
+                        <Pressable
+                          onPress={() => navigation.navigate('Photos')}
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginTop: 28,
+                            marginBottom: 25,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontFamily: 'work-sans-semibold',
+                              fontWeight: '600',
+                              fontSize: 15,
+                              color: '#0104AC',
+                              marginRight: 20,
+                            }}
+                          >
+                            {i18n.t('GALLERY.SEE_ALL')}
+                          </Text>
+                          <Ionicons name="ios-arrow-forward" size={23} color="#0104AC" />
+                        </Pressable>
+                        <View
+                          style={{
+                            borderBottomColor: '#F2F3FF',
+                            borderBottomWidth: StyleSheet.hairlineWidth,
+                            width: '90%',
+                          }}
+                        />
+                      </View>
                       <RemindersHeaders
                         reminders={reminders}
                         selectedHeader={selectedReminder}
@@ -247,7 +329,7 @@ const HomeScreen = ({ navigation }) => {
                 </View>
               </>
             }
-            ListFooterComponent={
+            /*ListFooterComponent={
               <>
                 {!loading ? (
                   <View
@@ -333,7 +415,7 @@ const HomeScreen = ({ navigation }) => {
                   </View>
                 ) : null}
               </>
-            }
+            }*/
           ></FlatList>
         );
       }}

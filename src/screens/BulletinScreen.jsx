@@ -76,8 +76,10 @@ const BulletinScreen = ({ navigation }) => {
         .then((res) => {
           const fetchedPosts = res.data.result;
           const notArchived = fetchedPosts.filter((res) => !res.isArchived);
-          setPosts(notArchived);
-          console.log('posts', res.data.result);
+          const sortedPosts = notArchived.sort((a, b) => a.title.localeCompare(b.title));
+
+          setPosts(sortedPosts);
+          console.log('posts', sortedPosts);
           markCheckUnseenCounter();
           setLoading(false);
         })
@@ -124,7 +126,9 @@ const BulletinScreen = ({ navigation }) => {
       .then((res) => {
         const fetchedPosts = res.data.result;
         const notArchived = fetchedPosts.filter((res) => !res.isArchived);
-        setPosts(notArchived);
+        const sortedPosts = notArchived.sort((a, b) => a.title.localeCompare(b.title));
+
+        setPosts(sortedPosts);
         setLoading(false);
       })
       .catch(() => {

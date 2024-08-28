@@ -12,6 +12,7 @@ import {
   Image,
   ScrollView,
   AsyncStorage,
+  Pressable,
 } from 'react-native';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
@@ -25,6 +26,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { getTerritories, getFiliations, getGenerations, getCourses } from '../api';
 import { NavigationEvents } from 'react-navigation';
 import { getDateMaskByLocale } from '../utils/date-utils';
+import deceasedIcon from '../../assets/deceasedIcon.png';
 
 const styles = StyleSheet.create({
   screen: {
@@ -245,40 +247,44 @@ class AssignmentsScreen extends Component {
             });
 
           list = (
-              <SectionList
-                stickySectionHeadersEnabled={false}
-                keyExtractor={item=> item.assignmentId.toString()}
-                sections={filtered}
-                renderItem={({ item }) => (
-                  <ListItem
-                    name={item.person.fullName}
-                    photo={item.person.photo}
-                    roleTitle={item.roleTitle}
-                    startDate={item.startDate}
-                    endDate={item.endDate}
-                    selectPerson={() =>
-                      item.person
-                        ? this.props.navigation.navigate('PatreDetail', {
-                            fatherId: item.person.personId,
-                          })
-                        : null
-                    }
-                  />
-                )}
-                renderSectionHeader={({ section: { name, territoryId } }) => (
-                  <Header
-                    selectHeader={() => {
-                      this.props.navigation.navigate('DelegationDetail', {
-                        delegationId: territoryId,
-                      });
-                    }}
-                    name={name}
-                  />
-                )}
-              />
-
+            <SectionList
+              stickySectionHeadersEnabled={false}
+              keyExtractor={(item) => item.assignmentId.toString()}
+              sections={filtered}
+              renderItem={({ item }) => (
+                <ListItem
+                  wa={
+                    item.person.phones.length >= 1 && item.person.phones[0].whatsApp === true
+                      ? item.person.phones[0].number
+                      : null
+                  }
+                  name={item.person.fullName}
+                  photo={item.person.photo}
+                  roleTitle={item.roleTitle}
+                  startDate={item.startDate}
+                  endDate={item.endDate}
+                  selectPerson={() =>
+                    item.person
+                      ? this.props.navigation.navigate('PatreDetail', {
+                          fatherId: item.person.personId,
+                        })
+                      : null
+                  }
+                />
+              )}
+              renderSectionHeader={({ section: { name, territoryId } }) => (
+                <Header
+                  selectHeader={() => {
+                    this.props.navigation.navigate('DelegationDetail', {
+                      delegationId: territoryId,
+                    });
+                  }}
+                  name={name}
+                />
+              )}
+            />
           );
-        //   console.log('filtered', filtered);
+          //   console.log('filtered', filtered);
           break;
 
         case 1:
@@ -309,7 +315,7 @@ class AssignmentsScreen extends Component {
                 return (
                   <View>
                     <TouchableComp
-                        key={territory.territoryId.toString()}
+                      key={territory.territoryId.toString()}
                       onPress={() => {
                         this.props.navigation.navigate('DelegationDetail', {
                           delegationId: territory.territoryId,
@@ -322,7 +328,7 @@ class AssignmentsScreen extends Component {
                       </View>
                     </TouchableComp>
                     {territory.filiations.map((filiation) => {
-                    //   console.log(filiation);
+                      console.log('OJO', filiation);
                       return (
                         <Fragment>
                           {filiation.data.map((asg) => {
@@ -368,6 +374,23 @@ class AssignmentsScreen extends Component {
                                         asg.startDate ? moment.utc(asg.startDate).format(dateMask) : ''
                                       } - ${asg.endDate ? moment.utc(asg.endDate).format(dateMask) : ''}`}</Text>
                                     </View>
+                                    {asg.person.phones.length >= 1 && asg.person.phones[0].whatsApp === true && (
+                                      <Pressable
+                                        onPress={() => {
+                                          Linking.openURL(
+                                            `http://api.whatsapp.com/send?phone=${asg.person.phones[0].number}`,
+                                          );
+                                        }}
+                                        style={{ position: 'absolute', marginLeft: '90%' }}
+                                      >
+                                        <Ionicons
+                                          name="logo-whatsapp"
+                                          style={styles.icon}
+                                          size={23}
+                                          color={Colors.primaryColor}
+                                        />
+                                      </Pressable>
+                                    )}
                                   </View>
                                 )}
                               </Fragment>
@@ -379,45 +402,49 @@ class AssignmentsScreen extends Component {
                   </View>
                 );
               })}
-          </ScrollView>
-
-            );
+            </ScrollView>
+          );
 
           break;
         case 2:
           filtered = territories;
           list = (
-              <SectionList
-                stickySectionHeadersEnabled={false}
-                keyExtractor={item=> item.assignmentId.toString()}
-                sections={filtered}
-                renderItem={({ item }) => (
-                  <ListItem
-                    name={item.person.fullName}
-                    photo={item.person.photo}
-                    roleTitle={item.roleTitle}
-                    startDate={item.startDate}
-                    endDate={item.endDate}
-                    selectPerson={() =>
-                      item.person
-                        ? this.props.navigation.navigate('PatreDetail', {
-                            fatherId: item.person.personId,
-                          })
-                        : null
-                    }
-                  />
-                )}
-                renderSectionHeader={({ section: { name, territoryId } }) => (
-                  <Header
-                    selectHeader={() => {
-                      this.props.navigation.navigate('DelegationDetail', {
-                        delegationId: territoryId,
-                      });
-                    }}
-                    name={name}
-                  />
-                )}
-              />
+            <SectionList
+              stickySectionHeadersEnabled={false}
+              keyExtractor={(item) => item.assignmentId.toString()}
+              sections={filtered}
+              renderItem={({ item }) => (
+                <ListItem
+                  wa={
+                    item.person.phones.length >= 1 && item.person.phones[0].whatsApp === true
+                      ? item.person.phones[0].number
+                      : null
+                  }
+                  name={item.person.fullName}
+                  photo={item.person.photo}
+                  roleTitle={item.roleTitle}
+                  startDate={item.startDate}
+                  endDate={item.endDate}
+                  selectPerson={() =>
+                    item.person
+                      ? this.props.navigation.navigate('PatreDetail', {
+                          fatherId: item.person.personId,
+                        })
+                      : null
+                  }
+                />
+              )}
+              renderSectionHeader={({ section: { name, territoryId } }) => (
+                <Header
+                  selectHeader={() => {
+                    this.props.navigation.navigate('DelegationDetail', {
+                      delegationId: territoryId,
+                    });
+                  }}
+                  name={name}
+                />
+              )}
+            />
           );
           break;
         case 3:
@@ -426,6 +453,13 @@ class AssignmentsScreen extends Component {
               {this.state.generations.map((generation) => {
                 return (
                   <ListItemGC
+                    wa={
+                      generation.mainAssignment?.person.phones.length >= 1 &&
+                      generation.mainAssignment.person.phones[0].whatsApp === true
+                        ? generation.mainAssignment.person.phones[0].number
+                        : null
+                    }
+                    deceased={generation.mainAssignment ? false : true}
                     photo={generation.mainAssignment ? generation.mainAssignment.person.photo : null}
                     title={generation.name}
                     fullName={generation.mainAssignment ? generation.mainAssignment.person.fullName : null}
@@ -456,7 +490,14 @@ class AssignmentsScreen extends Component {
               {this.state.courses.map((course) => {
                 return (
                   <ListItemGC
-                    photo={course.leaderAssignment ? course.leaderAssignment.person.photo : null}
+                    wa={
+                      course.leaderAssignment?.person.phones.length >= 1 &&
+                      course.leaderAssignment.person.phones[0].whatsApp === true
+                        ? course.leaderAssignment.person.phones[0].number
+                        : null
+                    }
+                    deceased={course.leaderAssignment ? false : true}
+                    photo={course.leaderAssignment ? course.leaderAssignment.person.photo : deceasedIcon}
                     title={course.name}
                     fullName={course.leaderAssignment ? course.leaderAssignment.person.fullName : null}
                     startDate={course.leaderAssignment ? course.leaderAssignment.startDate : null}
@@ -485,7 +526,7 @@ class AssignmentsScreen extends Component {
     return (
       <I18nContext.Consumer>
         {(value) => {
-        //   console.log(value);
+          //   console.log(value);
           moment.locale(value.lang);
           return (
             <SafeAreaView style={styles.screen}>
@@ -537,7 +578,7 @@ class AssignmentsScreen extends Component {
 
 AssignmentsScreen.navigationOptions = (navigationData) => ({
   headerTitle: '',
-  headerRight: () =>(
+  headerRight: () => (
     <HeaderButtons HeaderButtonComponent={HeaderButton}>
       <Item
         title="Menu"
@@ -574,7 +615,7 @@ const Header = (props) => {
 
 const ListItem = (props) => {
   const dateMask = getDateMaskByLocale(moment.locale());
-  const { photo, name, startDate, endDate, roleTitle, selectPerson } = props;
+  const { photo, name, startDate, endDate, roleTitle, selectPerson, wa } = props;
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableComp = TouchableNativeFeedback;
@@ -600,6 +641,16 @@ const ListItem = (props) => {
             endDate ? moment.utc(endDate).format(dateMask) : ''
           }`}</Text>
         </View>
+        {wa && (
+          <Pressable
+            onPress={() => {
+              Linking.openURL(`http://api.whatsapp.com/send?phone=${wa}`);
+            }}
+            style={{ position: 'absolute', marginLeft: '90%' }}
+          >
+            <Ionicons name="logo-whatsapp" style={styles.icon} size={23} color={Colors.primaryColor} />
+          </Pressable>
+        )}
       </View>
     </TouchableComp>
   );
@@ -607,20 +658,24 @@ const ListItem = (props) => {
 
 const ListItemGC = (props) => {
   const dateMask = getDateMaskByLocale(moment.locale());
-  const { photo, title, fullName, startDate, endDate, selectTitle, selectPerson } = props;
+  const { photo, title, fullName, startDate, endDate, selectTitle, selectPerson, deceased, wa } = props;
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableComp = TouchableNativeFeedback;
   }
   return (
     <View style={[styles.itemContainer, { marginVertical: 15 }]}>
-      <Image
-        style={{ width: 45, height: 45, borderRadius: 22 }}
-        resizMode="center"
-        source={{
-          uri: `https://schoenstatt-fathers.link${photo}`,
-        }}
-      />
+      {!deceased ? (
+        <Image
+          style={{ width: 45, height: 45, borderRadius: 22 }}
+          resizMode="center"
+          source={{
+            uri: `https://schoenstatt-fathers.link${photo}`,
+          }}
+        />
+      ) : (
+        <Image style={{ width: 45, height: 45, resizeMode: 'contain' }} source={deceasedIcon} />
+      )}
       <View style={styles.itemTextContainer}>
         <TouchableComp onPress={() => selectTitle()}>
           <Text style={styles.itemTextTitle}>{title}</Text>
@@ -635,6 +690,16 @@ const ListItemGC = (props) => {
           }`}</Text>
         )}
       </View>
+      {wa && (
+        <Pressable
+          onPress={() => {
+            Linking.openURL(`http://api.whatsapp.com/send?phone=${wa}`);
+          }}
+          style={{ position: 'absolute', marginLeft: '90%' }}
+        >
+          <Ionicons name="logo-whatsapp" style={styles.icon} size={23} color={Colors.primaryColor} />
+        </Pressable>
+      )}
     </View>
   );
 };

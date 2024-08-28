@@ -179,6 +179,8 @@ class CourseDetailScreen extends Component {
     const { course, showHistorical, permission } = this.state;
     const { navigation } = this.props;
     if (course) console.log('Course -> ', course);
+    const activeMembers = course && course.persons.filter((person) => !person.leaveDate);
+    const inactiveMembers = course && course.persons.filter((person) => person.leaveDate);
     return (
       <I18nContext.Consumer>
         {(value) => {
@@ -701,41 +703,81 @@ class CourseDetailScreen extends Component {
                       </View>
                     ) : null}
                     <Text style={styles.sectionHeader}>{i18n.t('COURSE.MEMBERS')}</Text>
-                    {course.persons.map((person) => {
-                      return (
-                        <TouchableComp
-                          key={person.personId}
-                          onPress={() => navigation.navigate('PatreDetail', { fatherId: person.personId })}
-                        >
-                          <View style={styles.memberItem}>
-                            <Image
-                              source={{ uri: `https://schoenstatt-fathers.link${person.photo}` }}
-                              style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
-                            />
-
-                            <Text
-                              style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}
+                    <View>
+                      {activeMembers.length > 0 && (
+                        <>
+                          {activeMembers.map((person) => (
+                            <TouchableComp
+                              key={person.personId}
+                              onPress={() => navigation.navigate('PatreDetail', { fatherId: person.personId })}
                             >
-                              {person.fullFriendlyName}&nbsp;
-                              {person.deathDate && (
-                                <>
-                                  {'('}
-                                  <FontAwesome5 name="cross" size={10} color={Colors.primaryColor} />
-                                  {person.deathDate.substring(0, 4) + ')'}
-                                </>
-                              )}
-                              {person.leaveDate && (
-                                <>
-                                  {'(X'}
-                                  {/* <Entypo name="cross" size={15} color={Colors.primaryColor} /> */}
-                                  {person.leaveDate.substring(0, 4) + ')'}
-                                </>
-                              )}
-                            </Text>
-                          </View>
-                        </TouchableComp>
-                      );
-                    })}
+                              <View style={styles.memberItem}>
+                                <Image
+                                  source={{ uri: `https://schoenstatt-fathers.link${person.photo}` }}
+                                  style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
+                                />
+                                <Text
+                                  style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}
+                                >
+                                  {person.fullFriendlyName}&nbsp;
+                                  {person.deathDate && (
+                                    <>
+                                      {'('}
+                                      <FontAwesome5 name="cross" size={10} color={Colors.primaryColor} />
+                                      {person.deathDate.substring(0, 4) + ')'}
+                                    </>
+                                  )}
+                                </Text>
+                              </View>
+                            </TouchableComp>
+                          ))}
+                        </>
+                      )}
+
+                      {inactiveMembers.length > 0 && (
+                        <>
+                          <Text
+                            style={[
+                              styles.sectionHeader,
+                              { backgroundColor: Colors.primaryColor, color: Colors.surfaceColorSecondary },
+                            ]}
+                          >
+                            {i18n.t('COURSE.EXMEMBERS')}
+                          </Text>
+                          {inactiveMembers.map((person) => (
+                            <TouchableComp
+                              key={person.personId}
+                              onPress={() => navigation.navigate('PatreDetail', { fatherId: person.personId })}
+                            >
+                              <View style={styles.memberItem}>
+                                <Image
+                                  source={{ uri: `https://schoenstatt-fathers.link${person.photo}` }}
+                                  style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
+                                />
+                                <Text
+                                  style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}
+                                >
+                                  {person.fullFriendlyName}&nbsp;
+                                  {person.deathDate && (
+                                    <>
+                                      {'('}
+                                      <FontAwesome5 name="cross" size={10} color={Colors.primaryColor} />
+                                      {person.deathDate.substring(0, 4) + ')'}
+                                    </>
+                                  )}
+                                  {person.leaveDate && (
+                                    <>
+                                      {'(X'}
+                                      {person.leaveDate.substring(0, 4) + ')'}
+                                    </>
+                                  )}
+                                </Text>
+                              </View>
+                            </TouchableComp>
+                          ))}
+                        </>
+                      )}
+                    </View>
                   </View>
                 </ScrollView>
               ) : (

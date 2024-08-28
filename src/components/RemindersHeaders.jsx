@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native';
 import i18n from 'i18n-js';
-
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { Ionicons } from 'expo-vector-icons';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
     color: Colors.primaryColor,
     fontFamily: 'work-sans-semibold',
     fontSize: 28,
-    marginTop: 5,
     padding: 20,
   },
   buttonContainer: {
@@ -57,7 +56,11 @@ const styles = StyleSheet.create({
 });
 
 const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader }) => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
+
   const dateFormatByLocale = getDateFormatByLocale(moment.locale());
+
   const handleShowReminders = (index) => {
     if (selectedHeader === index) {
       onChangeSelectedHeader(null);
@@ -65,15 +68,57 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
       onChangeSelectedHeader(index);
     }
   };
-  console.log(dateFormatByLocale);
-  var keyC = 0;
+
+  const onDateChange = (event, date) => {
+    setShowPicker(false);
+    if (date) {
+      setSelectedDate(date);
+    }
+  };
+
+  // Filtra los recordatorios según la fecha seleccionada
+  const filteredReminders = reminders.filter((item) => moment.utc(item.date).isSame(moment(selectedDate), 'day'));
 
   return (
-    <View>
-      <Text style={styles.title}>{i18n.t('HOME_SCREEN.REMINDERS')}</Text>
-      {reminders && reminders.length > 0 ? (
+    <View style={{ paddingHorizontal: 15 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <Text style={styles.title}>{i18n.t('HOME_SCREEN.REMINDERS')}</Text>
+
+        <Pressable
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            borderRadius: 15,
+            backgroundColor: Colors.surfaceColorSecondary,
+            borderColor: Colors.primaryColor,
+            borderWidth: 2,
+            //height: 50,
+            width: 170,
+          }}
+          onPress={() => setShowPicker(true)}
+        >
+          <Text
+            style={{
+              fontSize: 12,
+              fontFamily: 'work-sans-medium',
+              fontWeight: '700',
+              color: Colors.primaryColor,
+            }}
+          >
+            {/*moment.utc(selectedDate).format(dateFormatByLocale)*/ i18n.t('HOME_SCREEN.SELECT_DATE')}
+          </Text>
+          <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+        </Pressable>
+      </View>
+
+      {showPicker && <DateTimePicker value={selectedDate} mode="date" display="default" onChange={onDateChange} />}
+
+      {filteredReminders && filteredReminders.length > 0 ? (
         <FlatList
-          data={reminders}
+          data={filteredReminders}
           key={(item) => item.memorialEvents[0]?.entityObject.eventId}
           renderItem={({ item, index }) => {
             const date = moment.utc(item.date).format(dateFormatByLocale);
@@ -124,14 +169,25 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
             );
           }}
         />
-      ) : null}
+      ) : (
+        <Text
+          style={{
+            color: Colors.primaryColor,
+            fontFamily: 'work-sans-semibold',
+            marginTop: 5,
+            textAlign: 'center',
+          }}
+        >
+          {i18n.t('HOME_SCREEN.NO_REMINDERS_FOR_DATE')}
+        </Text>
+      )}
     </View>
   );
 };
 
 RemindersHeaders.propTypes = {
   onChangeSelectedHeader: PropTypes.func.isRequired,
-  //selectedHeader: PropTypes.number.isRequired,
+  selectedHeader: PropTypes.number,
   reminders: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
