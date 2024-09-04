@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -17,12 +17,11 @@ import 'moment/min/locales';
 import countries from 'i18n-iso-countries';
 import * as Contacts from 'expo-contacts';
 import * as Network from 'expo-network';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { NavigationEvents } from 'react-navigation';
+
 import SnackBar from '../components/SnackBar';
 import { I18nContext } from '../context/I18nProvider';
 import Colors from '../constants/Colors';
-import HeaderButton from '../components/HeaderButton';
+
 import DefaultItem from '../components/FatherDetailItem';
 import FatherContactInfo from '../components/FatherContactInfo';
 import { getInterfaceData, getPerson } from '../api';
@@ -30,6 +29,8 @@ import { getDateFormatByLocale, getMonthFormatByLocale } from '../utils/date-uti
 import PastLivingSituations from '../components/PastLivingSituations';
 import ModalProfilePicture from '../components/ModalProfilePicture';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
+
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/de.json'));
@@ -70,7 +71,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const PatreDetailScreen = ({ navigation }) => {
+const PatreDetailScreen = ({ navigation, route }) => {
   const [father, setFather] = useState(null);
   const [showSaveContact, setShowSaveContact] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -143,14 +144,14 @@ const PatreDetailScreen = ({ navigation }) => {
     const loadPerson = async () => {
       const status = await Network.getNetworkStateAsync();
       if (status.isConnected === true) {
-        const fatherId = navigation.getParam('fatherId');
+        const fatherId = route.params.fatherId;
         getPerson(fatherId, false)
           .then((response) => {
             const resFather = response.data.result;
             setFather(resFather);
             console.log('resFather ', resFather);
             loadInterfaceData(resFather);
-            if (navigation.getParam('updated')) {
+            if (route.params.updated) {
               setSnackMsg(i18n.t('GENERAL.EDIT_SUCCESS'));
               setVisible(true);
             }
@@ -168,6 +169,39 @@ const PatreDetailScreen = ({ navigation }) => {
     };
     loadPerson();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      const loadPerson = async () => {
+        const status = await Network.getNetworkStateAsync();
+        if (status.isConnected === true) {
+          const fatherId = route.params.fatherId;
+          getPerson(fatherId, false)
+            .then((response) => {
+              const resFather = response.data.result;
+              setFather(resFather);
+              console.log('resFather ', resFather);
+              loadInterfaceData(resFather);
+              if (route.params.updated) {
+                setSnackMsg(i18n.t('GENERAL.EDIT_SUCCESS'));
+                setVisible(true);
+              }
+            })
+            .catch(() => {
+              setLoading(false);
+              setVisible(true);
+              setSnackMsg(i18n.t('GENERAL.ERROR'));
+            });
+        } else {
+          setLoading(false);
+          setVisible(true);
+          setSnackMsg(i18n.t('GENERAL.NO_INTERNET'));
+        }
+      };
+      loadPerson();
+    }, [navigation]),
+  );
+
   return (
     <I18nContext.Consumer>
       {(value) => {
@@ -177,34 +211,6 @@ const PatreDetailScreen = ({ navigation }) => {
 
         return (
           <View style={styles.screen}>
-            <NavigationEvents
-              onDidFocus={() => {
-                const loadPerson = async () => {
-                  const status = await Network.getNetworkStateAsync();
-                  if (status.isConnected === true) {
-                    const fatherId = navigation.getParam('fatherId');
-                    getPerson(fatherId, false)
-                      .then((response) => {
-                        const resFather = response.data.result;
-                        setFather(resFather);
-                        console.log('resFather ', resFather);
-                        loadInterfaceData(resFather);
-                      })
-                      .catch(() => {
-                        setLoading(false);
-                        setVisible(true);
-                        setSnackMsg(i18n.t('GENERAL.ERROR'));
-                      });
-                  } else {
-                    setLoading(false);
-                    setVisible(true);
-                    setSnackMsg(i18n.t('GENERAL.NO_INTERNET'));
-                  }
-                };
-                loadPerson();
-              }}
-            />
-
             {father ? (
               <ScrollView>
                 <ModalProfilePicture
@@ -256,6 +262,7 @@ const PatreDetailScreen = ({ navigation }) => {
                   handleSaveContact={() => {
                     handleSaveContact(father);
                   }}
+                  navigation={navigation}
                 />
                 {father.activeLivingSituation && (
                   <>
@@ -473,21 +480,5 @@ const PatreDetailScreen = ({ navigation }) => {
     </I18nContext.Consumer>
   );
 };
-
-PatreDetailScreen.navigationOptions = (navigationData) => ({
-  headerTitle: '',
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
 
 export default PatreDetailScreen;

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   View,
   Text,
@@ -10,10 +11,8 @@ import {
   ActivityIndicator,
   TouchableNativeFeedback,
 } from 'react-native';
-import { Flag } from 'react-native-svg-flagkit';
+import CountryFlag from 'react-native-country-flag';
 import { Ionicons } from 'expo-vector-icons';
-import HeaderButton from '../components/HeaderButton';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import Colors from '../constants/Colors';
 import i18n from 'i18n-js';
 import * as Network from 'expo-network';
@@ -37,7 +36,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: Colors.onSurfaceColorPrimary,
     fontFamily: 'work-sans-medium',
-
     marginVertical: 10,
   },
   sectionHeaderContainer: {
@@ -61,6 +59,12 @@ const styles = StyleSheet.create({
 class CommunityScreen extends Component {
   state = {
     delegations: [],
+  };
+
+  static propTypes = {
+    navigation: PropTypes.shape({
+      navigate: PropTypes.func.isRequired,
+    }).isRequired,
   };
 
   _onToggleSnackBar = () => this.setState({ visible: !this.state.visible });
@@ -140,22 +144,6 @@ class CommunityScreen extends Component {
   }
 }
 
-CommunityScreen.navigationOptions = (navigationData) => ({
-  headerTitle: '',
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
-
 const Filiation = ({ title, flag, onSelect }) => {
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -164,20 +152,25 @@ const Filiation = ({ title, flag, onSelect }) => {
 
   return (
     <TouchableComp
-      //key={key}
       onPress={() => {
         onSelect();
       }}
     >
       <View style={styles.item}>
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', width: '80%', alignItems: 'center' }}>
-          <Flag id={flag} size={0.2} />
+          <CountryFlag isoCode={flag} size={20} />
           <Text style={styles.title}>{title}</Text>
         </View>
         <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
       </View>
     </TouchableComp>
   );
+};
+
+Filiation.propTypes = {
+  title: PropTypes.string.isRequired,
+  flag: PropTypes.string.isRequired,
+  onSelect: PropTypes.func.isRequired,
 };
 
 export default CommunityScreen;

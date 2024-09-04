@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   rightReminderContainer: {},
 });
 
-const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader }) => {
+const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader, navigation }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
 
@@ -164,7 +164,7 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
                     </View>
                   )}
                 </Button>
-                {selectedHeader === index && <Reminders reminders={item.memorialEvents} />}
+                {selectedHeader === index && <Reminders reminders={item.memorialEvents} navigation={navigation} />}
               </View>
             );
           }}
@@ -183,12 +183,6 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader })
       )}
     </View>
   );
-};
-
-RemindersHeaders.propTypes = {
-  onChangeSelectedHeader: PropTypes.func.isRequired,
-  selectedHeader: PropTypes.number,
-  reminders: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default RemindersHeaders;

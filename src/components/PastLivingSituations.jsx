@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import i18n from 'i18n-js';
-import { withNavigation } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
 import DefaultItem from './FatherDetailItem';
 import Colors from '../constants/Colors';
@@ -37,7 +36,7 @@ const PastLivingSituations = ({
             <View key={pastHome.startDate}>
               <View style={styles.headerContainer}>
                 <Text style={styles.sectionHeader}>{`${pastHome.filiationName}-${
-                  pastHome.startDate ? pastHome.startDate.split('-')[0] : ""
+                  pastHome.startDate ? pastHome.startDate.split('-')[0] : ''
                 }`}</Text>
                 <Button
                   onPress={() => {
@@ -117,4 +116,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withNavigation(PastLivingSituations);
+export default PastLivingSituations;

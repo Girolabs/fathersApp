@@ -10,14 +10,14 @@ import {
   Platform,
 } from 'react-native';
 import { WebView } from 'react-native-webview';
+import { useFocusEffect } from '@react-navigation/native';
 import i18n from 'i18n-js';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+
 import * as Network from 'expo-network';
-import { NavigationEvents } from 'react-navigation';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
-import HeaderButton from '../components/HeaderButton';
+
 import { getBoardPost, savePinnedPost, saveUnpinnedPost, getPinnedPosts, errorHandler } from '../api';
 import star from '../../assets/star-outline.png';
 import starActive from '../../assets/star-active.png';
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const BulletinDetail = ({ navigation }) => {
+const BulletinDetail = ({ navigation, route }) => {
   const [post, setPost] = useState({});
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
@@ -36,8 +36,8 @@ const BulletinDetail = ({ navigation }) => {
   const [favorite, setFavorite] = useState(false);
   const [id, setId] = useState(null);
 
-  const postId = navigation.getParam('postId');
-  const navigationUrl = navigation.getParam('url');
+  const postId = route.params.postId;
+  const navigationUrl = route.params.url;
 
   const loadPost = async (source) => {
     const status = await Network.getNetworkStateAsync();
@@ -45,7 +45,6 @@ const BulletinDetail = ({ navigation }) => {
       if (source.html) {
         getBoardPost(source.html)
           .then((res) => {
-            console.log(res.data.result);
             const { content } = res.data.result;
             const head =
               '<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style type="text/css"> body {-webkit-user-select:none;-webkit-touch-callout:none; font-family: "Arial"; background-color:#FFFFFF;font-size:1.2em} div { color : black};*{ user-select: none; };</style></head>';
@@ -85,7 +84,7 @@ const BulletinDetail = ({ navigation }) => {
           setFavorite(true);
         }
       })
-      .catch((err) => {
+      .catch(() => {
         setFavorite(false);
       });
   };
@@ -93,8 +92,7 @@ const BulletinDetail = ({ navigation }) => {
   const savePin = () => {
     setLoading(true);
     savePinnedPost(postId).then(
-      (res) => {
-        //Alert.alert(i18n.t('ARCHIVE.SUCCESS'));
+      () => {
         setFavorite(!favorite);
       },
       (err) => {
@@ -107,8 +105,7 @@ const BulletinDetail = ({ navigation }) => {
   const saveUnpin = () => {
     setLoading(true);
     saveUnpinnedPost(postId).then(
-      (res) => {
-        //Alert.alert(i18n.t('ARCHIVE.SUCCESS'));
+      () => {
         setFavorite(!favorite);
       },
       (err) => {
@@ -131,28 +128,36 @@ const BulletinDetail = ({ navigation }) => {
       };
     }
     loadPost(source);
-    console.log('id: ', id);
   }, []);
 
   useEffect(() => {
     loadPinPost();
   }, [favorite, post]);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      // Se ejecuta al enfocar la pantalla
+      const unlockOrientation = async () => {
+        await ScreenOrientation.unlockAsync();
+      };
+
+      unlockOrientation();
+
+      return () => {
+        // Se ejecuta al desenfocar la pantalla
+        const lockOrientation = async () => {
+          await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+        };
+
+        lockOrientation();
+      };
+    }, []),
+  );
+
   const windowHeight = useWindowDimensions().height;
 
   return (
     <View style={styles.screen}>
-      <NavigationEvents
-        onDidFocus={async () => {
-          // Unlock landscape orentation
-          console.log(' Focus on Bulletin Detail ');
-          await ScreenOrientation.unlockAsync();
-        }}
-        onDidBlur={async () => {
-          // Restric orentiation to Portrait Up
-          await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-        }}
-      />
       {!loading ? (
         <>
           <Pressable
@@ -189,21 +194,5 @@ const BulletinDetail = ({ navigation }) => {
     </View>
   );
 };
-
-BulletinDetail.navigationOptions = (navigationData) => ({
-  headerTitle: '',
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
 
 export default BulletinDetail;

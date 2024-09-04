@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import i18n from 'i18n-js';
 
 console.log('El idioma ', i18n.locale);

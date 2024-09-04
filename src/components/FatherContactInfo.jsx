@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Clipboard } from 'react-native';
 import i18n from 'i18n-js';
-import { withNavigation } from 'react-navigation';
 import { Ionicons } from 'expo-vector-icons';
 import PropTypes from 'prop-types';
 import Colors from '../constants/Colors';
@@ -48,7 +47,7 @@ const styles = StyleSheet.create({
 const FatherContactInfo = ({
   navigation,
   father,
-  viewPermissions,
+  viewPermissions = [],
   setSnackBarVisible,
   setSnackMsg,
   handleSaveContact,
@@ -165,34 +164,4 @@ const FatherContactInfo = ({
   );
 };
 
-FatherContactInfo.defaultProps = {
-  viewPermissions: [],
-};
-
-FatherContactInfo.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-  }).isRequired,
-  father: PropTypes.shape({
-    personId: PropTypes.number.isRequired,
-    email: PropTypes.string,
-    phones: PropTypes.arrayOf(
-      PropTypes.shape({
-        label: PropTypes.string,
-        number: PropTypes.string,
-        whatsApp: PropTypes.bool,
-      }),
-    ),
-    facebookUrl: PropTypes.string,
-    slackUser: PropTypes.string,
-    instagramUser: PropTypes.string,
-    skypeUser: PropTypes.string,
-    twitterUser: PropTypes.string,
-  }).isRequired,
-  viewPermissions: PropTypes.arrayOf(PropTypes.string),
-  setSnackBarVisible: PropTypes.func.isRequired,
-  setSnackMsg: PropTypes.func.isRequired,
-  handleSaveContact: PropTypes.func.isRequired,
-};
-
-export default withNavigation(FatherContactInfo);
+export default FatherContactInfo;

@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet, Platform, SafeAreaView, AsyncStorage } from 'react-native';
+import { View, Text, StyleSheet, Platform, SafeAreaView } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import moment from 'moment';
 import 'moment/min/locales';
 import i18n from 'i18n-js';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+
 import { Ionicons } from 'expo-vector-icons';
 import Constants from 'expo-constants';
 import Colors from '../constants/Colors';
-import HeaderButton from '../components/HeaderButton';
+
 import { I18nContext } from '../context/I18nProvider';
 import Select from '../components/Select';
 import Button from '../components/Button';
@@ -106,7 +107,7 @@ const SettingsScreen = (props) => {
             <View style={styles.textContainer}>
               <Text style={styles.text}>{i18n.t('SETTINGS.VERSION')}</Text>
 
-              <Text style={styles.text2}>{Constants.manifest.version}</Text>
+              <Text style={styles.text2}>{Constants.expoConfig.version}</Text>
             </View>
             {Platform.OS === 'android' ? (
               <View style={styles.pickerContainerAndroid}>
@@ -146,21 +147,5 @@ const SettingsScreen = (props) => {
     </I18nContext.Consumer>
   );
 };
-
-SettingsScreen.navigationOptions = (navigationData) => ({
-  headerTitle: '',
-  headerRight: ()=>(
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
 
 export default SettingsScreen;

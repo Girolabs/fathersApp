@@ -11,13 +11,12 @@ import {
   useWindowDimensions,
   KeyboardAvoidingView,
 } from 'react-native';
-import HeaderButton from '../components/HeaderButton';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+
 import i18n from 'i18n-js';
-import Colors from '../constants/Colors';
 import * as _ from 'lodash';
 import { TextInput } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
+import Colors from '../constants/Colors';
 import imageIcon from '../../assets/imageIcon.png';
 import pencil from '../../assets/editpencil.png';
 import { savePhoto, errorHandler } from '../api';
@@ -221,22 +220,5 @@ const GalleryScreen = ({ navigation }) => {
     </KeyboardAvoidingView>
   );
 };
-
-GalleryScreen.navigationOptions = (navigationData) => ({
-  headerTitle: i18n.t('GALLERY.POST_PHOTO'),
-  headerTintColor: Colors.primaryColor,
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
 
 export default GalleryScreen;

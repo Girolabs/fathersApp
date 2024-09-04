@@ -8,9 +8,9 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   ActivityIndicator,
-  Pressable
+  Pressable,
 } from 'react-native';
-import { NavigationEvents } from 'react-navigation';
+
 import i18n from 'i18n-js';
 // import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from 'expo-vector-icons';
@@ -19,10 +19,10 @@ import * as Network from 'expo-network';
 import * as _ from 'lodash';
 import * as Yup from 'yup';
 import { Snackbar } from 'react-native-paper';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Colors from '../constants/Colors';
-import HeaderButton from '../components/HeaderButton';
+
 import {
   getFiliations,
   getTerritories,
@@ -150,7 +150,7 @@ const stylePicker = {
     right: 15,
   },
 };
-const LivingSituationsFormScreen = ({ navigation }) => {
+const LivingSituationsFormScreen = ({ navigation, route }) => {
   const [livingSituation, setLivingSituation] = useState({});
   const [isCreate, setIsCreate] = useState(false);
   const [territories, setTerritories] = useState([]);
@@ -336,8 +336,8 @@ const LivingSituationsFormScreen = ({ navigation }) => {
   }, [statusLabels]);
 
   useEffect(() => {
-    const livingSituation = navigation.getParam('livingSituation');
-    const paramPersonId = navigation.getParam('personId');
+    const livingSituation = route.params.livingSituation;
+    const paramPersonId = route.params.personId;
     if (!paramPersonId) {
       navigation.goBack();
     }
@@ -360,11 +360,6 @@ const LivingSituationsFormScreen = ({ navigation }) => {
 
   return (
     <>
-      <NavigationEvents
-        onDidFocus={() => {
-          console.log('onDidFocus');
-        }}
-      />
       <KeyboardAvoidingView style={{ flex: 1, paddingHorizontal: 15 }}>
         <SafeAreaView style={styles.screen}>
           {!loading ? (
@@ -564,28 +559,28 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                     </View>
                     <View>
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.START_DATE')}</Text>
-                        <Pressable
-                            style={{
-                                position: 'absolute',
-                                left: '58%',
-                                flexDirection: 'row',
-                                backgroundColor: Colors.primaryColor,
-                                padding: 3,
-                                borderRadius: 5,
-                                marginTop:10
-                            }}
-                            onPress={() => {
-                                setFieldValue('startDate', null);
-                            }}
-                        >
+                      <Pressable
+                        style={{
+                          position: 'absolute',
+                          left: '58%',
+                          flexDirection: 'row',
+                          backgroundColor: Colors.primaryColor,
+                          padding: 3,
+                          borderRadius: 5,
+                          marginTop: 10,
+                        }}
+                        onPress={() => {
+                          setFieldValue('startDate', null);
+                        }}
+                      >
                         <Text
-                            style={{
+                          style={{
                             color: 'white',
-                            }}
+                          }}
                         >
-                            {i18n.t('ASSIGNMENTS_FORM.MARK_NULL')}
+                          {i18n.t('ASSIGNMENTS_FORM.MARK_NULL')}
                         </Text>
-                        </Pressable>
+                      </Pressable>
                       <Button onPress={() => setOpenStartDate(true)}>
                         <View style={styles.inputContainer}>
                           <Text style={styles.inputDatePicker}>{_.get(values, 'startDate') || ''}</Text>
@@ -595,28 +590,28 @@ const LivingSituationsFormScreen = ({ navigation }) => {
                     </View>
                     <View>
                       <Text style={styles.label}>{i18n.t('LIVING_SITUATION.END_DATE')}</Text>
-                        <Pressable
-                            style={{
-                                position: 'absolute',
-                                left: '58%',
-                                flexDirection: 'row',
-                                padding: 3,
-                                backgroundColor: Colors.primaryColor,
-                                borderRadius: 5,
-                                marginTop:10
-                            }}
-                            onPress={() => {
-                                setFieldValue('endDate', null);
-                            }}
-                            >
-                            <Text
-                                style={{
-                                color: 'white',
-                                }}
-                            >
-                                {i18n.t('ASSIGNMENTS_FORM.MARK_NULL')}
-                            </Text>
-                            </Pressable>
+                      <Pressable
+                        style={{
+                          position: 'absolute',
+                          left: '58%',
+                          flexDirection: 'row',
+                          padding: 3,
+                          backgroundColor: Colors.primaryColor,
+                          borderRadius: 5,
+                          marginTop: 10,
+                        }}
+                        onPress={() => {
+                          setFieldValue('endDate', null);
+                        }}
+                      >
+                        <Text
+                          style={{
+                            color: 'white',
+                          }}
+                        >
+                          {i18n.t('ASSIGNMENTS_FORM.MARK_NULL')}
+                        </Text>
+                      </Pressable>
                       <Button onPress={() => setOpenEndDate(true)}>
                         <View style={styles.inputContainer}>
                           <Text style={styles.inputDatePicker}>{_.get(values, 'endDate') || ''}</Text>
@@ -673,21 +668,5 @@ const LivingSituationsFormScreen = ({ navigation }) => {
     </>
   );
 };
-
-LivingSituationsFormScreen.navigationOptions = (navigationData) => ({
-  headerTitle: '',
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
 
 export default LivingSituationsFormScreen;

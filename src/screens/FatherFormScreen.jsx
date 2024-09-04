@@ -3,23 +3,22 @@ import {
   View,
   Text,
   StyleSheet,
-  AsyncStorage,
   Platform,
   ActivityIndicator,
   KeyboardAvoidingView,
   ScrollView,
   SafeAreaView,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import InputWithFormik from '../components/InputWithFormik';
-import HeaderButton from '../components/HeaderButton';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+
 import * as Network from 'expo-network';
 import i18n from 'i18n-js';
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
-import { NavigationEvents } from 'react-navigation';
+
 import { getPerson, getInterfaceData, updateFatherForm } from '../api';
 import Button from '../components/Button';
 import SwitchWithFormik from '../components/SwitchWithFormik';
@@ -164,7 +163,20 @@ class FatherFormScreen extends Component {
   };
   async componentDidMount() {
     this.setState({ loading: true });
+
+    // Llama a loadPerson cuando el componente se monta
     await this.loadPerson();
+
+    // Añade el listener para llamar a loadPerson cada vez que la pantalla esté enfocada
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener('focus', this.loadPerson);
+  }
+
+  componentWillUnmount() {
+    // Elimina el listener para evitar fugas de memoria
+    if (this.focusListener) {
+      this.focusListener();
+    }
   }
 
   loadInterfaceData = async (father) => {
@@ -228,10 +240,10 @@ class FatherFormScreen extends Component {
 
   loadPerson = async () => {
     this.setState({ loading: true });
-    const { navigation } = this.props;
+    const { navigation, route } = this.props;
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
-      let fatherId = this.props.navigation.getParam('fatherId');
+      let fatherId = route.params.fatherId;
       if (!fatherId) {
         fatherId = await AsyncStorage.getItem('fatherId');
         fatherId = JSON.parse(fatherId);
@@ -338,11 +350,6 @@ class FatherFormScreen extends Component {
 
     return (
       <>
-        <NavigationEvents
-          onDidFocus={async () => {
-            await this.loadPerson();
-          }}
-        />
         <SafeAreaView style={styles.screen}>
           {!loading ? (
             <>
@@ -929,41 +936,5 @@ class FatherFormScreen extends Component {
     );
   }
 }
-
-FatherFormScreen.navigationOptions = (navigationData) => {
-  const showMenu = navigationData.navigation.isFirstRouteInParent();
-  if (showMenu) {
-    return {
-      headerTitle: '',
-      headerRight: () => (
-        <HeaderButtons HeaderButtonComponent={HeaderButton}>
-          <Item
-            title="Menu"
-            iconName="md-menu"
-            onPress={() => {
-              navigationData.navigation.toggleDrawer();
-            }}
-          />
-        </HeaderButtons>
-      ),
-    };
-  } else {
-    return {
-      headerTitle: '',
-      headerRight: () => (
-        <HeaderButtons HeaderButtonComponent={HeaderButton}>
-          <Item
-            title="Menu"
-            iconName="md-menu"
-            onPress={() => {
-              navigationData.navigation.toggleDrawer();
-            }}
-          />
-        </HeaderButtons>
-      ),
-      headerBackTitle: i18n.t('GENERAL.BACK'),
-    };
-  }
-};
 
 export default FatherFormScreen;

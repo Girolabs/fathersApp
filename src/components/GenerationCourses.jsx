@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import { withNavigation } from 'react-navigation';
 import i18n from 'i18n-js';
 import moment from 'moment';
 import Button from './Button';
@@ -139,4 +138,4 @@ const GenerationCourses = ({ navigation, courses }) => {
   );
 };
 
-export default withNavigation(GenerationCourses);
+export default GenerationCourses;

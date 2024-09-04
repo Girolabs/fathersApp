@@ -19,8 +19,7 @@ import moment from 'moment';
 import 'moment/min/locales';
 import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import HeaderButton from '../components/HeaderButton';
+
 import { getGeneration, getGenerations, assigmentsUserPermissions } from '../api';
 import IdealStatement from '../components/IdealStatement';
 import GenerationCourses from '../components/GenerationCourses';
@@ -28,7 +27,7 @@ import { getDateFormatByLocale, getDateMaskByLocale, getDateMaskForm } from '../
 import pencil from '../../assets/editpencil.png';
 import { Ionicons } from 'expo-vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { withNavigation } from 'react-navigation';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   screen: {
@@ -158,22 +157,34 @@ class GenerationDetailScreen extends Component {
         this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
       });
   };
+
+  updateGeneration = () => {
+    const { navigation, route } = this.props;
+    const generationId = route.params.generationId;
+    this.loadGeneration(generationId, false);
+    console.log('refresh!');
+  };
+
   async componentDidMount() {
-    const { navigation } = this.props;
-    const generationId = navigation.getParam('generationId');
+    const { navigation, route } = this.props;
+    const generationId = route.params.generationId;
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      this.focusListener = navigation.addListener('didFocus', () => {
-        this.loadGeneration(generationId, false);
-        console.log('refresh!');
-      });
+      this.loadGeneration(generationId, false);
+      this.focusListener = this.props.navigation.addListener('focus', this.updateGeneration);
+      this.blurListener = this.props.navigation.addListener('blur', this.updateGeneration);
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    if (this.focusListener) {
+      this.focusListener();
+    }
+    if (this.blurListener) {
+      this.blurListener();
+    }
   }
 
   render() {
@@ -377,20 +388,4 @@ class GenerationDetailScreen extends Component {
   }
 }
 
-GenerationDetailScreen.navigationOptions = (navigationData) => ({
-  headerTitle: '',
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
-
-export default withNavigation(GenerationDetailScreen);
+export default GenerationDetailScreen;

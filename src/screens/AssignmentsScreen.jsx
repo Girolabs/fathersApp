@@ -11,20 +11,19 @@ import {
   SectionList,
   Image,
   ScrollView,
-  AsyncStorage,
   Pressable,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
 import { Ionicons } from 'expo-vector-icons';
 import moment from 'moment';
 import 'moment/min/locales';
 import { I18nContext } from '../context/I18nProvider';
-import { Flag } from 'react-native-svg-flagkit';
-import HeaderButton from '../components/HeaderButton';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import CountryFlag from 'react-native-country-flag';
+import PropTypes from 'prop-types';
 import { getTerritories, getFiliations, getGenerations, getCourses } from '../api';
-import { NavigationEvents } from 'react-navigation';
+
 import { getDateMaskByLocale } from '../utils/date-utils';
 import deceasedIcon from '../../assets/deceasedIcon.png';
 
@@ -124,6 +123,13 @@ class AssignmentsScreen extends Component {
     language: [],
   };
 
+  static propTypes = {
+    navigation: PropTypes.shape({
+      navigate: PropTypes.func.isRequired,
+      addListener: PropTypes.func.isRequired,
+    }).isRequired,
+  };
+
   updateLang = async () => {
     const lang = await AsyncStorage.getItem('lang');
     this.setState({ language: lang });
@@ -194,6 +200,18 @@ class AssignmentsScreen extends Component {
   };
   componentDidMount() {
     this.loadAllData();
+    // Add listeners for screen focus
+    this.focusListener = this.props.navigation.addListener('focus', this.updateAssignments);
+    this.blurListener = this.props.navigation.addListener('blur', this.updateAssignments);
+  }
+  componentWillUnmount() {
+    // Remove listeners
+    if (this.focusListener) {
+      this.focusListener();
+    }
+    if (this.blurListener) {
+      this.blurListener();
+    }
   }
   updateAssignments = async () => {
     const lang = await AsyncStorage.getItem('lang');
@@ -354,7 +372,7 @@ class AssignmentsScreen extends Component {
                                       >
                                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                           <Text style={styles.itemTextTitle}>{asg.filiationName}</Text>
-                                          <Flag id={asg.country} size={0.1} />
+                                          <CountryFlag isoCode={asg.country} size={10} />
                                         </View>
                                       </TouchableComp>
 
@@ -530,13 +548,6 @@ class AssignmentsScreen extends Component {
           moment.locale(value.lang);
           return (
             <SafeAreaView style={styles.screen}>
-              <NavigationEvents
-                onDidFocus={() => {
-                  if (this.state.territories) {
-                    this.updateAssignments();
-                  }
-                }}
-              />
               {!this.state.loading ? (
                 <>
                   <View style={styles.tabsGroup}>
@@ -575,22 +586,6 @@ class AssignmentsScreen extends Component {
     );
   }
 }
-
-AssignmentsScreen.navigationOptions = (navigationData) => ({
-  headerTitle: '',
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
 
 const Header = (props) => {
   const { name, selectHeader } = props;

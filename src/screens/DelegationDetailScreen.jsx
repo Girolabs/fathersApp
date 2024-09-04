@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import i18n from 'i18n-js';
 import { FlatList } from 'react-native-gesture-handler';
-import { Flag } from 'react-native-svg-flagkit';
+import CountryFlag from 'react-native-country-flag';
 import Colors from '../constants/Colors';
 import moment from 'moment';
 import 'moment/min/locales';
@@ -22,14 +22,14 @@ import { I18nContext } from '../context/I18nProvider';
 import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
 import { getTerritory, assigmentsUserPermissions } from '../api';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import HeaderButton from '../components/HeaderButton';
+
 import { FontAwesome5 } from '@expo/vector-icons';
 import IdealStatement from '../components/IdealStatement';
 import { getDateMaskByLocale, getDateFormatByLocale, getDateMaskForm } from '../utils/date-utils';
 import { Ionicons } from 'expo-vector-icons';
 import pencil from '../../assets/editpencil.png';
-import { withNavigation } from 'react-navigation';
+import PropTypes from 'prop-types';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   screen: {
@@ -169,6 +169,19 @@ class DelegationDetailScreen extends Component {
     permission: {},
   };
 
+  static propTypes = {
+    navigation: PropTypes.shape({
+      addListener: PropTypes.func.isRequired,
+      navigate: PropTypes.func.isRequired,
+    }).isRequired,
+    route: PropTypes.shape({
+      params: PropTypes.shape({
+        filiationId: PropTypes.number.isRequired,
+        delegationId: PropTypes.number.isRequired,
+      }).isRequired,
+    }).isRequired,
+  };
+
   loadTerritory = (territoryId, fields) => {
     assigmentsUserPermissions().then((res) => this.setState({ permission: res.data.result }));
     getTerritory(territoryId, fields)
@@ -195,15 +208,21 @@ class DelegationDetailScreen extends Component {
       });
   };
 
+  updateTerritory = () => {
+    const { navigation, route } = this.props;
+    const territoryId = route.params.delegationId;
+    this.loadTerritory(territoryId, 'all');
+    console.log('refresh!');
+  };
+
   async componentDidMount() {
-    const { navigation } = this.props;
-    const territoryId = navigation.getParam('delegationId');
+    const { navigation, route } = this.props;
+    const territoryId = route.params.delegationId;
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
-      this.focusListener = navigation.addListener('didFocus', () => {
-        this.loadTerritory(territoryId, 'all');
-        console.log('refresh!');
-      });
+      this.loadTerritory(territoryId, 'all');
+      this.focusListener = this.props.navigation.addListener('focus', this.updateTerritory);
+      this.blurListener = this.props.navigation.addListener('blur', this.updateTerritory);
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
@@ -223,7 +242,12 @@ class DelegationDetailScreen extends Component {
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    if (this.focusListener) {
+      this.focusListener();
+    }
+    if (this.blurListener) {
+      this.blurListener();
+    }
   }
 
   render() {
@@ -410,7 +434,7 @@ class DelegationDetailScreen extends Component {
                               >
                                 <View style={styles.card}>
                                   <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                    <Flag id={filiation.country} size={0.1} />
+                                    <CountryFlag isoCode={filiation.country} size={10} />
                                     <Text style={styles.cardTitle}>{filiation.name}</Text>
                                   </View>
 
@@ -478,20 +502,4 @@ class DelegationDetailScreen extends Component {
   }
 }
 
-DelegationDetailScreen.navigationOptions = (navigationData) => ({
-  headerTitle: '',
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
-
-export default withNavigation(DelegationDetailScreen);
+export default DelegationDetailScreen;

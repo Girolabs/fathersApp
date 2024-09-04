@@ -2,8 +2,7 @@ import React from 'react';
 import { View, StyleSheet, FlatList, Text, Linking, Image } from 'react-native';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from 'expo-vector-icons';
-import { Flag } from 'react-native-svg-flagkit';
-import { withNavigation } from 'react-navigation';
+import CountryFlag from 'react-native-country-flag';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import Colors from '../constants/Colors';
@@ -46,7 +45,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Reminders = ({ navigation, reminders }) => {
+const Reminders = ({ navigation, reminders = [] }) => {
   const getIcon = (dateType) => {
     let icon = null;
     switch (dateType) {
@@ -136,7 +135,7 @@ const Reminders = ({ navigation, reminders }) => {
   return (
     <FlatList
       data={reminders}
-      keyExtractor={(item) => item.entityId.toString()+ item.dateType}
+      keyExtractor={(item) => item.entityId.toString() + item.dateType}
       renderItem={({ item }) => {
         const IconComp = getIcon(item.dateType);
         const path = getPath(item.kind);
@@ -151,7 +150,7 @@ const Reminders = ({ navigation, reminders }) => {
                   <View style={styles.iconContainer}>{IconComp}</View>
                   <View style={styles.flagContainer}>
                     {item.entityCountry != null ? (
-                      <Flag id={item.entityCountry} size={0.15} />
+                      <CountryFlag isoCode={item.entityCountry} size={15} />
                     ) : (
                       <Ionicons name="ios-flag" size={23} color={Colors.primaryColor} />
                     )}
@@ -211,15 +210,4 @@ const Reminders = ({ navigation, reminders }) => {
   );
 };
 
-Reminders.defaultProps = {
-  reminders: [],
-};
-
-Reminders.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-  }).isRequired,
-  reminders: PropTypes.arrayOf(PropTypes.object),
-};
-
-export default withNavigation(Reminders);
+export default Reminders;

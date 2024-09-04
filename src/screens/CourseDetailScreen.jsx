@@ -18,12 +18,11 @@ import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
 import moment from 'moment';
 import 'moment/min/locales';
-import { Flag } from 'react-native-svg-flagkit';
+import CountryFlag from 'react-native-country-flag';
 
 import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import HeaderButton from '../components/HeaderButton';
+
 import { getCourse, getPerson, assigmentsUserPermissions } from '../api';
 import IdealStatement from '../components/IdealStatement';
 import { getDateMaskByLocale, getDateFormatByLocale, getDateMaskForm } from '../utils/date-utils';
@@ -31,7 +30,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { Entypo } from 'expo-vector-icons';
 import pencil from '../../assets/editpencil.png';
 import { Ionicons } from 'expo-vector-icons';
-import { withNavigation } from 'react-navigation';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   screen: {
@@ -153,24 +152,34 @@ class CourseDetailScreen extends Component {
       });
   };
 
+  updateCourse = () => {
+    const { navigation, route } = this.props;
+    const courseId = route.params.courseId;
+    this.loadCourse(courseId, false, i18n.locale);
+    console.log('refresh!');
+  };
+
   async componentDidMount() {
-    const { navigation } = this.props;
-    const courseId = navigation.getParam('courseId');
+    const { navigation, route } = this.props;
+    const courseId = route.params.courseId;
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected === true) {
-      this.focusListener = navigation.addListener('didFocus', () => {
-        this.loadCourse(courseId, false, i18n.locale);
-        console.log('refresh!');
-      });
+      this.loadCourse(courseId, false, i18n.locale);
+      this.focusListener = this.props.navigation.addListener('focus', this.updateCourse);
+      this.blurListener = this.props.navigation.addListener('blur', this.updateCourse);
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    if (this.focusListener) {
+      this.focusListener();
+    }
+    if (this.blurListener) {
+      this.blurListener();
+    }
   }
-
   render() {
     let TouchableComp = TouchableOpacity;
     if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -300,7 +309,9 @@ class CourseDetailScreen extends Component {
                                 {course.novitiateFiliation ? course.novitiateFiliation.name : ''}
                               </Text>
                             </View>
-                            {course.novitiateFiliation && <Flag id={course.novitiateFiliation.country} size={0.2} />}
+                            {course.novitiateFiliation && (
+                              <CountryFlag isoCode={course.novitiateFiliation.country} size={20} />
+                            )}
                           </View>
                         </View>
                       </TouchableComp>
@@ -395,7 +406,7 @@ class CourseDetailScreen extends Component {
                                 <Text style={styles.listItemBody}>{course.firstTertianshipFiliation.name}</Text>
                               </View>
                               {course.firstTertianshipFiliation.country && (
-                                <Flag id={course.firstTertianshipFiliation.country} size={0.2} />
+                                <CountryFlag isoCode={course.firstTertianshipFiliation.country} size={20} />
                               )}
                             </View>
                           </View>
@@ -462,7 +473,7 @@ class CourseDetailScreen extends Component {
                                 <Text style={styles.listItemBody}>{course.secondTertianshipFiliation.name}</Text>
                               </View>
                               {course.secondTertianshipFiliation.country && (
-                                <Flag id={course.secondTertianshipFiliation.country} size={0.2} />
+                                <CountryFlag isoCode={course.secondTertianshipFiliation.country} size={20} />
                               )}
                             </View>
                           </View>
@@ -530,7 +541,7 @@ class CourseDetailScreen extends Component {
                                 <Text style={styles.listItemBody}>{course.sionzeitFiliation.name}</Text>
                               </View>
                               {course.sionzeitFiliation.country && (
-                                <Flag id={course.sionzeitFiliation.country} size={0.2} />
+                                <CountryFlag isoCode={course.sionzeitFiliation.country} size={20} />
                               )}
                             </View>
                           </View>
@@ -794,20 +805,4 @@ class CourseDetailScreen extends Component {
   }
 }
 
-CourseDetailScreen.navigationOptions = (navigationData) => ({
-  headerTitle: '',
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
-
-export default withNavigation(CourseDetailScreen);
+export default CourseDetailScreen;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import {
   View,
   Text,
@@ -15,15 +15,13 @@ import * as Network from 'expo-network';
 import i18n from 'i18n-js';
 import { Ionicons } from 'expo-vector-icons';
 import * as Linking from 'expo-linking';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { NavigationEvents } from 'react-navigation';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
-import HeaderButton from '../components/HeaderButton';
 import { getBoard } from '../api';
 import { BulletinCheckContext } from '../context/BulletinCheckProvider';
 import archive from '../../assets/archive.png';
+import { useFocusEffect } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   screen: {
@@ -121,6 +119,18 @@ const BulletinScreen = ({ navigation }) => {
     };
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      // Unlock landscape orientation when the screen is focused
+      ScreenOrientation.unlockAsync();
+
+      return () => {
+        // Restrict orientation to PORTRAIT_UP when leaving the screen
+        ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+      };
+    }, []),
+  );
+
   useEffect(() => {
     getBoard()
       .then((res) => {
@@ -145,18 +155,6 @@ const BulletinScreen = ({ navigation }) => {
 
   return (
     <View style={styles.screen}>
-      <NavigationEvents
-        onDidFocus={async () => {
-          // Unlock landscape orentation
-          await ScreenOrientation.unlockAsync();
-        }}
-        onWillBlur={async (pay) => {
-          // if the next navigation is not BulletinDetail, restric orientation to PortraitUp mode
-          if (pay.state.routeName !== 'BulletinDetail') {
-            await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-          }
-        }}
-      />
       {!loading ? (
         <>
           <View
@@ -243,21 +241,5 @@ const BulletinScreen = ({ navigation }) => {
     </View>
   );
 };
-
-BulletinScreen.navigationOptions = (navigationData) => ({
-  headerTitle: '',
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
 
 export default BulletinScreen;

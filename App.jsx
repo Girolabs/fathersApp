@@ -1,17 +1,16 @@
-import React, { useRef } from 'react';
-
+import React from 'react';
 import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
+import { NavigationContainer } from '@react-navigation/native';
 import PatresNavigator from './src/navigator/PatresNavigator';
 import I18nProvider from './src/context/I18nProvider';
 import AuthProvider from './src/context/AuthProvider';
 import BulletinCheckProvider from './src/context/BulletinCheckProvider';
-import { NavigationActions } from 'react-navigation';
+import { useNavigationContainerRef } from '@react-navigation/native';
 import { addResponseInterceptor } from './src/api';
+import AsyncStorage from '@react-native-community/async-storage';
 
 export default function App() {
-  const navigation = useRef();
-
   const [fontsLoaded] = useFonts({
     'work-sans': require('./assets/fonts/WorkSans-Regular.ttf'),
     'work-sans-medium': require('./assets/fonts/WorkSans-Medium.ttf'),
@@ -19,13 +18,17 @@ export default function App() {
     'work-sans-bold': require('./assets/fonts/WorkSans-Bold.ttf'),
   });
 
+  const navigationRef = useNavigationContainerRef();
+
   const responseInterceptor = async (response) => {
     console.log('ejecutando interceptor');
-    if (response.status == 401) {
-      //logout
+    if (response.status === 401) {
+      // Logout
       try {
         await AsyncStorage.removeItem('token');
-        navigation.current.dispatch(NavigationActions.navigate({ routeName: 'Auth' }));
+        if (navigationRef.isReady()) {
+          navigationRef.navigate('Auth');
+        }
       } catch (e) {
         console.error(e);
       }
@@ -39,11 +42,14 @@ export default function App() {
   if (!fontsLoaded) {
     return <AppLoading />;
   }
+
   return (
     <AuthProvider>
       <I18nProvider>
         <BulletinCheckProvider>
-          <PatresNavigator ref={(nav) => (navigation.current = nav)} />
+          <NavigationContainer ref={navigationRef}>
+            <PatresNavigator />
+          </NavigationContainer>
         </BulletinCheckProvider>
       </I18nProvider>
     </AuthProvider>

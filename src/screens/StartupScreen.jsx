@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import {
-  AsyncStorage, ActivityIndicator, View, StyleSheet,
-} from 'react-native';
+import { ActivityIndicator, View, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import Colors from '../constants/Colors';
+import PropTypes from 'prop-types';
 
 const styles = StyleSheet.create({
   screen: {
@@ -13,6 +13,11 @@ const styles = StyleSheet.create({
 });
 
 class StartupScreen extends Component {
+  static propTypes = {
+    navigation: PropTypes.shape({
+      navigate: PropTypes.func.isRequired,
+    }).isRequired,
+  };
   componentDidMount() {
     const tryLogin = async () => {
       const token = await AsyncStorage.getItem('token');
@@ -44,7 +49,5 @@ class StartupScreen extends Component {
     );
   }
 }
-
-
 
 export default StartupScreen;

@@ -6,23 +6,21 @@ import {
   ScrollView,
   Pressable,
   ActivityIndicator,
-  AsyncStorage,
   useWindowDimensions,
   Alert,
   Platform,
   KeyboardAvoidingView,
 } from 'react-native';
 import React from 'react';
-import HeaderButton from '../components/HeaderButton';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import heart from '../../assets/heart.png';
 import heartActive from '../../assets/heartActive.png';
 import comments from '../../assets/message-circle.png';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import { NavigationEvents } from 'react-navigation';
+
 import { useState, useRef } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
 import {
@@ -43,9 +41,10 @@ import icon from '../../assets/img/icon_app.png';
 import { Ionicons } from 'expo-vector-icons';
 import pencil from '../../assets/editpencil.png';
 import { ImageZoom } from '@likashefqet/react-native-image-zoom';
+import { useFocusEffect } from '@react-navigation/native';
 
-const PhotoScreen = ({ navigation }) => {
-  const photoID = navigation.getParam('galleryPhotoId');
+const PhotoScreen = ({ navigation, route }) => {
+  const photoID = route.params.galleryPhotoId;
   const [loading, setLoading] = useState(true);
   const [like, setLike] = useState(false);
   const [totalComments, setTotalComments] = useState([]);
@@ -179,6 +178,26 @@ const PhotoScreen = ({ navigation }) => {
     };
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      // Se ejecuta al enfocar la pantalla
+      const unlockOrientation = async () => {
+        await ScreenOrientation.unlockAsync();
+      };
+
+      unlockOrientation();
+
+      return () => {
+        // Se ejecuta al desenfocar la pantalla
+        const lockOrientation = async () => {
+          await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+        };
+
+        lockOrientation();
+      };
+    }, []),
+  );
+
   /*useEffect(() => {
     loadUser();
   }, [userId]);*/
@@ -196,12 +215,6 @@ const PhotoScreen = ({ navigation }) => {
       style={{ flex: 1 }}
     >
       <ScrollView>
-        <NavigationEvents
-          onDidFocus={async () => {
-            // Unlock landscape orentation
-            await ScreenOrientation.unlockAsync();
-          }}
-        />
         {!loading ? (
           <View
             style={{
@@ -673,22 +686,5 @@ const PhotoScreen = ({ navigation }) => {
     </KeyboardAvoidingView>
   );
 };
-
-PhotoScreen.navigationOptions = (navigationData) => ({
-  headerTitle: i18n.t('GALLERY.PHOTO'),
-  headerTintColor: Colors.primaryColor,
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
 
 export default PhotoScreen;

@@ -8,8 +8,6 @@ import SnackBar from '../components/SnackBar';
 import { Pressable } from 'react-native';
 import { ScrollView } from 'react-native';
 import BulletinItem from '../components/BulletinItem';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import HeaderButton from '../components/HeaderButton';
 
 const ArchiveScreen = ({ navigation }) => {
   const [posts, setPosts] = useState([]);
@@ -126,21 +124,5 @@ const ArchiveScreen = ({ navigation }) => {
     </ScrollView>
   );
 };
-
-ArchiveScreen.navigationOptions = (navigationData) => ({
-  headerTitle: i18n.t('ARCHIVE.EDIT'),
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
 
 export default ArchiveScreen;

@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  View, StyleSheet, TouchableNativeFeedback, TouchableOpacity, Platform, Linking,
-} from 'react-native';
+import { View, StyleSheet, TouchableNativeFeedback, TouchableOpacity, Platform, Linking } from 'react-native';
 import { Ionicons } from 'expo-vector-icons';
 import PropTypes from 'prop-types';
 import Colors from '../constants/Colors';
@@ -15,9 +13,7 @@ const styles = StyleSheet.create({
     margin: 5,
   },
 });
-const SocialIcons = ({
-  wa, fb, slack, tw, ig, skype, size,
-}) => {
+const SocialIcons = ({ wa = '', tw = '', slack = '', ig = '', skype = '', fb = '', size = 24 }) => {
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableComp = TouchableNativeFeedback;

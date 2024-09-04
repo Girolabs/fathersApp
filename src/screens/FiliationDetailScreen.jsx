@@ -16,26 +16,39 @@ import Colors from '../constants/Colors';
 import { I18nContext } from '../context/I18nProvider';
 import i18n from 'i18n-js';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Flag } from 'react-native-svg-flagkit';
+import CountryFlag from 'react-native-country-flag';
 import moment from 'moment';
 import 'moment/min/locales';
 import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import HeaderButton from '../components/HeaderButton';
+import PropTypes from 'prop-types';
 import { assigmentsUserPermissions, getFiliation } from '../api';
 import FiliationHouses from '../components/FiliationHouses';
 import { getDateMaskByLocale, getDateMaskForm } from '../utils/date-utils';
 import { Ionicons } from 'expo-vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import pencil from '../../assets/editpencil.png';
-import { withNavigation } from 'react-navigation';
+import { useNavigation } from '@react-navigation/native';
+
 class FiliationDetailScreen extends Component {
   state = {
     filiation: null,
     showHistorical: false,
     permission: {},
   };
+
+  static propTypes = {
+    navigation: PropTypes.shape({
+      addListener: PropTypes.func.isRequired,
+      navigate: PropTypes.func.isRequired,
+    }).isRequired,
+    route: PropTypes.shape({
+      params: PropTypes.shape({
+        filiationId: PropTypes.number.isRequired,
+      }).isRequired,
+    }).isRequired,
+  };
+
   loadFiliation = (filiationId, fields) => {
     assigmentsUserPermissions().then((res) => this.setState({ permission: res.data.result }));
     getFiliation(filiationId, fields)
@@ -52,22 +65,33 @@ class FiliationDetailScreen extends Component {
       });
   };
 
+  updateFiliation = () => {
+    const { navigation, route } = this.props;
+    const filiationId = route.params.filiationId;
+    this.loadFiliation(filiationId, false);
+    console.log('refresh!');
+  };
+
   async componentDidMount() {
-    const { navigation } = this.props;
-    const filiationId = navigation.getParam('filiationId');
+    const { navigation, route } = this.props;
+    const filiationId = route.params.filiationId;
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      this.focusListener = navigation.addListener('didFocus', () => {
-        this.loadFiliation(filiationId, false);
-        console.log('refresh!');
-      });
+      this.loadFiliation(filiationId, false);
+      this.focusListener = this.props.navigation.addListener('focus', this.updateFiliation);
+      this.blurListener = this.props.navigation.addListener('blur', this.updateFiliation);
     } else {
       this.setState({ snackMsg: i18n.t('GENERAL.NO_INTERNET'), visible: true, loading: false });
     }
   }
 
   componentWillUnmount() {
-    this.focusListener.remove();
+    if (this.focusListener) {
+      this.focusListener();
+    }
+    if (this.blurListener) {
+      this.blurListener();
+    }
   }
 
   render() {
@@ -90,7 +114,7 @@ class FiliationDetailScreen extends Component {
                   {/*remove  ScrollView */}
                   <View style={styles.titleContainer}>
                     <Text style={styles.title}>{filiation.name}</Text>
-                    <Flag id={filiation.country} size={0.2} />
+                    <CountryFlag isoCode={filiation.country} size={20} />
                   </View>
                   <View>
                     <Text style={styles.sectionHeader}>{i18n.t('FILIAL_DETAIL.FILIAL_INFO')}</Text>
@@ -323,22 +347,6 @@ class FiliationDetailScreen extends Component {
   }
 }
 
-FiliationDetailScreen.navigationOptions = (navigationData) => ({
-  headerTitle: '',
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
-
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -450,4 +458,4 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondaryColor,
   },
 });
-export default withNavigation(FiliationDetailScreen);
+export default FiliationDetailScreen;

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator, Image, FlatList, Clipboard } from 'react-native';
 import Colors from '../constants/Colors';
 import { I18nContext } from '../context/I18nProvider';
-import { Flag } from 'react-native-svg-flagkit';
+import CountryFlag from 'react-native-country-flag';
 import i18n from 'i18n-js';
 import moment from 'moment';
 import 'moment/min/locales';
@@ -10,8 +10,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import countries from 'i18n-iso-countries';
 import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import HeaderButton from '../components/HeaderButton';
+
 import { getHouse, getFiliation, getPersons } from '../api';
 import { Ionicons } from 'expo-vector-icons';
 import Button from '../components/Button';
@@ -95,8 +94,8 @@ class HouseDetailScreen extends Component {
   };
 
   loadHouse = (houseId, fields) => {
-    getPersons().then((res)=> {
-      console.log(res.data.result)/*.filter( (r) => r.activeLivingSituation !== null).map( (r) => {
+    getPersons().then((res) => {
+      console.log(res.data.result); /*.filter( (r) => r.activeLivingSituation !== null).map( (r) => {
         return {house: r.activeLivingSituation}
       }));*/
     });
@@ -122,8 +121,8 @@ class HouseDetailScreen extends Component {
   };
 
   async componentDidMount() {
-    const { navigation } = this.props;
-    const houseId = navigation.getParam('houseId');
+    const { navigation, route } = this.props;
+    const houseId = route.params.houseId;
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
       this.loadHouse(houseId, false);
@@ -152,7 +151,7 @@ class HouseDetailScreen extends Component {
                         )}
                       </View>
 
-                      <Flag id={house.country} size={0.2} />
+                      <CountryFlag isoCode={house.country} size={20} />
                     </View>
                     <View>
                       <Text style={styles.sectionHeader}>{i18n.t('HOUSE_DETAIL.HOUSE_INFO')}</Text>
@@ -337,20 +336,5 @@ class HouseDetailScreen extends Component {
     );
   }
 }
-HouseDetailScreen.navigationOptions = (navigationData) => ({
-  headerTitle: '',
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
 
 export default HouseDetailScreen;

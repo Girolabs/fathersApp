@@ -9,8 +9,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import HeaderButton from '../components/HeaderButton';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
 import like from '../../assets/heart-white.png';
@@ -351,22 +350,5 @@ const PhotosScreen = ({ navigation }) => {
     </ScrollView>
   );
 };
-
-PhotosScreen.navigationOptions = (navigationData) => ({
-  headerTitle: i18n.t('GALLERY.PHOTOS'),
-  headerTintColor: Colors.primaryColor,
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
 
 export default PhotosScreen;

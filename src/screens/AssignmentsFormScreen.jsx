@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  AsyncStorage,
   Platform,
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -16,13 +15,12 @@ import {
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import InputWithFormik from '../components/InputWithFormik';
-import HeaderButton from '../components/HeaderButton';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+
 import * as Network from 'expo-network';
 import i18n from 'i18n-js';
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
-import { NavigationEvents } from 'react-navigation';
+
 import {
   assigmentsUserPermissions,
   createAssignment,
@@ -122,7 +120,7 @@ const EditableDateItem = function (props) {
                 setShow(false);
               }
               setShowOk(true);
-              const pickedDate = Platform.OS === 'android' ? formatDate(val) : val.toISOString().split("T")[0];
+              const pickedDate = Platform.OS === 'android' ? formatDate(val) : val.toISOString().split('T')[0];
               if (event.type === 'set') {
                 props.onDateChange(pickedDate);
               }
@@ -145,7 +143,7 @@ const EditableDateItem = function (props) {
       {Platform.OS === 'ios' && showOk ? (
         <Pressable
           style={{
-            display: show ? "flex" : "none",
+            display: show ? 'flex' : 'none',
             position: 'absolute',
             top: '10%',
             left: '95%',
@@ -177,20 +175,20 @@ const EditableDateItem = function (props) {
   );
 };
 
-const AssigmentsFormScreen = ({ navigation }) => {
-  const rolesRep = navigation.getParam('roles');
+const AssigmentsFormScreen = ({ navigation, route }) => {
+  const rolesRep = route.params.roles;
   let hash = {};
-  const _assignmentId = navigation.getParam('assignmentId');
+  const _assignmentId = route.params.assignmentId;
   const entityRoles = rolesRep?.filter((o) => (hash[o.value] ? false : (hash[o.value] = true)));
-  const entityId = navigation.getParam('entityId');
-  const entityName = navigation.getParam('entityName');
-  const fatherId = navigation.getParam('fatherId');
-  const roleTitle = navigation.getParam('roleTitle');
-  const roleId = navigation.getParam('roleId');
-  const updated = navigation.getParam('isCreate');
-  const personName = navigation.getParam('personName');
-  const start = navigation.getParam('startDate');
-  const end = navigation.getParam('endDate');
+  const entityId = route.params.entityId;
+  const entityName = route.params.entityName;
+  const fatherId = route.params.fatherId;
+  const roleTitle = route.params.roleTitle;
+  const roleId = route.params.roleId;
+  const updated = route.params.isCreate;
+  const personName = route.params.personName;
+  const start = route.params.startDate;
+  const end = route.params.endDate;
   const [role, setRole] = useState(roleId ? roleId : entityRoles[0]?.value);
   const [persons, setPersons] = useState(null);
   const [roles, setRoles] = useState(entityRoles ? entityRoles : null);
@@ -562,7 +560,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
               onDateChange={(value) => {
                 setStartDate(value);
               }}
-              onClose={() => !startDate ? setStartDate((new Date()).toISOString().split('T')[0]): null}
+              onClose={() => (!startDate ? setStartDate(new Date().toISOString().split('T')[0]) : null)}
             />
             <View
               style={{
@@ -632,7 +630,7 @@ const AssigmentsFormScreen = ({ navigation }) => {
               onDateChange={(value) => {
                 setEndDate(value);
               }}
-              onClose={() => !endDate ? setEndDate((new Date()).toISOString().split('T')[0]): null}
+              onClose={() => (!endDate ? setEndDate(new Date().toISOString().split('T')[0]) : null)}
             />
             <Button
               onPress={handleSubmit}
@@ -727,20 +725,5 @@ const AssigmentsFormScreen = ({ navigation }) => {
     </KeyboardAvoidingView>
   );
 };
-AssigmentsFormScreen.navigationOptions = (navigationData) => ({
-  headerTitle: '',
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
 
 export default AssigmentsFormScreen;

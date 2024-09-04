@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import i18n from 'i18n-js';
 import { Ionicons } from 'expo-vector-icons';
-import { NavigationEvents } from 'react-navigation';
 import Colors from '../constants/Colors';
 import logo from '../../assets/img/fatherIcon.png';
 import { getCheckUnseenPosts } from '../api';

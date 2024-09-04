@@ -1,9 +1,6 @@
 import React from 'react';
-
-import { createAppContainer, createSwitchNavigator } from 'react-navigation';
-import { Ionicons } from '@expo/vector-icons';
-import { createStackNavigator } from 'react-navigation-stack';
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator, DrawerToggleButton } from '@react-navigation/drawer';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
 import HomeScreen from '../screens/HomeScreen';
@@ -33,6 +30,9 @@ import ArchiveScreen from '../screens/ArchiveScreen';
 import PhotosScreen from '../screens/PhotosScreen';
 import PhotoScreen from '../screens/PhotoScreen';
 
+const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
+
 const defaultStackNavOptions = {
   headerStyle: {
     backgroundColor: Colors.surfaceColorPrimary,
@@ -46,346 +46,170 @@ const defaultStackNavOptions = {
   headerTintColor: Colors.onSurfaceColorPrimary,
 };
 
-/*const BulletinNavigator = createStackNavigator({
-  screen: BulletinScreen,
-  BulletinDetail: {
-    screen: BulletinDetailScreen,
-  }
-});*/
+const HomeNavigator = () => (
+  <Stack.Navigator screenOptions={defaultStackNavOptions}>
+    <Stack.Screen
+      name="Home"
+      component={HomeScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton />, headerLeft: '' }}
+    />
+    <Stack.Screen
+      name="Search"
+      component={SearchScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="Bulletin"
+      component={BulletinScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="BulletinDetail"
+      component={BulletinDetailScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="Archived"
+      component={ArchivedScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="Edit"
+      component={ArchiveScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="Community"
+      component={CommunityScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="FreeCommunity"
+      component={FreeCommunityScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="Assignments"
+      component={AssignmentsScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="Gallery"
+      component={GalleryScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="Settings"
+      component={SettingsScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="PatreDetail"
+      component={PatreDetailScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="FiliationDetail"
+      component={FiliationDetailScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="DelegationDetail"
+      component={DelegationDetailScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="GenerationDetail"
+      component={GenerationDetailScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="HouseDetail"
+      component={HouseDetailScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="CourseDetail"
+      component={CourseDetailScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="FatherForm"
+      component={FatherFormScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
 
-const HomeNavigator = createStackNavigator(
-  {
-    Home: {
-      screen: HomeScreen,
-      navigationOptions: {
-        headerTitle: '',
-      },
-    },
-    PatreDetail: {
-      screen: PatreDetailScreen,
-    },
-    FiliationDetail: {
-      screen: FiliationDetailScreen,
-    },
-    DelegationDetail: {
-      screen: DelegationDetailScreen,
-    },
-    GenerationDetail: {
-      screen: GenerationDetailScreen,
-    },
-    HouseDetail: {
-      screen: HouseDetailScreen,
-    },
-    CourseDetail: {
-      screen: CourseDetailScreen,
-    },
-    FatherForm: {
-      screen: FatherFormScreen,
-    },
-    Bulletin: {
-      screen: BulletinScreen,
-    },
-    BulletinDetail: {
-      screen: BulletinDetailScreen,
-    },
-    Archived: {
-      screen: ArchivedScreen,
-    },
-    Edit: {
-      screen: ArchiveScreen,
-    },
-    LivingSituationForm: {
-      screen: LivingSituationsFormScreen,
-    },
-    IdealStatementDetail: {
-      screen: IdealStatementDetail,
-    },
-    Gallery: {
-      screen: GalleryScreen,
-    },
-    Photos: {
-      screen: PhotosScreen,
-    },
-    Photo: {
-      screen: PhotoScreen,
-    },
-    AssigmentsForm: {
-      screen: AssignmentsFormScreen,
-    },
-  },
-  {
-    defaultNavigationOptions: defaultStackNavOptions,
-  },
+    <Stack.Screen
+      name="LivingSituationForm"
+      component={LivingSituationsFormScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="IdealStatementDetail"
+      component={IdealStatementDetail}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="Photos"
+      component={PhotosScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="Photo"
+      component={PhotoScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+    <Stack.Screen
+      name="AssignmentsForm"
+      component={AssignmentsFormScreen}
+      options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
+    />
+  </Stack.Navigator>
 );
 
-const SearchNavigator = createStackNavigator(
-  {
-    Search: {
-      screen: SearchScreen,
-    },
-    PatreDetail: {
-      screen: PatreDetailScreen,
-    },
-    FatherForm: {
-      screen: FatherFormScreen,
-    },
-    FiliationDetail: {
-      screen: FiliationDetailScreen,
-    },
-    DelegationDetail: {
-      screen: DelegationDetailScreen,
-    },
-    GenerationDetail: {
-      screen: GenerationDetailScreen,
-    },
-    HouseDetail: {
-      screen: HouseDetailScreen,
-    },
-    CourseDetail: {
-      screen: CourseDetailScreen,
-    },
-    LivingSituationForm: {
-      screen: LivingSituationsFormScreen,
-    },
-    IdealStatementDetail: {
-      screen: IdealStatementDetail,
-    },
-    AssigmentsForm: {
-      screen: AssignmentsFormScreen,
-    },
-  },
-  {
-    defaultNavigationOptions: defaultStackNavOptions,
-  },
+const activeTintColor = Colors.secondaryColor;
+const inactiveTintColor = Colors.surfaceColorPrimary;
+
+const labelStyle = {
+  fontFamily: 'work-sans-semibold',
+  fontSize: 18,
+};
+
+const DrawerNavigator = () => (
+  <Drawer.Navigator
+    drawerContent={(props) => (
+      <DefaultDrawer
+        {...props}
+        activeTintColor={activeTintColor}
+        inactiveTintColor={inactiveTintColor}
+        labelStyle={labelStyle}
+      />
+    )}
+    screenOptions={{
+      headerShown: false,
+      headerLeft: false,
+      drawerPosition: 'right',
+      drawerStyle: {
+        backgroundColor: Colors.primaryColor,
+      },
+      drawerContentOptions: {
+        labelStyle: {
+          fontFamily: 'work-sans-semibold',
+          fontSize: 18,
+        },
+      },
+    }}
+  >
+    <Drawer.Screen name="HomeNav" component={HomeNavigator} options={{ drawerLabel: i18n.t('GENERAL.HOME') }} />
+  </Drawer.Navigator>
 );
 
-const ProfileNavigator = createStackNavigator(
-  {
-    screen: FatherFormScreen,
-    LivingSituationForm: {
-      screen: LivingSituationsFormScreen,
-    },
-  },
-
-  {
-    navigationOptions: {},
-    defaultNavigationOptions: defaultStackNavOptions,
-  },
+const AppNavigator = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="Startup" component={StartupScreen} />
+    <Stack.Screen name="Auth" component={AuthScreen} />
+    <Stack.Screen name="Drawer" component={DrawerNavigator} />
+  </Stack.Navigator>
 );
 
-const CommunityNavigator = createStackNavigator(
-  {
-    Comunidad: {
-      screen: CommunityScreen,
-      navigationOptions: {
-        headerTitle: '',
-      },
-    },
-    FiliationDetail: {
-      screen: FiliationDetailScreen,
-    },
-    DelegationDetail: {
-      screen: DelegationDetailScreen,
-    },
-    PatreDetail: {
-      screen: PatreDetailScreen,
-    },
-    FatherForm: {
-      screen: FatherFormScreen,
-    },
-    GenerationDetail: {
-      screen: GenerationDetailScreen,
-    },
-    HouseDetail: {
-      screen: HouseDetailScreen,
-    },
-    CourseDetail: {
-      screen: CourseDetailScreen,
-    },
-    LivingSituationForm: {
-      screen: LivingSituationsFormScreen,
-    },
-    AssigmentsForm: {
-      screen: AssignmentsFormScreen,
-    },
-  },
-  {
-    defaultNavigationOptions: defaultStackNavOptions,
-  },
-);
-
-const FreeCommunityNavigator = createStackNavigator({
-  FreeCommunity: {
-    screen: FreeCommunityScreen,
-    navigationOptions: {
-      headerTitle: '',
-    },
-  },
-  GenerationDetail: {
-    screen: GenerationDetailScreen,
-  },
-  CourseDetail: {
-    screen: CourseDetailScreen,
-  },
-  PatreDetail: {
-    screen: PatreDetailScreen,
-  },
-  FatherForm: {
-    screen: FatherFormScreen,
-  },
-  LivingSituationForm: {
-    screen: LivingSituationsFormScreen,
-  },
-  IdealStatementDetail: {
-    screen: IdealStatementDetail,
-  },
-  AssigmentsForm: {
-    screen: AssignmentsFormScreen,
-  },
-});
-
-const AssignmentsNavigator = createStackNavigator({
-  Assignments: {
-    screen: AssignmentsScreen,
-  },
-  CourseDetail: {
-    screen: CourseDetailScreen,
-  },
-  PatreDetail: {
-    screen: PatreDetailScreen,
-  },
-  FatherForm: {
-    screen: FatherFormScreen,
-  },
-  GenerationDetail: {
-    screen: GenerationDetailScreen,
-  },
-  DelegationDetail: {
-    screen: DelegationDetailScreen,
-  },
-  FiliationDetail: {
-    screen: FiliationDetailScreen,
-  },
-  AssigmentsForm: {
-    screen: AssignmentsFormScreen,
-  },
-});
-
-const SettingsNavigator = createStackNavigator(
-  {
-    Settings: {
-      screen: SettingsScreen,
-    },
-  },
-  {
-    defaultNavigationOptions: defaultStackNavOptions,
-  },
-);
-
-const GalleryNavigator = createStackNavigator(
-  {
-    Gallery: {
-      screen: GalleryScreen,
-    },
-  },
-  {
-    defaultNavigationOptions: defaultStackNavOptions,
-  },
-);
-
-const AssigmentsFormScreenNavigator = createStackNavigator(
-  {
-    AssigmentsForm: {
-      screen: AssignmentsFormScreen,
-    },
-  },
-  {
-    defaultNavigationOptions: defaultStackNavOptions,
-  },
-);
-
-const DrawerNavigator = createDrawerNavigator(
-  {
-    HomeSearch: {
-      screen: HomeNavigator,
-      navigationOptions: {
-        drawerLabel: i18n.t('GENERAL.HOME'),
-      },
-    },
-    Search: {
-      screen: SearchNavigator,
-      navigationOptions: {
-        drawerLabel: i18n.t('GENERAL.SEARCH'),
-      },
-    },
-    Profile: {
-      screen: ProfileNavigator,
-      navigationOptions: {
-        drawerLabel: i18n.t('GENERAL.PROFILE'),
-      },
-    },
-    Community: {
-      screen: CommunityNavigator,
-      navigationOptions: {
-        drawerLabel: i18n.t('GENERAL.GENERAL_COMMUNITY'),
-      },
-    },
-    FreeCommunity: {
-      screen: FreeCommunityNavigator,
-      navigationOptions: {
-        drawerLabel: i18n.t('GENERAL.FREE_COMMUNITY'),
-      },
-    },
-    Assignments: {
-      screen: AssignmentsNavigator,
-      navigationOptions: {
-        drawerLabel: i18n.t('GENERAL.ASSIGNMENTS'),
-      },
-    },
-    AssigmentsForm: {
-      screen: AssigmentsFormScreenNavigator,
-      navigationOptions: {
-        drawerLabel: i18n.t('ASSIGNMENTS_FORM.TITLE'),
-      },
-    },
-    Gallery: {
-      screen: GalleryNavigator,
-      navigationOptions: {
-        drawerLabel: i18n.t('GALLERY.TITLE'),
-      },
-    },
-    Settings: {
-      screen: SettingsNavigator,
-      navigationOptions: {
-        drawerLabel: i18n.t('GENERAL.SETTINGS'),
-      },
-    },
-  },
-  {
-    contentComponent: (props) => <DefaultDrawer {...props} />,
-    drawerBackgroundColor: Colors.primaryColor,
-    contentOptions: {
-      activeTintColor: Colors.secondaryColor,
-      inactiveTintColor: Colors.surfaceColorPrimary,
-      labelStyle: {
-        fontFamily: 'work-sans-semibold',
-        fontSize: 18,
-      },
-    },
-    drawerPosition: 'right',
-  },
-);
-
-const AuthNavigator = createStackNavigator({
-  Auth: AuthScreen,
-});
-
-const MainNavigator = createSwitchNavigator({
-  Startup: {
-    screen: StartupScreen,
-  },
-  Auth: AuthNavigator,
-  Drawer: DrawerNavigator,
-});
-
-export default createAppContainer(MainNavigator);
+export default AppNavigator;

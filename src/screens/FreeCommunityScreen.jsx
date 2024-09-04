@@ -11,8 +11,7 @@ import {
   TouchableNativeFeedback,
 } from 'react-native';
 import { Ionicons } from 'expo-vector-icons';
-import HeaderButton from '../components/HeaderButton';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+
 import Colors from '../constants/Colors';
 import i18n from 'i18n-js';
 import * as Network from 'expo-network';
@@ -137,22 +136,6 @@ class FreeCommunityScreen extends Component {
     );
   }
 }
-
-FreeCommunityScreen.navigationOptions = (navigationData) => ({
-  headerTitle: '',
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
 
 const Course = ({ title, onSelect }) => {
   let TouchableComp = TouchableOpacity;

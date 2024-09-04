@@ -1,24 +1,37 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { View, StyleSheet, ActivityIndicator, Text, Image, FlatList, useWindowDimensions } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
+import {
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  Text,
+  Image,
+  FlatList,
+  useWindowDimensions,
+  Pressable,
+  BackHandler,
+  Platform,
+} from 'react-native';
+
 import i18n from 'i18n-js';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import * as Network from 'expo-network';
 import 'moment/min/locales';
-import { NavigationEvents } from 'react-navigation';
+
 import * as ScreenOrientation from 'expo-screen-orientation';
+import { useFocusEffect } from '@react-navigation/native';
+import { Ionicons } from 'expo-vector-icons';
+
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
-import HeaderButton from '../components/HeaderButton';
+
 import { I18nContext } from '../context/I18nProvider';
 import { getLastPhotos, getPinnedPosts, getReminders } from '../api';
 import RemindersHeaders from '../components/RemindersHeaders';
 import { BulletinCheckContext } from '../context/BulletinCheckProvider';
-import { Pressable } from 'react-native';
-import { Ionicons } from 'expo-vector-icons';
 import star from '../../assets/star.png';
 import { CustomSlider } from '../components/CarouselSlider';
+
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -111,6 +124,21 @@ const HomeScreen = ({ navigation }) => {
   const [photos, setPhotos] = useState([]);
   const [favorite, setFavorite] = useState({});
 
+  useEffect(() => {
+    const backAction = () => {
+      if (Platform.OS === 'android') {
+        // Si estamos en Android, evitamos que el botón de atrás funcione
+        BackHandler.exitApp(); // Esto minimizará la aplicación
+        return true;
+      }
+      return false; // Si estamos en otro sistema operativo, no hacemos nada
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () => backHandler.remove();
+  }, []);
+
   const loadReminders = async () => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
@@ -154,6 +182,18 @@ const HomeScreen = ({ navigation }) => {
     loadReminders();
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      // Funciones a ejecutar cuando la pantalla se enfoca
+      loadReminders();
+      checkOnly();
+
+      return () => {
+        // Cleanup si es necesario
+      };
+    }, []),
+  );
+
   useEffect(() => {
     loadPinPost();
   }, [favorite && loading]);
@@ -180,12 +220,6 @@ const HomeScreen = ({ navigation }) => {
             ListHeaderComponent={
               <>
                 <View style={styles.screen}>
-                  <NavigationEvents
-                    onDidFocus={() => {
-                      loadReminders();
-                      checkOnly();
-                    }}
-                  />
                   {!loading ? (
                     <>
                       {Object.entries(favorite).length > 0 && (
@@ -306,11 +340,14 @@ const HomeScreen = ({ navigation }) => {
                           }}
                         />
                       </View>
-                      <RemindersHeaders
-                        reminders={reminders}
-                        selectedHeader={selectedReminder}
-                        onChangeSelectedHeader={(index) => setSelectedReminder(index)}
-                      />
+                      {
+                        <RemindersHeaders
+                          reminders={reminders}
+                          selectedHeader={selectedReminder}
+                          onChangeSelectedHeader={(index) => setSelectedReminder(index)}
+                          navigation={navigation}
+                        />
+                      }
                     </>
                   ) : (
                     <View style={styles.screenLoading}>
@@ -422,22 +459,6 @@ const HomeScreen = ({ navigation }) => {
     </I18nContext.Consumer>
   );
 };
-
-HomeScreen.navigationOptions = (navigationData) => ({
-  headerTitle: '',
-  headerRight: () => (
-    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      <Item
-        title="Menu"
-        iconName="md-menu"
-        onPress={() => {
-          navigationData.navigation.toggleDrawer();
-        }}
-      />
-    </HeaderButtons>
-  ),
-  headerBackTitle: i18n.t('GENERAL.BACK'),
-});
 
 HomeScreen.propTypes = {
   navigation: PropTypes.shape({

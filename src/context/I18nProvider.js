@@ -1,7 +1,7 @@
 import React, { createContext, Component, Fragment } from 'react';
 import i18n from 'i18n-js';
 import * as Localization from 'expo-localization';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import { EN } from '../i18n/en';
 import { ES } from '../i18n/es';
