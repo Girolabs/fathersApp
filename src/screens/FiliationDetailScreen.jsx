@@ -298,7 +298,10 @@ class FiliationDetailScreen extends Component {
                       })}
                     </View>
                   ) : null}
-                  <FiliationHouses houses={filiation.houses.filter((house) => house.isActive)} />
+                  <FiliationHouses
+                    houses={filiation.houses.filter((house) => house.isActive)}
+                    navigation={navigation}
+                  />
                   <View>
                     <Text style={styles.sectionHeader}>{i18n.t('FILIAL_DETAIL.MEMBERS')}</Text>
                     {/* <FlatList

@@ -83,59 +83,79 @@ class SearchScreen extends Component {
     showDeceased: false,
     showExMember: false,
     searchText: '',
-    visible: false,
-    snackMsg: '',
   };
 
   loadPersons = async (fields) => {
-    try {
-      const res = await getPersons(fields);
-      this.setState({ results: res.data.result, loading: false });
-      await AsyncStorage.setItem('result', JSON.stringify(res.data.result));
-    } catch (e) {
-      this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
-    }
+    getPersons(fields)
+      .then(async (res) => {
+        this.setState({ results: res.data.result, loading: false });
+        console.log('res data', res.data.result);
+        try {
+          console.log('Cargar resultado en el localstorage');
+          await AsyncStorage.setItem('result', JSON.stringify(res.data.result));
+        } catch (e) {
+          console.log('Error al cargar results ', e);
+        }
+      })
+      .catch(() => {
+        this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
+      });
   };
-
   async getData() {
-    let isOldresult = false;
+    //Verificamos si current Date es menor al DateDeadline
+    //Si es menor no hace falta, hacer un nuevo request, se usa lo que esta en el local si existe sino existe se hace el get de los datos
+    //Si es mayor se actualiza el item result on AsyncStorage llamando a la funcion loadPerson('all) y se actuliza el nuevo DateDeadline sumandole 24 horas al current date
+    var isOldresult = false;
     try {
-      const currentDate = new Date();
+      var currentDate = new Date();
       const tem = await AsyncStorage.getItem('DateDeadline');
       if (tem !== null) {
         const date = new Date(tem);
         if (currentDate > date) {
           isOldresult = true;
-          const newDateDeadline = new Date();
+          var newDateDeadline = new Date();
           newDateDeadline.setDate(currentDate.getDate() + 1);
           await AsyncStorage.setItem('DateDeadline', newDateDeadline.toString());
         }
       } else {
-        const newDateDeadline = new Date();
+        //si no existe cargamos
+        var newDateDeadline = new Date();
         newDateDeadline.setDate(currentDate.getDate() + 1);
         await AsyncStorage.setItem('DateDeadline', newDateDeadline.toString());
       }
     } catch (e) {
-      const newDateDeadline = new Date();
+      //if an error ocurr we just create a newDateDeadline
+      var newDateDeadline = new Date();
       newDateDeadline.setDate(currentDate.getDate() + 1);
       await AsyncStorage.setItem('DateDeadline', newDateDeadline.toString());
       console.log('Error at AsyncStorage get item on Date');
     }
 
+    console.log('isOldresult => ', isOldresult);
     try {
+      //Verificamos si esta almacenado en el local storage los fields
       const result = await AsyncStorage.getItem('result');
-      if (result == null || isOldresult) {
+      if (result == null) {
+        //si no esta en el local, cargamos los datos
         this.loadPersons(false);
       } else {
-        this.setState({ results: JSON.parse(result), loading: false });
+        if (isOldresult)
+          //aunque este almacenado en el local storage, se tiene que actualizar los datos ya que vencio el tiempo
+          this.loadPersons(false);
+        else this.setState({ results: JSON.parse(result), loading: false });
       }
     } catch (e) {
+      //Si ocurre error suponemos que  getItem ocurrio el error
       this.loadPersons(false);
       console.log('Error on asyncstorage get item result');
     }
   }
-
   async componentDidMount() {
+    const { navigation } = this.props;
+    navigation.setOptions({
+      title: i18n.t('SEARCH.TITLE'),
+    });
+
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
       await this.getData();
@@ -144,45 +164,57 @@ class SearchScreen extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.showExMember !== this.state.showExMember || prevState.showDeceased !== this.state.showDeceased) {
-      this.setState({ loading: true });
-      const texto = this.state.searchText.toLowerCase();
-      this.onChangeFilter(texto);
-    }
-  }
-
   onChangeFilter = (texto) => {
     let filterResults = [];
+
     if (this.state.showDeceased && this.state.showExMember) {
+      console.log('Ambos filtros');
       filterResults = this.state.results;
     } else if (this.state.showDeceased && !this.state.showExMember) {
-      filterResults = this.state.results.filter((persona) => persona.isMember !== false);
+      console.log('Mostrar fallecidos');
+      filterResults = this.state.results.filter((persona) => persona.isMember != false);
     } else if (!this.state.showDeceased && this.state.showExMember) {
-      filterResults = this.state.results.filter((persona) => persona.isLiving !== false);
+      console.log('Mostrar ex miembros');
+      filterResults = this.state.results.filter((persona) => persona.isLiving != false);
     } else {
-      filterResults = this.state.results.filter((persona) => persona.isLiving !== false && persona.isMember !== false);
+      console.log('Ningun filtro');
+      console.log('personas', this.state.results);
+      filterResults = this.state.results.filter((persona) => persona.isLiving != false);
+      filterResults = filterResults.filter((persona) => persona.isMember != false);
     }
 
     filterResults = filterResults.filter((persona) => {
-      return (
+      if (
         (persona.firstNameWithoutAccents &&
           persona.lastNameWithoutAccents &&
           (persona.firstNameWithoutAccents + ' ' + persona.lastNameWithoutAccents).trim().startsWith(texto)) ||
         (persona.firstNameWithoutAccents && persona.firstNameWithoutAccents.trim().startsWith(texto)) ||
         (persona.lastNameWithoutAccents && persona.lastNameWithoutAccents.trim().startsWith(texto)) ||
         (persona.firstNameWithoutAccents + ' ' + persona.lastNameWithoutAccents).trim().includes(texto)
-      );
+      ) {
+        return persona;
+      }
     });
-    this.setState({ filterResults, loading: false });
+    this.setState({ filterResults: filterResults, loading: false });
   };
 
   handleFilter = (keyword) => {
     if (keyword) {
       this.setState({ searchText: keyword.toLowerCase(), loading: true });
-      this.onChangeFilter(keyword.toLowerCase());
+      const texto = keyword.toLowerCase();
+
+      this.onChangeFilter(texto);
     }
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.showExMember != this.state.showExMember || prevState.showDeceased != this.state.showDeceased) {
+      console.log('DidUpdate');
+      this.setState({ loading: true });
+      const texto = this.state.searchText.toLowerCase();
+      this.onChangeFilter(texto);
+    }
+  }
 
   render() {
     return (
@@ -195,7 +227,7 @@ class SearchScreen extends Component {
                 placeholder={i18n.t('SEARCH.PLACEHOLDER')}
                 onChangeText={(text) => this.handleFilter(text)}
               />
-              <Ionicons name="ios-search" size={25} color={Colors.primaryColor} />
+              <Ionicons name="ios-search" size={25} colors={Colors.primaryColor} />
             </View>
             <View style={styles.filtersContainer}>
               {Platform.OS === 'ios' ? (
@@ -256,26 +288,31 @@ class SearchScreen extends Component {
 
             <FlatList
               data={this.state.filterResults}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('Details', { personId: item.id })}>
-                  <View style={styles.item}>
-                    <Text>{item.firstName + ' ' + item.lastName}</Text>
-                  </View>
-                </TouchableOpacity>
-              )}
+              keyExtractor={(item) => item.personId.toString()}
+              renderItem={({ item, index }) => {
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.item}
+                    onPress={() => {
+                      this.props.navigation.navigate('PatreDetail', {
+                        fatherId: item.personId,
+                      });
+                    }}
+                  >
+                    <Text>{item.fullName}</Text>
+                    <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
+                  </TouchableOpacity>
+                );
+              }}
             />
           </Fragment>
         ) : (
           <ActivityIndicator size="large" color={Colors.primaryColor} />
         )}
-        <SnackBar
-          visible={this.state.visible}
-          textMessage={this.state.snackMsg}
-          actionHandler={() => this.setState({ visible: false })}
-          actionText={i18n.t('GENERAL.CLOSE')}
-          backgroundColor={Colors.secondaryColor}
-        />
+        <SnackBar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })}>
+          {this.state.snackMsg}
+        </SnackBar>
       </View>
     );
   }

@@ -127,17 +127,30 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     const backAction = () => {
       if (Platform.OS === 'android') {
-        // Si estamos en Android, evitamos que el botón de atrás funcione
-        BackHandler.exitApp(); // Esto minimizará la aplicación
+        // Solo en HomeScreen, minimizar la app
+        BackHandler.exitApp();
         return true;
       }
-      return false; // Si estamos en otro sistema operativo, no hacemos nada
+      return false;
     };
 
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+    // Listener para cuando la pantalla obtiene el foco
+    const focusListener = navigation.addListener('focus', () => {
+      BackHandler.addEventListener('hardwareBackPress', backAction);
+    });
 
-    return () => backHandler.remove();
-  }, []);
+    // Listener para cuando la pantalla pierde el foco
+    const blurListener = navigation.addListener('blur', () => {
+      BackHandler.removeEventListener('hardwareBackPress', backAction);
+    });
+
+    // Limpieza de listeners cuando el componente se desmonta
+    return () => {
+      focusListener(); // Eliminar listener de foco
+      blurListener(); // Eliminar listener de blur
+      BackHandler.removeEventListener('hardwareBackPress', backAction); // Asegurar eliminación del listener de back
+    };
+  }, [navigation]);
 
   const loadReminders = async () => {
     const status = await Network.getNetworkStateAsync();
