@@ -18,7 +18,7 @@ import SnackBar from '../components/SnackBar';
 import { getPersons } from '../api';
 import { CheckBox } from 'react-native-elements';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const styles = StyleSheet.create({
   screen: {

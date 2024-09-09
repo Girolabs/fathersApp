@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Alert } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from 'i18n-js';
 
 export const url = 'https://schoenstatt-fathers.link/';

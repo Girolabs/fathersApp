@@ -14,7 +14,7 @@ import {
   Pressable,
   Linking,
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
 import { Ionicons } from 'expo-vector-icons';

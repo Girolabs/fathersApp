@@ -9,7 +9,7 @@ import {
   ScrollView,
   SafeAreaView,
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import InputWithFormik from '../components/InputWithFormik';

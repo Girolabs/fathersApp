@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Colors from '../constants/Colors';
 import PropTypes from 'prop-types';
 

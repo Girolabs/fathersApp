@@ -21,7 +21,7 @@ import axios from '../../axios-instance';
 import SnackBar from '../components/SnackBar';
 import 'moment/min/locales';
 import i18n from 'i18n-js';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Network from 'expo-network';
 import { lng } from '../constants/Langs';
 const styles = StyleSheet.create({
