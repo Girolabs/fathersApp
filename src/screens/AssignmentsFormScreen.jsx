@@ -175,7 +175,7 @@ const EditableDateItem = function (props) {
   );
 };
 
-const AssigmentsFormScreen = ({ navigation, route }) => {
+const AssignmentsFormScreen = ({ navigation, route }) => {
   const rolesRep = route.params.roles;
   let hash = {};
   const _assignmentId = route.params.assignmentId;
@@ -726,4 +726,4 @@ const AssigmentsFormScreen = ({ navigation, route }) => {
   );
 };
 
-export default AssigmentsFormScreen;
+export default AssignmentsFormScreen;

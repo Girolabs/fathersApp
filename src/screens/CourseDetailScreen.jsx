@@ -270,15 +270,13 @@ class CourseDetailScreen extends Component {
                                   {course.leaderAssignment.person.fullFriendlyName}
                                 </Text>
                                 <Text style={styles.listItemBody}>
-                                  {`${
-                                    course.leaderAssignment.startDate
-                                      ? moment.utc(course.leaderAssignment.startDate).format(dateMask)
-                                      : ''
-                                  } - ${
-                                    course.leaderAssignment.endDate
+                                  {`${course.leaderAssignment.startDate
+                                    ? moment.utc(course.leaderAssignment.startDate).format(dateMask)
+                                    : ''
+                                    } - ${course.leaderAssignment.endDate
                                       ? moment.utc(course.leaderAssignment.endDate).format(dateMask)
                                       : ''
-                                  }`}
+                                    }`}
                                 </Text>
                               </View>
                             )}
@@ -623,7 +621,7 @@ class CourseDetailScreen extends Component {
                             top: 8,
                           }}
                           onPress={() => {
-                            navigation.navigate('AssigmentsForm', {
+                            navigation.navigate('AssignmentsForm', {
                               entityName: course.name,
                               roles: course.roles.map((item) => ({ name: item.roleTitle, value: item.roleId })),
                               entityId: course.courseId,
@@ -677,9 +675,8 @@ class CourseDetailScreen extends Component {
                                       </Text>
                                       <Text style={asg.isActive ? styles.listItemBody : styles.listItemBodyInactive}>
                                         {/*`${moment.utc(asg.startDate).format(dateMask)}`*/}
-                                        {`${asg.startDate ? moment.utc(asg.startDate).format(dateMask) : ''} - ${
-                                          asg.endDate ? moment.utc(asg.endDate).format(dateMask) : ''
-                                        }`}
+                                        {`${asg.startDate ? moment.utc(asg.startDate).format(dateMask) : ''} - ${asg.endDate ? moment.utc(asg.endDate).format(dateMask) : ''
+                                          }`}
                                       </Text>
                                     </View>
                                     <Pressable
@@ -690,7 +687,7 @@ class CourseDetailScreen extends Component {
                                         padding: 5,
                                       }}
                                       onPress={() => {
-                                        this.props.navigation.navigate('AssigmentsForm', {
+                                        this.props.navigation.navigate('AssignmentsForm', {
                                           assignmentId: asg.assignmentId,
                                           entityName: course.name,
                                           entityId: course.courseId,

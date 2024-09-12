@@ -336,7 +336,7 @@ class DelegationDetailScreen extends Component {
                                     display: permission.userCanCreateAssignments ? 'flex' : 'none',
                                   }}
                                   onPress={() => {
-                                    navigation.navigate('AssigmentsForm', {
+                                    navigation.navigate('AssignmentsForm', {
                                       entityName: territory.name,
                                       roles: territory.roles.map((item) => ({
                                         name: item.roleTitle,
@@ -385,9 +385,8 @@ class DelegationDetailScreen extends Component {
                                         {asg.person.fullName}
                                       </Text>
                                       <Text style={asg.isActive ? styles.listItemBody : styles.listItemBodyInactive}>
-                                        {`${asg.startDate ? moment.utc(asg.startDate).format(dateMask) : ''} - ${
-                                          asg.endDate ? moment.utc(asg.endDate).format(dateMask) : ''
-                                        }`}
+                                        {`${asg.startDate ? moment.utc(asg.startDate).format(dateMask) : ''} - ${asg.endDate ? moment.utc(asg.endDate).format(dateMask) : ''
+                                          }`}
                                       </Text>
                                     </View>
                                     <Pressable
@@ -398,7 +397,7 @@ class DelegationDetailScreen extends Component {
                                         padding: 5,
                                       }}
                                       onPress={() => {
-                                        navigation.navigate('AssigmentsForm', {
+                                        navigation.navigate('AssignmentsForm', {
                                           assignmentId: asg.assignmentId,
                                           entityName: territory.name,
                                           entityId: territory.territoryId,

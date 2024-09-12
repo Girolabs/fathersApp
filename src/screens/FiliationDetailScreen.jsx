@@ -204,7 +204,7 @@ class FiliationDetailScreen extends Component {
                           top: 8,
                         }}
                         onPress={() => {
-                          navigation.navigate('AssigmentsForm', {
+                          navigation.navigate('AssignmentsForm', {
                             entityName: filiation.name,
                             roles: filiation.roles.map((item) => ({ name: item.roleTitle, value: item.roleId })),
                             entityId: filiation.filiationId,
@@ -256,15 +256,13 @@ class FiliationDetailScreen extends Component {
                                       {item.person.fullName}
                                     </Text>
                                     <Text style={item.isActive ? styles.listItemBody : styles.listItemBodyInactive}>
-                                      {`${
-                                        filiation.mainAssignment.startDate
-                                          ? moment.utc(item.startDate).format(dateMask)
-                                          : ''
-                                      } - ${
-                                        filiation.mainAssignment.endDate
+                                      {`${filiation.mainAssignment.startDate
+                                        ? moment.utc(item.startDate).format(dateMask)
+                                        : ''
+                                        } - ${filiation.mainAssignment.endDate
                                           ? moment.utc(item.endDate).format(dateMask)
                                           : ''
-                                      }`}
+                                        }`}
                                     </Text>
                                   </View>
                                   <Pressable
@@ -275,7 +273,7 @@ class FiliationDetailScreen extends Component {
                                       padding: 5,
                                     }}
                                     onPress={() => {
-                                      this.props.navigation.navigate('AssigmentsForm', {
+                                      this.props.navigation.navigate('AssignmentsForm', {
                                         assignmentId: item.assignmentId,
                                         entityName: filiation.name,
                                         entityId: filiation.filiationId,

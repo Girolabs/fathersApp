@@ -273,7 +273,7 @@ class GenerationDetailScreen extends Component {
                               top: 8,
                             }}
                             onPress={() => {
-                              navigation.navigate('AssigmentsForm', {
+                              navigation.navigate('AssignmentsForm', {
                                 entityName: generation.name,
                                 roles: generation.roles.map((item) => ({
                                   name: item.roleTitle,
@@ -332,9 +332,8 @@ class GenerationDetailScreen extends Component {
                                         </Text>
                                         <Text style={asg.isActive ? styles.listItemBody : styles.listItemBodyInactive}>
                                           {/*`${moment.utc(asg.startDate).format(dateMask)}`*/}
-                                          {`${asg.startDate ? moment.utc(asg.startDate).format(dateMask) : ''} - ${
-                                            asg.endDate ? moment.utc(asg.endDate).format(dateMask) : ''
-                                          }`}
+                                          {`${asg.startDate ? moment.utc(asg.startDate).format(dateMask) : ''} - ${asg.endDate ? moment.utc(asg.endDate).format(dateMask) : ''
+                                            }`}
                                         </Text>
                                       </View>
                                       <Pressable
@@ -345,7 +344,7 @@ class GenerationDetailScreen extends Component {
                                           padding: 5,
                                         }}
                                         onPress={() => {
-                                          this.props.navigation.navigate('AssigmentsForm', {
+                                          this.props.navigation.navigate('AssignmentsForm', {
                                             assignmentId: asg.assignmentId,
                                             entityName: generation.name,
                                             entityId: generation.generationId,
