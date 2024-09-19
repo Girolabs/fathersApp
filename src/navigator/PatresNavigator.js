@@ -44,6 +44,7 @@ const defaultStackNavOptions = {
     fontFamily: 'work-sans',
   },
   headerTintColor: Colors.onSurfaceColorPrimary,
+  headerBackTitle: i18n.t('GENERAL.BACK')
 };
 
 const HomeNavigator = () => (
