@@ -83,6 +83,7 @@ const PhotosScreen = ({ navigation }) => {
 
   return (
     <ScrollView
+      scrollIndicatorInsets={{ right: 1 }}
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
