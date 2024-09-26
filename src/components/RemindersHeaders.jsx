@@ -77,7 +77,9 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader, n
   };
 
   // Filtra los recordatorios según la fecha seleccionada
-  const filteredReminders = reminders.filter((item) => moment.utc(item.date).isSame(moment(selectedDate), 'day'));
+  const filteredReminders = reminders.filter(
+    (item) => moment.utc(item.date).isSame(moment(selectedDate), 'day') && item.memorialEvents.length > 0,
+  );
 
   return (
     <View style={{ paddingHorizontal: 15 }}>
