@@ -38,10 +38,10 @@ const GalleryScreen = ({ navigation }) => {
       base64: true,
     });
 
-    //console.log('foto', result.uri);
+    //console.log('foto', result.assets[0].base64);
 
     if (!result.cancelled) {
-      setPhoto(result.base64);
+      setPhoto(result.assets[0].base64);
     }
   };
 
