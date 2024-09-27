@@ -143,7 +143,7 @@ exports.ES = {
     SION_TIME_MASTER: 'Coordinador de Tiempo de Sión',
     STATEMENT: 'Explicación del ideal',
     MEMBERS: 'Miembros del curso',
-    EXMEMBERS: 'Ex-miembros',
+    EXMEMBERS: 'Exmiembros',
     START_DATE: 'Fecha de inicio',
     END_DATE: 'Fecha de término',
   },

@@ -143,7 +143,7 @@ exports.DE = {
     SION_TIME_MASTER: 'Koordinator der Sionszeit',
     STATEMENT: 'Beschreibung des Kursideals',
     MEMBERS: 'Mitglieder des Kurses',
-    EXMEMBERS: 'Ex-Mitglieder',
+    EXMEMBERS: 'Ehemalige Mitglieder',
     START_DATE: 'Anfangsdatum',
     END_DATE: 'Enddatum',
   },
