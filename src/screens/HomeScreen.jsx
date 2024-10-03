@@ -162,12 +162,33 @@ const HomeScreen = ({ navigation }) => {
       const month = (d.getMonth() + 1).toString().padStart(2, '0');
       const year = d.getFullYear().toString();
       const startDate = year + '-' + month + '-' + day; //(US)
-      getReminders(6, startDate)
+      const firstDayOfYear = new Date(new Date().getFullYear(), 0, 1);
+
+      const today = new Date();
+
+      // Calcular la fecha de 6 meses anteriores (fecha de inicio)
+      const sixMonthsBefore = new Date(today);
+      sixMonthsBefore.setMonth(today.getMonth() - 6);
+
+      // Formatear la fecha como 'YYYY-MM-DD' para la fecha de inicio
+      const formatDate = (date) => {
+        return (
+          date.getFullYear() +
+          '-' +
+          String(date.getMonth() + 1).padStart(2, '0') +
+          '-' +
+          String(date.getDate()).padStart(2, '0')
+        );
+      };
+
+      const formattedSixMonthsBefore = formatDate(sixMonthsBefore);
+
+      getReminders(365, formattedSixMonthsBefore)
         .then((res) => {
-          const fetchedReminders = res.data.result.slice(0, 6);
+          const fetchedReminders = res.data.result;
           setReminders(fetchedReminders);
         })
-        .catch(() => {
+        .catch((err) => {
           setVisible(true);
           setSnackMsg(i18n.t('GENERAL.ERROR'));
         })

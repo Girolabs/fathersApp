@@ -59,6 +59,34 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader, n
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
 
+  const today = new Date(); // Fecha actual
+
+  // Calcular la fecha mínima (6 meses antes de hoy)
+  const minDate = new Date(today);
+  minDate.setMonth(today.getMonth() - 6); // Restar 6 meses
+
+  // Calcular la fecha máxima (6 meses después de hoy)
+  const maxDate = new Date(today);
+  maxDate.setMonth(today.getMonth() + 6); // Sumar 6 meses
+
+  // Función para determinar si un año es bisiesto
+  function isLeapYear(year) {
+    return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+  }
+
+  // Obtener el año actual
+  const currentYear = today.getFullYear();
+
+  // Verificar si el año actual es bisiesto
+  const isCurrentYearLeap = isLeapYear(currentYear);
+
+  // Si el año actual es bisiesto, restar un día al maxDate
+  if (isCurrentYearLeap) {
+    maxDate.setDate(maxDate.getDate() - 1); // Restar un día
+  }
+
+  // Ahora puedes usar minDate y maxDate en tu selector de fecha
+
   const dateFormatByLocale = getDateFormatByLocale(moment.locale());
 
   const handleShowReminders = (index) => {
@@ -116,7 +144,16 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader, n
         </Pressable>
       </View>
 
-      {showPicker && <DateTimePicker value={selectedDate} mode="date" display="default" onChange={onDateChange} />}
+      {showPicker && (
+        <DateTimePicker
+          value={selectedDate}
+          mode="date"
+          display="default"
+          onChange={onDateChange}
+          minimumDate={minDate}
+          maximumDate={maxDate}
+        />
+      )}
 
       {filteredReminders && filteredReminders.length > 0 ? (
         <FlatList
