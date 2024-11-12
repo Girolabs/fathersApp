@@ -111,7 +111,7 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader, n
 
   return (
     <View style={{ paddingHorizontal: 15 }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap' }}>
         <Text style={styles.title}>{i18n.t('HOME_SCREEN.REMINDERS')}</Text>
 
         <Pressable
