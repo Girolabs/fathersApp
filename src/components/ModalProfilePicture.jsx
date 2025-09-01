@@ -37,9 +37,9 @@ const ModalProfilePicture = (props) => {
           </Button>
           <Button
             onPress={() => {
-              let mail = 'webmaster@schoenstatt-fathers.link';
+              let mail = 'gensec@schoenstatt-fathers.org';
               let subject = `Photo update for person ${props.fatherId}`;
-              let body = `Dear webmaster, please update the photo for ${props.fullName} with the one I will attach to this email. Thanks!`;
+              let body = `Dear general secretary, please update the photo for ${props.fullName} with the one I will attach to this email. Thanks!`;
               Linking.openURL(`mailto:${mail}?subject=${subject}&body=${body}`);
             }}
           >
@@ -58,9 +58,9 @@ const ModalProfilePicture = (props) => {
             ) : (
               <Button
                 onPress={() => {
-                  let mail = 'webmaster@schoenstatt-fathers.link';
+                  let mail = 'gensec@schoenstatt-fathers.org';
                   let subject = `Photo update for person ${props.fatherId}`;
-                  let body = `Dear webmaster, please update the photo for ${props.fullName} with the one I will attach to this email. Thanks!`;
+                  let body = `Dear general secretary, please update the photo for ${props.fullName} with the one I will attach to this email. Thanks!`;
                   Linking.openURL(`mailto:${mail}?subject=${subject}&body=${body}`);
                 }}
               >

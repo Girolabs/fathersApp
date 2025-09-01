@@ -183,6 +183,8 @@ const HomeScreen = ({ navigation }) => {
 
       const formattedSixMonthsBefore = formatDate(sixMonthsBefore);
 
+      console.log('hola', startDate, formattedSixMonthsBefore);
+
       getReminders(365, formattedSixMonthsBefore)
         .then((res) => {
           const fetchedReminders = res.data.result;

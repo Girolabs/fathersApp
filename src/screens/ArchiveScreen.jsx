@@ -88,7 +88,10 @@ const ArchiveScreen = ({ navigation }) => {
               if (postToUpdate.length > 0) {
                 sendToArchive();
                 //Alert.alert('POST TO UPDATE: ', postToUpdate.toString());
-                navigation.goBack();
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: 'Bulletin' }],
+                });
               } else {
                 Alert.alert('Error', i18n.t('ARCHIVE.ERROR'));
               }

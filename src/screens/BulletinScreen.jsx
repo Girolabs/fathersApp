@@ -16,12 +16,12 @@ import i18n from 'i18n-js';
 import { Ionicons } from 'expo-vector-icons';
 import * as Linking from 'expo-linking';
 import * as ScreenOrientation from 'expo-screen-orientation';
+import { useFocusEffect } from '@react-navigation/native';
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 import { getBoard } from '../api';
 import { BulletinCheckContext } from '../context/BulletinCheckProvider';
 import archive from '../../assets/archive.png';
-import { useFocusEffect } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   screen: {
@@ -67,141 +67,82 @@ const BulletinScreen = ({ navigation }) => {
   const [snackMsg, setSnackMsg] = useState('');
   const { unseenPostsCount, markCheckUnseenCounter, checkOnly } = useContext(BulletinCheckContext);
 
-  const loadPosts = async () => {
+  const loadPosts = useCallback(async () => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
-      getBoard()
-        .then((res) => {
-          const fetchedPosts = res.data.result;
-          const notArchived = fetchedPosts.filter((res) => !res.isArchived);
-          const sortedPosts = notArchived.sort((a, b) => a.title.localeCompare(b.title));
+      try {
+        const res = await getBoard();
+        const fetchedPosts = res.data.result;
+        const notArchived = fetchedPosts.filter((post) => !post.isArchived);
+        const sortedPosts = notArchived.sort((a, b) => a.title.localeCompare(b.title));
 
-          setPosts(sortedPosts);
-          console.log('posts', sortedPosts);
-          markCheckUnseenCounter();
-          setLoading(false);
-        })
-        .catch(() => {
-          setLoading(false);
-          setVisible(true);
-          setSnackMsg(i18n.t('GENERAL.ERROR'));
-        });
+        setPosts(sortedPosts);
+        markCheckUnseenCounter();
+      } catch (error) {
+        setSnackMsg(i18n.t('GENERAL.ERROR'));
+        setVisible(true);
+      } finally {
+        setLoading(false);
+      }
     } else {
-      setVisible(true);
       setSnackMsg(i18n.t('GENERAL.NO_INTERNET'));
+      setVisible(true);
+      setLoading(false);
     }
-  };
-
-  const handleRedirect = (item) => {
-    if (item.redirectUrl && item.isRedirectUrlExternal) {
-      Linking.openURL(item.redirectUrl);
-    } else if (item.redirectUrl && !item.isRedirectUrlExternal) {
-      navigation.navigate('BulletinDetail', {
-        url: item.redirectUrl,
-        postId: item.postId,
-      });
-    } else {
-      navigation.navigate('BulletinDetail', {
-        postId: item.postId,
-      });
-    }
-  };
+  }, [markCheckUnseenCounter]);
 
   useEffect(() => {
     loadPosts();
-    async function orientationBack() {
-      // Restric orientation PORTRAIT_UP screen
-      await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-    }
+    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+
     return () => {
       checkOnly();
-      orientationBack();
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
     };
   }, []);
 
   useFocusEffect(
     useCallback(() => {
-      // Unlock landscape orientation when the screen is focused
       ScreenOrientation.unlockAsync();
-
-      return () => {
-        // Restrict orientation to PORTRAIT_UP when leaving the screen
-        ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
-      };
+      return () => ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
     }, []),
   );
 
-  useEffect(() => {
-    getBoard()
-      .then((res) => {
-        const fetchedPosts = res.data.result;
-        const notArchived = fetchedPosts.filter((res) => !res.isArchived);
-        const sortedPosts = notArchived.sort((a, b) => a.title.localeCompare(b.title));
+  const handleRedirect = (item) => {
+    if (item.redirectUrl) {
+      item.isRedirectUrlExternal
+        ? Linking.openURL(item.redirectUrl)
+        : navigation.navigate('BulletinDetail', { url: item.redirectUrl, postId: item.postId });
+    } else {
+      navigation.navigate('BulletinDetail', { postId: item.postId });
+    }
+  };
 
-        setPosts(sortedPosts);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-        setVisible(true);
-        setSnackMsg(i18n.t('GENERAL.ERROR'));
-      });
-  }, [posts]);
-
-  let TouchableComp = TouchableOpacity;
-  if (Platform.OS === 'android' && Platform.Version >= 21) {
-    TouchableComp = TouchableNativeFeedback;
-  }
+  const TouchableComp =
+    Platform.OS === 'android' && Platform.Version >= 21 ? TouchableNativeFeedback : TouchableOpacity;
 
   return (
     <View style={styles.screen}>
-      {!loading ? (
+      {loading ? (
+        <ActivityIndicator size="large" color={Colors.primaryColor} />
+      ) : (
         <>
           <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginVertical: 20,
-              marginHorizontal: 20,
-            }}
+            style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 20, marginHorizontal: 20 }}
           >
             <Pressable
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-              }}
-              onPress={() => {
-                navigation.navigate('Archived');
-              }}
+              style={{ flexDirection: 'row', alignItems: 'center' }}
+              onPress={() => navigation.navigate('Archived')}
             >
               <Text
-                style={{
-                  fontFamily: 'work-sans',
-                  fontStyle: 'normal',
-                  marginRight: 5,
-                  fontSize: 15,
-                  fontWeight: '400',
-                  color: '#0104AC',
-                }}
+                style={{ fontFamily: 'work-sans', marginRight: 5, fontSize: 15, fontWeight: '400', color: '#0104AC' }}
               >
                 {i18n.t('ARCHIVE.ARCHIVED')}
               </Text>
               <Image source={archive} />
             </Pressable>
-            <Pressable
-              onPress={() => {
-                navigation.navigate('Edit');
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: 'work-sans',
-                  fontStyle: 'normal',
-                  fontSize: 15,
-                  fontWeight: '400',
-                  color: '#0104AC',
-                }}
-              >
+            <Pressable onPress={() => navigation.navigate('Edit')}>
+              <Text style={{ fontFamily: 'work-sans', fontSize: 15, fontWeight: '400', color: '#0104AC' }}>
                 {i18n.t('ARCHIVE.EDIT')}
               </Text>
             </Pressable>
@@ -210,11 +151,7 @@ const BulletinScreen = ({ navigation }) => {
             data={posts}
             keyExtractor={(item) => item.postId.toString()}
             renderItem={({ item }) => (
-              <TouchableComp
-                onPress={() => {
-                  handleRedirect(item);
-                }}
-              >
+              <TouchableComp onPress={() => handleRedirect(item)}>
                 <View style={styles.listItem}>
                   <View style={styles.leftSideListItem}>
                     <Ionicons
@@ -232,8 +169,6 @@ const BulletinScreen = ({ navigation }) => {
             )}
           />
         </>
-      ) : (
-        <ActivityIndicator size="large" color={Colors.primaryColor} />
       )}
       <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
         {snackMsg}

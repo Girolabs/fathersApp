@@ -6,7 +6,7 @@
       "ios",
       "android"
     ],
-    "version": "1.6.4",
+    "version": "1.6.12",
     "orientation": "portrait",
     "icon": "./assets/img/icon_app.png",
     "primaryColor": "#ffffff",
@@ -33,7 +33,7 @@
     ],
     "android": {
       "package": "com.schoenstatt.fathersApp",
-      "versionCode": 29,
+      "versionCode": 37,
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.WRITE_EXTERNAL_STORAGE",
@@ -49,7 +49,7 @@
     },
     "ios": {
       "bundleIdentifier": "com.schoenstatt.fathersApp",
-      "buildNumber": "13",
+      "buildNumber": "1",
       "supportsTablet": false,
       "requireFullScreen": true
     },
