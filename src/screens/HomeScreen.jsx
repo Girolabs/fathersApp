@@ -124,38 +124,30 @@ const HomeScreen = ({ navigation }) => {
   const [photos, setPhotos] = useState([]);
   const [favorite, setFavorite] = useState({});
 
-  useEffect(() => {
-    const backAction = () => {
-      if (Platform.OS === 'android') {
+  // Manejo del botón atrás en Android usando la API moderna
+  useFocusEffect(
+    useCallback(() => {
+      if (Platform.OS !== 'android') return;
+
+      const backAction = () => {
         // Solo en HomeScreen, minimizar la app
         BackHandler.exitApp();
         return true;
-      }
-      return false;
-    };
+      };
 
-    // Listener para cuando la pantalla obtiene el foco
-    const focusListener = navigation.addListener('focus', () => {
-      BackHandler.addEventListener('hardwareBackPress', backAction);
-    });
+      // Nueva forma de agregar listener
+      const subscription = BackHandler.addEventListener('hardwareBackPress', backAction);
 
-    // Listener para cuando la pantalla pierde el foco
-    const blurListener = navigation.addListener('blur', () => {
-      BackHandler.removeEventListener('hardwareBackPress', backAction);
-    });
-
-    // Limpieza de listeners cuando el componente se desmonta
-    return () => {
-      focusListener(); // Eliminar listener de foco
-      blurListener(); // Eliminar listener de blur
-      BackHandler.removeEventListener('hardwareBackPress', backAction); // Asegurar eliminación del listener de back
-    };
-  }, [navigation]);
+      // Cleanup del listener al perder foco o desmontar
+      return () => subscription.remove();
+    }, []),
+  );
 
   const loadReminders = async () => {
     const status = await Network.getNetworkStateAsync();
     if (status.isConnected) {
       setLoading(true);
+
       //pasar fecha de hoy como parametro en getReminders
       var d = new Date();
       const day = d.getDate().toString().padStart(2, '0');
@@ -402,93 +394,6 @@ const HomeScreen = ({ navigation }) => {
                 </View>
               </>
             }
-            /*ListFooterComponent={
-              <>
-                {!loading ? (
-                  <View
-                    style={{
-                      backgroundColor: '#fff',
-                      marginTop: 20,
-                      width: '100%',
-                      height: '100%',
-                    }}
-                  >
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        margin: 30,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: 'work-sans-semibold',
-                          fontWeight: '600',
-                          color: Colors.primaryColor,
-                          fontSize: 27,
-                          textAlign: 'center',
-                        }}
-                      >
-                        {i18n.t('GALLERY.PHOTOS')}
-                      </Text>
-                      <Pressable
-                        style={{
-                          width: 30,
-                          height: 30,
-                          alignItems: 'center',
-                        }}
-                        onPress={() => {
-                          navigation.navigate('Gallery');
-                        }}
-                      >
-                        <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
-                      </Pressable>
-                    </View>
-                    <View
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      <CustomSlider data={photos} navigation={navigation} />
-                    </View>
-                    <Pressable
-                      onPress={() => navigation.navigate('Photos')}
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: 28,
-                        marginBottom: 25,
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontFamily: 'work-sans-semibold',
-                          fontWeight: '600',
-                          fontSize: 15,
-                          color: '#0104AC',
-                          marginRight: 20,
-                        }}
-                      >
-                        {i18n.t('GALLERY.SEE_ALL')}
-                      </Text>
-                      <Ionicons name="ios-arrow-forward" size={23} color="#0104AC" />
-                    </Pressable>
-                    <View
-                      style={{
-                        borderBottomColor: '#F2F3FF',
-                        borderBottomWidth: StyleSheet.hairlineWidth,
-                        width: '90%',
-                      }}
-                    />
-                  </View>
-                ) : null}
-              </>
-            }*/
           ></FlatList>
         );
       }}

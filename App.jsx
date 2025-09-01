@@ -1,6 +1,5 @@
-import React from 'react';
+import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
-import AppLoading from 'expo-app-loading';
 import { NavigationContainer } from '@react-navigation/native';
 import PatresNavigator from './src/navigator/PatresNavigator';
 import I18nProvider from './src/context/I18nProvider';
@@ -40,7 +39,12 @@ export default function App() {
   addResponseInterceptor(responseInterceptor);
 
   if (!fontsLoaded) {
-    return <AppLoading />;
+    // reemplazo de AppLoading
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
   }
 
   return (
@@ -55,3 +59,11 @@ export default function App() {
     </AuthProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
