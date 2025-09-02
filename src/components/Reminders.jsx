@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, Text, Linking, Image } from 'react-native';
+import { View, StyleSheet, FlatList, Text, Linking, Image, Alert } from 'react-native';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from 'expo-vector-icons';
 import CountryFlag from 'react-native-country-flag';
@@ -45,6 +45,21 @@ const styles = StyleSheet.create({
   },
 });
 
+const sanitizePhoneNumber = (number) => {
+  return number.replace(/[^0-9]/g, '');
+};
+
+const openWhatsApp = async (rawNumber) => {
+  const phoneNumber = sanitizePhoneNumber(rawNumber);
+  const url = `https://wa.me/${phoneNumber}`;
+  const supported = await Linking.canOpenURL(url);
+  if (supported) {
+    await Linking.openURL(url);
+  } else {
+    Alert.alert('Error', 'Unable to open WhatsApp. Please make sure it is installed and the phone number is valid.');
+  }
+};
+
 const Reminders = ({ navigation, reminders = [] }) => {
   const getIcon = (dateType) => {
     let icon = null;
@@ -56,30 +71,14 @@ const Reminders = ({ navigation, reminders = [] }) => {
         icon = <FontAwesome5 name="birthday-cake" size={24} color={Colors.primaryColor} />;
         break;
       case 'priestDate':
-        // icon = <FontAwesome5 name="wine-glass-alt" size={24} color={Colors.primaryColor} />;
-        icon = (
-          <Image
-            style={{
-              width: 24,
-              height: 35,
-            }}
-            source={logo}
-          />
-        );
+        icon = <Image style={{ width: 24, height: 35 }} source={logo} />;
+
         break;
       case 'deathDate':
         icon = <FontAwesome5 name="cross" size={24} color={Colors.primaryColor} />;
         break;
       case 'bishopDate':
-        icon = (
-          <Image
-            style={{
-              width: 24.5,
-              height: 27.5,
-            }}
-            source={bishopLogo}
-          />
-        );
+        icon = <Image style={{ width: 24.5, height: 27.5 }} source={bishopLogo} />;
         break;
       default:
         icon = <Ionicons name="ios-calendar" size={24} color={Colors.primaryColor} />;
@@ -141,7 +140,7 @@ const Reminders = ({ navigation, reminders = [] }) => {
         const path = getPath(item.kind);
         const params = getParams(item.kind, item.entityObject);
         const date = moment.utc(item.date).format('dddd, Do MMMM YYYY');
-        const prefixWa = 'http://api.whatsapp.com/send?phone=';
+
         return (
           <View>
             <View style={styles.container}>
@@ -195,7 +194,7 @@ const Reminders = ({ navigation, reminders = [] }) => {
                   item.entityObject.phones[0].whatsApp && (
                     <Button
                       onPress={() => {
-                        Linking.openURL(`${prefixWa}${item.entityObject.phones[0].number}`);
+                        openWhatsApp(item.entityObject.phones[0].number);
                       }}
                     >
                       <Ionicons name="logo-whatsapp" size={23} color={Colors.onSurfaceColorSecondary} />
