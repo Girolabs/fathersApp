@@ -1,13 +1,13 @@
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
+import { useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import PatresNavigator from './src/navigator/PatresNavigator';
 import I18nProvider from './src/context/I18nProvider';
 import AuthProvider from './src/context/AuthProvider';
 import BulletinCheckProvider from './src/context/BulletinCheckProvider';
-import { useNavigationContainerRef } from '@react-navigation/native';
 import { addResponseInterceptor } from './src/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -26,7 +26,10 @@ export default function App() {
       try {
         await AsyncStorage.removeItem('token');
         if (navigationRef.isReady()) {
-          navigationRef.navigate('Auth');
+          navigationRef.reset({
+            index: 0,
+            routes: [{ name: 'Auth' }], // Limpia el stack y redirige a Auth
+          });
         }
       } catch (e) {
         console.error(e);
@@ -36,7 +39,10 @@ export default function App() {
     return response;
   };
 
-  addResponseInterceptor(responseInterceptor);
+  // Registrar el interceptor una sola vez
+  useEffect(() => {
+    addResponseInterceptor(responseInterceptor);
+  }, []);
 
   if (!fontsLoaded) {
     // reemplazo de AppLoading

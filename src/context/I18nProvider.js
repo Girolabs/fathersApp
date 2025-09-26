@@ -11,52 +11,45 @@ import { DE } from '../i18n/de';
 const I18nContext = createContext();
 
 class I18nProvider extends Component {
-  state = {
-    lang: null,
-  };
-  async componentDidMount() {
-    i18n.translations = {
-      en: EN,
-      es: ES,
-      de: DE,
-      pt: PT,
-    };
-    const storageLang = await AsyncStorage.getItem('lang');
+  state = { lang: null };
 
-    if (storageLang) {
-      let transformedStorageLang = storageLang;
-      i18n.locale = transformedStorageLang;
-      i18n.fallbacks = true;
-      this.setState({ lang: transformedStorageLang });
-    } else {
-      i18n.locale = String(Localization.locale).split('-')[0];
-      i18n.fallbacks = true;
-      this.setState({ lang: String(Localization.locale).split('-')[0] });
-      AsyncStorage.setItem('lang', String(Localization.locale).split('-')[0]);
+  async componentDidMount() {
+    i18n.translations = { en: EN, es: ES, de: DE, pt: PT };
+    i18n.fallbacks = true;
+
+    const storageLang = await AsyncStorage.getItem('lang');
+    const defaultLang = String(Localization.locale).split('-')[0];
+
+    const lang = storageLang || defaultLang;
+    i18n.locale = lang;
+
+    this.setState({ lang });
+    if (!storageLang) {
+      await AsyncStorage.setItem('lang', lang);
     }
   }
-  componentDidUpdate() {
-    console.log('[Provider componentDidUpdate]');
-    i18n.locale = this.state.lang;
-    i18n.fallbacks = true;
+
+  async componentDidUpdate(_, prevState) {
+    if (prevState.lang !== this.state.lang) {
+      i18n.locale = this.state.lang;
+    }
   }
 
-  changeLang = (newLang) => {
-    i18n.locale = newLang.lang;
-    i18n.fallbacks = true;
-    AsyncStorage.setItem('lang', newLang.lang);
-    this.setState({ lang: newLang.lang });
+  changeLang = async (newLang) => {
+    i18n.locale = newLang;
+    await AsyncStorage.setItem('lang', newLang);
+    this.setState({ lang: newLang });
   };
 
   render() {
     console.log('[Rendering]: I18nProvider');
     return (
       <Fragment>
-        {this.state.lang && i18n.translations ? (
+        {this.state.lang ? (
           <I18nContext.Provider
             value={{
               lang: this.state.lang,
-              changeLang: (newLang) => this.changeLang({ lang: newLang }),
+              changeLang: this.changeLang,
             }}
           >
             {this.props.children}

@@ -6,7 +6,7 @@
       "ios",
       "android"
     ],
-    "version": "1.6.12",
+    "version": "1.6.13",
     "orientation": "portrait",
     "icon": "./assets/img/icon_app.png",
     "primaryColor": "#ffffff",
@@ -51,7 +51,11 @@
       "bundleIdentifier": "com.schoenstatt.fathersApp",
       "buildNumber": "1",
       "supportsTablet": false,
-      "requireFullScreen": true
+      "requireFullScreen": true,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSContactsUsageDescription": "This app needs access to your contacts so you can save a phone number and email directly in your device."
+      }
     },
     "extra": {
       "secretKey": "",
