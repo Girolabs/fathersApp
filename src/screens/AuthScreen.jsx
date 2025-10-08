@@ -287,8 +287,11 @@ class AuthScreen extends Component {
                               <Select
                                 containerStyle={styles.selectContainer}
                                 elements={lng}
-                                value={value.lang}
-                                valueChange={value.changeLang}
+                                // Aseguramos que el value siempre sea válido dentro de elements
+                                value={lng.some((l) => l.value === value.lang) ? value.lang : 'en'}
+                                valueChange={async (newLang) => {
+                                  await value.changeLang(newLang);
+                                }}
                               />
                               <Button
                                 onPress={() => {

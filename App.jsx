@@ -1,8 +1,16 @@
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
-import { useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Localization from 'expo-localization';
+import i18n from 'i18n-js';
+
+import { EN } from './src/i18n/en';
+import { ES } from './src/i18n/es';
+import { PT } from './src/i18n/pt';
+import { DE } from './src/i18n/de';
+
 import PatresNavigator from './src/navigator/PatresNavigator';
 import I18nProvider from './src/context/I18nProvider';
 import AuthProvider from './src/context/AuthProvider';
@@ -17,35 +25,52 @@ export default function App() {
     'work-sans-bold': require('./assets/fonts/WorkSans-Bold.ttf'),
   });
 
+  const [langReady, setLangReady] = useState(false);
   const navigationRef = useNavigationContainerRef();
 
+  // Inicializar idioma ANTES de renderizar
+  useEffect(() => {
+    const initLang = async () => {
+      i18n.translations = { en: EN, es: ES, de: DE, pt: PT };
+      i18n.fallbacks = true;
+
+      const storageLang = await AsyncStorage.getItem('lang');
+      const systemLang = String(Localization.locale).split('-')[0];
+      const selectedLang = storageLang || systemLang || 'en';
+
+      i18n.locale = selectedLang;
+      if (!storageLang) await AsyncStorage.setItem('lang', selectedLang);
+
+      console.log('[i18n initialized]:', i18n.locale);
+      setLangReady(true);
+    };
+
+    initLang();
+  }, []);
+
+  // Interceptor de respuesta
   const responseInterceptor = async (response) => {
-    console.log('ejecutando interceptor');
     if (response.status === 401) {
-      // Logout
       try {
         await AsyncStorage.removeItem('token');
         if (navigationRef.isReady()) {
           navigationRef.reset({
             index: 0,
-            routes: [{ name: 'Auth' }], // Limpia el stack y redirige a Auth
+            routes: [{ name: 'Auth' }],
           });
         }
       } catch (e) {
         console.error(e);
       }
-      return response;
     }
     return response;
   };
 
-  // Registrar el interceptor una sola vez
   useEffect(() => {
     addResponseInterceptor(responseInterceptor);
   }, []);
 
-  if (!fontsLoaded) {
-    // reemplazo de AppLoading
+  if (!fontsLoaded || !langReady) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#0000ff" />

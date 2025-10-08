@@ -116,14 +116,19 @@ const SettingsScreen = (props) => {
                   // containerStyle={styles.selectContainer}
                   style={styles.selectAndroid}
                   elements={lng}
-                  value={value.lang}
+                  value={lng.some((l) => l.value === value.lang) ? value.lang : 'en'}
                   valueChange={value.changeLang}
                 />
               </View>
             ) : (
               <View style={styles.pickerContainer}>
                 <Text style={styles.text}>{i18n.t('SETTINGS.LANGUAGE')}</Text>
-                <Select style={styles.select} elements={lng} value={value.lang} valueChange={value.changeLang} />
+                <Select
+                  style={styles.select}
+                  elements={lng}
+                  value={lng.some((l) => l.value === value.lang) ? value.lang : 'en'}
+                  valueChange={value.changeLang}
+                />
               </View>
             )}
             {Platform.OS === 'android' ? (

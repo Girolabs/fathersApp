@@ -8,10 +8,10 @@ import { ES } from '../i18n/es';
 import { PT } from '../i18n/pt';
 import { DE } from '../i18n/de';
 
-const I18nContext = createContext();
+export const I18nContext = createContext();
 
 class I18nProvider extends Component {
-  state = { lang: null };
+  state = { lang: null, ready: false };
 
   async componentDidMount() {
     i18n.translations = { en: EN, es: ES, de: DE, pt: PT };
@@ -19,19 +19,13 @@ class I18nProvider extends Component {
 
     const storageLang = await AsyncStorage.getItem('lang');
     const defaultLang = String(Localization.locale).split('-')[0];
-
     const lang = storageLang || defaultLang;
-    i18n.locale = lang;
 
-    this.setState({ lang });
+    i18n.locale = lang;
+    this.setState({ lang, ready: true });
+
     if (!storageLang) {
       await AsyncStorage.setItem('lang', lang);
-    }
-  }
-
-  async componentDidUpdate(_, prevState) {
-    if (prevState.lang !== this.state.lang) {
-      i18n.locale = this.state.lang;
     }
   }
 
@@ -42,23 +36,18 @@ class I18nProvider extends Component {
   };
 
   render() {
-    console.log('[Rendering]: I18nProvider');
+    if (!this.state.ready) return null; // Espera a que el idioma esté listo
     return (
-      <Fragment>
-        {this.state.lang ? (
-          <I18nContext.Provider
-            value={{
-              lang: this.state.lang,
-              changeLang: this.changeLang,
-            }}
-          >
-            {this.props.children}
-          </I18nContext.Provider>
-        ) : null}
-      </Fragment>
+      <I18nContext.Provider
+        value={{
+          lang: this.state.lang,
+          changeLang: this.changeLang,
+        }}
+      >
+        {this.props.children}
+      </I18nContext.Provider>
     );
   }
 }
 
 export default I18nProvider;
-export { I18nContext };

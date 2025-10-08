@@ -13,17 +13,20 @@ const instance = axios.create({
   },
 });
 
+// Interceptor de request
 instance.interceptors.request.use(async (config) => {
+  const storageLang = await AsyncStorage.getItem('lang');
+  const lang = storageLang || i18n.locale || 'en';
+  i18n.locale = lang;
+
   let token = await AsyncStorage.getItem('token');
-  // console.log('Token Interceptor', token);
-  //   console.log(config);
-  const lang = i18n.locale;
   token = token ? JSON.parse(token).jwt : null;
-  config.headers.Authorization = token ? `Bearer ${token}` : '';
-  config.url = i18n.locale + config.url;
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+
   return config;
 });
 
+// Interceptor de respuesta
 export function addResponseInterceptor(fn) {
   instance.interceptors.response.use(fn);
 }
