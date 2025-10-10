@@ -114,6 +114,25 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
 });
+
+// Función de referencia para WhatsApp
+const sanitizePhoneNumber = (number) => {
+  return number.replace(/[^0-9]/g, '');
+};
+
+const openWhatsApp = async (rawNumber) => {
+  const phoneNumber = sanitizePhoneNumber(rawNumber);
+  const url = `https://wa.me/${phoneNumber}`;
+  const supported = await Linking.canOpenURL(url);
+  if (supported) {
+    await Linking.openURL(url);
+  } else {
+    Alert.alert(
+      'Error',
+      'Unable to open WhatsApp. Please make sure it is installed and the phone number is valid.'
+    );
+  }
+};
 class AssignmentsScreen extends Component {
   state = {
     selectedtTab: 0,
@@ -396,9 +415,7 @@ class AssignmentsScreen extends Component {
                                     {asg.person.phones.length >= 1 && asg.person.phones[0].whatsApp === true && (
                                       <Pressable
                                         onPress={() => {
-                                          Linking.openURL(
-                                            `http://api.whatsapp.com/send?phone=${asg.person.phones[0].number}`,
-                                          );
+                                          openWhatsApp(asg.person.phones[0].number)
                                         }}
                                         style={{ position: 'absolute', marginLeft: '90%' }}
                                       >
@@ -640,7 +657,7 @@ const ListItem = (props) => {
         {wa && (
           <Pressable
             onPress={() => {
-              Linking.openURL(`http://api.whatsapp.com/send?phone=${wa}`);
+             openWhatsApp(wa);
             }}
             style={{ position: 'absolute', marginLeft: '90%' }}
           >
@@ -689,7 +706,7 @@ const ListItemGC = (props) => {
       {wa && (
         <Pressable
           onPress={() => {
-            Linking.openURL(`http://api.whatsapp.com/send?phone=${wa}`);
+            openWhatsApp(wa);
           }}
           style={{ position: 'absolute', marginLeft: '90%' }}
         >

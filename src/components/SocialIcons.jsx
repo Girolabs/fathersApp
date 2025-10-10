@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableNativeFeedback, TouchableOpacity, Platform, Linking } from 'react-native';
+import { View, StyleSheet, TouchableNativeFeedback, TouchableOpacity, Platform, Linking, Alert } from 'react-native';
 import { Ionicons } from 'expo-vector-icons';
 import PropTypes from 'prop-types';
 import Colors from '../constants/Colors';
@@ -13,6 +13,26 @@ const styles = StyleSheet.create({
     margin: 5,
   },
 });
+
+// Función de referencia para WhatsApp
+const sanitizePhoneNumber = (number) => {
+  return number.replace(/[^0-9]/g, '');
+};
+
+const openWhatsApp = async (rawNumber) => {
+  const phoneNumber = sanitizePhoneNumber(rawNumber);
+  const url = `https://wa.me/${phoneNumber}`;
+  const supported = await Linking.canOpenURL(url);
+  if (supported) {
+    await Linking.openURL(url);
+  } else {
+    Alert.alert(
+      'Error',
+      'Unable to open WhatsApp. Please make sure it is installed and the phone number is valid.'
+    );
+  }
+};
+
 const SocialIcons = ({ wa = '', tw = '', slack = '', ig = '', skype = '', fb = '', size = 24 }) => {
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -24,7 +44,7 @@ const SocialIcons = ({ wa = '', tw = '', slack = '', ig = '', skype = '', fb = '
       {wa && (
         <TouchableComp
           onPress={() => {
-            Linking.openURL(`http://api.whatsapp.com/send?phone=${wa}`);
+            openWhatsApp(wa);
           }}
         >
           <Ionicons name="logo-whatsapp" style={styles.icon} size={size} color={Colors.primaryColor} />
