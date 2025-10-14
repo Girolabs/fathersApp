@@ -17,14 +17,12 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import * as Network from 'expo-network';
 import 'moment/min/locales';
-
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { useFocusEffect } from '@react-navigation/native';
 import { Ionicons } from 'expo-vector-icons';
 
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
-
 import { I18nContext } from '../context/I18nProvider';
 import { getLastPhotos, getPinnedPosts, getReminders } from '../api';
 import RemindersHeaders from '../components/RemindersHeaders';
@@ -35,7 +33,6 @@ import { CustomSlider } from '../components/CarouselSlider';
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    //padding: 15,
     backgroundColor: Colors.surfaceColorPrimary,
     marginBottom: 15,
   },
@@ -44,70 +41,6 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: Colors.surfaceColorPrimary,
     justifyContent: 'center',
-  },
-  prayerCard: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: Colors.secondaryColor,
-    width: '100%',
-    padding: 15,
-    borderRadius: 15,
-    marginVertical: 10,
-  },
-  prayerCardTitle: {
-    fontFamily: 'work-sans-semibold',
-    fontSize: 18,
-    color: Colors.primaryColor,
-  },
-  title: {
-    color: Colors.primaryColor,
-    fontFamily: 'work-sans-semibold',
-    fontSize: 28,
-    marginTop: 5,
-    padding: 20,
-  },
-  reminderHeader: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: Colors.primaryColor,
-    borderRadius: 15,
-    marginTop: 5,
-  },
-  reminderHeaderTitle: {
-    color: Colors.surfaceColorPrimary,
-    fontSize: 15,
-    marginLeft: 10,
-    fontFamily: 'work-sans-medium',
-    width: '85%',
-  },
-  reminderImportantHeader: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: Colors.secondaryColor,
-    borderRadius: 15,
-    marginTop: 5,
-  },
-  reminderListItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.surfaceColorPrimary,
-    backgroundColor: Colors.surfaceColorSecondary,
   },
   snackError: {
     backgroundColor: Colors.secondaryColor,
@@ -120,120 +53,120 @@ const HomeScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
   const [snackMsg, setSnackMsg] = useState('');
-  const { unseenPostsCount, markCheckUnseenCounter, checkOnly } = useContext(BulletinCheckContext);
   const [photos, setPhotos] = useState([]);
   const [favorite, setFavorite] = useState({});
+  const { checkOnly } = useContext(BulletinCheckContext);
 
-  // Manejo del botón atrás en Android usando la API moderna
+  // Botón atrás en Android → salir de la app
   useFocusEffect(
     useCallback(() => {
       if (Platform.OS !== 'android') return;
 
       const backAction = () => {
-        // Solo en HomeScreen, minimizar la app
         BackHandler.exitApp();
         return true;
       };
 
-      // Nueva forma de agregar listener
       const subscription = BackHandler.addEventListener('hardwareBackPress', backAction);
-
-      // Cleanup del listener al perder foco o desmontar
       return () => subscription.remove();
     }, []),
   );
 
-  const loadReminders = async () => {
-    const status = await Network.getNetworkStateAsync();
-    if (status.isConnected) {
-      setLoading(true);
+  // Bloquear orientación + cargar recordatorios al montar
+  useEffect(() => {
+    let isMounted = true;
 
-      //pasar fecha de hoy como parametro en getReminders
-      var d = new Date();
-      const day = d.getDate().toString().padStart(2, '0');
-      const month = (d.getMonth() + 1).toString().padStart(2, '0');
-      const year = d.getFullYear().toString();
-      const startDate = year + '-' + month + '-' + day; //(US)
-      const firstDayOfYear = new Date(new Date().getFullYear(), 0, 1);
+    const lockScreen = async () => {
+      try {
+        await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+      } catch (e) {
+        console.log('Orientation lock failed', e);
+      }
+    };
 
-      const today = new Date();
+    const loadReminders = async () => {
+      try {
+        const status = await Network.getNetworkStateAsync();
+        if (!status.isConnected) {
+          if (isMounted) {
+            setVisible(true);
+            setSnackMsg(i18n.t('GENERAL.NO_INTERNET'));
+          }
+          return;
+        }
 
-      // Calcular la fecha de 6 meses anteriores (fecha de inicio)
-      const sixMonthsBefore = new Date(today);
-      sixMonthsBefore.setMonth(today.getMonth() - 6);
+        setLoading(true);
 
-      // Formatear la fecha como 'YYYY-MM-DD' para la fecha de inicio
-      const formatDate = (date) => {
-        return (
-          date.getFullYear() +
-          '-' +
-          String(date.getMonth() + 1).padStart(2, '0') +
-          '-' +
-          String(date.getDate()).padStart(2, '0')
-        );
-      };
+        const today = new Date();
+        const sixMonthsBefore = new Date(today);
+        sixMonthsBefore.setMonth(today.getMonth() - 6);
 
-      const formattedSixMonthsBefore = formatDate(sixMonthsBefore);
+        const formatDate = (date) =>
+          `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(
+            date.getDate(),
+          ).padStart(2, '0')}`;
 
-      console.log('hola', startDate, formattedSixMonthsBefore);
+        const formattedSixMonthsBefore = formatDate(sixMonthsBefore);
 
-      getReminders(365, formattedSixMonthsBefore)
-        .then((res) => {
-          const fetchedReminders = res.data.result;
-          setReminders(fetchedReminders);
-        })
-        .catch((err) => {
+        const res = await getReminders(365, formattedSixMonthsBefore);
+        if (isMounted) setReminders(res.data.result);
+      } catch (err) {
+        console.log('loadReminders error', err);
+        if (isMounted) {
           setVisible(true);
           setSnackMsg(i18n.t('GENERAL.ERROR'));
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    } else {
-      setVisible(true);
-      setSnackMsg(i18n.t('GENERAL.NO_INTERNET'));
-    }
-  };
+          console.log(err)
+        }
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
 
-  const loadPinPost = async () => {
-    await getPinnedPosts()
-      .then((res) => {
-        setFavorite(res.data.result);
-      })
-      .catch((err) => {
-        setFavorite({});
-      });
-  };
-
-  useEffect(() => {
-    ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
+    lockScreen();
     loadReminders();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
+  // Ejecutar checkOnly cuando se enfoca
   useFocusEffect(
     useCallback(() => {
-      // Funciones a ejecutar cuando la pantalla se enfoca
-      loadReminders();
-      checkOnly();
-
-      return () => {
-        // Cleanup si es necesario
-      };
-    }, []),
+      checkOnly?.();
+      return () => {};
+    }, [checkOnly]),
   );
 
+  // Cargar post destacado (pinned)
   useEffect(() => {
-    loadPinPost();
-  }, [favorite && loading]);
-
-  useEffect(() => {
-    getLastPhotos().then((res) => {
-      const dataSort = res.data.result.sort(function (a, b) {
-        return b.galleryPhotoId - a.galleryPhotoId; /* Modificar si se desea otra propiedad */
+    let active = true;
+    getPinnedPosts()
+      .then((res) => {
+        if (active) setFavorite(res.data.result);
+      })
+      .catch(() => {
+        if (active) setFavorite({});
       });
-      setPhotos(dataSort);
-    });
-  }, [photos && loading]);
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  // Cargar fotos recientes
+  useEffect(() => {
+    let active = true;
+    getLastPhotos()
+      .then((res) => {
+        if (!active) return;
+        const dataSort = res.data.result.sort((a, b) => b.galleryPhotoId - a.galleryPhotoId);
+        setPhotos(dataSort);
+      })
+      .catch((e) => console.log('photo load error', e));
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const windowHeight = useWindowDimensions().height;
 
@@ -241,160 +174,156 @@ const HomeScreen = ({ navigation }) => {
     <I18nContext.Consumer>
       {(value) => {
         moment.locale(value.lang);
-        console.log(moment.locale());
 
         return (
           <FlatList
             ListHeaderComponent={
-              <>
-                <View style={styles.screen}>
-                  {!loading ? (
-                    <>
-                      {Object.entries(favorite).length > 0 && (
-                        <Pressable
-                          style={{ padding: 15 }}
-                          onPress={() =>
-                            navigation.navigate('BulletinDetail', {
-                              postId: favorite.postId,
-                              url: favorite.redirectUrl,
-                            })
-                          }
-                        >
-                          <View
-                            style={{
-                              height: 100,
-                              backgroundColor: '#F8CE46',
-                              borderRadius: 10,
-                              flexDirection: 'row',
-                              justifyContent: 'space-evenly',
-                              alignItems: 'center',
-                              padding: 20,
-                            }}
-                          >
-                            <Image source={star} />
-                            <Text
-                              style={{
-                                fontSize: 18,
-                                fontFamily: 'work-sans-semibold',
-                                color: Colors.primaryColor,
-                                paddingHorizontal: 15,
-                                width: '85%',
-                              }}
-                            >
-                              {favorite.title}
-                            </Text>
-                            <Ionicons name="ios-arrow-forward" size={25} color={Colors.primaryColor} />
-                          </View>
-                        </Pressable>
-                      )}
-                      <View
-                        style={{
-                          backgroundColor: '#fff',
-                          //marginTop: 20,
-                          width: '100%',
-                          //height: '100%',
-                        }}
+              <View style={styles.screen}>
+                {!loading ? (
+                  <>
+                    {Object.entries(favorite).length > 0 && (
+                      <Pressable
+                        style={{ padding: 15 }}
+                        onPress={() =>
+                          navigation.navigate('BulletinDetail', {
+                            postId: favorite.postId,
+                            url: favorite.redirectUrl,
+                          })
+                        }
                       >
                         <View
                           style={{
+                            height: 100,
+                            backgroundColor: '#F8CE46',
+                            borderRadius: 10,
                             flexDirection: 'row',
-                            justifyContent: 'space-between',
+                            justifyContent: 'space-evenly',
                             alignItems: 'center',
-                            margin: 30,
+                            padding: 20,
                           }}
                         >
+                          <Image source={star} />
                           <Text
                             style={{
+                              fontSize: 18,
                               fontFamily: 'work-sans-semibold',
-                              fontWeight: '600',
                               color: Colors.primaryColor,
-                              fontSize: 27,
-                              textAlign: 'center',
+                              paddingHorizontal: 15,
+                              width: '85%',
                             }}
                           >
-                            {i18n.t('GALLERY.PHOTOS')}
+                            {favorite.title}
                           </Text>
-                          <Pressable
-                            style={{
-                              width: 30,
-                              height: 30,
-                              alignItems: 'center',
-                            }}
-                            onPress={() => {
-                              navigation.navigate('Gallery');
-                            }}
-                          >
-                            <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
-                          </Pressable>
+                          <Ionicons name="ios-arrow-forward" size={25} color={Colors.primaryColor} />
                         </View>
-                        <View
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            overflow: 'hidden',
-                          }}
-                        >
-                          <CustomSlider data={photos} navigation={navigation} />
-                        </View>
-                        <Pressable
-                          onPress={() => navigation.navigate('Photos')}
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginTop: 28,
-                            marginBottom: 25,
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontFamily: 'work-sans-semibold',
-                              fontWeight: '600',
-                              fontSize: 15,
-                              color: '#0104AC',
-                              marginRight: 20,
-                            }}
-                          >
-                            {i18n.t('GALLERY.SEE_ALL')}
-                          </Text>
-                          <Ionicons name="ios-arrow-forward" size={23} color="#0104AC" />
-                        </Pressable>
-                        <View
-                          style={{
-                            borderBottomColor: '#F2F3FF',
-                            borderBottomWidth: StyleSheet.hairlineWidth,
-                            width: '90%',
-                          }}
-                        />
-                      </View>
-                      {
-                        <RemindersHeaders
-                          reminders={reminders}
-                          selectedHeader={selectedReminder}
-                          onChangeSelectedHeader={(index) => setSelectedReminder(index)}
-                          navigation={navigation}
-                        />
-                      }
-                    </>
-                  ) : (
-                    <View style={styles.screenLoading}>
-                      <ActivityIndicator
+                      </Pressable>
+                    )}
+
+                    <View
+                      style={{
+                        backgroundColor: '#fff',
+                        width: '100%',
+                      }}
+                    >
+                      <View
                         style={{
-                          height: windowHeight,
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          margin: 30,
                         }}
-                        size="large"
-                        color={Colors.primaryColor}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: 'work-sans-semibold',
+                            fontWeight: '600',
+                            color: Colors.primaryColor,
+                            fontSize: 27,
+                            textAlign: 'center',
+                          }}
+                        >
+                          {i18n.t('GALLERY.PHOTOS')}
+                        </Text>
+                        <Pressable
+                          style={{
+                            width: 30,
+                            height: 30,
+                            alignItems: 'center',
+                          }}
+                          onPress={() => {
+                            navigation.navigate('Gallery');
+                          }}
+                        >
+                          <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
+                        </Pressable>
+                      </View>
+
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        <CustomSlider data={photos} navigation={navigation} />
+                      </View>
+
+                      <Pressable
+                        onPress={() => navigation.navigate('Photos')}
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          marginTop: 28,
+                          marginBottom: 25,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: 'work-sans-semibold',
+                            fontWeight: '600',
+                            fontSize: 15,
+                            color: '#0104AC',
+                            marginRight: 20,
+                          }}
+                        >
+                          {i18n.t('GALLERY.SEE_ALL')}
+                        </Text>
+                        <Ionicons name="ios-arrow-forward" size={23} color="#0104AC" />
+                      </Pressable>
+
+                      <View
+                        style={{
+                          borderBottomColor: '#F2F3FF',
+                          borderBottomWidth: StyleSheet.hairlineWidth,
+                          width: '90%',
+                        }}
                       />
                     </View>
-                  )}
-                  <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
-                    {snackMsg}
-                  </SnackBar>
-                </View>
-              </>
+
+                    <RemindersHeaders
+                      reminders={reminders}
+                      selectedHeader={selectedReminder}
+                      onChangeSelectedHeader={(index) => setSelectedReminder(index)}
+                      navigation={navigation}
+                    />
+                  </>
+                ) : (
+                  <View style={styles.screenLoading}>
+                    <ActivityIndicator
+                      style={{ height: windowHeight }}
+                      size="large"
+                      color={Colors.primaryColor}
+                    />
+                  </View>
+                )}
+
+                <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
+                  {snackMsg}
+                </SnackBar>
+              </View>
             }
-          ></FlatList>
+          />
         );
       }}
     </I18nContext.Consumer>

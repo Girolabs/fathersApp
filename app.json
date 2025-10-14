@@ -2,10 +2,7 @@
   "expo": {
     "name": "Schoenstatt Fathers",
     "slug": "schoenstatt-fathers",
-    "platforms": [
-      "ios",
-      "android"
-    ],
+    "platforms": ["ios", "android"],
     "version": "1.6.13",
     "orientation": "portrait",
     "icon": "./assets/img/icon_app.png",
@@ -14,23 +11,10 @@
       "backgroundColor": "#000258",
       "image": "./assets/img/splash.png"
     },
-    "hooks": {
-      "postPublish": [
-        {
-          "config": {
-            "organization": "Girolabs",
-            "project": "girolabs",
-            "authToken": "5c32d5485cf8487a8b92ea1e5a4fb81635465aa75fbd4e8abc2a9ffbaa595f97"
-          }
-        }
-      ]
-    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "android": {
       "package": "com.schoenstatt.fathersApp",
       "versionCode": 37,
