@@ -186,6 +186,7 @@ const DrawerNavigator = () => (
         labelStyle={labelStyle}
       />
     )}
+    useLegacyImplementation={false}
     screenOptions={{
       headerShown: false,
       headerLeft: false,
