@@ -16,6 +16,7 @@ import I18nProvider from './src/context/I18nProvider';
 import AuthProvider from './src/context/AuthProvider';
 import BulletinCheckProvider from './src/context/BulletinCheckProvider';
 import { addResponseInterceptor } from './src/api';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -79,15 +80,17 @@ export default function App() {
   }
 
   return (
-    <AuthProvider>
-      <I18nProvider>
-        <BulletinCheckProvider>
-          <NavigationContainer ref={navigationRef}>
-            <PatresNavigator />
-          </NavigationContainer>
-        </BulletinCheckProvider>
-      </I18nProvider>
-    </AuthProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AuthProvider>
+        <I18nProvider>
+          <BulletinCheckProvider>
+            <NavigationContainer ref={navigationRef}>
+              <PatresNavigator />
+            </NavigationContainer>
+          </BulletinCheckProvider>
+        </I18nProvider>
+      </AuthProvider>
+    </GestureHandlerRootView>
   );
 }
 
