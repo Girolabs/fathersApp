@@ -51,18 +51,23 @@ export default function App() {
 
   // Interceptor de respuesta
   const responseInterceptor = async (response) => {
-    if (response.status === 401) {
-      try {
+    try {
+      if (response?.status === 401) {
+        console.log('[Interceptor] Sesión expirada, borrando token...');
         await AsyncStorage.removeItem('token');
-        if (navigationRef.isReady()) {
+
+        // Evitar llamar reset si el contenedor no está listo
+        if (navigationRef?.isReady()) {
           navigationRef.reset({
             index: 0,
             routes: [{ name: 'Auth' }],
           });
+        } else {
+          console.log('[Interceptor] Navigation no estaba listo');
         }
-      } catch (e) {
-        console.error(e);
       }
+    } catch (error) {
+      console.error('[Interceptor Error]:', error);
     }
     return response;
   };

@@ -16,26 +16,54 @@ class StartupScreen extends Component {
   static propTypes = {
     navigation: PropTypes.shape({
       navigate: PropTypes.func.isRequired,
+      replace: PropTypes.func,
     }).isRequired,
   };
+
   componentDidMount() {
     const tryLogin = async () => {
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
+      try {
+        const token = await AsyncStorage.getItem('token');
+
+        // 🔒 Si no hay token o está vacío → ir a Auth
+        if (!token || token.trim() === '') {
+          await AsyncStorage.removeItem('token');
+          this.props.navigation.navigate('Auth');
+          return;
+        }
+
+        // 🔍 Intentar parsear el token
+        let transformedData;
+        try {
+          transformedData = JSON.parse(token);
+        } catch (e) {
+          console.log('Token inválido, limpiando...', e);
+          await AsyncStorage.removeItem('token');
+          this.props.navigation.navigate('Auth');
+          return;
+        }
+
+        const { jwt, expiration } = transformedData || {};
+        if (!jwt || !expiration) {
+          await AsyncStorage.removeItem('token');
+          this.props.navigation.navigate('Auth');
+          return;
+        }
+
+        const expirationDate = new Date(expiration);
+        if (isNaN(expirationDate) || expirationDate <= new Date()) {
+          await AsyncStorage.removeItem('token');
+          this.props.navigation.navigate('Auth');
+          return;
+        }
+
+        // ✅ Token válido → ir al Drawer
+        this.props.navigation.navigate('Drawer');
+      } catch (err) {
+        console.log('Error en tryLogin:', err);
+        await AsyncStorage.removeItem('token');
         this.props.navigation.navigate('Auth');
-        return;
       }
-      const transformedData = JSON.parse(token);
-      const { jwt, expiration } = transformedData;
-
-      const expirationDate = new Date(expiration);
-
-      if (expirationDate <= new Date() || !jwt) {
-        this.props.navigation.navigate('Auth');
-        return;
-      }
-
-      this.props.navigation.navigate('Drawer');
     };
 
     tryLogin();
