@@ -2,6 +2,7 @@
   "expo": {
     "name": "Schoenstatt Fathers",
     "slug": "schoenstatt-fathers",
+    "jsEngine": "hermes",
     "platforms": ["ios", "android"],
     "version": "1.6.13",
     "orientation": "portrait",
@@ -42,12 +43,12 @@
       }
     },
     "extra": {
+      "EX_DEV_CLIENT_NETWORK_INSPECTOR": "true",
       "secretKey": "",
       "eas": {
         "projectId": "708c0b82-d128-4143-a56c-8a91a7666130"
       }
     },
-    "description": "",
     "plugins": [
       [
         "expo-image-picker",
