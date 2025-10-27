@@ -7,47 +7,62 @@ export const url = 'https://schoenstatt-fathers.link/';
 
 const instance = axios.create({
   baseURL: url,
-  data: null,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
+// Request interceptor seguro
 instance.interceptors.request.use(async (config) => {
-  let token = await AsyncStorage.getItem('token');
-  // console.log('Token Interceptor', token);
-  //   console.log(config);
-  const lang = i18n.locale;
-  token = token ? JSON.parse(token).jwt : null;
+  let token = null;
+  try {
+    const rawToken = await AsyncStorage.getItem('token');
+    token = rawToken ? JSON.parse(rawToken).jwt : null;
+  } catch (e) {
+    console.log('[Request Interceptor] Token inválido', e);
+    token = null;
+  }
+
   config.headers.Authorization = token ? `Bearer ${token}` : '';
-  config.url = i18n.locale + config.url;
+  config.url = (config.url || '').startsWith('/') ? i18n.locale + config.url : config.url;
+
   return config;
+}, (error) => {
+  return Promise.reject(error);
 });
 
+// Response interceptor seguro
 export function addResponseInterceptor(fn) {
-  instance.interceptors.response.use(fn);
+  instance.interceptors.response.use(
+    (response) => fn(response),
+    (error) => Promise.reject(error)
+  );
 }
 
-export default instance;
-
+// Error handler sin navegación
 export const errorHandler = async (err) => {
-  if (err.response?.status == 400) {
+  const status = err.response?.status;
+
+  if (status === 400) {
     Alert.alert(i18n.t('GENERAL.ERROR_400'));
-  } else if (err.response?.status == 401) {
-    //logout
+  } else if (status === 401) {
     try {
       await AsyncStorage.removeItem('token');
-      props.navigation.navigate('Auth');
     } catch (e) {
-      console.log(e);
+      console.log('[Error Handler] Error removiendo token', e);
     }
-    return;
-  } else if (err.response?.status == 403) {
+  } else if (status === 403) {
     Alert.alert(i18n.t('GENERAL.ERROR_403'));
   } else {
     Alert.alert(i18n.t('GENERAL.ERROR_500'));
   }
 };
+
+export default instance;
+
+// ===================
+// API FUNCTIONS
+// ===================
 
 export const getReminders = (daysInAdvance, startDate) => {
   return instance.get(`/api/v2/date-tiles`, { params: { daysInAdvance, startDate } });
@@ -61,7 +76,6 @@ export const getBoardPost = (postId) => {
   return instance.get(`/api/v1/bulletin-board/${postId}`);
 };
 
-// all brings filitations
 export const getTerritories = (fields) => {
   return instance.get(`/api/v1/territories${fields ? `?fields=${fields}` : ''}`);
 };

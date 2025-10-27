@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, View, StyleSheet } from 'react-native';
+import { ActivityIndicator, View, StyleSheet, InteractionManager } from 'react-native';
 import { useFonts } from 'expo-font';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -29,52 +29,60 @@ export default function App() {
   const [langReady, setLangReady] = useState(false);
   const navigationRef = useNavigationContainerRef();
 
-  // Inicializar idioma ANTES de renderizar
+  // Inicializar idioma con protección total
   useEffect(() => {
     const initLang = async () => {
-      i18n.translations = { en: EN, es: ES, de: DE, pt: PT };
-      i18n.fallbacks = true;
+      try {
+        i18n.translations = { en: EN, es: ES, de: DE, pt: PT };
+        i18n.fallbacks = true;
 
-      const storageLang = await AsyncStorage.getItem('lang');
-      const systemLang = String(Localization.locale).split('-')[0];
-      const selectedLang = storageLang || systemLang || 'en';
+        const storageLang = await AsyncStorage.getItem('lang');
+        const systemLang = String(Localization.locale || 'en').split('-')[0];
+        const selectedLang = storageLang || systemLang || 'en';
 
-      i18n.locale = selectedLang;
-      if (!storageLang) await AsyncStorage.setItem('lang', selectedLang);
+        i18n.locale = selectedLang;
+        if (!storageLang) await AsyncStorage.setItem('lang', selectedLang);
 
-      console.log('[i18n initialized]:', i18n.locale);
-      setLangReady(true);
+        console.log('[i18n initialized]:', i18n.locale);
+      } catch (err) {
+        console.log('[i18n init error]', err);
+        i18n.locale = 'en';
+      } finally {
+        setLangReady(true);
+      }
     };
 
     initLang();
   }, []);
 
-  // Interceptor de respuesta
-  const responseInterceptor = async (response) => {
-    try {
-      if (response?.status === 401) {
-        console.log('[Interceptor] Sesión expirada, borrando token...');
-        await AsyncStorage.removeItem('token');
-
-        // Evitar llamar reset si el contenedor no está listo
-        if (navigationRef?.isReady()) {
-          navigationRef.reset({
-            index: 0,
-            routes: [{ name: 'Auth' }],
-          });
-        } else {
-          console.log('[Interceptor] Navigation no estaba listo');
-        }
-      }
-    } catch (error) {
-      console.error('[Interceptor Error]:', error);
-    }
-    return response;
-  };
-
+  // Interceptor seguro para respuestas 401
   useEffect(() => {
+    const responseInterceptor = async (response) => {
+      try {
+        if (response?.status === 401) {
+          console.log('[Interceptor] Sesión expirada, borrando token...');
+          await AsyncStorage.removeItem('token');
+
+          // Esperar al próximo frame para evitar conflictos
+          InteractionManager.runAfterInteractions(() => {
+            if (navigationRef?.isReady()) {
+              navigationRef.reset({
+                index: 0,
+                routes: [{ name: 'Auth' }],
+              });
+            } else {
+              console.log('[Interceptor] Navigation no estaba listo');
+            }
+          });
+        }
+      } catch (error) {
+        console.error('[Interceptor Error]:', error);
+      }
+      return response;
+    };
+
     addResponseInterceptor(responseInterceptor);
-  }, []);
+  }, [navigationRef]);
 
   if (!fontsLoaded || !langReady) {
     return (

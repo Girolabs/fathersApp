@@ -1,23 +1,38 @@
+import React from 'react';
 import { View, Dimensions } from 'react-native';
 import Carousel from 'react-native-snap-carousel';
 import CarouselItem from './CarouselItem';
 import styles from '../constants/styles';
 
 const { width } = Dimensions.get('window');
-export const CustomSlider = ({ data, navigation }) => {
-  const settings = {
-    sliderWidth: width,
-    sliderHeight: width,
-    itemWidth: width - 230,
-    data: data,
-    renderItem: ({ item }, parallaxProps) => {
-      return <CarouselItem item={item} navigation={navigation} parallaxProps={parallaxProps} />;
-    },
-    hasParallaxImages: true,
-  };
+
+export const CustomSlider = ({ data = [], navigation }) => {
+  // Evita crash si data no es array
+  const validData = Array.isArray(data) ? data : [];
+
+  // Si no hay datos, devuelve un contenedor vacío (sin error)
+  if (validData.length === 0) {
+    return <View style={[styles.container, { minHeight: 150 }]} />;
+  }
+
   return (
     <View style={styles.container}>
-      <Carousel {...settings} firstItem={1} />
+      <Carousel
+        data={validData}
+        sliderWidth={width}
+        itemWidth={width - 230}
+        renderItem={({ item, index }, parallaxProps) => (
+          <CarouselItem
+            key={item?.galleryPhotoId ?? index}
+            item={item}
+            navigation={navigation}
+            parallaxProps={parallaxProps}
+          />
+        )}
+        hasParallaxImages
+        inactiveSlideOpacity={0.8}
+        firstItem={0}
+      />
     </View>
   );
 };
