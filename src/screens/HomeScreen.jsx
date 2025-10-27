@@ -11,6 +11,7 @@ import {
   BackHandler,
   Platform,
 } from 'react-native';
+
 import i18n from 'i18n-js';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -56,9 +57,7 @@ const HomeScreen = ({ navigation }) => {
   const [favorite, setFavorite] = useState({});
   const { checkOnly } = useContext(BulletinCheckContext);
 
-  const windowHeight = useWindowDimensions().height;
-
-  /** Exit app on back press (Android) */
+  // Botón atrás en Android → salir de la app
   useFocusEffect(
     useCallback(() => {
       if (Platform.OS !== 'android') return;
@@ -70,14 +69,14 @@ const HomeScreen = ({ navigation }) => {
 
       const subscription = BackHandler.addEventListener('hardwareBackPress', backAction);
       return () => subscription.remove();
-    }, [])
+    }, []),
   );
 
-  /** Lock orientation and load reminders */
+  // Bloquear orientación + cargar recordatorios al montar
   useEffect(() => {
-    let mounted = true;
+    let isMounted = true;
 
-    const lockOrientation = async () => {
+    const lockScreen = async () => {
       try {
         await ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
       } catch (e) {
@@ -87,11 +86,11 @@ const HomeScreen = ({ navigation }) => {
 
     const loadReminders = async () => {
       try {
-        const networkState = await Network.getNetworkStateAsync();
-        if (!networkState?.isConnected) {
-          if (mounted) {
-            setSnackMsg(i18n.t('GENERAL.NO_INTERNET'));
+        const status = await Network.getNetworkStateAsync();
+        if (!status.isConnected) {
+          if (isMounted) {
             setVisible(true);
+            setSnackMsg(i18n.t('GENERAL.NO_INTERNET'));
           }
           return;
         }
@@ -103,150 +102,81 @@ const HomeScreen = ({ navigation }) => {
         sixMonthsBefore.setMonth(today.getMonth() - 6);
 
         const formatDate = (date) =>
-          `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(
-            date.getDate()
-          ).padStart(2, '0')}`;
+          `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(
+            2,
+            '0',
+          )}`;
 
-        const res = await getReminders(365, formatDate(sixMonthsBefore));
-        if (mounted && Array.isArray(res?.data?.result)) setReminders(res.data.result);
+        const formattedSixMonthsBefore = formatDate(sixMonthsBefore);
+
+        const res = await getReminders(365, formattedSixMonthsBefore);
+        const safeReminders = Array.isArray(res?.data?.result) ? res.data.result : [];
+        if (isMounted) setReminders(safeReminders);
       } catch (err) {
         console.log('loadReminders error', err);
-        if (mounted) {
-          setSnackMsg(i18n.t('GENERAL.ERROR'));
+        if (isMounted) {
           setVisible(true);
+          setSnackMsg(i18n.t('GENERAL.ERROR'));
         }
       } finally {
-        if (mounted) setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
 
-    lockOrientation();
+    lockScreen();
     loadReminders();
 
     return () => {
-      mounted = false;
+      isMounted = false;
     };
   }, []);
 
-  /** Check bulletin only on focus */
+  // Ejecutar checkOnly cuando se enfoca
   useFocusEffect(
     useCallback(() => {
       checkOnly?.();
-    }, [checkOnly])
+      return () => {};
+    }, [checkOnly]),
   );
 
-  /** Load pinned post */
+  // Cargar post destacado (pinned)
   useEffect(() => {
     let active = true;
     getPinnedPosts()
       .then((res) => {
-        if (active && res?.data?.result) setFavorite(res.data.result);
+        if (active) {
+          const data = res?.data?.result || {};
+          setFavorite(data);
+        }
       })
-      .catch(() => active && setFavorite({}));
-    return () => (active = false);
+      .catch(() => {
+        if (active) setFavorite({});
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
-  /** Load recent photos */
+  // Cargar fotos recientes
   useEffect(() => {
     let active = true;
     getLastPhotos()
       .then((res) => {
         if (!active) return;
         const data = Array.isArray(res?.data?.result) ? res.data.result : [];
-        setPhotos(data.sort((a, b) => (b.galleryPhotoId || 0) - (a.galleryPhotoId || 0)));
+        const dataSort = data.sort((a, b) => b.galleryPhotoId - a.galleryPhotoId);
+        setPhotos(dataSort);
       })
-      .catch((e) => console.log('photo load error', e));
-    return () => (active = false);
+      .catch((e) => {
+        console.log('photo load error', e);
+        if (active) setPhotos([]);
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
-  /** FlatList header */
-  const renderHeader = useCallback(() => {
-    return (
-      <View style={styles.screen}>
-        {favorite?.postId && (
-          <Pressable
-            style={{ padding: 15 }}
-            onPress={() =>
-              navigation.navigate('BulletinDetail', {
-                postId: favorite.postId,
-                url: favorite.redirectUrl,
-              })
-            }
-          >
-            <View
-              style={{
-                height: 100,
-                backgroundColor: '#F8CE46',
-                borderRadius: 10,
-                flexDirection: 'row',
-                justifyContent: 'space-evenly',
-                alignItems: 'center',
-                padding: 20,
-              }}
-            >
-              <Image source={star} />
-              <Text
-                style={{
-                  fontSize: 18,
-                  fontFamily: 'work-sans-semibold',
-                  color: Colors.primaryColor,
-                  paddingHorizontal: 15,
-                  width: '85%',
-                }}
-              >
-                {favorite.title || ''}
-              </Text>
-              <Ionicons name="ios-arrow-forward" size={25} color={Colors.primaryColor} />
-            </View>
-          </Pressable>
-        )}
-
-        <View style={{ backgroundColor: '#fff', width: '100%' }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', margin: 30 }}>
-            <Text
-              style={{
-                fontFamily: 'work-sans-semibold',
-                fontWeight: '600',
-                color: Colors.primaryColor,
-                fontSize: 27,
-                textAlign: 'center',
-              }}
-            >
-              {i18n.t('GALLERY.PHOTOS')}
-            </Text>
-            <Pressable style={{ width: 30, height: 30, alignItems: 'center' }} onPress={() => navigation.navigate('Gallery')}>
-              <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
-            </Pressable>
-          </View>
-
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', overflow: 'hidden' }}>
-            <CustomSlider data={photos} navigation={navigation} />
-          </View>
-
-          <Pressable
-            onPress={() => navigation.navigate('Photos')}
-            style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 28, marginBottom: 25 }}
-          >
-            <Text
-              style={{ fontFamily: 'work-sans-semibold', fontWeight: '600', fontSize: 15, color: '#0104AC', marginRight: 20 }}
-            >
-              {i18n.t('GALLERY.SEE_ALL')}
-            </Text>
-            <Ionicons name="ios-arrow-forward" size={23} color="#0104AC" />
-          </Pressable>
-
-          <View style={{ borderBottomColor: '#F2F3FF', borderBottomWidth: StyleSheet.hairlineWidth, width: '90%' }} />
-        </View>
-
-        <RemindersHeaders
-          reminders={reminders}
-          selectedHeader={selectedReminder}
-          onChangeSelectedHeader={setSelectedReminder}
-          navigation={navigation}
-        />
-      </View>
-    );
-  }, [favorite, photos, reminders, selectedReminder, navigation]);
+  const windowHeight = useWindowDimensions().height;
 
   return (
     <I18nContext.Consumer>
@@ -254,18 +184,149 @@ const HomeScreen = ({ navigation }) => {
         moment.locale(value.lang);
 
         return (
-          <View style={{ flex: 1 }}>
-            {loading ? (
-              <View style={styles.screenLoading}>
-                <ActivityIndicator style={{ height: windowHeight }} size="large" color={Colors.primaryColor} />
+          <FlatList
+            ListHeaderComponent={
+              <View style={styles.screen}>
+                {!loading ? (
+                  <>
+                    {favorite && Object.entries(favorite).length > 0 && (
+                      <Pressable
+                        style={{ padding: 15 }}
+                        onPress={() =>
+                          navigation.navigate('BulletinDetail', {
+                            postId: favorite?.postId,
+                            url: favorite?.redirectUrl,
+                          })
+                        }
+                      >
+                        <View
+                          style={{
+                            height: 100,
+                            backgroundColor: '#F8CE46',
+                            borderRadius: 10,
+                            flexDirection: 'row',
+                            justifyContent: 'space-evenly',
+                            alignItems: 'center',
+                            padding: 20,
+                          }}
+                        >
+                          <Image source={star} />
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              fontFamily: 'work-sans-semibold',
+                              color: Colors.primaryColor,
+                              paddingHorizontal: 15,
+                              width: '85%',
+                            }}
+                            numberOfLines={2}
+                          >
+                            {favorite?.title || ''}
+                          </Text>
+                          <Ionicons name="ios-arrow-forward" size={25} color={Colors.primaryColor} />
+                        </View>
+                      </Pressable>
+                    )}
+
+                    <View
+                      style={{
+                        backgroundColor: '#fff',
+                        width: '100%',
+                      }}
+                    >
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          margin: 30,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: 'work-sans-semibold',
+                            fontWeight: '600',
+                            color: Colors.primaryColor,
+                            fontSize: 27,
+                            textAlign: 'center',
+                          }}
+                        >
+                          {i18n.t('GALLERY.PHOTOS')}
+                        </Text>
+                        <Pressable
+                          style={{
+                            width: 30,
+                            height: 30,
+                            alignItems: 'center',
+                          }}
+                          onPress={() => navigation.navigate('Gallery')}
+                        >
+                          <Ionicons name="md-add" size={30} color={Colors.primaryColor} />
+                        </Pressable>
+                      </View>
+
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        <CustomSlider data={photos || []} navigation={navigation} />
+                      </View>
+
+                      <Pressable
+                        onPress={() => navigation.navigate('Photos')}
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          marginTop: 28,
+                          marginBottom: 25,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontFamily: 'work-sans-semibold',
+                            fontWeight: '600',
+                            fontSize: 15,
+                            color: '#0104AC',
+                            marginRight: 20,
+                          }}
+                        >
+                          {i18n.t('GALLERY.SEE_ALL')}
+                        </Text>
+                        <Ionicons name="ios-arrow-forward" size={23} color="#0104AC" />
+                      </Pressable>
+
+                      <View
+                        style={{
+                          borderBottomColor: '#F2F3FF',
+                          borderBottomWidth: StyleSheet.hairlineWidth,
+                          width: '90%',
+                        }}
+                      />
+                    </View>
+
+                    <RemindersHeaders
+                      reminders={reminders || []}
+                      selectedHeader={selectedReminder}
+                      onChangeSelectedHeader={(index) => setSelectedReminder(index)}
+                      navigation={navigation}
+                    />
+                  </>
+                ) : (
+                  <View style={styles.screenLoading}>
+                    <ActivityIndicator style={{ height: windowHeight }} size="large" color={Colors.primaryColor} />
+                  </View>
+                )}
+
+                <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
+                  {snackMsg}
+                </SnackBar>
               </View>
-            ) : (
-              <FlatList ListHeaderComponent={renderHeader} />
-            )}
-            <SnackBar visible={visible} onDismiss={() => setVisible(false)}>
-              {snackMsg}
-            </SnackBar>
-          </View>
+            }
+          />
         );
       }}
     </I18nContext.Consumer>
