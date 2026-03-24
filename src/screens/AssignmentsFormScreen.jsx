@@ -43,134 +43,105 @@ import { TextInput } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
 
-function toIsoString(date) {
-  var tzo = -date.getTimezoneOffset(),
-    dif = tzo >= 0 ? '+' : '-',
-    pad = function (num) {
-      return (num < 10 ? '0' : '') + num;
-    };
+const toIsoString = (date) => {
+  const pad = (num) => (num < 10 ? '0' : '') + num;
 
-  return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate()); /* +
-          'T' + pad(date.getHours()) +
-          ':' + pad(date.getMinutes()) +
-          ':' + pad(date.getSeconds()) +
-          dif + pad(Math.floor(Math.abs(tzo) / 60)) +
-          ':' + pad(Math.abs(tzo) % 60);*/
-}
+  return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate());
+};
+
+const parseLocalDate = (dateString) => {
+  if (!dateString) return new Date();
+
+  const [year, month, day] = dateString.split('-');
+  return new Date(Number(year), Number(month) - 1, Number(day), 12);
+};
 const today = new Date();
 const todayString = toIsoString(today);
 
 const EditableDateItem = function (props) {
   const [show, setShow] = useState(false);
-  const [showOk, setShowOk] = useState(true);
-
-  let editableItemStyle = StyleSheet.create({
-    item: {
-      width: '90%',
-      height: 50,
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingHorizontal: 15,
-      paddingVertical: 5,
-      borderRadius: 10,
-      marginTop: 10,
-      marginBottom: 7,
-      backgroundColor: '#FFFFFF',
-      zIndex: 11,
-    },
-  });
 
   return (
-    <View style={editableItemStyle.item}>
+    <View
+      style={{
+        width: '90%',
+        height: 50,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 15,
+        borderRadius: 10,
+        marginTop: 10,
+        marginBottom: 7,
+        backgroundColor: '#FFFFFF',
+      }}
+    >
       <Pressable
         style={{
-          marginLeft: 'auto',
-          zIndex: 9,
           width: '100%',
           height: '100%',
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
         }}
-        onPress={() => {
-          setShow(true);
-          /*if (!props.disabled) {
-            setShow(false);
-          }*/
-        }}
+        onPress={() => setShow(true)}
       >
-        {show && (
-          <DateTimePicker
-            textColor="black"
-            timeZoneOffsetInMinutes={0}
-            minimumDate={new Date(1965, 0, 1)}
-            display={Platform.OS === 'android' ? 'default' : 'spinner'}
-            value={props.date ? new Date(props.date) : new Date(todayString)}
-            onChange={(event, val) => {
-              const formatDate = (val) => {
-                let fecha = new Date(val);
-                const dia = fecha.getDate().toString().padStart(2, '0');
-                const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
-                const year = fecha.getFullYear().toString();
-                return `${year}-${mes}-${dia}`;
-              };
-              if (Platform.OS === 'android') {
-                setShow(false);
-              }
-              setShowOk(true);
-              const pickedDate = Platform.OS === 'android' ? formatDate(val) : val.toISOString().split('T')[0];
-              if (event.type === 'set') {
-                props.onDateChange(pickedDate);
-              }
-            }}
-            //disabled={props.disabled}
-            style={{ width: 320, backgroundColor: 'white', position: 'absolute', zIndex: 8 }}
-          />
-        )}
         <Text
           style={{
             color: Colors.onSurfaceColorPrimary,
             fontSize: 16,
           }}
         >
-          {props.date}
+          {props.date || 'Seleccionar fecha'}
         </Text>
 
         <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
       </Pressable>
-      {Platform.OS === 'ios' && showOk ? (
+
+      {show && (
+        <DateTimePicker
+          textColor="black"
+          display={Platform.OS === 'android' ? 'default' : 'spinner'}
+          value={parseLocalDate(props.date)}
+          onChange={(event, val) => {
+            if (Platform.OS === 'android') {
+              setShow(false);
+            }
+
+            if (event.type === 'set' && val) {
+              const safeDate = new Date(val.getFullYear(), val.getMonth(), val.getDate(), 12);
+
+              const pickedDate = toIsoString(safeDate);
+              props.onDateChange(pickedDate);
+            }
+          }}
+          style={{
+            position: 'absolute',
+            backgroundColor: 'white',
+            zIndex: 10,
+          }}
+        />
+      )}
+
+      {Platform.OS === 'ios' && show && (
         <Pressable
           style={{
-            display: show ? 'flex' : 'none',
             position: 'absolute',
-            top: '10%',
-            left: '95%',
-            width: 50,
-            padding: 10,
+            right: 10,
+            top: 10,
+            padding: 8,
             backgroundColor: '#000000DE',
-            justifyContent: 'center',
-            alignItems: 'center',
             borderRadius: 5,
-            zIndex: 12,
+            zIndex: 20,
           }}
           onPress={() => {
             setShow(false);
-            props.onClose();
-            //setShowOk(false);
+            props.onClose && props.onClose();
           }}
         >
-          <Text
-            style={{
-              color: 'white',
-            }}
-          >
-            OK
-          </Text>
+          <Text style={{ color: 'white' }}>OK</Text>
         </Pressable>
-      ) : null}
-      <View />
+      )}
     </View>
   );
 };
@@ -220,15 +191,15 @@ const AssignmentsFormScreen = ({ navigation, route }) => {
   }, []);
 
   const validateForm = function (formValues) {
-    const formatStartDate = new Date(startDate);
-    const formatEndDate = new Date(endDate);
+    const formatStartDate = startDate ? parseLocalDate(startDate) : null;
+    const formatEndDate = endDate ? parseLocalDate(endDate) : null;
     let claves = Object.keys(formValues);
     for (let i = 0; i < claves.length; i++) {
       let clave = claves[i];
       if (role === null || person === null || entityId === null) {
         setError(i18n.t('ASSIGNMENTS_FORM.ERROR'));
         return false;
-      } else if (startDate && endDate && formatStartDate.getTime() >= formatEndDate.getTime()) {
+      } else if (formatStartDate && formatEndDate && formatStartDate >= formatEndDate) {
         setError(i18n.t('ASSIGNMENTS_FORM.ERROR_END_DATE'));
         return false;
       }
@@ -560,7 +531,7 @@ const AssignmentsFormScreen = ({ navigation, route }) => {
               onDateChange={(value) => {
                 setStartDate(value);
               }}
-              onClose={() => (!startDate ? setStartDate(new Date().toISOString().split('T')[0]) : null)}
+              onClose={() => (!startDate ? setStartDate(toIsoString(new Date())) : null)}
             />
             <View
               style={{
@@ -630,7 +601,7 @@ const AssignmentsFormScreen = ({ navigation, route }) => {
               onDateChange={(value) => {
                 setEndDate(value);
               }}
-              onClose={() => (!endDate ? setEndDate(new Date().toISOString().split('T')[0]) : null)}
+              onClose={() => (!endDate ? setEndDate(toIsoString(new Date())) : null)}
             />
             <Button
               onPress={handleSubmit}
