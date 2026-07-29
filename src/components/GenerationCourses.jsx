@@ -6,6 +6,7 @@ import Button from './Button';
 import Colors from '../constants/Colors';
 import 'moment/min/locales';
 import { getDateMaskByLocale, getDateFormatByLocale } from '../utils/date-utils';
+import { buildPhotoUrl } from '../utils/photo-utils';
 
 const styles = StyleSheet.create({
   header: {
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const GenerationCourses = ({ navigation, courses }) => {
+const GenerationCourses = ({ navigation, courses, photoVersion }) => {
   const dateMask = getDateMaskByLocale(moment.locale());
   return (
     <>
@@ -104,7 +105,7 @@ const GenerationCourses = ({ navigation, courses }) => {
                           <Image
                             style={styles.img}
                             resizeMode="cover"
-                            source={{ uri: `https://schoenstatt-fathers.link${course.leaderAssignment.person.photo}` }}
+                            source={{ uri: buildPhotoUrl(course.leaderAssignment.person.photo, photoVersion) }}
                           />
                           <View style={styles.leaderTextContainer}>
                             <Text style={styles.cardBodyTextBold}>{course.leaderAssignment.person.fullName}</Text>

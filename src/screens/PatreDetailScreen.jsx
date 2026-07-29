@@ -28,6 +28,7 @@ import { getInterfaceData, getPerson } from '../api';
 import { getDateFormatByLocale, getMonthFormatByLocale } from '../utils/date-utils';
 import PastLivingSituations from '../components/PastLivingSituations';
 import ModalProfilePicture from '../components/ModalProfilePicture';
+import { buildPhotoUrl } from '../utils/photo-utils';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -73,6 +74,7 @@ const styles = StyleSheet.create({
 
 const PatreDetailScreen = ({ navigation, route }) => {
   const [father, setFather] = useState(null);
+  const [photoVersion, setPhotoVersion] = useState(Date.now());
   const [showSaveContact, setShowSaveContact] = useState(false);
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
@@ -149,6 +151,7 @@ const PatreDetailScreen = ({ navigation, route }) => {
           .then((response) => {
             const resFather = response.data.result;
             setFather(resFather);
+            setPhotoVersion(Date.now());
             console.log('resFather ', resFather);
             loadInterfaceData(resFather);
             if (route.params.updated) {
@@ -168,7 +171,7 @@ const PatreDetailScreen = ({ navigation, route }) => {
       }
     };
     loadPerson();
-  }, []);
+  }, [route.params.fatherId]);
 
   useFocusEffect(
     useCallback(() => {
@@ -180,6 +183,7 @@ const PatreDetailScreen = ({ navigation, route }) => {
             .then((response) => {
               const resFather = response.data.result;
               setFather(resFather);
+              setPhotoVersion(Date.now());
               console.log('resFather ', resFather);
               loadInterfaceData(resFather);
               if (route.params.updated) {
@@ -199,7 +203,7 @@ const PatreDetailScreen = ({ navigation, route }) => {
         }
       };
       loadPerson();
-    }, [navigation]),
+    }, [navigation, route.params.fatherId]),
   );
 
   return (
@@ -218,6 +222,7 @@ const PatreDetailScreen = ({ navigation, route }) => {
                   fatherId={father ? father.personId : ''}
                   fullName={father ? father.fullName : ''}
                   photo={father ? father.photo : ''}
+                  photoVersion={photoVersion}
                   Close={() => setModal(false)}
                 />
                 <View style={{ flexDirection: 'row', alignItems: 'center', padding: 15 }}>
@@ -226,7 +231,7 @@ const PatreDetailScreen = ({ navigation, route }) => {
                       <Image
                         style={{ width: 100, height: 100, borderRadius: 50 }}
                         resizMode="center"
-                        source={{ uri: `https://schoenstatt-fathers.link${father.photo}` }}
+                        source={{ uri: buildPhotoUrl(father.photo, photoVersion) }}
                       />
                     ) : (
                       <MaterialIcons name="add-a-photo" size={80} color="black" />

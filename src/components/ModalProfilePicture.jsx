@@ -6,6 +6,7 @@ import Colors from '../constants/Colors';
 import i18n from 'i18n-js';
 import countries from 'i18n-iso-countries';
 import { MaterialIcons } from '@expo/vector-icons';
+import { buildPhotoUrl } from '../utils/photo-utils';
 
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
 countries.registerLocale(require('i18n-iso-countries/langs/es.json'));
@@ -53,7 +54,7 @@ const ModalProfilePicture = (props) => {
               <Image
                 style={{ width: 300, height: 400, borderRadius: 10 }}
                 resizMode="center"
-                source={{ uri: `https://schoenstatt-fathers.link${props.photo}` }}
+                source={{ uri: buildPhotoUrl(props.photo, props.photoVersion) }}
               />
             ) : (
               <Button

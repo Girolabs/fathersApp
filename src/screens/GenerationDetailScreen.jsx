@@ -28,6 +28,7 @@ import pencil from '../../assets/editpencil.png';
 import { Ionicons } from 'expo-vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { buildPhotoUrl } from '../utils/photo-utils';
 
 const styles = StyleSheet.create({
   screen: {
@@ -144,6 +145,7 @@ class GenerationDetailScreen extends Component {
     showHistorical: false,
     hasAssignment: null,
     permission: {},
+    photoVersion: Date.now(),
   };
 
   loadGeneration = (generationId, fields) => {
@@ -151,7 +153,7 @@ class GenerationDetailScreen extends Component {
     getGeneration(generationId, fields)
       .then((res) => {
         const generation = res.data.result;
-        this.setState({ generation: generation, loading: false });
+        this.setState({ generation: generation, loading: false, photoVersion: Date.now() });
       })
       .catch(() => {
         this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
@@ -188,7 +190,7 @@ class GenerationDetailScreen extends Component {
   }
 
   render() {
-    const { generation, generations, showHistorical, hasAssignment, permission } = this.state;
+    const { generation, generations, showHistorical, hasAssignment, permission, photoVersion } = this.state;
     const { navigation } = this.props;
     let TouchableComp = TouchableOpacity;
     if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -303,7 +305,7 @@ class GenerationDetailScreen extends Component {
                                     <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 10 }}>
                                       <Image
                                         source={{
-                                          uri: `https://schoenstatt-fathers.link${asg.person.photo}`,
+                                          uri: buildPhotoUrl(asg.person.photo, photoVersion),
                                         }}
                                         style={{
                                           width: 50,
@@ -369,7 +371,7 @@ class GenerationDetailScreen extends Component {
                           })}
                         </View>
                       ) : null}
-                      <GenerationCourses courses={generation.courses} />
+                      <GenerationCourses courses={generation.courses} photoVersion={photoVersion} />
                     </View>
                   </View>
                 </ScrollView>

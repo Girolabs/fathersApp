@@ -22,6 +22,7 @@ import { I18nContext } from '../context/I18nProvider';
 import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
 import { getTerritory, assigmentsUserPermissions } from '../api';
+import { buildPhotoUrl } from '../utils/photo-utils';
 
 import { FontAwesome5 } from '@expo/vector-icons';
 import IdealStatement from '../components/IdealStatement';
@@ -167,6 +168,7 @@ class DelegationDetailScreen extends Component {
     assignments: [],
     filiations: [],
     permission: {},
+    photoVersion: Date.now(),
   };
 
   static propTypes = {
@@ -200,6 +202,7 @@ class DelegationDetailScreen extends Component {
           territory: fetchedDelegation,
           assignments: fetchedAssignments,
           filiations: fetchedActiveFiliations,
+          photoVersion: Date.now(),
         });
         //console.log('ACA', fetchedDelegation);
       })
@@ -256,7 +259,7 @@ class DelegationDetailScreen extends Component {
       TouchableComp = TouchableNativeFeedback;
     }
     const { navigation } = this.props;
-    const { territory, showHistorical, assignments, filiations, permission } = this.state;
+    const { territory, showHistorical, assignments, filiations, permission, photoVersion } = this.state;
     return (
       <I18nContext.Consumer>
         {(value) => {
@@ -361,7 +364,7 @@ class DelegationDetailScreen extends Component {
                                 >
                                   <View style={styles.fatherItem}>
                                     <Image
-                                      source={{ uri: `https://schoenstatt-fathers.link${asg.person.photo}` }}
+                                      source={{ uri: buildPhotoUrl(asg.person.photo, photoVersion) }}
                                       style={{
                                         width: 50,
                                         height: 50,
@@ -458,7 +461,7 @@ class DelegationDetailScreen extends Component {
                       <TouchableComp onPress={() => navigation.navigate('PatreDetail', { fatherId: item.personId })}>
                         <View style={styles.memberItem}>
                           <Image
-                            source={{ uri: `https://schoenstatt-fathers.link${item.photo}` }}
+                            source={{ uri: buildPhotoUrl(item.photo, photoVersion) }}
                             style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
                           />
                           <Text style={{ fontSize: 12, color: Colors.primaryColor, fontFamily: 'work-sans-semibold' }}>

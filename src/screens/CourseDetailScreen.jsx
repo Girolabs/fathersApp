@@ -24,6 +24,7 @@ import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
 
 import { getCourse, getPerson, assigmentsUserPermissions } from '../api';
+import { buildPhotoUrl } from '../utils/photo-utils';
 import IdealStatement from '../components/IdealStatement';
 import { getDateMaskByLocale, getDateFormatByLocale, getDateMaskForm } from '../utils/date-utils';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -119,6 +120,7 @@ class CourseDetailScreen extends Component {
     course: null,
     showHistorical: false,
     permission: {},
+    photoVersion: Date.now(),
   };
 
   loadCourse = (courseId, fields) => {
@@ -126,7 +128,7 @@ class CourseDetailScreen extends Component {
     getCourse(courseId, fields)
       .then((res) => {
         let course = res.data.result;
-        this.setState({ course });
+        this.setState({ course, photoVersion: Date.now() });
         if (course.leaderAssignment) {
           getPerson(course.leaderAssignment.personId, false)
             .then((respPerson) => {
@@ -140,7 +142,7 @@ class CourseDetailScreen extends Component {
                 leaderAssignment,
                 persons: course.persons,
               };
-              this.setState({ course });
+              this.setState({ course, photoVersion: Date.now() });
             })
             .catch((error) => {
               this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
@@ -185,7 +187,7 @@ class CourseDetailScreen extends Component {
     if (Platform.OS === 'android' && Platform.Version >= 21) {
       TouchableComp = TouchableNativeFeedback;
     }
-    const { course, showHistorical, permission } = this.state;
+    const { course, showHistorical, permission, photoVersion } = this.state;
     const { navigation } = this.props;
     if (course) console.log('Course -> ', course);
     const activeMembers = course && course.persons.filter((person) => !person.leaveDate);
@@ -253,7 +255,7 @@ class CourseDetailScreen extends Component {
                             {course.leaderAssignment.person && (
                               <Image
                                 source={{
-                                  uri: `https://schoenstatt-fathers.link${course.leaderAssignment.person.photo}`,
+                                  uri: buildPhotoUrl(course.leaderAssignment.person.photo, photoVersion),
                                 }}
                                 style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }}
                               />
@@ -326,7 +328,7 @@ class CourseDetailScreen extends Component {
                           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             {course.noviceMaster && (
                               <Image
-                                source={{ uri: `https://schoenstatt-fathers.link${course.noviceMaster.photo}` }}
+                                source={{ uri: buildPhotoUrl(course.noviceMaster.photo, photoVersion) }}
                                 style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }}
                               />
                             )}
@@ -373,7 +375,7 @@ class CourseDetailScreen extends Component {
                               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 {rector && (
                                   <Image
-                                    source={{ uri: `https://schoenstatt-fathers.link${rector.photo}` }}
+                                    source={{ uri: buildPhotoUrl(rector.photo, photoVersion) }}
                                     style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }}
                                   />
                                 )}
@@ -420,7 +422,7 @@ class CourseDetailScreen extends Component {
                               {course.firstTertianshipMaster && (
                                 <Image
                                   source={{
-                                    uri: `https://schoenstatt-fathers.link${course.firstTertianshipMaster.photo}`,
+                                    uri: buildPhotoUrl(course.firstTertianshipMaster.photo, photoVersion),
                                   }}
                                   style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }}
                                 />
@@ -487,7 +489,7 @@ class CourseDetailScreen extends Component {
                               {course.secondTertianshipMaster && (
                                 <Image
                                   source={{
-                                    uri: `https://schoenstatt-fathers.link${course.secondTertianshipMaster.photo}`,
+                                    uri: buildPhotoUrl(course.secondTertianshipMaster.photo, photoVersion),
                                   }}
                                   style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }}
                                 />
@@ -555,7 +557,7 @@ class CourseDetailScreen extends Component {
                               {course.sionzeitCoordinator && (
                                 <Image
                                   source={{
-                                    uri: `https://schoenstatt-fathers.link${course.sionzeitCoordinator.photo}`,
+                                    uri: buildPhotoUrl(course.sionzeitCoordinator.photo, photoVersion),
                                   }}
                                   style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }}
                                 />
@@ -648,7 +650,7 @@ class CourseDetailScreen extends Component {
                                   <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 10 }}>
                                     <Image
                                       source={{
-                                        uri: `https://schoenstatt-fathers.link${asg.person.photo}`,
+                                        uri: buildPhotoUrl(asg.person.photo, photoVersion),
                                       }}
                                       style={{
                                         width: 50,
@@ -721,7 +723,7 @@ class CourseDetailScreen extends Component {
                             >
                               <View style={styles.memberItem}>
                                 <Image
-                                  source={{ uri: `https://schoenstatt-fathers.link${person.photo}` }}
+                                  source={{ uri: buildPhotoUrl(person.photo, photoVersion) }}
                                   style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
                                 />
                                 <Text
@@ -759,7 +761,7 @@ class CourseDetailScreen extends Component {
                             >
                               <View style={styles.memberItem}>
                                 <Image
-                                  source={{ uri: `https://schoenstatt-fathers.link${person.photo}` }}
+                                  source={{ uri: buildPhotoUrl(person.photo, photoVersion) }}
                                   style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
                                 />
                                 <Text

@@ -12,6 +12,7 @@ import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
 
 import { getHouse, getFiliation, getPersons } from '../api';
+import { buildPhotoUrl } from '../utils/photo-utils';
 import { Ionicons } from 'expo-vector-icons';
 import Button from '../components/Button';
 
@@ -91,6 +92,7 @@ const styles = StyleSheet.create({
 class HouseDetailScreen extends Component {
   state = {
     house: null,
+    photoVersion: Date.now(),
   };
 
   loadHouse = (houseId, fields) => {
@@ -109,7 +111,7 @@ class HouseDetailScreen extends Component {
               .filter((person) => person.activeLivingSituation.houseId == house.houseId)
               .filter((person) => person.isActive == true && person.isMember == true);
             console.log(house);
-            this.setState({ house: { ...house, membersHouse, filiationName: filiation.name } });
+            this.setState({ house: { ...house, membersHouse, filiationName: filiation.name }, photoVersion: Date.now() });
           })
           .catch(() => {
             this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
@@ -133,7 +135,7 @@ class HouseDetailScreen extends Component {
 
   render() {
     const { navigation } = this.props;
-    const { house } = this.state;
+    const { house, photoVersion } = this.state;
     return (
       <I18nContext.Consumer>
         {(value) => {
@@ -300,7 +302,7 @@ class HouseDetailScreen extends Component {
                             >
                               <View style={styles.memberItem}>
                                 <Image
-                                  source={{ uri: `https://schoenstatt-fathers.link${item.photo}` }}
+                                  source={{ uri: buildPhotoUrl(item.photo, photoVersion) }}
                                   style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
                                 />
                                 <Text

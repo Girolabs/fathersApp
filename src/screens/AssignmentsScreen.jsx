@@ -26,6 +26,7 @@ import PropTypes from 'prop-types';
 import { getTerritories, getFiliations, getGenerations, getCourses } from '../api';
 
 import { getDateMaskByLocale } from '../utils/date-utils';
+import { buildPhotoUrl } from '../utils/photo-utils';
 import deceasedIcon from '../../assets/deceasedIcon.png';
 
 const styles = StyleSheet.create({
@@ -141,6 +142,7 @@ class AssignmentsScreen extends Component {
     generations: [],
     courses: [],
     language: [],
+    photoVersion: Date.now(),
   };
 
   static propTypes = {
@@ -210,11 +212,11 @@ class AssignmentsScreen extends Component {
           let generations = resGenerations.data.result;
           getCourses('all').then((resCourses) => {
             let courses = resCourses.data.result;
-            this.setState({ generations, courses });
+            this.setState({ generations, courses, photoVersion: Date.now() });
           });
         });
         this.updateLang();
-        this.setState({ territories, loading: false });
+        this.setState({ territories, loading: false, photoVersion: Date.now() });
       });
     });
   };
@@ -246,7 +248,7 @@ class AssignmentsScreen extends Component {
   }
   render() {
     const dateMask = getDateMaskByLocale(moment.locale());
-    const { territories, selectedtTab } = this.state;
+    const { territories, selectedtTab, photoVersion } = this.state;
     let TouchableComp = TouchableOpacity;
     if (Platform.OS === 'android' && Platform.Version >= 21) {
       TouchableComp = TouchableNativeFeedback;
@@ -298,6 +300,7 @@ class AssignmentsScreen extends Component {
                   }
                   name={item.person.fullName}
                   photo={item.person.photo}
+                  photoVersion={photoVersion}
                   roleTitle={item.roleTitle}
                   startDate={item.startDate}
                   endDate={item.endDate}
@@ -378,7 +381,7 @@ class AssignmentsScreen extends Component {
                                       style={{ width: 45, height: 45, borderRadius: 50 }}
                                       resizMode="center"
                                       source={{
-                                        uri: `https://schoenstatt-fathers.link${asg.person.photo}`,
+                                        uri: buildPhotoUrl(asg.person.photo, photoVersion),
                                       }}
                                     />
                                     <View style={styles.itemTextContainer}>
@@ -458,6 +461,7 @@ class AssignmentsScreen extends Component {
                   }
                   name={item.person.fullName}
                   photo={item.person.photo}
+                  photoVersion={photoVersion}
                   roleTitle={item.roleTitle}
                   startDate={item.startDate}
                   endDate={item.endDate}
@@ -497,6 +501,7 @@ class AssignmentsScreen extends Component {
                     }
                     deceased={generation.mainAssignment ? false : true}
                     photo={generation.mainAssignment ? generation.mainAssignment.person.photo : null}
+                    photoVersion={photoVersion}
                     title={generation.name}
                     fullName={generation.mainAssignment ? generation.mainAssignment.person.fullName : null}
                     startDate={generation.mainAssignment ? generation.mainAssignment.startDate : null}
@@ -534,6 +539,7 @@ class AssignmentsScreen extends Component {
                     }
                     deceased={course.leaderAssignment ? false : true}
                     photo={course.leaderAssignment ? course.leaderAssignment.person.photo : deceasedIcon}
+                    photoVersion={photoVersion}
                     title={course.name}
                     fullName={course.leaderAssignment ? course.leaderAssignment.person.fullName : null}
                     startDate={course.leaderAssignment ? course.leaderAssignment.startDate : null}
@@ -628,7 +634,7 @@ const Header = (props) => {
 
 const ListItem = (props) => {
   const dateMask = getDateMaskByLocale(moment.locale());
-  const { photo, name, startDate, endDate, roleTitle, selectPerson, wa } = props;
+  const { photo, photoVersion, name, startDate, endDate, roleTitle, selectPerson, wa } = props;
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableComp = TouchableNativeFeedback;
@@ -644,7 +650,7 @@ const ListItem = (props) => {
           style={{ width: 45, height: 45, borderRadius: 22 }}
           resizMode="center"
           source={{
-            uri: `https://schoenstatt-fathers.link${photo}`,
+            uri: buildPhotoUrl(photo, photoVersion),
           }}
         />
         <View style={styles.itemTextContainer}>
@@ -671,7 +677,7 @@ const ListItem = (props) => {
 
 const ListItemGC = (props) => {
   const dateMask = getDateMaskByLocale(moment.locale());
-  const { photo, title, fullName, startDate, endDate, selectTitle, selectPerson, deceased, wa } = props;
+  const { photo, photoVersion, title, fullName, startDate, endDate, selectTitle, selectPerson, deceased, wa } = props;
   let TouchableComp = TouchableOpacity;
   if (Platform.OS === 'android' && Platform.Version >= 21) {
     TouchableComp = TouchableNativeFeedback;
@@ -683,7 +689,7 @@ const ListItemGC = (props) => {
           style={{ width: 45, height: 45, borderRadius: 22 }}
           resizMode="center"
           source={{
-            uri: `https://schoenstatt-fathers.link${photo}`,
+            uri: buildPhotoUrl(photo, photoVersion),
           }}
         />
       ) : (

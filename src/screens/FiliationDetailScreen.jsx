@@ -23,6 +23,7 @@ import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
 import PropTypes from 'prop-types';
 import { assigmentsUserPermissions, getFiliation } from '../api';
+import { buildPhotoUrl } from '../utils/photo-utils';
 import FiliationHouses from '../components/FiliationHouses';
 import { getDateMaskByLocale, getDateMaskForm } from '../utils/date-utils';
 import { Ionicons } from 'expo-vector-icons';
@@ -35,6 +36,7 @@ class FiliationDetailScreen extends Component {
     filiation: null,
     showHistorical: false,
     permission: {},
+    photoVersion: Date.now(),
   };
 
   static propTypes = {
@@ -58,7 +60,7 @@ class FiliationDetailScreen extends Component {
           ...res.data.result,
           persons: res.data.result.persons.filter((person) => person.isActive == true && person.isMember == true),
         };
-        this.setState({ filiation: fetchedFiliation });
+        this.setState({ filiation: fetchedFiliation, photoVersion: Date.now() });
       })
       .catch((err) => {
         this.setState({ snackMsg: i18n.t('GENERAL.ERROR'), visible: true, loading: false });
@@ -96,7 +98,7 @@ class FiliationDetailScreen extends Component {
 
   render() {
     const { navigation } = this.props;
-    const { filiation, showHistorical, permission } = this.state;
+    const { filiation, showHistorical, permission, photoVersion } = this.state;
     let TouchableComp = TouchableOpacity;
     if (Platform.OS === 'android' && Platform.Version >= 21) {
       TouchableComp = TouchableNativeFeedback;
@@ -141,7 +143,7 @@ class FiliationDetailScreen extends Component {
                           <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 10 }}>
                             <Image
                               source={{
-                                uri: `https://schoenstatt-fathers.link${filiation.mainAssignment.person.photo}`,
+                                uri: buildPhotoUrl(filiation.mainAssignment.person.photo, photoVersion),
                               }}
                               style={{ width: 50, height: 50, borderRadius: 25, marginRight: 10 }}
                             />
@@ -230,7 +232,7 @@ class FiliationDetailScreen extends Component {
                                 <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 10 }}>
                                   <Image
                                     source={{
-                                      uri: `https://schoenstatt-fathers.link${item.person.photo}`,
+                                      uri: buildPhotoUrl(item.person.photo, photoVersion),
                                     }}
                                     style={{
                                       width: 50,
@@ -315,7 +317,7 @@ class FiliationDetailScreen extends Component {
                         >
                           <View style={styles.memberItem}>
                             <Image
-                              source={{ uri: `https://schoenstatt-fathers.link${item.photo}` }}
+                              source={{ uri: buildPhotoUrl(item.photo, photoVersion) }}
                               style={{ width: 30, height: 30, borderRadius: 15, marginRight: 10 }}
                             />
                             <Text
