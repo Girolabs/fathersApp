@@ -21,15 +21,9 @@ export const CustomSlider = ({ data = [], navigation }) => {
         data={validData}
         sliderWidth={width}
         itemWidth={width - 230}
-        renderItem={({ item, index }, parallaxProps) => (
-          <CarouselItem
-            key={item?.galleryPhotoId ?? index}
-            item={item}
-            navigation={navigation}
-            parallaxProps={parallaxProps}
-          />
+        renderItem={({ item, index }) => (
+          <CarouselItem key={item?.galleryPhotoId ?? index} item={item} navigation={navigation} />
         )}
-        hasParallaxImages
         inactiveSlideOpacity={0.8}
         firstItem={0}
       />

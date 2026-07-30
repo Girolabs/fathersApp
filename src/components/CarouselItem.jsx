@@ -1,13 +1,12 @@
 import React from 'react';
-import { ParallaxImage } from 'react-native-snap-carousel';
-import { View, Text, Pressable, SafeAreaView } from 'react-native';
+import { View, Text, Pressable, SafeAreaView, Image } from 'react-native';
 import styles from '../constants/styles';
 import { Ionicons } from 'expo-vector-icons';
 import Colors from '../constants/Colors';
 import { url } from '../api';
 import i18n from 'i18n-js';
 
-const CarouselItem = ({ item, navigation, parallaxProps }) => {
+const CarouselItem = ({ item, navigation }) => {
   if (!item || !item.pathThumbnail800) {
     // Evita crash si el item no es válido o está vacío
     return null;
@@ -25,12 +24,7 @@ const CarouselItem = ({ item, navigation, parallaxProps }) => {
       }}
     >
       <SafeAreaView style={styles.item}>
-        <ParallaxImage
-          source={{ uri: imageUri }}
-          containerStyle={styles.imageContainer}
-          style={styles.image}
-          {...parallaxProps}
-        />
+        <Image source={{ uri: imageUri }} style={[styles.imageContainer, styles.image]} />
         {!!caption && (
           <Text style={styles.title} numberOfLines={2}>
             {caption}
