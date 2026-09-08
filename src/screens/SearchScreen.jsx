@@ -32,14 +32,18 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     flexDirection: 'row',
+    alignItems: 'center',
     borderRadius: 15,
-    padding: 15,
+    paddingHorizontal: 15,
     justifyContent: 'space-between',
     marginBottom: 15,
   },
   searchInput: {
     minWidth: '75%',
     maxWidth: '85%',
+    padding: 0,
+    textAlignVertical: 'center',
+    color: Colors.onSurfaceColorPrimary,
   },
   item: {
     backgroundColor: Colors.surfaceColorSecondary,
@@ -195,22 +199,18 @@ class SearchScreen extends Component {
         return persona;
       }
     });
-    this.setState({ filterResults: filterResults, loading: false });
+    this.setState({ filterResults: filterResults });
   };
 
   handleFilter = (keyword) => {
-    if (keyword) {
-      this.setState({ searchText: keyword.toLowerCase(), loading: true });
-      const texto = keyword.toLowerCase();
-
-      this.onChangeFilter(texto);
-    }
+    const texto = (keyword || '').toLowerCase();
+    this.setState({ searchText: texto });
+    this.onChangeFilter(texto);
   };
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.showExMember != this.state.showExMember || prevState.showDeceased != this.state.showDeceased) {
       console.log('DidUpdate');
-      this.setState({ loading: true });
       const texto = this.state.searchText.toLowerCase();
       this.onChangeFilter(texto);
     }
@@ -225,6 +225,8 @@ class SearchScreen extends Component {
               <TextInput
                 style={styles.searchInput}
                 placeholder={i18n.t('SEARCH.PLACEHOLDER')}
+                placeholderTextColor={Colors.onSurfaceColorSecondary}
+                value={this.state.searchText}
                 onChangeText={(text) => this.handleFilter(text)}
               />
               <Ionicons name="ios-search" size={25} colors={Colors.primaryColor} />
