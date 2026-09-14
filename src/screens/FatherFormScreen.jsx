@@ -279,6 +279,12 @@ class FatherFormScreen extends Component {
     return dateString;
   };
 
+  parseLocalDate = (dateString) => {
+    if (!dateString) return new Date();
+    const [year, month, day] = dateString.split('-');
+    return new Date(Number(year), Number(month) - 1, Number(day), 12);
+  };
+
   render() {
     const { father, updateFields, regex, loading } = this.state;
     let { navigation } = this.props;
@@ -651,6 +657,7 @@ class FatherFormScreen extends Component {
                         <DateTimePickerModal
                           isDarkModeEnabled={false}
                           isVisible={this.state.openDeaconDate}
+                          date={this.parseLocalDate(values.deaconDate)}
                           mode="date"
                           onConfirm={(date) => {
                             this.setState({
@@ -677,6 +684,7 @@ class FatherFormScreen extends Component {
                         <DateTimePickerModal
                           isDarkModeEnabled={false}
                           isVisible={this.state.openPriestDate}
+                          date={this.parseLocalDate(values.priestDate)}
                           mode="date"
                           onConfirm={(date) => {
                             this.setState({
@@ -704,6 +712,7 @@ class FatherFormScreen extends Component {
                         <DateTimePickerModal
                           isDarkModeEnabled={false}
                           isVisible={this.state.openBishopDate}
+                          date={this.parseLocalDate(values.bishopDate)}
                           mode="date"
                           onConfirm={(date) => {
                             this.setState({
@@ -731,6 +740,7 @@ class FatherFormScreen extends Component {
                         <DateTimePickerModal
                           isDarkModeEnabled={false}
                           isVisible={this.state.openDeathDate}
+                          date={this.parseLocalDate(values.deathDate)}
                           mode="date"
                           onConfirm={(date) => {
                             this.setState({
@@ -758,6 +768,7 @@ class FatherFormScreen extends Component {
                         <DateTimePickerModal
                           isDarkModeEnabled={false}
                           isVisible={this.state.openLeaveDate}
+                          date={this.parseLocalDate(values.leaveDate)}
                           mode="date"
                           onConfirm={(date) => {
                             this.setState({

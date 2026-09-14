@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native';
 import i18n from 'i18n-js';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { Ionicons } from 'expo-vector-icons';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -59,33 +59,15 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader, n
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
 
-  const today = new Date(); // Fecha actual
 
-  // Calcular la fecha mínima (6 meses antes de hoy)
-  const minDate = new Date(today);
-  minDate.setMonth(today.getMonth() - 6); // Restar 6 meses
-
-  // Calcular la fecha máxima (6 meses después de hoy)
-  const maxDate = new Date(today);
-  maxDate.setMonth(today.getMonth() + 6); // Sumar 6 meses
-
-  // Función para determinar si un año es bisiesto
-  function isLeapYear(year) {
-    return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
-  }
-
-  // Obtener el año actual
-  const currentYear = today.getFullYear();
-
-  // Verificar si el año actual es bisiesto
-  const isCurrentYearLeap = isLeapYear(currentYear);
-
-  // Si el año actual es bisiesto, restar un día al maxDate
-  if (isCurrentYearLeap) {
-    maxDate.setDate(maxDate.getDate() - 1); // Restar un día
-  }
-
-  // Ahora puedes usar minDate y maxDate en tu selector de fecha
+  const { minDate, maxDate } = useMemo(() => {
+    const today = new Date();
+    const min = new Date(today);
+    min.setMonth(today.getMonth() - 6);
+    const max = new Date(today);
+    max.setMonth(today.getMonth() + 6);
+    return { minDate: min, maxDate: max };
+  }, []);
 
   const dateFormatByLocale = getDateFormatByLocale(moment.locale());
 
@@ -94,13 +76,6 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader, n
       onChangeSelectedHeader(null);
     } else {
       onChangeSelectedHeader(index);
-    }
-  };
-
-  const onDateChange = (event, date) => {
-    setShowPicker(false);
-    if (date) {
-      setSelectedDate(date);
     }
   };
 
@@ -138,22 +113,24 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader, n
               color: Colors.primaryColor,
             }}
           >
-            {/*moment.utc(selectedDate).format(dateFormatByLocale)*/ i18n.t('HOME_SCREEN.SELECT_DATE')}
+            {moment(selectedDate).format(dateFormatByLocale)}
           </Text>
           <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
         </Pressable>
       </View>
 
-      {showPicker && (
-        <DateTimePicker
-          value={selectedDate}
-          mode="date"
-          display="default"
-          onChange={onDateChange}
-          minimumDate={minDate}
-          maximumDate={maxDate}
-        />
-      )}
+      <DateTimePickerModal
+        isVisible={showPicker}
+        mode="date"
+        date={selectedDate}
+        minimumDate={minDate}
+        maximumDate={maxDate}
+        onConfirm={(date) => {
+          setShowPicker(false);
+          setSelectedDate(date);
+        }}
+        onCancel={() => setShowPicker(false)}
+      />
 
       {filteredReminders && filteredReminders.length > 0 ? (
         <FlatList

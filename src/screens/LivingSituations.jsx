@@ -270,6 +270,12 @@ const LivingSituationsFormScreen = ({ navigation, route }) => {
     }
   };
 
+  const parseLocalDate = (dateString) => {
+    if (!dateString) return new Date();
+    const [year, month, day] = dateString.split('-');
+    return new Date(Number(year), Number(month) - 1, Number(day), 12);
+  };
+
   const formatDate = (selectedDate) => {
     // const newDate = new Date();
     // newDate.setTime(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60 * 1000);
@@ -413,6 +419,7 @@ const LivingSituationsFormScreen = ({ navigation, route }) => {
                     <View>
                       <DateTimePickerModal
                         isVisible={openStartDate}
+                        date={parseLocalDate(values.startDate)}
                         mode="date"
                         onConfirm={(date) => {
                           setOpenStartDate(false);
@@ -423,6 +430,7 @@ const LivingSituationsFormScreen = ({ navigation, route }) => {
                       />
                       <DateTimePickerModal
                         isVisible={openEndDate}
+                        date={parseLocalDate(values.endDate)}
                         mode="date"
                         onConfirm={(date) => {
                           setOpenEndDate(false);
