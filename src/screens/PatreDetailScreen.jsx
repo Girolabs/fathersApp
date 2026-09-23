@@ -402,11 +402,6 @@ const PatreDetailScreen = ({ navigation, route }) => {
                   body={father.birthDate ? moment.utc(father.birthDate).format(dateFormatByLocale) : null}
                 />
                 <DefaultItem
-                  show={viewFatherFields.indexOf('deathDate')}
-                  title="FATHER_DETAIL.DEATHDATE"
-                  body={father.deathDate ? moment.utc(father.deathDate).format(dateFormatByLocale) : null}
-                />
-                <DefaultItem
                   show={viewFatherFields.indexOf('nameDay')}
                   title="FATHER_DETAIL.NAMEDAY"
                   body={father.nameDay ? moment.utc(father.nameDay).format(monthFormatByLocale) : null}
@@ -463,6 +458,11 @@ const PatreDetailScreen = ({ navigation, route }) => {
                   show={viewFatherFields.indexOf('bishopDate') !== -1}
                   title="FATHER_DETAIL.BISHOP_DATE"
                   body={father.bishopDate ? moment.utc(father.bishopDate).format(dateFormatByLocale) : null}
+                />
+                <DefaultItem
+                  show={viewFatherFields.indexOf('deathDate')}
+                  title="FATHER_DETAIL.DEATHDATE"
+                  body={father.deathDate ? moment.utc(father.deathDate).format(dateFormatByLocale) : null}
                 />
                 <PastLivingSituations
                   livingSituations={father.livingSituations}
