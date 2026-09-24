@@ -186,7 +186,6 @@ const DrawerNavigator = () => (
         labelStyle={labelStyle}
       />
     )}
-    useLegacyImplementation={false}
     screenOptions={{
       headerShown: false,
       headerLeft: false,
@@ -194,12 +193,7 @@ const DrawerNavigator = () => (
       drawerStyle: {
         backgroundColor: Colors.primaryColor,
       },
-      drawerContentOptions: {
-        labelStyle: {
-          fontFamily: 'work-sans-semibold',
-          fontSize: 18,
-        },
-      },
+      drawerLabelStyle: labelStyle,
     }}
   >
     <Drawer.Screen name="HomeNav" component={HomeNavigator} options={{ drawerLabel: i18n.t('GENERAL.HOME') }} />

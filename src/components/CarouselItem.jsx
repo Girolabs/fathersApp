@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Pressable, SafeAreaView, Image } from 'react-native';
 import styles from '../constants/styles';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import { url } from '../api';
 import i18n from 'i18n-js';

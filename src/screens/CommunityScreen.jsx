@@ -12,7 +12,7 @@ import {
   TouchableNativeFeedback,
 } from 'react-native';
 import CountryFlag from 'react-native-country-flag';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import i18n from 'i18n-js';
 import * as Network from 'expo-network';
@@ -126,7 +126,7 @@ class CommunityScreen extends Component {
               >
                 <View style={styles.sectionHeaderContainer}>
                   <Text style={styles.header}>{name}</Text>
-                  <Ionicons name="ios-help-circle-outline" size={23} color={Colors.primaryColor} />
+                  <Ionicons name="help-circle-outline" size={23} color={Colors.primaryColor} />
                 </View>
               </TouchableComp>
             )}
@@ -161,7 +161,7 @@ const Filiation = ({ title, flag, onSelect }) => {
           <CountryFlag isoCode={flag} size={20} />
           <Text style={styles.title}>{title}</Text>
         </View>
-        <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
+        <Ionicons name="arrow-forward" size={23} color={Colors.primaryColor} />
       </View>
     </TouchableComp>
   );

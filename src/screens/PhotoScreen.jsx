@@ -38,9 +38,9 @@ import {
   errorHandler,
 } from '../api';
 import icon from '../../assets/img/icon_app.png';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import pencil from '../../assets/editpencil.png';
-import { ImageZoom } from '@likashefqet/react-native-image-zoom';
+import ZoomableImage from '../components/ZoomableImage';
 import { useFocusEffect } from '@react-navigation/native';
 
 const PhotoScreen = ({ navigation, route }) => {
@@ -229,7 +229,7 @@ const PhotoScreen = ({ navigation, route }) => {
                 height: 400,
               }}
             >
-              <ImageZoom
+              <ZoomableImage
                 style={{
                   width: '100%',
                   height: '100%',
@@ -246,7 +246,7 @@ const PhotoScreen = ({ navigation, route }) => {
               >
                 {photo.canUserDeletePhoto ? (
                   <Pressable onPress={() => setWarning(true)}>
-                    <Ionicons name="md-close-circle" size={28} color="#CD5C5C" />
+                    <Ionicons name="close-circle" size={28} color="#CD5C5C" />
                   </Pressable>
                 ) : null}
 
@@ -343,7 +343,7 @@ const PhotoScreen = ({ navigation, route }) => {
                     padding: 5,
                   }}
                 >
-                  <Ionicons name="md-send" size={25} color={Colors.primaryColor} />
+                  <Ionicons name="send" size={25} color={Colors.primaryColor} />
                 </Pressable>
                 <Pressable
                   onPress={() => {
@@ -355,7 +355,7 @@ const PhotoScreen = ({ navigation, route }) => {
                     left: '3%',
                   }}
                 >
-                  <Ionicons name="md-arrow-back" size={25} color={Colors.primaryColor} />
+                  <Ionicons name="arrow-back" size={25} color={Colors.primaryColor} />
                 </Pressable>
               </View>
             )}
@@ -587,7 +587,7 @@ const PhotoScreen = ({ navigation, route }) => {
                         left: '95%',
                       }}
                     >
-                      <Ionicons name="md-close" size={20} color={Colors.primaryColor} />
+                      <Ionicons name="close" size={20} color={Colors.primaryColor} />
                     </Pressable>
                   ) : null}
                   <View

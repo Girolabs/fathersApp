@@ -36,7 +36,7 @@ import SwitchWithFormik from '../components/SwitchWithFormik';
 import Select from '../components/Select';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import * as _ from 'lodash';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
 import Input from '../components/Input';
 import { TextInput } from 'react-native-paper';
@@ -95,7 +95,7 @@ const EditableDateItem = function (props) {
           {props.date || 'Seleccionar fecha'}
         </Text>
 
-        <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+        <Ionicons name="calendar" size={23} color={Colors.primaryColor} />
       </Pressable>
 
       {show && (

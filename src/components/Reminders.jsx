@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, FlatList, Text, Linking, Image, Alert } from 'react-native';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import CountryFlag from 'react-native-country-flag';
 import moment from 'moment';
 import PropTypes from 'prop-types';
@@ -81,7 +81,7 @@ const Reminders = ({ navigation, reminders = [] }) => {
         icon = <Image style={{ width: 24.5, height: 27.5 }} source={bishopLogo} />;
         break;
       default:
-        icon = <Ionicons name="ios-calendar" size={24} color={Colors.primaryColor} />;
+        icon = <Ionicons name="calendar" size={24} color={Colors.primaryColor} />;
         break;
     }
     return icon;
@@ -151,7 +151,7 @@ const Reminders = ({ navigation, reminders = [] }) => {
                     {item.entityCountry != null ? (
                       <CountryFlag isoCode={item.entityCountry} size={15} />
                     ) : (
-                      <Ionicons name="ios-flag" size={23} color={Colors.primaryColor} />
+                      <Ionicons name="flag" size={23} color={Colors.primaryColor} />
                     )}
                   </View>
                 </View>

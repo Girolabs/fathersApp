@@ -2,20 +2,21 @@
   "expo": {
     "name": "Schoenstatt Fathers",
     "slug": "schoenstatt-fathers",
-    "jsEngine": "hermes",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "version": "1.6.13",
+    "runtimeVersion": "1.6.13",
     "orientation": "portrait",
     "icon": "./assets/img/icon_app.png",
     "primaryColor": "#ffffff",
-    "splash": {
-      "backgroundColor": "#000258",
-      "image": "./assets/img/splash.png"
-    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "android": {
       "package": "com.schoenstatt.fathersApp",
       "versionCode": 37,
@@ -58,7 +59,15 @@
       ],
       "expo-font",
       "expo-localization",
-      "expo-web-browser"
+      "expo-web-browser",
+      "@react-native-community/datetimepicker",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#000258",
+          "image": "./assets/img/splash.png"
+        }
+      ]
     ],
     "owner": "girolabs"
   }

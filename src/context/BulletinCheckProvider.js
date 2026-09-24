@@ -1,44 +1,50 @@
-import React, { Component, createContext, Fragment } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import PropTypes from 'prop-types';
 import { getCheckUnseenPosts, markAllPost } from '../api';
 
 const BulletinCheckContext = createContext();
 
-class BulletinCheckProvider extends Component {
-  state = {
-    unSeenPostsCounter: null,
-  };
-  componentDidMount() {
-    this.checkUnseenPosts();
-  }
-  checkUnseenPosts() {
-    getCheckUnseenPosts()
+function BulletinCheckProvider({ children }) {
+  const [unseenPostsCount, setUnseenPostsCount] = useState(null);
+
+  const checkUnseenPosts = useCallback(() => {
+    return getCheckUnseenPosts()
       .then((res) => {
         const fetchedCount = res.data.result.unseenPostsCount;
-        this.setState({ unSeenPostsCounter: fetchedCount });
+        setUnseenPostsCount(fetchedCount);
       })
       .catch(() => {});
-  }
+  }, []);
 
-  render() {
-    return (
-      <Fragment>
-        <BulletinCheckContext.Provider
-          value={{
-            unseenPostsCount: this.state.unSeenPostsCounter,
-            checkOnly: () => this.checkUnseenPosts(),
-            markCheckUnseenCounter: () => {
-              markAllPost().then((res) => {
-                this.checkUnseenPosts();
-              });
-            },
-          }}
-        >
-          {this.props.children}
-        </BulletinCheckContext.Provider>
-      </Fragment>
-    );
-  }
+  const markCheckUnseenCounter = useCallback(() => {
+    return markAllPost().then(checkUnseenPosts);
+  }, [checkUnseenPosts]);
+
+  useEffect(() => {
+    checkUnseenPosts();
+  }, [checkUnseenPosts]);
+
+  const value = useMemo(
+    () => ({
+      unseenPostsCount,
+      checkOnly: checkUnseenPosts,
+      markCheckUnseenCounter,
+    }),
+    [checkUnseenPosts, markCheckUnseenCounter, unseenPostsCount],
+  );
+
+  return <BulletinCheckContext.Provider value={value}>{children}</BulletinCheckContext.Provider>;
 }
+
+BulletinCheckProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export default BulletinCheckProvider;
 export { BulletinCheckContext };

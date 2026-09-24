@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, TouchableNativeFeedback, TouchableOpacity, Platform, Linking, Alert } from 'react-native';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import Colors from '../constants/Colors';
 

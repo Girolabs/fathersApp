@@ -17,7 +17,7 @@ import comments from '../../assets/message-circle-white.png';
 import search from '../../assets/search.png';
 import heartActive from '../../assets/heartActive.png';
 import icon from '../../assets/img/icon_app.png';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { errorHandler, getPhotos, url, likePhoto, unlikePhoto } from '../api';
 
 const PhotosScreen = ({ navigation }) => {
@@ -124,7 +124,7 @@ const PhotosScreen = ({ navigation }) => {
               marginBottom: 20,
             }}
           >
-            <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
+            <Ionicons name="add" size={30} color={Colors.primaryColor} fontWeight="700" />
             <Text
               style={{
                 fontFamily: 'work-sans-semibold',

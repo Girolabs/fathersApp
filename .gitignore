@@ -57,4 +57,4 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-# @end expo-cli
+# @end expo-cliandroid/local.properties

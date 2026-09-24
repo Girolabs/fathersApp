@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, View, StyleSheet, InteractionManager } from 'react-native';
+import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import { useFonts } from 'expo-font';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -63,8 +63,8 @@ export default function App() {
           console.log('[Interceptor] Sesión expirada, borrando token...');
           await AsyncStorage.removeItem('token');
 
-          // Esperar al próximo frame para evitar conflictos
-          InteractionManager.runAfterInteractions(() => {
+          // Defer navigation until the JS thread is idle.
+          requestIdleCallback(() => {
             if (navigationRef?.isReady()) {
               navigationRef.reset({
                 index: 0,

@@ -1,6 +1,6 @@
 import React from 'react';
 import ModalSelector from 'react-native-modal-selector'
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { TextInput,StyleSheet, View} from 'react-native';
 import Colors from '../constants/Colors';
 const styles = StyleSheet.create({
@@ -46,7 +46,7 @@ const SelectModal = (props)=>{
                     placeholder="Select an item..."
                     value={props.value}
                     />
-                    {props.arrowDropDown && <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />}
+                    {props.arrowDropDown && <Ionicons name="caret-down" size={23} color={Colors.primaryColor} />}
                 </View>
             </ModalSelector>
     )

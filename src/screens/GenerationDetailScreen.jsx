@@ -25,7 +25,7 @@ import IdealStatement from '../components/IdealStatement';
 import GenerationCourses from '../components/GenerationCourses';
 import { getDateFormatByLocale, getDateMaskByLocale, getDateMaskForm } from '../utils/date-utils';
 import pencil from '../../assets/editpencil.png';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { buildPhotoUrl } from '../utils/photo-utils';
@@ -286,7 +286,7 @@ class GenerationDetailScreen extends Component {
                               });
                             }}
                           >
-                            <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
+                            <Ionicons name="add" size={30} color={Colors.primaryColor} fontWeight="700" />
                           </Pressable>
 
                           {generation.assignments.map((asg) => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Clipboard } from 'react-native';
 import i18n from 'i18n-js';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import Colors from '../constants/Colors';
 import Button from './Button';
@@ -65,7 +65,7 @@ const FatherContactInfo = ({
             });
           }}
         >
-          <Ionicons name="md-create" size={23} color={Colors.primaryColor} />
+          <Ionicons name="create" size={23} color={Colors.primaryColor} />
         </Button>
       </View>
       <DefaultItem
@@ -73,7 +73,7 @@ const FatherContactInfo = ({
         show={viewPermissions.indexOf('email')}
         title="FATHER_DETAIL.EMAIL"
         body={father.email}
-        icon={<Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />}
+        icon={<Ionicons name="copy" size={23} color={Colors.primaryColor} />}
         selected={() => {
           Clipboard.setString(father.email);
           setSnackBarVisible();
@@ -88,7 +88,7 @@ const FatherContactInfo = ({
               show={viewPermissions.indexOf('phones')}
               titleNoI18n={phone.label}
               body={phone.number}
-              icon={<Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />}
+              icon={<Ionicons name="copy" size={23} color={Colors.primaryColor} />}
               selected={() => {
                 Clipboard.setString(phone.number);
                 setSnackBarVisible();
@@ -106,7 +106,7 @@ const FatherContactInfo = ({
           show={viewPermissions.indexOf('phones')}
           titleNoI18n={father.emergencyContact1Name}
           body={father.emergencyContact1Phone}
-          icon={<Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />}
+          icon={<Ionicons name="copy" size={23} color={Colors.primaryColor} />}
           selected={() => {
             Clipboard.setString(father.emergencyContact1Phone);
             setSnackBarVisible();
@@ -120,7 +120,7 @@ const FatherContactInfo = ({
           show={viewPermissions.indexOf('phones')}
           titleNoI18n={father.emergencyContact2Name}
           body={father.emergencyContact2Phone}
-          icon={<Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />}
+          icon={<Ionicons name="copy" size={23} color={Colors.primaryColor} />}
           selected={() => {
             Clipboard.setString(father.emergencyContact2Phone);
             setSnackBarVisible();

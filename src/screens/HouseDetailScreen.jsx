@@ -13,7 +13,7 @@ import SnackBar from '../components/SnackBar';
 
 import { getHouse, getFiliation, getPersons } from '../api';
 import { buildPhotoUrl } from '../utils/photo-utils';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import Button from '../components/Button';
 
 countries.registerLocale(require('i18n-iso-countries/langs/en.json'));
@@ -184,7 +184,7 @@ class HouseDetailScreen extends Component {
                                 </Text>
                                 <View style={styles.listItemBodyContainer}>
                                   <Text style={styles.listItemBody}>{phone.number}</Text>
-                                  <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
+                                  <Ionicons name="copy" size={23} color={Colors.primaryColor} />
                                 </View>
                               </View>
                             </Button>
@@ -202,7 +202,7 @@ class HouseDetailScreen extends Component {
                             <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.FAX')}</Text>
                             <View style={styles.listItemBodyContainer}>
                               <Text style={styles.listItemBody}>{house.fax}</Text>
-                              <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
+                              <Ionicons name="copy" size={23} color={Colors.primaryColor} />
                             </View>
                           </View>
                         </Button>
@@ -231,7 +231,7 @@ class HouseDetailScreen extends Component {
                             <Text style={styles.listItemTitle}>{i18n.t('HOUSE_DETAIL.WIFI')}</Text>
                             <View style={styles.listItemBodyContainer}>
                               <Text style={styles.listItemBody}>{house.wifiPassword}</Text>
-                              <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
+                              <Ionicons name="copy" size={23} color={Colors.primaryColor} />
                             </View>
                           </View>
                         </Button>
@@ -250,7 +250,7 @@ class HouseDetailScreen extends Component {
                               <Text style={styles.listItemBody}>{house.formattedAddress}</Text>
                             </View>
 
-                            <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
+                            <Ionicons name="copy" size={23} color={Colors.primaryColor} />
                           </View>
                         </View>
                       </Button>
@@ -268,7 +268,7 @@ class HouseDetailScreen extends Component {
                                 <Text style={styles.listItemBody}>{house.formattedPostAddress}</Text>
                               </View>
 
-                              <Ionicons name="ios-copy" size={23} color={Colors.primaryColor} />
+                              <Ionicons name="copy" size={23} color={Colors.primaryColor} />
                             </View>
                           </View>
                         </Button>

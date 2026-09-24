@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native';
 import i18n from 'i18n-js';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import Colors from '../constants/Colors';
@@ -115,7 +115,7 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader, n
           >
             {moment(selectedDate).format(dateFormatByLocale)}
           </Text>
-          <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+          <Ionicons name="calendar" size={23} color={Colors.primaryColor} />
         </Pressable>
       </View>
 
@@ -153,28 +153,28 @@ const RemindersHeaders = ({ reminders, selectedHeader, onChangeSelectedHeader, n
                   {importantReminder ? (
                     <View style={styles.remindersImportantHeader}>
                       <View style={styles.leftReminderContainer}>
-                        <Ionicons name="ios-calendar" size={23} color={Colors.surfaceColorPrimary} />
+                        <Ionicons name="calendar" size={23} color={Colors.surfaceColorPrimary} />
                         <Text style={styles.reminderHeaderTitle}>{importantTitle}</Text>
                       </View>
                       <View style={styles.rightReminderContainer}>
                         {selectedHeader === index ? (
-                          <Ionicons name="md-arrow-dropup" size={23} color={Colors.surfaceColorPrimary} />
+                          <Ionicons name="caret-up" size={23} color={Colors.surfaceColorPrimary} />
                         ) : (
-                          <Ionicons name="md-arrow-dropdown" size={23} color={Colors.surfaceColorPrimary} />
+                          <Ionicons name="caret-down" size={23} color={Colors.surfaceColorPrimary} />
                         )}
                       </View>
                     </View>
                   ) : (
                     <View style={styles.reminderHeader}>
                       <View style={styles.leftReminderContainer}>
-                        <Ionicons name="ios-calendar" size={23} color={Colors.surfaceColorPrimary} />
+                        <Ionicons name="calendar" size={23} color={Colors.surfaceColorPrimary} />
                         <Text style={styles.reminderHeaderTitle}>{date}</Text>
                       </View>
                       <View style={styles.rightReminderContainer}>
                         {selectedHeader === index ? (
-                          <Ionicons name="md-arrow-dropup" size={23} color={Colors.surfaceColorPrimary} />
+                          <Ionicons name="caret-up" size={23} color={Colors.surfaceColorPrimary} />
                         ) : (
-                          <Ionicons name="md-arrow-dropdown" size={23} color={Colors.surfaceColorPrimary} />
+                          <Ionicons name="caret-down" size={23} color={Colors.surfaceColorPrimary} />
                         )}
                       </View>
                     </View>

@@ -152,7 +152,6 @@ const PatreDetailScreen = ({ navigation, route }) => {
             const resFather = response.data.result;
             setFather(resFather);
             setPhotoVersion(Date.now());
-            console.log('resFather ', resFather);
             loadInterfaceData(resFather);
             if (route.params.updated) {
               setSnackMsg(i18n.t('GENERAL.EDIT_SUCCESS'));
@@ -184,7 +183,6 @@ const PatreDetailScreen = ({ navigation, route }) => {
               const resFather = response.data.result;
               setFather(resFather);
               setPhotoVersion(Date.now());
-              console.log('resFather ', resFather);
               loadInterfaceData(resFather);
               if (route.params.updated) {
                 setSnackMsg(i18n.t('GENERAL.EDIT_SUCCESS'));

@@ -13,7 +13,7 @@ import {
 
 import i18n from 'i18n-js';
 // import RNPickerSelect from 'react-native-picker-select';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { Formik } from 'formik';
 import * as Network from 'expo-network';
 import * as _ from 'lodash';
@@ -451,7 +451,7 @@ const LivingSituationsFormScreen = ({ navigation, route }) => {
                         items={filiations}
                         Icon={() => {
                           const icon = isCreate ? (
-                            <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />
+                            <Ionicons name="caret-down" size={23} color={Colors.primaryColor} />
                           ) : null;
                           return icon;
                         }}
@@ -493,7 +493,7 @@ const LivingSituationsFormScreen = ({ navigation, route }) => {
                         disabled={!isCreate}
                         Icon={() => {
                           const icon = isCreate ? (
-                            <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />
+                            <Ionicons name="caret-down" size={23} color={Colors.primaryColor} />
                           ) : null;
                           return icon;
                         }}
@@ -523,7 +523,7 @@ const LivingSituationsFormScreen = ({ navigation, route }) => {
                         value={_.get(values, 'responsibleTerritoryId') || ''}
                         items={territories}
                         Icon={() => {
-                          return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
+                          return <Ionicons name="caret-down" size={23} color={Colors.primaryColor} />;
                         }}
                       /> */}
                       <SelectModal
@@ -550,7 +550,7 @@ const LivingSituationsFormScreen = ({ navigation, route }) => {
                         value={_.get(values, 'status') || ''}
                         items={statusLabels}
                         Icon={() => {
-                          return <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />;
+                          return <Ionicons name="caret-down" size={23} color={Colors.primaryColor} />;
                         }}
                       /> */}
                       <SelectModal
@@ -592,7 +592,7 @@ const LivingSituationsFormScreen = ({ navigation, route }) => {
                       <Button onPress={() => setOpenStartDate(true)}>
                         <View style={styles.inputContainer}>
                           <Text style={styles.inputDatePicker}>{_.get(values, 'startDate') || ''}</Text>
-                          <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+                          <Ionicons name="calendar" size={23} color={Colors.primaryColor} />
                         </View>
                       </Button>
                     </View>
@@ -623,7 +623,7 @@ const LivingSituationsFormScreen = ({ navigation, route }) => {
                       <Button onPress={() => setOpenEndDate(true)}>
                         <View style={styles.inputContainer}>
                           <Text style={styles.inputDatePicker}>{_.get(values, 'endDate') || ''}</Text>
-                          <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+                          <Ionicons name="calendar" size={23} color={Colors.primaryColor} />
                         </View>
                       </Button>
                       {errors && errors.endDate && (

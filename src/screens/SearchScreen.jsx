@@ -10,7 +10,7 @@ import {
   Platform,
 } from 'react-native';
 import Colors from '../constants/Colors';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { Checkbox } from 'react-native-paper';
 import i18n from 'i18n-js';
 import * as Network from 'expo-network';
@@ -93,7 +93,6 @@ class SearchScreen extends Component {
     getPersons(fields)
       .then(async (res) => {
         this.setState({ results: res.data.result, loading: false });
-        console.log('res data', res.data.result);
         try {
           console.log('Cargar resultado en el localstorage');
           await AsyncStorage.setItem('result', JSON.stringify(res.data.result));
@@ -182,7 +181,6 @@ class SearchScreen extends Component {
       filterResults = this.state.results.filter((persona) => persona.isLiving != false);
     } else {
       console.log('Ningun filtro');
-      console.log('personas', this.state.results);
       filterResults = this.state.results.filter((persona) => persona.isLiving != false);
       filterResults = filterResults.filter((persona) => persona.isMember != false);
     }
@@ -229,7 +227,7 @@ class SearchScreen extends Component {
                 value={this.state.searchText}
                 onChangeText={(text) => this.handleFilter(text)}
               />
-              <Ionicons name="ios-search" size={25} colors={Colors.primaryColor} />
+              <Ionicons name="search" size={25} colors={Colors.primaryColor} />
             </View>
             <View style={styles.filtersContainer}>
               {Platform.OS === 'ios' ? (
@@ -303,7 +301,7 @@ class SearchScreen extends Component {
                     }}
                   >
                     <Text>{item.fullName}</Text>
-                    <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
+                    <Ionicons name="arrow-forward" size={23} color={Colors.primaryColor} />
                   </TouchableOpacity>
                 );
               }}

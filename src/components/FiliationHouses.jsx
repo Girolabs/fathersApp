@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import i18n from 'i18n-js';
 import CountryFlag from 'react-native-country-flag';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import Button from './Button';
@@ -67,7 +67,7 @@ const FiliationHouses = ({ houses, navigation }) => {
                     <Text style={styles.title}>{house.name}</Text>
                     {house.isMainFiliationHouse && <FontAwesome name="star-o" size={24} color={Colors.primaryColor} />}
                   </View>
-                  <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
+                  <Ionicons name="arrow-forward" size={23} color={Colors.primaryColor} />
                 </View>
               </Button>
             );

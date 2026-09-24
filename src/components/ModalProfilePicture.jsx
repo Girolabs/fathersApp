@@ -1,4 +1,4 @@
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Alert, Modal, StyleSheet, View, Image, Linking, Text } from 'react-native';
 import Button from './Button';
@@ -32,7 +32,7 @@ const ModalProfilePicture = (props) => {
             }}
           >
             <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-              <Ionicons name="ios-arrow-back" size={24} color={Colors.primaryColor} />
+              <Ionicons name="arrow-back" size={24} color={Colors.primaryColor} />
               <Text style={{ marginLeft: 10 }}>{i18n.t('GENERAL.BACK')}</Text>
             </View>
           </Button>
@@ -44,7 +44,7 @@ const ModalProfilePicture = (props) => {
               Linking.openURL(`mailto:${mail}?subject=${subject}&body=${body}`);
             }}
           >
-            <Ionicons name="md-create" size={24} color={Colors.primaryColor} />
+            <Ionicons name="create" size={24} color={Colors.primaryColor} />
           </Button>
         </View>
 

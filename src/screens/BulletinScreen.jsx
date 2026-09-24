@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import * as Network from 'expo-network';
 import i18n from 'i18n-js';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { useFocusEffect } from '@react-navigation/native';
@@ -155,7 +155,7 @@ const BulletinScreen = ({ navigation }) => {
                 <View style={styles.listItem}>
                   <View style={styles.leftSideListItem}>
                     <Ionicons
-                      name={item.title === 'Links' ? 'md-link' : 'md-book'}
+                      name={item.title === 'Links' ? 'link' : 'book'}
                       size={25}
                       color={Colors.primaryColor}
                     />
@@ -163,7 +163,7 @@ const BulletinScreen = ({ navigation }) => {
                       {item.title}
                     </Text>
                   </View>
-                  <Ionicons name="ios-arrow-forward" size={25} color={Colors.primaryColor} />
+                  <Ionicons name="arrow-forward" size={25} color={Colors.primaryColor} />
                 </View>
               </TouchableComp>
             )}

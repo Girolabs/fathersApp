@@ -19,7 +19,7 @@ import * as Network from 'expo-network';
 import 'moment/min/locales';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { useFocusEffect } from '@react-navigation/native';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
@@ -223,7 +223,7 @@ const HomeScreen = ({ navigation }) => {
                           >
                             {favorite?.title || ''}
                           </Text>
-                          <Ionicons name="ios-arrow-forward" size={25} color={Colors.primaryColor} />
+                          <Ionicons name="arrow-forward" size={25} color={Colors.primaryColor} />
                         </View>
                       </Pressable>
                     )}
@@ -261,7 +261,7 @@ const HomeScreen = ({ navigation }) => {
                           }}
                           onPress={() => navigation.navigate('Gallery')}
                         >
-                          <Ionicons name="md-add" size={30} color={Colors.primaryColor} />
+                          <Ionicons name="add" size={30} color={Colors.primaryColor} />
                         </Pressable>
                       </View>
 
@@ -296,7 +296,7 @@ const HomeScreen = ({ navigation }) => {
                         >
                           {i18n.t('GALLERY.SEE_ALL')}
                         </Text>
-                        <Ionicons name="ios-arrow-forward" size={23} color="#0104AC" />
+                        <Ionicons name="arrow-forward" size={23} color="#0104AC" />
                       </Pressable>
 
                       <View

@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   TouchableNativeFeedback,
 } from 'react-native';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 import Colors from '../constants/Colors';
 import i18n from 'i18n-js';
@@ -121,7 +121,7 @@ class FreeCommunityScreen extends Component {
               >
                 <View style={styles.sectionHeaderContainer}>
                   <Text style={styles.header}>{name}</Text>
-                  <Ionicons name="ios-help-circle-outline" size={23} color={Colors.primaryColor} />
+                  <Ionicons name="help-circle-outline" size={23} color={Colors.primaryColor} />
                 </View>
               </TouchableComp>
             )}
@@ -155,7 +155,7 @@ const Course = ({ title, onSelect }) => {
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', width: '80%', alignItems: 'center' }}>
           <Text style={styles.title}>{title}</Text>
         </View>
-        <Ionicons name="ios-arrow-forward" size={23} color={Colors.primaryColor} />
+        <Ionicons name="arrow-forward" size={23} color={Colors.primaryColor} />
       </View>
     </TouchableComp>
   );

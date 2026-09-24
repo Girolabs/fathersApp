@@ -28,9 +28,9 @@ import { buildPhotoUrl } from '../utils/photo-utils';
 import IdealStatement from '../components/IdealStatement';
 import { getDateMaskByLocale, getDateFormatByLocale, getDateMaskForm } from '../utils/date-utils';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { Entypo } from 'expo-vector-icons';
+import { Entypo } from '@expo/vector-icons';
 import pencil from '../../assets/editpencil.png';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
@@ -631,7 +631,7 @@ class CourseDetailScreen extends Component {
                             });
                           }}
                         >
-                          <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
+                          <Ionicons name="add" size={30} color={Colors.primaryColor} fontWeight="700" />
                         </Pressable>
 
                         {course.assignments.map((asg) => {

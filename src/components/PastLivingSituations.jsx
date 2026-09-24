@@ -28,7 +28,7 @@ const PastLivingSituations = ({
                 });
               }}
             >
-              <Ionicons name="md-add" size={24} color={Colors.primaryColor} />
+              <Ionicons name="add" size={24} color={Colors.primaryColor} />
             </Button>
           </View>
 
@@ -46,7 +46,7 @@ const PastLivingSituations = ({
                     });
                   }}
                 >
-                  <Ionicons name="md-create" size={23} color={Colors.primaryColor} />
+                  <Ionicons name="create" size={23} color={Colors.primaryColor} />
                 </Button>
               </View>
               <DefaultItem

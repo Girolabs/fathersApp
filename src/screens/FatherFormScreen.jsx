@@ -25,7 +25,7 @@ import SwitchWithFormik from '../components/SwitchWithFormik';
 import Select from '../components/Select';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import * as _ from 'lodash';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 const widthBtn = Platform.OS == 'android' ? '45%' : '100%';
 const styles = StyleSheet.create({
@@ -200,9 +200,7 @@ class FatherFormScreen extends Component {
         let arrayOfPhonesLabels = temp.map((e) => ({ name: e[1], value: e[0] }));
 
         temp = Object.entries(personEmergencyOptions);
-        console.log('arrayOfPhonesLabels  ', arrayOfPhonesLabels);
         let arrayOfPersonEmergencyOptions = temp.map((e) => ({ name: e[1], value: e[0] }));
-        console.log('arrayOfPersonEmergencyOptions ', arrayOfPersonEmergencyOptions);
         // Object.keys(c).map((key) => {
         //   arrayOfPersonEmergencyOptions.push({ name: personEmergencyOptions[key], value: personEmergencyOptions[key] });
         // });
@@ -469,7 +467,6 @@ class FatherFormScreen extends Component {
                         : { emergencyContact2Phone: null }),
                     }}
                     onSubmit={(values) => {
-                      console.log('Submit ', values);
                       this.setState({ loading: true });
                       updateFatherForm(this.state.father.personId, values).then(
                         () => {
@@ -580,7 +577,7 @@ class FatherFormScreen extends Component {
                           }}
                           elements={this.state.phoneLabels}
                           value={values.phone1Label}
-                          Icon={() => <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />}
+                          Icon={() => <Ionicons name="caret-down" size={23} color={Colors.primaryColor} />}
                         />
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('phone2') != -1}
@@ -607,7 +604,7 @@ class FatherFormScreen extends Component {
                           }}
                           elements={this.state.phoneLabels}
                           value={values.phone2Label}
-                          Icon={() => <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />}
+                          Icon={() => <Ionicons name="caret-down" size={23} color={Colors.primaryColor} />}
                         />
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('phone3') != -1}
@@ -634,7 +631,7 @@ class FatherFormScreen extends Component {
                           }}
                           elements={this.state.phoneLabels}
                           value={values.phone3Label}
-                          Icon={() => <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />}
+                          Icon={() => <Ionicons name="caret-down" size={23} color={Colors.primaryColor} />}
                         />
                         <InputWithFormik
                           hasPerm={updateFields.indexOf('contactNotes') != -1}
@@ -650,7 +647,7 @@ class FatherFormScreen extends Component {
                           <Button onPress={() => this.setState({ openDeaconDate: true })}>
                             <View style={styles.inputContainer}>
                               <Text style={styles.inputDatePicker}>{_.get(values, 'deaconDate') || ''}</Text>
-                              <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+                              <Ionicons name="calendar" size={23} color={Colors.primaryColor} />
                             </View>
                           </Button>
                         </View>
@@ -677,7 +674,7 @@ class FatherFormScreen extends Component {
                           <Button onPress={() => this.setState({ openPriestDate: true })}>
                             <View style={styles.inputContainer}>
                               <Text style={styles.inputDatePicker}>{_.get(values, 'priestDate') || ''}</Text>
-                              <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+                              <Ionicons name="calendar" size={23} color={Colors.primaryColor} />
                             </View>
                           </Button>
                         </View>
@@ -705,7 +702,7 @@ class FatherFormScreen extends Component {
                           <Button onPress={() => this.setState({ openBishopDate: true })}>
                             <View style={styles.inputContainer}>
                               <Text style={styles.inputDatePicker}>{_.get(values, 'bishopDate') || ''}</Text>
-                              <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+                              <Ionicons name="calendar" size={23} color={Colors.primaryColor} />
                             </View>
                           </Button>
                         </View>
@@ -733,7 +730,7 @@ class FatherFormScreen extends Component {
                           <Button onPress={() => this.setState({ openDeathDate: true })}>
                             <View style={styles.inputContainer}>
                               <Text style={styles.inputDatePicker}>{_.get(values, 'deathDate') || ''}</Text>
-                              <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+                              <Ionicons name="calendar" size={23} color={Colors.primaryColor} />
                             </View>
                           </Button>
                         </View>
@@ -761,7 +758,7 @@ class FatherFormScreen extends Component {
                           <Button onPress={() => this.setState({ openLeaveDate: true })}>
                             <View style={styles.inputContainer}>
                               <Text style={styles.inputDatePicker}>{_.get(values, 'leaveDate') || ''}</Text>
-                              <Ionicons name="ios-calendar" size={23} color={Colors.primaryColor} />
+                              <Ionicons name="calendar" size={23} color={Colors.primaryColor} />
                             </View>
                           </Button>
                         </View>
@@ -844,7 +841,7 @@ class FatherFormScreen extends Component {
                           }}
                           elements={this.state.personEmergencyOptions}
                           value={values.emergencyContact1Relation}
-                          Icon={() => <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />}
+                          Icon={() => <Ionicons name="caret-down" size={23} color={Colors.primaryColor} />}
                         />
 
                         <InputWithFormik
@@ -879,7 +876,7 @@ class FatherFormScreen extends Component {
                           }}
                           elements={this.state.personEmergencyOptions}
                           value={values.emergencyContact2Relation}
-                          Icon={() => <Ionicons name="md-arrow-dropdown" size={23} color={Colors.primaryColor} />}
+                          Icon={() => <Ionicons name="caret-down" size={23} color={Colors.primaryColor} />}
                         />
 
                         <InputWithFormik

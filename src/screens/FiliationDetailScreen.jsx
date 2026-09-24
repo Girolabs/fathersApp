@@ -26,7 +26,7 @@ import { assigmentsUserPermissions, getFiliation } from '../api';
 import { buildPhotoUrl } from '../utils/photo-utils';
 import FiliationHouses from '../components/FiliationHouses';
 import { getDateMaskByLocale, getDateMaskForm } from '../utils/date-utils';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import pencil from '../../assets/editpencil.png';
 import { useNavigation } from '@react-navigation/native';
@@ -214,7 +214,7 @@ class FiliationDetailScreen extends Component {
                           });
                         }}
                       >
-                        <Ionicons name="md-add" size={30} color={Colors.primaryColor} fontWeight="700" />
+                        <Ionicons name="add" size={30} color={Colors.primaryColor} fontWeight="700" />
                       </Pressable>
                       {filiation.assignments.map((item) => {
                         if (showHistorical ? item : item.isActive)

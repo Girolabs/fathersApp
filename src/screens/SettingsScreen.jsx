@@ -5,7 +5,7 @@ import moment from 'moment';
 import 'moment/min/locales';
 import i18n from 'i18n-js';
 
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 import Colors from '../constants/Colors';
 
@@ -135,14 +135,14 @@ const SettingsScreen = (props) => {
               <Button onPress={onPress}>
                 <View style={styles.textContainer}>
                   <Text style={styles.text}>{i18n.t('SETTINGS.LOGOUT')}</Text>
-                  <Ionicons name="md-close-circle" size={23} />
+                  <Ionicons name="close-circle" size={23} />
                 </View>
               </Button>
             ) : (
               <Button onPress={onPress} style={styles.logoutContainer}>
                 <View style={styles.textContainer}>
                   <Text style={styles.text}>{i18n.t('SETTINGS.LOGOUT')}</Text>
-                  <Ionicons name="md-close-circle" size={23} />
+                  <Ionicons name="close-circle" size={23} />
                 </View>
               </Button>
             )}

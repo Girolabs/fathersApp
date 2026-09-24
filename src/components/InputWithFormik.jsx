@@ -35,7 +35,6 @@ const InputWithFormik = ({
   const value = _.get(formik.values, name) || '';
   const error = pathHasError(name, formik.errors);
 
-  console.log('error', error);
   const onChangeText = formik.handleChange(name);
   const id = name;
   const innerProps = {

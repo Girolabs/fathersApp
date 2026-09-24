@@ -17,7 +17,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import i18n from 'i18n-js';
 import Colors from '../constants/Colors';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
 import 'moment/min/locales';
 import { I18nContext } from '../context/I18nProvider';
@@ -365,7 +365,7 @@ class AssignmentsScreen extends Component {
                     >
                       <View style={styles.sectionHeaderContainer}>
                         <Text style={styles.header}>{territory.name}</Text>
-                        <Ionicons name="ios-help-circle-outline" size={23} color={Colors.primaryColor} />
+                        <Ionicons name="help-circle-outline" size={23} color={Colors.primaryColor} />
                       </View>
                     </TouchableComp>
                     {territory.filiations.map((filiation) => {
@@ -626,7 +626,7 @@ const Header = (props) => {
     >
       <View style={styles.sectionHeaderContainer}>
         <Text style={styles.header}>{name}</Text>
-        <Ionicons name="ios-help-circle-outline" size={23} color={Colors.primaryColor} />
+        <Ionicons name="help-circle-outline" size={23} color={Colors.primaryColor} />
       </View>
     </TouchableComp>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ActionSheetIOS, Text, View, Platform, Button, TouchableOpacity } from 'react-native';
 import { Picker as SelectPicker } from '@react-native-picker/picker';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 
 const Select = ({ value, elements, valueChange, style, containerStyle, itemColor }) => {
@@ -43,7 +43,7 @@ const Select = ({ value, elements, valueChange, style, containerStyle, itemColor
         >
           <Button color={itemColor || Colors.onSurfaceColorPrimary} title={result} onPress={onPress} />
           {/* <Text style={{fontSize:16}} color={itemColor || Colors.onSurfaceColorPrimary} title={result} >{result}</Text> */}
-          <Ionicons name="md-arrow-dropdown" size={24} color="black" />
+          <Ionicons name="caret-down" size={24} color="black" />
         </TouchableOpacity>
       )}
     </View>

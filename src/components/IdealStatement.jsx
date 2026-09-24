@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import i18n from 'i18n-js';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import Select from './Select';
 import Colors from '../constants/Colors';
 import Button from './Button';
@@ -84,7 +84,7 @@ const IdealStatement = ({ languages, recommendedLang, entity, navigation }) => {
                   alignItems: 'center',
                 }}
               >
-                <Ionicons name="ios-arrow-forward" size={28} color={Colors.primaryColor} />
+                <Ionicons name="arrow-forward" size={28} color={Colors.primaryColor} />
               </View>
             </Button>
           </View>

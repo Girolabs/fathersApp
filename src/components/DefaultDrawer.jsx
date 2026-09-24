@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
-  SafeAreaView,
   TouchableOpacity,
   Image,
   Text,
@@ -10,11 +9,11 @@ import {
   TouchableNativeFeedback,
   StyleSheet,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import i18n from 'i18n-js';
-import { Ionicons } from 'expo-vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import logo from '../../assets/img/fatherIcon.png';
-import { getCheckUnseenPosts } from '../api';
 import { BulletinCheckContext } from '../context/BulletinCheckProvider';
 
 const styles = (props) =>
@@ -110,12 +109,6 @@ const DefaultDrawer = (props) => {
     },
   ];
 
-  useEffect(() => {
-    getCheckUnseenPosts().then((res) => {
-      console.log('sidebar', res);
-    });
-  }, []);
-
   const { navigation } = props;
   return (
     <BulletinCheckContext.Consumer>
@@ -130,7 +123,7 @@ const DefaultDrawer = (props) => {
                     navigation.toggleDrawer();
                   }}
                 >
-                  <Ionicons name="md-close" size={28} color={Colors.surfaceColorPrimary} />
+                  <Ionicons name="close" size={28} color={Colors.surfaceColorPrimary} />
                 </TouchableOpacity>
               </View>
 
@@ -143,7 +136,13 @@ const DefaultDrawer = (props) => {
                 </View>
                 {routes.map((route) => {
                   return (
-                    <TouchableComp key={route.path} onPress={() => navigation.navigate(route.path)}>
+                    <TouchableComp
+                      key={route.path}
+                      onPress={() => {
+                        navigation.navigate('HomeNav', { screen: route.path });
+                        navigation.closeDrawer();
+                      }}
+                    >
                       <View style={styles(props).listItemContainer}>
                         <Text
                           style={[
