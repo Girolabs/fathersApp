@@ -17,6 +17,7 @@ import AuthProvider from './src/context/AuthProvider';
 import BulletinCheckProvider from './src/context/BulletinCheckProvider';
 import { addResponseInterceptor } from './src/api';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -97,9 +98,13 @@ export default function App() {
       <AuthProvider>
         <I18nProvider>
           <BulletinCheckProvider>
-            <NavigationContainer ref={navigationRef}>
-              <PatresNavigator />
-            </NavigationContainer>
+            <SafeAreaProvider>
+              <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
+                <NavigationContainer ref={navigationRef}>
+                  <PatresNavigator />
+                </NavigationContainer>
+              </SafeAreaView>
+            </SafeAreaProvider>
           </BulletinCheckProvider>
         </I18nProvider>
       </AuthProvider>
