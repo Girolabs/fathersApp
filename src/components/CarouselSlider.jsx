@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, Dimensions } from 'react-native';
-import Carousel from 'react-native-reanimated-carousel';
+import { View, FlatList, Dimensions } from 'react-native';
 import CarouselItem from './CarouselItem';
 import styles from '../constants/styles';
 
@@ -18,16 +17,18 @@ export const CustomSlider = ({ data = [], navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <Carousel
+    <View style={[styles.container, { height: ITEM_HEIGHT }]}>
+      <FlatList
+        horizontal
         data={validData}
-        width={ITEM_WIDTH}
-        height={ITEM_HEIGHT}
-        style={{ width }}
-        loop={false}
-        defaultIndex={0}
-        renderItem={({ item, index }) => (
-          <CarouselItem key={item?.galleryPhotoId ?? index} item={item} navigation={navigation} />
+        keyExtractor={(item, index) => String(item?.galleryPhotoId ?? index)}
+        showsHorizontalScrollIndicator={false}
+        snapToInterval={ITEM_WIDTH}
+        decelerationRate="fast"
+        renderItem={({ item }) => (
+          <View style={{ width: ITEM_WIDTH }}>
+            <CarouselItem item={item} navigation={navigation} />
+          </View>
         )}
       />
     </View>

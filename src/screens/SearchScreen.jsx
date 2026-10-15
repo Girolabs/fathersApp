@@ -20,7 +20,7 @@ import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CheckBox = ({ title, checked, onPress, checkedIcon, uncheckedIcon, containerStyle, textStyle }) => (
-  <TouchableOpacity onPress={onPress} style={[{ flexDirection: 'row', alignItems: 'center' }, containerStyle]}>
+  <TouchableOpacity onPress={onPress} style={[{ flexDirection: 'row', alignItems: 'center', margin: 5, padding: 10 }, containerStyle]}>
     {checked ? checkedIcon : uncheckedIcon}
     <Text style={[{ marginLeft: 10 }, textStyle]}>{title}</Text>
   </TouchableOpacity>

@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   ScrollView,
-  SafeAreaView,
   Pressable,
   Alert,
   useWindowDimensions,
@@ -41,7 +40,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import Input from '../components/Input';
 import { TextInput } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { AutocompleteDropdown } from 'react-native-autocomplete-dropdown';
+import { AutocompleteDropdown, AutocompleteDropdownContextProvider } from 'react-native-autocomplete-dropdown';
 
 const toIsoString = (date) => {
   const pad = (num) => (num < 10 ? '0' : '') + num;
@@ -280,6 +279,7 @@ const AssignmentsFormScreen = ({ navigation, route }) => {
     ]);
   };
   return (
+    <AutocompleteDropdownContextProvider>
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'position' : null}
       //keyboardVerticalOffset={150}
@@ -694,6 +694,7 @@ const AssignmentsFormScreen = ({ navigation, route }) => {
         )}
       </View>
     </KeyboardAvoidingView>
+    </AutocompleteDropdownContextProvider>
   );
 };
 

@@ -1,4 +1,4 @@
-import { I18n } from '.';
+import { I18n } from 'i18n-js';
 
 import { EN } from './en';
 import { ES } from './es';
