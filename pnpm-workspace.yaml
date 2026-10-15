@@ -2,12 +2,17 @@ allowBuilds:
   postinstall-postinstall: true
   react-native-elements: true
 minimumReleaseAgeExclude:
-  - '@expo/cli@57.0.27'
+  - '@expo/cli@57.0.27 || 57.0.30'
   - '@expo/router-server@57.0.11'
   - babel-preset-expo@57.0.13
-  - expo-modules-core@57.0.19
+  - expo-modules-core@57.0.19 || 57.0.23
   - expo-modules-jsi@57.1.1
-  - expo@57.0.25
+  - expo@57.0.25 || 57.0.29
   - expo-image-picker@57.0.20
-  - expo-linking@57.0.11
+  - expo-linking@57.0.11 || 57.0.13
   - expo-location@57.0.20
+  - '@expo/prebuild-config@57.0.19'
+  - expo-asset@57.0.20
+  - expo-constants@57.0.22
+  - expo-modules-autolinking@57.0.16
+  - expo-contacts@57.0.8
