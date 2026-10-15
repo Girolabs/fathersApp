@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ActivityIndicator, Image, FlatList } from 'reac
 import * as Clipboard from 'expo-clipboard';
 import Colors from '../constants/Colors';
 import { I18nContext } from '../context/I18nProvider';
-import CountryFlag from '../components/CountryFlag';
+import CountryFlag from 'react-native-country-flag';
 import i18n from '../i18n';
 import moment from 'moment';
 import 'moment/min/locales';

@@ -47,6 +47,7 @@
     "react-dom": "19.2.3",
     "react-native": "0.86.3",
     "react-native-autocomplete-dropdown": "^5.1.0",
+    "react-native-country-flag": "^2.0.2",
     "react-native-gesture-handler": "~2.32.0",
     "react-native-modal-datetime-picker": "^18.0.0",
     "react-native-paper": "^5.15.3",

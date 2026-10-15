@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import i18n from '../i18n';
 import { FlatList } from 'react-native-gesture-handler';
-import CountryFlag from '../components/CountryFlag';
+import CountryFlag from 'react-native-country-flag';
 import Colors from '../constants/Colors';
 import moment from 'moment';
 import 'moment/min/locales';

@@ -21,7 +21,7 @@ import { Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
 import 'moment/min/locales';
 import { I18nContext } from '../context/I18nProvider';
-import CountryFlag from '../components/CountryFlag';
+import CountryFlag from 'react-native-country-flag';
 import PropTypes from 'prop-types';
 import { getTerritories, getFiliations, getGenerations, getCourses } from '../api';
 
