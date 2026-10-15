@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import moment from 'moment';
 import Button from './Button';
 import Colors from '../constants/Colors';

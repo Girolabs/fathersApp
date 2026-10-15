@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerToggleButton } from '@react-navigation/drawer';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import Colors from '../constants/Colors';
 import HomeScreen from '../screens/HomeScreen';
 import PatreDetailScreen from '../screens/PatreDetailScreen';

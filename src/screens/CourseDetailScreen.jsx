@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import Constants from 'expo-constants';
 import { I18nContext } from '../context/I18nProvider';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import Colors from '../constants/Colors';
 import moment from 'moment';
 import 'moment/min/locales';

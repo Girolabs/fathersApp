@@ -20,7 +20,7 @@ import Select from '../components/Select';
 import axios from '../../axios-instance';
 import SnackBar from '../components/SnackBar';
 import 'moment/min/locales';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Network from 'expo-network';
 import { lng } from '../constants/Langs';

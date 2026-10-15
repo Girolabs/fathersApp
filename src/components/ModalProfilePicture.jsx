@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Alert, Modal, StyleSheet, View, Image, Linking, Text } from 'react-native';
 import Button from './Button';
 import Colors from '../constants/Colors';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import countries from 'i18n-iso-countries';
 import { MaterialIcons } from '@expo/vector-icons';
 import { buildPhotoUrl } from '../utils/photo-utils';

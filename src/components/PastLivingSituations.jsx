@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import { Ionicons } from '@expo/vector-icons';
 import DefaultItem from './FatherDetailItem';
 import Colors from '../constants/Colors';

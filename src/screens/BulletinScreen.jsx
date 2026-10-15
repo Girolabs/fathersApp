@@ -12,7 +12,7 @@ import {
   Image,
 } from 'react-native';
 import * as Network from 'expo-network';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import { Ionicons } from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
 import * as ScreenOrientation from 'expo-screen-orientation';

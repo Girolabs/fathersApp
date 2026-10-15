@@ -14,7 +14,7 @@ import {
 import CountryFlag from 'react-native-country-flag';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
 import { getTerritories } from '../api';

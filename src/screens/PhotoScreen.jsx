@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import React from 'react';
 
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import Colors from '../constants/Colors';
 import { useEffect, useCallback } from 'react';
 import heart from '../../assets/heart.png';

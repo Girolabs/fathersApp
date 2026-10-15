@@ -12,7 +12,7 @@ import {
   Linking,
 } from 'react-native';
 import moment from 'moment';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import 'moment/min/locales';
 import countries from 'i18n-iso-countries';
 import * as Contacts from 'expo-contacts';

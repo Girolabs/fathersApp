@@ -4,7 +4,7 @@ import styles from '../constants/styles';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import { url } from '../api';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 
 const CarouselItem = ({ item, navigation }) => {
   if (!item || !item.pathThumbnail800) {

@@ -15,7 +15,7 @@ import {
   Linking,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import Colors from '../constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import moment from 'moment';

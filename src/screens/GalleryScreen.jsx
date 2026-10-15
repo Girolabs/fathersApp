@@ -12,7 +12,7 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import * as _ from 'lodash';
 import { TextInput } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';

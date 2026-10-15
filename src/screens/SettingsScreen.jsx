@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Platform, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import 'moment/min/locales';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 
 import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';

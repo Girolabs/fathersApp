@@ -4,12 +4,8 @@ import { useFonts } from 'expo-font';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Localization from 'expo-localization';
-import i18n from 'i18n-js';
+import i18n from './src/i18n';
 
-import { EN } from './src/i18n/en';
-import { ES } from './src/i18n/es';
-import { PT } from './src/i18n/pt';
-import { DE } from './src/i18n/de';
 
 import PatresNavigator from './src/navigator/PatresNavigator';
 import I18nProvider from './src/context/I18nProvider';
@@ -18,6 +14,7 @@ import BulletinCheckProvider from './src/context/BulletinCheckProvider';
 import { addResponseInterceptor } from './src/api';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { PaperProvider, MD2LightTheme } from 'react-native-paper';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -34,8 +31,6 @@ export default function App() {
   useEffect(() => {
     const initLang = async () => {
       try {
-        i18n.translations = { en: EN, es: ES, de: DE, pt: PT };
-        i18n.fallbacks = true;
 
         const storageLang = await AsyncStorage.getItem('lang');
         const systemLang = String(Localization.locale || 'en').split('-')[0];
@@ -99,11 +94,13 @@ export default function App() {
         <I18nProvider>
           <BulletinCheckProvider>
             <SafeAreaProvider>
-              <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
-                <NavigationContainer ref={navigationRef}>
-                  <PatresNavigator />
-                </NavigationContainer>
-              </SafeAreaView>
+              <PaperProvider theme={MD2LightTheme}>
+                <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
+                  <NavigationContainer ref={navigationRef}>
+                    <PatresNavigator />
+                  </NavigationContainer>
+                </SafeAreaView>
+              </PaperProvider>
             </SafeAreaProvider>
           </BulletinCheckProvider>
         </I18nProvider>

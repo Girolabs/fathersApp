@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import Colors from '../constants/Colors';
 import { I18nContext } from '../context/I18nProvider';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import { ScrollView } from 'react-native-gesture-handler';
 import CountryFlag from 'react-native-country-flag';
 import moment from 'moment';

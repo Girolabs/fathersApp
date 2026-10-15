@@ -17,7 +17,7 @@ import * as Yup from 'yup';
 import InputWithFormik from '../components/InputWithFormik';
 
 import * as Network from 'expo-network';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import SnackBar from '../components/SnackBar';
 import Colors from '../constants/Colors';
 

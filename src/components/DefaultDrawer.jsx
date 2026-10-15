@@ -10,7 +10,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import logo from '../../assets/img/fatherIcon.png';

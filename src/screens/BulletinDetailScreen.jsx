@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useFocusEffect } from '@react-navigation/native';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 
 import * as Network from 'expo-network';
 import * as ScreenOrientation from 'expo-screen-orientation';

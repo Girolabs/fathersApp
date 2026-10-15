@@ -12,7 +12,7 @@ import {
   Platform,
 } from 'react-native';
 
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import * as Network from 'expo-network';

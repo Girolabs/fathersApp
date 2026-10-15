@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator, Image, FlatLis
 import Colors from '../constants/Colors';
 import { I18nContext } from '../context/I18nProvider';
 import CountryFlag from 'react-native-country-flag';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import moment from 'moment';
 import 'moment/min/locales';
 import { ScrollView } from 'react-native-gesture-handler';

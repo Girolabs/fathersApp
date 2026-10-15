@@ -11,7 +11,7 @@ import {
   Pressable,
 } from 'react-native';
 
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 // import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from '@expo/vector-icons';
 import { Formik } from 'formik';

@@ -1,12 +1,8 @@
 import React, { createContext, Component, Fragment } from 'react';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import * as Localization from 'expo-localization';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { EN } from '../i18n/en';
-import { ES } from '../i18n/es';
-import { PT } from '../i18n/pt';
-import { DE } from '../i18n/de';
 
 export const I18nContext = createContext();
 
@@ -14,8 +10,6 @@ class I18nProvider extends Component {
   state = { lang: null, ready: false };
 
   async componentDidMount() {
-    i18n.translations = { en: EN, es: ES, de: DE, pt: PT };
-    i18n.fallbacks = true;
 
     const storageLang = await AsyncStorage.getItem('lang');
     const defaultLang = String(Localization.locale).split('-')[0];

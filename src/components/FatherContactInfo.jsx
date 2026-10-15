@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Clipboard } from 'react-native';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import { Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import Colors from '../constants/Colors';

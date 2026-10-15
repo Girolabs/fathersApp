@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import { Ionicons } from '@expo/vector-icons';
 import Select from './Select';
 import Colors from '../constants/Colors';

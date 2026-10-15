@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, Alert, useWindowDimensions } from 'react-native';
 import { errorHandler, getArchivedPosts, getBoard, unarchivePost } from '../api';
 import Colors from '../constants/Colors';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
 import { Pressable } from 'react-native';

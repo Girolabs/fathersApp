@@ -12,13 +12,19 @@ import {
 import Colors from '../constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import { Checkbox } from 'react-native-paper';
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';
 import { getPersons } from '../api';
-import { CheckBox } from 'react-native-elements';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const CheckBox = ({ title, checked, onPress, checkedIcon, uncheckedIcon, containerStyle, textStyle }) => (
+  <TouchableOpacity onPress={onPress} style={[{ flexDirection: 'row', alignItems: 'center' }, containerStyle]}>
+    {checked ? checkedIcon : uncheckedIcon}
+    <Text style={[{ marginLeft: 10 }, textStyle]}>{title}</Text>
+  </TouchableOpacity>
+);
 
 const styles = StyleSheet.create({
   screen: {

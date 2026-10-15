@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import React, { useState, useEffect } from 'react';
 
-import i18n from 'i18n-js';
+import i18n from '../i18n';
 import Colors from '../constants/Colors';
 import like from '../../assets/heart-white.png';
 import comments from '../../assets/message-circle-white.png';
