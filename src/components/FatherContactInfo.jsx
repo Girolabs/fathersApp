@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, Clipboard } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 import i18n from '../i18n';
 import { Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
@@ -75,7 +76,7 @@ const FatherContactInfo = ({
         body={father.email}
         icon={<Ionicons name="copy" size={23} color={Colors.primaryColor} />}
         selected={() => {
-          Clipboard.setString(father.email);
+          Clipboard.setStringAsync(father.email);
           setSnackBarVisible();
           setSnackMsg(i18n.t('GENERAL.COPY_CLIPBOARD'));
         }}
@@ -90,7 +91,7 @@ const FatherContactInfo = ({
               body={phone.number}
               icon={<Ionicons name="copy" size={23} color={Colors.primaryColor} />}
               selected={() => {
-                Clipboard.setString(phone.number);
+                Clipboard.setStringAsync(phone.number);
                 setSnackBarVisible();
                 setSnackMsg(i18n.t('GENERAL.COPY_CLIPBOARD'));
               }}
@@ -108,7 +109,7 @@ const FatherContactInfo = ({
           body={father.emergencyContact1Phone}
           icon={<Ionicons name="copy" size={23} color={Colors.primaryColor} />}
           selected={() => {
-            Clipboard.setString(father.emergencyContact1Phone);
+            Clipboard.setStringAsync(father.emergencyContact1Phone);
             setSnackBarVisible();
             setSnackMsg(i18n.t('GENERAL.COPY_CLIPBOARD'));
           }}
@@ -122,7 +123,7 @@ const FatherContactInfo = ({
           body={father.emergencyContact2Phone}
           icon={<Ionicons name="copy" size={23} color={Colors.primaryColor} />}
           selected={() => {
-            Clipboard.setString(father.emergencyContact2Phone);
+            Clipboard.setStringAsync(father.emergencyContact2Phone);
             setSnackBarVisible();
             setSnackMsg(i18n.t('GENERAL.COPY_CLIPBOARD'));
           }}

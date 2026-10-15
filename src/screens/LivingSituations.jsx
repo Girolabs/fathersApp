@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 
 import i18n from '../i18n';
-// import RNPickerSelect from 'react-native-picker-select';
 import { Ionicons } from '@expo/vector-icons';
 import { Formik } from 'formik';
 import * as Network from 'expo-network';

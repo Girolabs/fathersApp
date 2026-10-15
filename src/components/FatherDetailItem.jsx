@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import CountryFlag from 'react-native-country-flag';
+import CountryFlag from './CountryFlag';
 import countries from 'i18n-iso-countries';
 import moment from 'moment';
 import i18n from '../i18n';

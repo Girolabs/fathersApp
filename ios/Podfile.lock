@@ -184,6 +184,8 @@ PODS:
     - Yoga
   - ExpoAsset (57.0.20):
     - ExpoModulesCore
+  - ExpoClipboard (57.0.2):
+    - ExpoModulesCore
   - ExpoContacts (57.0.8):
     - ExpoModulesCore
   - ExpoDevice (57.0.2):
@@ -2583,6 +2585,7 @@ DEPENDENCIES:
   - "expo-dev-menu (from `../node_modules/.pnpm/expo-dev-menu@57.0.20_expo@57.0.29_bff63b993298881176df5beda7432f6a__react-native@0.86._dfb5a6867908422b4fe3a246c11fcfa1/node_modules/expo-dev-menu`)"
   - "expo-dev-menu-interface (from `../node_modules/.pnpm/expo-dev-menu-interface@57.0.0_expo@57.0.29_bff63b993298881176df5beda7432f6a_/node_modules/expo-dev-menu-interface/ios`)"
   - "ExpoAsset (from `../node_modules/.pnpm/expo-asset@57.0.20_expo@57.0.29_bff63b993298881176df5beda7432f6a__react-native@0.86.3_@_7d69c0c10c002192e9e4b97c6265ae63/node_modules/expo-asset/ios`)"
+  - "ExpoClipboard (from `../node_modules/.pnpm/expo-clipboard@57.0.2_expo@57.0.29_bff63b993298881176df5beda7432f6a__react-native@0.86._1b99bcac8a73220eb8d45e8ff7f95ae5/node_modules/expo-clipboard/ios`)"
   - "ExpoContacts (from `../node_modules/.pnpm/expo-contacts@57.0.8_expo@57.0.29_bff63b993298881176df5beda7432f6a__react-native@0.86.3_4def6b1b7982b49566505e8abdf9c9bb/node_modules/expo-contacts/ios`)"
   - "ExpoDevice (from `../node_modules/.pnpm/expo-device@57.0.2_expo@57.0.29_bff63b993298881176df5beda7432f6a_/node_modules/expo-device/ios`)"
   - "ExpoDomWebView (from `../node_modules/.pnpm/@expo+dom-webview@57.0.1_expo@57.0.29_bff63b993298881176df5beda7432f6a__react-native@0._9de5a50a966733115a4c9f7df1e58bfd/node_modules/@expo/dom-webview/ios`)"
@@ -2720,6 +2723,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/.pnpm/expo-dev-menu-interface@57.0.0_expo@57.0.29_bff63b993298881176df5beda7432f6a_/node_modules/expo-dev-menu-interface/ios"
   ExpoAsset:
     :path: "../node_modules/.pnpm/expo-asset@57.0.20_expo@57.0.29_bff63b993298881176df5beda7432f6a__react-native@0.86.3_@_7d69c0c10c002192e9e4b97c6265ae63/node_modules/expo-asset/ios"
+  ExpoClipboard:
+    :path: "../node_modules/.pnpm/expo-clipboard@57.0.2_expo@57.0.29_bff63b993298881176df5beda7432f6a__react-native@0.86._1b99bcac8a73220eb8d45e8ff7f95ae5/node_modules/expo-clipboard/ios"
   ExpoContacts:
     :path: "../node_modules/.pnpm/expo-contacts@57.0.8_expo@57.0.29_bff63b993298881176df5beda7432f6a__react-native@0.86.3_4def6b1b7982b49566505e8abdf9c9bb/node_modules/expo-contacts/ios"
   ExpoDevice:
@@ -2950,6 +2955,7 @@ SPEC CHECKSUMS:
   expo-dev-menu: 7fb359361a69f0b5280f530e4f770878cea456f2
   expo-dev-menu-interface: 7a59e803916fbfd1b96c75ff91ea8dddac7e722f
   ExpoAsset: 2581425f9b581b4fce3c83ffc9f28528d1c4ee68
+  ExpoClipboard: 15b8cc88075d7c50af165ed8fca0a76915903bba
   ExpoContacts: 113c0a5d4a951ded3759bc403b9d68e6d6dc8506
   ExpoDevice: 5c638e530304a51992263ab5c1cab726f992b9dc
   ExpoDomWebView: beaec034e51bd028428b98bb1f2633ab79c6d095

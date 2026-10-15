@@ -1,54 +1,73 @@
-import React from 'react';
-import ModalSelector from 'react-native-modal-selector'
+import React, { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { TextInput,StyleSheet, View} from 'react-native';
+import { Modal, FlatList, Pressable, Text, TextInput, StyleSheet, View } from 'react-native';
 import Colors from '../constants/Colors';
+
 const styles = StyleSheet.create({
-    inputContainer: {
-        width: '100%',
-        height: 50,
-        backgroundColor: Colors.surfaceColorSecondary,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 15,
-        paddingVertical: 5,
-        borderRadius: 10,
-        marginTop: 10,
-        marginBottom: 7,
-      },
+  inputContainer: {
+    width: '100%',
+    height: 50,
+    backgroundColor: Colors.surfaceColorSecondary,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    borderRadius: 10,
+    marginTop: 10,
+    marginBottom: 7,
+  },
+  overlay: { flex: 1, justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.7)', padding: 20 },
+  sheet: { maxHeight: '70%', borderRadius: 10, backgroundColor: Colors.surfaceColorSecondary },
+  option: { paddingVertical: 12, paddingHorizontal: 15, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: '#ccc' },
+  optionText: { color: '#000', fontSize: 18 },
+  cancelText: { color: 'red', fontSize: 18, textAlign: 'center' },
+});
 
+const SelectModal = ({ data = [], initValue, value, onChange, onModalClose, disabled, arrowDropDown }) => {
+  const [visible, setVisible] = useState(false);
 
-})
-const SelectModal = (props)=>{
-    return(
-        <ModalSelector
-            name={props.name}
-            data={props.data}
-            initValue={props.initValue}
-            onChange={props.onChange}
-            keyExtractor= {item => item.value}
-            optionTextStyle={{flex:1,color:'#000' ,fontSize: 18,}}
-            optionContainerStyle={{backgroundColor:Colors.surfaceColorSecondary}}
-            optionStyle={{borderBottomColor:Colors.surfaceColorSecondary,paddingVertical:12}}
-            cancelStyle={{borderBottomColor:Colors.surfaceColorSecondary,paddingVertical:12}}
-            cancelContainerStyle={{backgroundColor:Colors.surfaceColorSecondary}}
-            cancelTextStyle={{color:'red'}}
-            selectedItemTextStyle={{color :'blue',fontStyle:'italic'}}
-            cancelText='Cancel'
-            onModalClose={props.onModalClose}
-            disabled={props.disabled}
-            >
-                <View style={styles.inputContainer}>
-                    <TextInput
-                    style={{color:'#000'}}
-                    editable={false}
-                    placeholder="Select an item..."
-                    value={props.value}
-                    />
-                    {props.arrowDropDown && <Ionicons name="caret-down" size={23} color={Colors.primaryColor} />}
-                </View>
-            </ModalSelector>
-    )
-}
+  const close = () => {
+    setVisible(false);
+    onModalClose?.();
+  };
+
+  return (
+    <>
+      <Pressable disabled={disabled} onPress={() => setVisible(true)}>
+        <View style={styles.inputContainer} pointerEvents="none">
+          <TextInput style={{ color: '#000' }} editable={false} placeholder="Select an item..." value={value ?? initValue} />
+          {arrowDropDown && <Ionicons name="caret-down" size={23} color={Colors.primaryColor} />}
+        </View>
+      </Pressable>
+      <Modal transparent animationType="fade" visible={visible} onRequestClose={close}>
+        <View style={styles.overlay}>
+          <View style={styles.sheet}>
+            <FlatList
+              data={data}
+              keyExtractor={(item) => String(item.value)}
+              renderItem={({ item }) => (
+                <Pressable
+                  style={styles.option}
+                  onPress={() => {
+                    onChange?.(item);
+                    close();
+                  }}
+                >
+                  <Text style={[styles.optionText, item.label === (value ?? initValue) && { color: 'blue', fontStyle: 'italic' }]}>
+                    {item.label}
+                  </Text>
+                </Pressable>
+              )}
+            />
+            <Pressable style={styles.option} onPress={close}>
+              <Text style={styles.cancelText}>Cancel</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
+    </>
+  );
+};
+
 export default SelectModal;

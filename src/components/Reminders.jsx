@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, FlatList, Text, Linking, Image, Alert } from 'react-native';
 import { FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
-import CountryFlag from 'react-native-country-flag';
+import CountryFlag from './CountryFlag';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import Colors from '../constants/Colors';

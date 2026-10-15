@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import i18n from '../i18n';
-import CountryFlag from 'react-native-country-flag';
+import CountryFlag from './CountryFlag';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import Colors from '../constants/Colors';

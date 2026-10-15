@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Image, FlatList, Clipboard } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, Image, FlatList } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 import Colors from '../constants/Colors';
 import { I18nContext } from '../context/I18nProvider';
-import CountryFlag from 'react-native-country-flag';
+import CountryFlag from '../components/CountryFlag';
 import i18n from '../i18n';
 import moment from 'moment';
 import 'moment/min/locales';
@@ -174,7 +175,7 @@ class HouseDetailScreen extends Component {
                           return (
                             <Button
                               onPress={() => {
-                                Clipboard.setString(phone.number);
+                                Clipboard.setStringAsync(phone.number);
                                 this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
                               }}
                             >
@@ -194,7 +195,7 @@ class HouseDetailScreen extends Component {
                       {house.fax && (
                         <Button
                           onPress={() => {
-                            Clipboard.setString(house.fax);
+                            Clipboard.setStringAsync(house.fax);
                             this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
                           }}
                         >
@@ -223,7 +224,7 @@ class HouseDetailScreen extends Component {
                       {house.wifiPassword && (
                         <Button
                           onPress={() => {
-                            Clipboard.setString(house.wifiPassword);
+                            Clipboard.setStringAsync(house.wifiPassword);
                             this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
                           }}
                         >
@@ -239,7 +240,7 @@ class HouseDetailScreen extends Component {
 
                       <Button
                         onPress={() => {
-                          Clipboard.setString(house.formattedAddress);
+                          Clipboard.setStringAsync(house.formattedAddress);
                           this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
                         }}
                       >
@@ -257,7 +258,7 @@ class HouseDetailScreen extends Component {
                       {house.formattedPostAddress && (
                         <Button
                           onPress={() => {
-                            Clipboard.setString(house.formattedPostAddress);
+                            Clipboard.setStringAsync(house.formattedPostAddress);
                             this.setState({ snackMsg: i18n.t('GENERAL.COPY_CLIPBOARD'), visible: true });
                           }}
                         >

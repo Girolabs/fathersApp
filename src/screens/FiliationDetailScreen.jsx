@@ -15,7 +15,7 @@ import Colors from '../constants/Colors';
 import { I18nContext } from '../context/I18nProvider';
 import i18n from '../i18n';
 import { ScrollView } from 'react-native-gesture-handler';
-import CountryFlag from 'react-native-country-flag';
+import CountryFlag from '../components/CountryFlag';
 import moment from 'moment';
 import 'moment/min/locales';
 import * as Network from 'expo-network';

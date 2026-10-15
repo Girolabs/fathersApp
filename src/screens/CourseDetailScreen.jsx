@@ -17,7 +17,7 @@ import i18n from '../i18n';
 import Colors from '../constants/Colors';
 import moment from 'moment';
 import 'moment/min/locales';
-import CountryFlag from 'react-native-country-flag';
+import CountryFlag from '../components/CountryFlag';
 
 import * as Network from 'expo-network';
 import SnackBar from '../components/SnackBar';

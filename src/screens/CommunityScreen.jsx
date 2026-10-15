@@ -10,7 +10,7 @@ import {
   ActivityIndicator,
   TouchableNativeFeedback,
 } from 'react-native';
-import CountryFlag from 'react-native-country-flag';
+import CountryFlag from '../components/CountryFlag';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import i18n from '../i18n';
