@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Dimensions } from 'react-native';
-import Carousel from 'react-native-snap-carousel';
+import Carousel from 'react-native-reanimated-carousel';
 import CarouselItem from './CarouselItem';
 import styles from '../constants/styles';
 
 const { width } = Dimensions.get('window');
+const ITEM_WIDTH = width - 230;
+const ITEM_HEIGHT = 213;
 
 export const CustomSlider = ({ data = [], navigation }) => {
   // Evita crash si data no es array
@@ -19,13 +21,14 @@ export const CustomSlider = ({ data = [], navigation }) => {
     <View style={styles.container}>
       <Carousel
         data={validData}
-        sliderWidth={width}
-        itemWidth={width - 230}
+        width={ITEM_WIDTH}
+        height={ITEM_HEIGHT}
+        style={{ width }}
+        loop={false}
+        defaultIndex={0}
         renderItem={({ item, index }) => (
           <CarouselItem key={item?.galleryPhotoId ?? index} item={item} navigation={navigation} />
         )}
-        inactiveSlideOpacity={0.8}
-        firstItem={0}
       />
     </View>
   );
