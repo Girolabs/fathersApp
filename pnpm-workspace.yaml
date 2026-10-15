@@ -1,5 +1,5 @@
 allowBuilds:
-  postinstall-postinstall: true
+  unrs-resolver: false
 minimumReleaseAgeExclude:
   - '@expo/cli@57.0.27 || 57.0.30'
   - '@expo/router-server@57.0.11'

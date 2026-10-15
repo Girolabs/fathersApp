@@ -12,7 +12,7 @@ class I18nProvider extends Component {
   async componentDidMount() {
 
     const storageLang = await AsyncStorage.getItem('lang');
-    const defaultLang = String(Localization.locale).split('-')[0];
+    const defaultLang = Localization.getLocales()[0]?.languageCode || 'en';
     const lang = storageLang || defaultLang;
 
     i18n.locale = lang;

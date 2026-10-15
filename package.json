@@ -5,9 +5,8 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "lint": "eslint --ext .jsx,.js src",
-    "postinstall": "patch-package",
-    "prepare": "husky install"
+    "lint": "eslint src",
+    "prepare": "husky"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
@@ -43,8 +42,6 @@
     "jsrsasign": "^10.5.26",
     "lodash": "^4.17.15",
     "moment": "^2.18.1",
-    "patch-package": "^6.4.7",
-    "postinstall-postinstall": "^2.1.0",
     "prop-types": "^15.8.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -70,24 +67,15 @@
     "@babel/core": "^7.24.0",
     "@react-native-community/cli": "^20.0.2",
     "babel-preset-expo": "~57.0.13",
-    "eslint": "^8.22.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.19.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "husky": "^8.0.1",
-    "lint-staged": "^13.0.3",
-    "prettier": "^2.1.1",
-    "prettier-eslint": "^15.0.1"
+    "eslint": "^9.39.5",
+    "eslint-config-expo": "^57.0.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
+    "prettier": "^3.9.10"
   },
   "private": true,
   "lint-staged": {
-    "*.{js,jsx,json,css,md}": [
-      "prettier --write",
-      "git add"
-    ],
-    "*.{js,jsx,css,md}": "prettier --write"
+    "*.{js,jsx,json,css,md}": "prettier --write"
   },
   "resolutions": {
     "react-native-vector-icons": "10.3.0"

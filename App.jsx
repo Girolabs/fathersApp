@@ -33,7 +33,7 @@ export default function App() {
       try {
 
         const storageLang = await AsyncStorage.getItem('lang');
-        const systemLang = String(Localization.locale || 'en').split('-')[0];
+        const systemLang = Localization.getLocales()[0]?.languageCode || 'en';
         const selectedLang = storageLang || systemLang || 'en';
 
         i18n.locale = selectedLang;
