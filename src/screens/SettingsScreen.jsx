@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Platform, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment';
 import 'moment/min/locales';
@@ -103,7 +103,7 @@ const SettingsScreen = (props) => {
       {(value) => {
         moment.locale(value.lang);
         return (
-          <SafeAreaView style={styles.screen}>
+          <View style={styles.screen}>
             <View style={styles.textContainer}>
               <Text style={styles.text}>{i18n.t('SETTINGS.VERSION')}</Text>
 
@@ -146,7 +146,7 @@ const SettingsScreen = (props) => {
                 </View>
               </Button>
             )}
-          </SafeAreaView>
+          </View>
         );
       }}
     </I18nContext.Consumer>

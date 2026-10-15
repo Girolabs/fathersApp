@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   TouchableNativeFeedback,
   Image,
-  SafeAreaView,
   ScrollView,
   ActivityIndicator,
   Platform,
@@ -268,7 +267,7 @@ class DelegationDetailScreen extends Component {
           const dateFormat = getDateFormatByLocale(value.lang);
           moment.locale(value.lang);
           return (
-            <SafeAreaView style={styles.screen}>
+            <View style={styles.screen}>
               {territory ? (
                 <FlatList
                   keyExtractor={(item) => item.personId.toString()}
@@ -496,7 +495,7 @@ class DelegationDetailScreen extends Component {
               <SnackBar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })}>
                 {this.state.snackMsg}
               </SnackBar>
-            </SafeAreaView>
+            </View>
           );
         }}
       </I18nContext.Consumer>

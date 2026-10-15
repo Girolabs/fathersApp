@@ -4,7 +4,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   SectionList,
   TouchableOpacity,
   Platform,
@@ -103,7 +102,7 @@ class CommunityScreen extends Component {
       TouchableComp = TouchableNativeFeedback;
     }
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         {this.state.delegations.length > 0 ? (
           <SectionList
             stickySectionHeadersEnabled={false}
@@ -139,7 +138,7 @@ class CommunityScreen extends Component {
         <SnackBar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })}>
           {this.state.snackMsg}
         </SnackBar>
-      </SafeAreaView>
+      </View>
     );
   }
 }

@@ -8,7 +8,6 @@ import {
   Platform,
   TouchableNativeFeedback,
   ActivityIndicator,
-  SafeAreaView,
   SectionList,
   Image,
   ScrollView,
@@ -572,7 +571,7 @@ class AssignmentsScreen extends Component {
           //   console.log(value);
           moment.locale(value.lang);
           return (
-            <SafeAreaView style={styles.screen}>
+            <View style={styles.screen}>
               {!this.state.loading ? (
                 <>
                   <View style={styles.tabsGroup}>
@@ -604,7 +603,7 @@ class AssignmentsScreen extends Component {
               ) : (
                 <ActivityIndicator size="large" color={Colors.primaryColor} />
               )}
-            </SafeAreaView>
+            </View>
           );
         }}
       </I18nContext.Consumer>

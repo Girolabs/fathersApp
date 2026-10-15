@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   ScrollView,
   Platform,
   TouchableNativeFeedback,
@@ -200,7 +199,7 @@ class CourseDetailScreen extends Component {
           const dateMask = getDateMaskByLocale(moment.locale());
           moment.locale(value.lang);
           return (
-            <SafeAreaView style={styles.screen}>
+            <View style={styles.screen}>
               {course ? (
                 <ScrollView>
                   <View style={styles.titleContainer}>
@@ -796,7 +795,7 @@ class CourseDetailScreen extends Component {
               <SnackBar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })}>
                 {this.state.snackMsg}
               </SnackBar>
-            </SafeAreaView>
+            </View>
           );
         }}
       </I18nContext.Consumer>

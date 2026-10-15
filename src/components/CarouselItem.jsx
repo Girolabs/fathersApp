@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable, SafeAreaView, Image } from 'react-native';
+import { View, Text, Pressable, Image } from 'react-native';
 import styles from '../constants/styles';
 import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
@@ -23,14 +23,14 @@ const CarouselItem = ({ item, navigation }) => {
         }
       }}
     >
-      <SafeAreaView style={styles.item}>
+      <View style={styles.item}>
         <Image source={{ uri: imageUri }} style={[styles.imageContainer, styles.image]} />
         {!!caption && (
           <Text style={styles.title} numberOfLines={2}>
             {caption}
           </Text>
         )}
-      </SafeAreaView>
+      </View>
     </Pressable>
   );
 };

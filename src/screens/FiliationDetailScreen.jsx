@@ -6,7 +6,6 @@ import {
   Image,
   ActivityIndicator,
   Platform,
-  SafeAreaView,
   FlatList,
   TouchableNativeFeedback,
   TouchableOpacity,
@@ -110,7 +109,7 @@ class FiliationDetailScreen extends Component {
           const dateMask = getDateMaskByLocale(value.lang);
           moment.locale(value.lang);
           return (
-            <SafeAreaView style={styles.screen}>
+            <View style={styles.screen}>
               {filiation ? (
                 <ScrollView>
                   {/*remove  ScrollView */}
@@ -342,7 +341,7 @@ class FiliationDetailScreen extends Component {
               <SnackBar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })}>
                 {this.state.snackMsg}
               </SnackBar>
-            </SafeAreaView>
+            </View>
           );
         }}
       </I18nContext.Consumer>

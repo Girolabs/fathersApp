@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   ScrollView,
-  SafeAreaView,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Formik } from 'formik';
@@ -354,7 +353,7 @@ class FatherFormScreen extends Component {
 
     return (
       <>
-        <SafeAreaView style={styles.screen}>
+        <View style={styles.screen}>
           {!loading ? (
             <>
               <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? this.state.keyboardAV : 'height'}>
@@ -939,7 +938,7 @@ class FatherFormScreen extends Component {
           ) : (
             <ActivityIndicator size="large" color={Colors.primaryColor} />
           )}
-        </SafeAreaView>
+        </View>
       </>
     );
   }

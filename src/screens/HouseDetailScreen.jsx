@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator, Image, FlatList, Clipboard } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator, Image, FlatList, Clipboard } from 'react-native';
 import Colors from '../constants/Colors';
 import { I18nContext } from '../context/I18nProvider';
 import CountryFlag from 'react-native-country-flag';
@@ -141,7 +141,7 @@ class HouseDetailScreen extends Component {
         {(value) => {
           moment.locale(value.lang);
           return (
-            <SafeAreaView style={styles.screen}>
+            <View style={styles.screen}>
               {house ? (
                 <ScrollView>
                   <View>
@@ -331,7 +331,7 @@ class HouseDetailScreen extends Component {
               <SnackBar visible={this.state.visible} onDismiss={() => this.setState({ visible: false })}>
                 {this.state.snackMsg}
               </SnackBar>
-            </SafeAreaView>
+            </View>
           );
         }}
       </I18nContext.Consumer>

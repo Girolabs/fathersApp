@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   TextInput,
   KeyboardAvoidingView,
   ScrollView,
@@ -367,7 +366,7 @@ const LivingSituationsFormScreen = ({ navigation, route }) => {
   return (
     <>
       <KeyboardAvoidingView style={{ flex: 1, paddingHorizontal: 15 }}>
-        <SafeAreaView style={styles.screen}>
+        <View style={styles.screen}>
           {!loading ? (
             <ScrollView>
               {isCreate ? (
@@ -671,7 +670,7 @@ const LivingSituationsFormScreen = ({ navigation, route }) => {
           <Snackbar visible={visible} onDismiss={() => setVisible(false)} style={styles.snackError}>
             {snackMsg}
           </Snackbar>
-        </SafeAreaView>
+        </View>
       </KeyboardAvoidingView>
     </>
   );
