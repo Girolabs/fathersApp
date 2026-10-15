@@ -273,6 +273,7 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SchoenstattFathers/Pods-SchoenstattFathers-resources.sh",
+				"${PODS_CONFIGURATION_BUILD_DIR}/EASClient/EASClient_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/EXApplication/ExpoApplication_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/EXConstants.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/EXConstants/ExpoConstants_privacy.bundle",
@@ -283,25 +284,6 @@
 				"${PODS_CONFIGURATION_BUILD_DIR}/ExpoSystemUI/ExpoSystemUI_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNCAsyncStorage/RNCAsyncStorage_resources.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/RNSVG/RNSVGFilters.bundle",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/Feather.ttf",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/FontAwesome6_Brands.ttf",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/FontAwesome6_Regular.ttf",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/FontAwesome6_Solid.ttf",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/Fontisto.ttf",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/Foundation.ttf",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/Ionicons.ttf",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/Octicons.ttf",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf",
-				"${PODS_ROOT}/../../node_modules/.pnpm/react-native-vector-icons@10.3.0/node_modules/react-native-vector-icons/Fonts/Zocial.ttf",
 				"${PODS_CONFIGURATION_BUILD_DIR}/ReachabilitySwift/ReachabilitySwift.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core/React-Core_privacy.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-cxxreact/React-cxxreact_privacy.bundle",
@@ -311,6 +293,7 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EASClient_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoApplication_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EXConstants.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoConstants_privacy.bundle",
@@ -321,25 +304,6 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ExpoSystemUI_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNCAsyncStorage_resources.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RNSVGFilters.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Feather.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Brands.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Regular.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome5_Solid.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome6_Brands.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome6_Regular.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FontAwesome6_Solid.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Fontisto.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Foundation.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Ionicons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialCommunityIcons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MaterialIcons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Octicons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SimpleLineIcons.ttf",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Zocial.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ReachabilitySwift.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-Core_privacy.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/React-cxxreact_privacy.bundle",
@@ -521,7 +485,7 @@
 					"-DRCT_REMOVE_LEGACY_ARCH=1",
 				);
 				PODFILE_DIR = "$(SRCROOT)";
-				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/.pnpm/react-native@0.86.3_@babel+core@7.29.7_supports-color@8.1.1__@react-native-community+cl_4b615460316e760ad4c684664cb8433b/node_modules/react-native";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/.pnpm/react-native@0.86.3_@babel+core@7.29.7_supports-color@8.1.1__@react-native-community+cl_4b83fd06d0c19948244ce0a67a28dbd2/node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
@@ -585,7 +549,7 @@
 					"-DRCT_REMOVE_LEGACY_ARCH=1",
 				);
 				PODFILE_DIR = "$(SRCROOT)";
-				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/.pnpm/react-native@0.86.3_@babel+core@7.29.7_supports-color@8.1.1__@react-native-community+cl_4b615460316e760ad4c684664cb8433b/node_modules/react-native";
+				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/.pnpm/react-native@0.86.3_@babel+core@7.29.7_supports-color@8.1.1__@react-native-community+cl_4b83fd06d0c19948244ce0a67a28dbd2/node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
 				USE_HERMES = true;
