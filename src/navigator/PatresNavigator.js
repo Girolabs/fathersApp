@@ -1,4 +1,6 @@
 import React from 'react';
+import { Platform } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerToggleButton } from '@react-navigation/drawer';
 import i18n from '../i18n';
@@ -47,8 +49,11 @@ const defaultStackNavOptions = {
   headerBackTitle: i18n.t('GENERAL.BACK')
 };
 
-const HomeNavigator = () => (
-  <Stack.Navigator screenOptions={defaultStackNavOptions}>
+const HomeNavigator = () => {
+  const insets = useSafeAreaInsets();
+  const bottom = Platform.OS === 'android' ? Math.max(insets.bottom, 48) : insets.bottom;
+  return (
+  <Stack.Navigator screenOptions={{ ...defaultStackNavOptions, cardStyle: { paddingBottom: bottom } }}>
     <Stack.Screen
       name="Home"
       component={HomeScreen}
@@ -166,7 +171,8 @@ const HomeNavigator = () => (
       options={{ headerTitle: '', headerRight: () => <DrawerToggleButton /> }}
     />
   </Stack.Navigator>
-);
+  );
+};
 
 const activeTintColor = Colors.secondaryColor;
 const inactiveTintColor = Colors.surfaceColorPrimary;

@@ -6,14 +6,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Localization from 'expo-localization';
 import i18n from './src/i18n';
 
-
 import PatresNavigator from './src/navigator/PatresNavigator';
 import I18nProvider from './src/context/I18nProvider';
 import AuthProvider from './src/context/AuthProvider';
 import BulletinCheckProvider from './src/context/BulletinCheckProvider';
 import { addResponseInterceptor } from './src/api';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { PaperProvider, MD2LightTheme } from 'react-native-paper';
 
 export default function App() {
@@ -31,7 +30,6 @@ export default function App() {
   useEffect(() => {
     const initLang = async () => {
       try {
-
         const storageLang = await AsyncStorage.getItem('lang');
         const systemLang = Localization.getLocales()[0]?.languageCode || 'en';
         const selectedLang = storageLang || systemLang || 'en';
@@ -95,11 +93,11 @@ export default function App() {
           <BulletinCheckProvider>
             <SafeAreaProvider>
               <PaperProvider theme={MD2LightTheme}>
-                <SafeAreaView style={{ flex: 1 }} edges={['bottom']}>
+                <View style={{ flex: 1 }}>
                   <NavigationContainer ref={navigationRef}>
                     <PatresNavigator />
                   </NavigationContainer>
-                </SafeAreaView>
+                </View>
               </PaperProvider>
             </SafeAreaProvider>
           </BulletinCheckProvider>
